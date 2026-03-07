@@ -1,0 +1,73 @@
+import { Router, Request, Response } from "express";
+import { usersController } from "../controllers/usersController";
+import { pagination } from "api/middleware/pagination";
+import { validate } from "api/middleware/validate";
+import {
+  UserSchemaGetAll,
+  UserSchemaPost,
+  UserSchemaPut,
+} from "../validation/schemas";
+import { SearchSchema } from "api/validation/SearchSchema";
+import { ParamsIdSchema } from "api/validation/ParamsIdSchema";
+import { validateAdminRole } from "api/middleware/validateRole";
+
+const router: Router = Router();
+
+// GET /users/self → fetch current user
+router.get("/self", async (_req: Request, res: Response) => {
+  await usersController.getSelf(res);
+});
+
+// GET /users → get all users
+router.get(
+  "/",
+  validateAdminRole(),
+  pagination(),
+  validate(SearchSchema, "query"),
+  validate(UserSchemaGetAll, "query"),
+  async (req: Request, res: Response) => {
+    await usersController.getAllUsers(req, res);
+  },
+);
+
+// GET /users/:id → get user by id
+router.get(
+  "/:id",
+  validateAdminRole(),
+  validate(ParamsIdSchema, "params"),
+  async (req: Request, res: Response) => {
+    await usersController.getUser(req, res);
+  },
+);
+
+// POST /users → create new user
+router.post(
+  "/",
+  validateAdminRole(),
+  validate(UserSchemaPost),
+  async (req: Request, res: Response) => {
+    await usersController.createUser(req, res);
+  },
+);
+
+// PUT /users/:id → update user by id
+router.put(
+  "/:id",
+  validate(ParamsIdSchema, "params"),
+  validate(UserSchemaPut),
+  async (req: Request, res: Response) => {
+    await usersController.updateUser(req, res);
+  },
+);
+
+// DELETE /users/:id → delete user by id
+router.delete(
+  "/:id",
+  validateAdminRole(),
+  validate(ParamsIdSchema, "params"),
+  async (req: Request, res: Response) => {
+    await usersController.deleteUser(req, res);
+  },
+);
+
+export default router;
