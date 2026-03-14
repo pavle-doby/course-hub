@@ -1,159 +1,92 @@
-# Turborepo starter
+# Course Hub
 
-This Turborepo starter is maintained by the Turborepo core team.
+Course Hub is a platform that allows users to create, share, and enroll in courses.
 
-## Using this example
+## TODO
 
-Run the following command:
+- [ ] Add husky for pre-commit linting and formatting
+- [ ] Add tamagui for UI components
+- [ ] Go go go
 
-```sh
-npx create-turbo@latest
+## Tech Stack
+
+### Web
+
+- Next.js
+- TanStack Query (for data fetching - auto-generated from OpenAPI spec)
+
+### API
+
+- Express.js
+- Zod for validation
+- OpenAPI for API contract
+
+### Database
+
+- Supabase (PostgreSQL)
+- Drizzle ORM
+
+## Monorepo structure
+
+The project is organized as a Turborepo monorepo using pnpm workspaces, with the following structure:
+
+```
+course-hub/
+├── apps/
+│   ├── api/          # Express API server
+│   ├── docs/         # Docs site (Next.js)
+│   └── web/          # Frontend (Next.js)
+├── packages/
+│   ├── api-client/   # Auto-generated TanStack Query hooks (Orval)
+│   ├── contract/     # Shared API contract types
+│   ├── db/           # Drizzle ORM client & migrations
+│   ├── db-schema/    # Shared DB schema definitions
+│   ├── eslint-config/# Shared ESLint configs
+│   ├── scripts/      # DB seed/clean scripts
+│   ├── typescript-config/ # Shared tsconfig bases
+│   └── ui/           # Shared React component library
+├── package.json
+├── pnpm-workspace.yaml
+├── pnpm-lock.yaml
+└── turbo.json
 ```
 
-## What's inside?
+## Auto generated TanStack Query hooks
 
-This Turborepo includes the following packages/apps:
+TanStack Query hooks for the API are fully auto-generated — no manual hook writing required.
 
-### Apps and Packages
+### How it works
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+1. **`apps/api`** uses [`@asteasolutions/zod-to-openapi`](https://github.com/asteasolutions/zod-to-openapi) to build an OpenAPI 3.1 spec from the existing Zod validation schemas. Each module registers its own routes:
+   - `src/modules/auth/openapi/paths/auth.ts`
+   - `src/modules/users/openapi/paths/users.ts`
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+   The spec is assembled in `src/openapi/spec.ts` and written to `apps/api/openapi.json`.
 
-### Utilities
+2. **`packages/api-client`** uses [Orval](https://orval.dev) to read `openapi.json` and emit fully-typed TanStack Query v5 hooks into `src/generated/`. An Axios instance (`src/lib/apiClient.ts`) is used as the mutator, configured with `withCredentials: true` for cookie-based auth.
 
-This Turborepo has some additional tools already setup for you:
+3. **`apps/web`** (and any other app) imports hooks directly from `@repo/api-client`.
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+### Generating
 
-### Build
+```bash
+# Full pipeline from the root (spec → hooks)
+pnpm generate
 
-To build all apps and packages, run the following command:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo build
+# Or step by step:
+pnpm --filter api generate:openapi          # writes apps/api/openapi.json
+pnpm --filter @repo/api-client generate:api  # writes packages/api-client/src/generated/
 ```
 
-Without global `turbo`, use your package manager:
+> The generated files (`openapi.json` and `src/generated/`) are gitignored and must be regenerated after any API route or schema change.
 
-```sh
-cd my-turborepo
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
+### Usage in web
+
+```tsx
+import { useGetV1UsersSelf, usePostV1AuthLogin } from "@repo/api-client";
+
+function Profile() {
+  const { data: user } = useGetV1UsersSelf();
+  // ...
+}
 ```
-
-You can build a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
-turbo build --filter=docs
-```
-
-Without global `turbo`:
-
-```sh
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo dev
-```
-
-Without global `turbo`, use your package manager:
-
-```sh
-cd my-turborepo
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
-```
-
-You can develop a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
-turbo dev --filter=web
-```
-
-Without global `turbo`:
-
-```sh
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
-
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo login
-```
-
-Without global `turbo`, use your package manager:
-
-```sh
-cd my-turborepo
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
-turbo link
-```
-
-Without global `turbo`:
-
-```sh
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.dev/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.dev/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.dev/docs/reference/configuration)
-- [CLI Usage](https://turborepo.dev/docs/reference/command-line-reference)

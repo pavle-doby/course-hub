@@ -1,13 +1,9 @@
-import type { UserEntity } from "@repo/db-schema";
+import { z } from "zod";
 import { User } from "../users";
+import { AuthLoginQuerySchema, AuthSignUpQuerySchema } from "./schemas";
 
-export type SignUpUserReq = Pick<
-  UserEntity,
-  "firstName" | "lastName" | "email"
-> & {
-  password: string;
-};
+export type SignUpUserReq = z.infer<typeof AuthSignUpQuerySchema>;
 export type SignUpUserRes = User;
 
-export type LogInUserReq = Pick<UserEntity, "email"> & { password: string };
+export type LogInUserReq = z.infer<typeof AuthLoginQuerySchema>;
 export type LogInUserRes = User;

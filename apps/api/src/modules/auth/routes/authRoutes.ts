@@ -1,14 +1,14 @@
 import { Router, Request, Response } from "express";
 import { authController } from "../controllers/authController";
 import { validate } from "api/middleware/validate";
-import { AuthSchemaLogin, AuthSchemaSignUp } from "../validation/schemas";
+import { AuthLoginQuerySchema, AuthSignUpQuerySchema } from "@repo/contract";
 
 const router: Router = Router();
 
 // POST /auth/signup → create a new user
 router.post(
   "/signup",
-  validate(AuthSchemaSignUp),
+  validate(AuthSignUpQuerySchema),
   async (req: Request, res: Response) => {
     await authController.signUp(req, res);
   },
@@ -17,7 +17,7 @@ router.post(
 // POST /auth/login → sign in user
 router.post(
   "/login",
-  validate(AuthSchemaLogin),
+  validate(AuthLoginQuerySchema),
   async (req: Request, res: Response) => {
     await authController.logIn(req, res);
   },

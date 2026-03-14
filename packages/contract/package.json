@@ -9,7 +9,9 @@
   },
   "sideEffects": false,
   "dependencies": {
-    "@repo/db-schema": "workspace:*"
+    "@repo/db-schema": "workspace:*",
+    "drizzle-zod": "^0.7.0",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*"

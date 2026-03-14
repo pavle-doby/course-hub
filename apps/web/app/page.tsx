@@ -3,7 +3,7 @@
 import Image, { type ImageProps } from "next/image";
 import { Button } from "@repo/ui/button";
 import styles from "./page.module.css";
-import { useEffect } from "react";
+import { useGetUserSelf } from "@repo/api-client";
 
 type Props = Omit<ImageProps, "src"> & {
   srcLight: string;
@@ -23,19 +23,9 @@ const ThemeImage = (props: Props) => {
 
 export default function Home() {
   // TODO@pavle: Remove this when auth is implemented
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await fetch("http://localhost:7007/api/v1/users/self");
-        const data = await response.json();
-        console.log(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  const { data: user, isPending } = useGetUserSelf();
 
-    fetchUser();
-  }, []);
+  console.log({ user, isPending });
 
   return (
     <div className={styles.page}>
@@ -47,7 +37,7 @@ export default function Home() {
           alt="Turborepo logo"
           width={180}
           height={38}
-          priority
+          preload
         />
         <ol>
           <li>

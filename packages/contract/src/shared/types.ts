@@ -1,3 +1,6 @@
+import { z } from "zod";
+import { PaginationSchema, SearchSchema } from "./schemas";
+
 export type PaginationReq = {
   page?: number;
   limit?: number;
@@ -5,13 +8,7 @@ export type PaginationReq = {
 
 export type PaginationRes<ItemType> = {
   data: ItemType[];
-  pagination: {
-    total: number;
-    page: number;
-    limit: number;
-  };
+  pagination: z.infer<typeof PaginationSchema>;
 };
 
-export type Search = {
-  query: string;
-};
+export type Search = z.infer<typeof SearchSchema>;

@@ -14,7 +14,8 @@
     "db:migrate": "cd packages/db && pnpm exec drizzle-kit migrate",
     "db:studio": "cd packages/db && pnpm exec drizzle-kit studio",
     "db:clean:users": "pnpm --filter @repo/scripts run db:clean:users",
-    "db:seed:users": "pnpm --filter @repo/scripts run db:seed:users"
+    "db:seed:users": "pnpm --filter @repo/scripts run db:seed:users",
+    "generate": "turbo run generate:openapi generate:api"
   },
   "devDependencies": {
     "prettier": "^3.7.4",

@@ -16,6 +16,13 @@
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "generate:openapi": {
+      "outputs": ["openapi.json"]
+    },
+    "generate:api": {
+      "dependsOn": ["api#generate:openapi"],
+      "outputs": ["src/generated/**"]
     }
   }
 }
