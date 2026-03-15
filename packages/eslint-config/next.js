@@ -1,4 +1,5 @@
 import js from "@eslint/js";
+import { fixupPluginRules } from "@eslint/compat";
 import { globalIgnores } from "eslint/config";
 import eslintConfigPrettier from "eslint-config-prettier";
 import tseslint from "typescript-eslint";
@@ -27,6 +28,7 @@ export const nextJsConfig = [
   ]),
   {
     ...pluginReact.configs.flat.recommended,
+    plugins: { react: fixupPluginRules(pluginReact) },
     languageOptions: {
       ...pluginReact.configs.flat.recommended.languageOptions,
       globals: {
@@ -43,13 +45,10 @@ export const nextJsConfig = [
       ...pluginNext.configs["core-web-vitals"].rules,
     },
   },
+  pluginReactHooks.configs.flat["recommended-latest"],
   {
-    plugins: {
-      "react-hooks": pluginReactHooks,
-    },
     settings: { react: { version: "detect" } },
     rules: {
-      ...pluginReactHooks.configs.recommended.rules,
       // React scope no longer necessary with new JSX transform.
       "react/react-in-jsx-scope": "off",
     },

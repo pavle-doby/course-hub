@@ -15,9 +15,13 @@
     "db:studio": "cd packages/db && pnpm exec drizzle-kit studio",
     "db:clean:users": "pnpm --filter @repo/scripts run db:clean:users",
     "db:seed:users": "pnpm --filter @repo/scripts run db:seed:users",
-    "generate": "turbo run generate:openapi generate:api"
+    "generate": "turbo run generate:openapi generate:api",
+    "prepare": "husky"
   },
   "devDependencies": {
+    "eslint": "^10.0.3",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
     "prettier": "^3.7.4",
     "turbo": "^2.8.14",
     "typescript": "5.9.2"
@@ -36,5 +40,14 @@
       "minimatch@<3.1.4": ">=3.1.4",
       "ajv@<6.14.0": ">=6.14.0"
     }
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{js,mjs,cjs,md,json,yaml}": [
+      "prettier --write"
+    ]
   }
 }

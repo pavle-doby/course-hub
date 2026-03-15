@@ -1,0 +1,2 @@
+pnpm exec lint-staged
+echo '✔ Pre commit hook executed'

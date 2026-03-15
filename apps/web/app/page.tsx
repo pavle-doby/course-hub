@@ -3,7 +3,7 @@
 import Image, { type ImageProps } from "next/image";
 import { Button } from "@repo/ui/button";
 import styles from "./page.module.css";
-import { useGetUserSelf } from "@repo/api-client";
+import { useGetUsers, useGetUserSelf } from "@repo/api-client";
 
 type Props = Omit<ImageProps, "src"> & {
   srcLight: string;
@@ -25,7 +25,9 @@ export default function Home() {
   // TODO@pavle: Remove this when auth is implemented
   const { data: user, isPending } = useGetUserSelf();
 
-  console.log({ user, isPending });
+  const { data: users, isPending: isUsersPending } = useGetUsers();
+
+  console.log({ user, users, isPending, isUsersPending });
 
   return (
     <div className={styles.page}>
