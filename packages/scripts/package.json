@@ -1,0 +1,17 @@
+{
+  "name": "@my/scripts",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "db:clean:users": "tsx ./dbCleanUsers.ts",
+    "db:seed:users": "tsx ./dbSeedUsers.ts"
+  },
+  "dependencies": {
+    "@my/db": "workspace:*",
+    "drizzle-orm": "^0.44.6"
+  },
+  "devDependencies": {
+    "tsx": "^4.20.6"
+  }
+}
