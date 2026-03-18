@@ -1,112 +1,106 @@
-# Tamagui + Solito + Next + Expo Monorepo
+# Course Hub
 
-> **We highly recommend using [Takeout](https://tamagui.dev/takeout) instead** - a much more comprehensive and actively maintained starter. Available in free and pro versions:
->
-> - [Takeout Overview](https://tamagui.dev/takeout)
-> - [Live Demo](https://takeout.tamagui.dev)
-> - [Takeout Free on GitHub](https://github.com/tamagui/takeout-free)
->
-> This repository is not well maintained.
+Course Hub is a web platform for hosting and sharing online courses. It provides a user-friendly interface for course creators to upload their content and for students to access and learn from it.
 
-```sh
-npm create tamagui
+## Tech stack
+
+- Next.js - for the web application
+- Tamagui - for the UI components
+- Express.js - for the backend API
+- Supabase - for database and authentication
+- Drizzle ORM - for database interactions
+- Orval + OpenAPI - for API client generation
+
+## Project structure
+
+```
+course-hub/
+├── apps/
+│   ├── api/          # REST API (Express.js)
+│   │   └── src/
+│   │       ├── modules/      # Feature modules (auth, users)
+│   │       ├── middleware/   # Auth, validation, error handling
+│   │       ├── repositories/ # Data access layer
+│   │       ├── services/     # Business logic
+│   │       ├── routes/       # Route definitions
+│   │       └── openapi/      # OpenAPI spec generation
+│   └── next/         # Next.js web app
+│       ├── app/              # App Router pages
+│       └── e2e/              # Playwright e2e tests
+│
+└── packages/
+    ├── app/          # Shared cross-platform app logic (features, providers)
+    ├── api-client/   # Auto-generated API client (OpenApi + Orval)
+    ├── contract/     # API contract / route types (drizzle-zod + TS types)
+    ├── db/           # Database client + migrations (Drizzle ORM)
+    ├── db-schema/    # Shared DB schema definitions
+    ├── config/       # Tamagui design tokens & theme config
+    ├── ui/           # Shared UI component library (Tamagui)
+    └── scripts/      # DB seed / cleanup scripts
 ```
 
-## 🔦 About
+## How to run
 
-This monorepo is a starter for an Expo + Next.js + Tamagui + Solito app.
+### Install dependencies:
 
-Many thanks to [@FernandoTheRojo](https://twitter.com/fernandotherojo) for the Solito starter monorepo which this was forked from. Check out his [talk about using expo + next together at Next.js Conf 2021](https://www.youtube.com/watch?v=0lnbdRweJtA).
-
-## 📦 Included packages
-
-- [Tamagui](https://tamagui.dev) 🪄
-- [solito](https://solito.dev) for cross-platform navigation
-- Expo SDK
-- Next.js
-- Expo Router
-
-## 🗂 Folder layout
-
-The main apps are:
-
-- `expo` (native)
-- `next` (web)
-
-- `packages` shared packages across apps
-  - `ui` includes your custom UI kit that will be optimized by Tamagui
-  - `app` you'll be importing most files from `app/`
-    - `features` (don't use a `screens` folder. organize by feature.)
-    - `provider` (all the providers that wrap the app, and some no-ops for Web.)
-
-You can add other folders inside of `packages/` if you know what you're doing and have a good reason to.
-
-> [!TIP]
-> Switching from `app` to `pages` router:
->
-> - remove `app` folder from `apps/next`
-> - move `index.tsx` from `pages-example` to `pages` folder
-> - rename `pages-example-user` to `user` and be sure to update `linkTarget` in `screen.tsx` to `user` as well
-> - delete `SwitchRouterButton.tsx` component and remove it from `screen.tsx` and `packages/ui/src/index.tsx`
-> - search for `pagesMode` keyword and remove it
-
-## 🏁 Start the app
-
-- Install dependencies: `yarn`
-
-- Next.js local dev: `yarn web`
-
-To run with optimizer on in dev mode (just for testing, it's faster to leave it off): `yarn web:extract`. To build for production `yarn web:prod`.
-
-To see debug output to verify the compiler, add `// debug` as a comment to the top of any file.
-
-- Expo local dev: `yarn native`
-
-## UI Kit
-
-Note we're following the [design systems guide](https://tamagui.dev/docs/guides/design-systems) and creating our own package for components.
-
-See `packages/ui` named `@my/ui` for how this works.
-
-## 🆕 Add new dependencies
-
-### Pure JS dependencies
-
-If you're installing a JavaScript-only dependency that will be used across platforms, install it in `packages/app`:
-
-```sh
-cd packages/app
-yarn add date-fns
-cd ../..
+```bash
 yarn
 ```
 
-### Native dependencies
+### Start the development servers:
 
-If you're installing a library with any native code, you must install it in `expo`:
+> In first terminal, start the API server:
 
-```sh
-cd apps/expo
-yarn add react-native-reanimated
-cd ..
-yarn
+```bash
+# Start the API server
+yarn api
 ```
 
-## Update new dependencies
+> In second terminal, start the Next.js app:
 
-### Pure JS dependencies
-
-```sh
-yarn upgrade-interactive
+```bash
+# Start the Next.js app
+yarn web
 ```
 
-You can also install the native library inside of `packages/app` if you want to get autoimport for that package inside of the `app` folder. However, you need to be careful and install the _exact_ same version in both packages. If the versions mismatch at all, you'll potentially get terrible bugs. This is a classic monorepo issue. I use `lerna-update-wizard` to help with this (you don't need to use Lerna to use that lib).
+Happy coding! 🚀
 
-You may potentially want to have the native module transpiled for the next app. If you get error messages with `Cannot use import statement outside a module`, you may need to use `transpilePackages` in your `next.config.js` and add the module to the array there.
+## Cool scripts
 
-### Deploying to Vercel
+### Database scripts
 
-- Root: `apps/next`
-- Install command to be `yarn set version stable && yarn install`
-- Build command: leave default setting
-- Output dir: leave default setting
+- `yarn db:generate` - Generate Drizzle ORM types from the database schema
+- `yarn db:push` - Run database migrations
+
+- `yarn db:clean:<table>` - Clean up the data form a specific table (e.g. `yarn db:clean:users`)
+- `yarn db:seed:<table>` - Seed the data for a specific table (e.g. `yarn db:seed:users`)
+
+### API client generation
+
+- `yarn api-client:generate` - Generate the API client using Orval based on the OpenAPI spec from the API server
+
+> Make sure the API server is running before generating the client, and that all API routes are properly documented with OpenAPI annotations.
+
+## Dev Guide
+
+The app is designed with a modular architecture, where each feature is organized into its own module. This allows for better separation of concerns and easier maintenance.
+
+Also with a specific flow in mind:
+
+1. **Define DB Table**: Start by defining the database table for your feature in the `db-schema` package. This will include the table structure and any relationships.
+
+2. **Define Contracts**: Next, define the API contracts (schemas & TS types) for your feature in the `contract` package using `drizzle-zod` helpers based on the DB schema. This will ensure type safety across the stack.
+
+3. **Implement API Logic**: Then, implement the API logic for your feature using `contracts` as "`inputs`" and "`outputs`" for the feature, in the `api` package. This will include creating the necessary `routes`, `services`, and `repositories` to handle the business logic and data access.
+
+4. **Generate API Client**: Then based on `api` implementation and `openapi` specification for the routes, generate `api-client` hooks (TanStack Query Hooks) by running the `api-client:generate` script. This will create type-safe API client hooks that can be used in the frontend.
+
+5. **Use in Frontend**: Finally, develop the frontend. Where generale UI components can be added to the `ui` package, and the main app logic (e.g. React Context providers, feature composition) can be implemented in the `app` package. You can then use the generated API client hooks to interact with your backend API.
+
+### TLDR
+
+1. Define DB table in `db-schema`
+2. Define API contracts in `contract` using `drizzle-zod`
+3. Implement API logic in `api` using the contracts
+4. Generate API client with `api-client:generate`
+5. Use generated API client hooks in the frontend (`app` + `ui`)
