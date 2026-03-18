@@ -1,8 +1,8 @@
-import { UserDetailScreen } from 'app/features/user/detail-screen'
-import { Stack, useLocalSearchParams } from 'expo-router'
+import { UserDetailScreen } from 'app/features/user/detail-screen';
+import { Stack, useLocalSearchParams } from 'expo-router';
 
 export default function Screen() {
-  const { id } = useLocalSearchParams<{ id: string }>()
+  const { id } = useLocalSearchParams<{ id: string }>();
   return (
     <>
       <Stack.Screen
@@ -16,5 +16,5 @@ export default function Screen() {
       />
       <UserDetailScreen id={id as string} />
     </>
-  )
+  );
 }

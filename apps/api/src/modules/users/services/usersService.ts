@@ -9,10 +9,10 @@ import {
   UpdateUserReq,
   UpdateUserRes,
   User,
-} from "@my/contract";
-import { NotFoundError, ConflictError } from "api/types/errors";
-import { usersRepository } from "../repository/usersRepository";
-import { PaginationReqExtended } from "api/middleware/pagination";
+} from '@my/contract';
+import { NotFoundError, ConflictError } from 'api/types/errors';
+import { usersRepository } from '../repository/usersRepository';
+import { PaginationReqExtended } from 'api/middleware/pagination';
 
 export const usersService = {
   getByEmail: async (email: string): Promise<User> => {
@@ -35,7 +35,7 @@ export const usersService = {
     return user;
   },
   getAllUsersWithProfiles: async (
-    dto: GetAllUsersReq<PaginationReqExtended>,
+    dto: GetAllUsersReq<PaginationReqExtended>
   ): Promise<GetAllUsersRes> => {
     return await usersRepository.getAllUsersWithProfiles(dto);
   },
@@ -52,10 +52,7 @@ export const usersService = {
     const [userRes] = await usersRepository.createUser(user);
     return userRes;
   },
-  updateUser: async (
-    id: string,
-    user: UpdateUserReq,
-  ): Promise<UpdateUserRes> => {
+  updateUser: async (id: string, user: UpdateUserReq): Promise<UpdateUserRes> => {
     const existingUser = await usersRepository.getUserWithProfile(id);
 
     if (!existingUser) {

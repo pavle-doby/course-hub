@@ -1,4 +1,4 @@
-import { ToastViewport as ToastViewportOg } from '@my/ui'
+import { ToastViewport as ToastViewportOg } from '@my/ui';
 
 export const ToastViewport = () => {
   return (
@@ -7,5 +7,5 @@ export const ToastViewport = () => {
       left={0}
       right={0}
     />
-  )
-}
+  );
+};

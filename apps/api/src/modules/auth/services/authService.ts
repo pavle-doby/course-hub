@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response } from 'express';
 import {
   ErrorCodeAuth,
   ErrorCode,
@@ -6,18 +6,18 @@ import {
   LogInUserRes,
   SignUpUserReq,
   SignUpUserRes,
-} from "@my/contract";
+} from '@my/contract';
 import {
   BadRequestError,
   ConflictError,
   NotFoundError,
   UnauthorizedError,
   InternalServerError,
-} from "api/types/errors";
-import { supabase } from "api/utils/supabase";
-import { authRepository } from "../repository/authRepository";
-import { CreateUser } from "../repository/types";
-import { setAuthTokens } from "../utils/setAuthTokens";
+} from 'api/types/errors';
+import { supabase } from 'api/utils/supabase';
+import { authRepository } from '../repository/authRepository';
+import { CreateUser } from '../repository/types';
+import { setAuthTokens } from '../utils/setAuthTokens';
 
 export const authService = {
   signUp: async ({
@@ -44,8 +44,8 @@ export const authService = {
       email: dto.email,
       firstName: dto.firstName,
       lastName: dto.lastName,
-      role: "user",
-      status: "pending",
+      role: 'user',
+      status: 'pending',
     };
 
     const existingUser = await authRepository.getUserByEmail(dto.email);
@@ -135,8 +135,8 @@ export const authService = {
     }
 
     // Clear cookies
-    res.clearCookie("access_token");
-    res.clearCookie("refresh_token");
+    res.clearCookie('access_token');
+    res.clearCookie('refresh_token');
 
     return;
   },
@@ -159,8 +159,8 @@ export const authService = {
 
       if (error) {
         // Clear invalid cookies
-        res.clearCookie("access_token");
-        res.clearCookie("refresh_token");
+        res.clearCookie('access_token');
+        res.clearCookie('refresh_token');
 
         throw new UnauthorizedError({
           code: ErrorCodeAuth.INVALID_REFRESH_TOKEN,
@@ -177,11 +177,11 @@ export const authService = {
 
       return;
     } catch (error) {
-      console.error("Refresh token error:", error);
+      console.error('Refresh token error:', error);
 
       // Clear cookies on unexpected error
-      res.clearCookie("access_token");
-      res.clearCookie("refresh_token");
+      res.clearCookie('access_token');
+      res.clearCookie('refresh_token');
 
       throw new InternalServerError({
         code: ErrorCode.SERVER_ERROR,

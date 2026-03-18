@@ -8,10 +8,10 @@ import {
   GetUserRes,
   UpdateUserReq,
   UpdateUserRes,
-} from "@my/contract";
-import { Request, Response } from "express";
-import { usersService } from "../services/usersService";
-import { PaginationReqExtended } from "api/middleware/pagination";
+} from '@my/contract';
+import { Request, Response } from 'express';
+import { usersService } from '../services/usersService';
+import { PaginationReqExtended } from 'api/middleware/pagination';
 
 export const usersController = {
   getSelf: async (res: Response): Promise<void> => {
@@ -28,8 +28,7 @@ export const usersController = {
       requiresFileUpload: res.locals.query.requiresFileUpload,
     };
 
-    const users: GetAllUsersRes =
-      await usersService.getAllUsersWithProfiles(dto);
+    const users: GetAllUsersRes = await usersService.getAllUsersWithProfiles(dto);
     res.status(200).json(users);
   },
 

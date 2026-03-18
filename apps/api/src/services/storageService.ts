@@ -50,21 +50,12 @@ export const storageService = {
    * Upload a file to Supabase Storage
    */
   async uploadFile(options: UploadFileOptions): Promise<UploadResult> {
-    const {
-      bucketName,
-      fileName,
-      file,
-      contentType,
-      isPublic = false,
-      upsert = false,
-    } = options;
+    const { bucketName, fileName, file, contentType, isPublic = false, upsert = false } = options;
 
-    const { data, error } = await supabase.storage
-      .from(bucketName)
-      .upload(fileName, file, {
-        contentType,
-        upsert,
-      });
+    const { data, error } = await supabase.storage.from(bucketName).upload(fileName, file, {
+      contentType,
+      upsert,
+    });
 
     if (error) {
       throw new BadRequestError({
@@ -88,9 +79,7 @@ export const storageService = {
 
     // Get public URL if requested
     if (isPublic) {
-      const { data: publicUrlData } = supabase.storage
-        .from(bucketName)
-        .getPublicUrl(fileName);
+      const { data: publicUrlData } = supabase.storage.from(bucketName).getPublicUrl(fileName);
 
       result.publicUrl = publicUrlData.publicUrl;
     }
@@ -101,18 +90,13 @@ export const storageService = {
   /**
    * Download a file from Supabase Storage
    */
-  async downloadFile(
-    options: DownloadFileOptions
-  ): Promise<{ data: unknown; fileName: string }> {
+  async downloadFile(options: DownloadFileOptions): Promise<{ data: unknown; fileName: string }> {
     const { bucketName, fileName } = options;
 
     const { data, error } = await supabase.storage.from(bucketName).download(fileName);
 
     if (error) {
-      if (
-        error.message.includes('not found') ||
-        error.message.includes('does not exist')
-      ) {
+      if (error.message.includes('not found') || error.message.includes('does not exist')) {
         throw new NotFoundError({
           error: new Error(`File not found: ${fileName}`),
           details: { originalError: error.message },

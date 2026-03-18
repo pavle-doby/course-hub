@@ -3,16 +3,16 @@ const headingFont = {
     6: 15,
   },
   transform: {
-    6: "uppercase",
-    7: "none",
+    6: 'uppercase',
+    7: 'none',
   },
   weight: {
-    6: "400",
-    7: "700",
+    6: '400',
+    7: '700',
   },
   color: {
-    6: "$colorFocus",
-    7: "$color",
+    6: '$colorFocus',
+    7: '$color',
   },
   letterSpacing: {
     5: 2,
@@ -26,13 +26,13 @@ const headingFont = {
     15: -6,
   },
   face: {
-    700: { normal: "InterBold" },
+    700: { normal: 'InterBold' },
   },
 };
 
 const bodyFont = {
   face: {
-    700: { normal: "InterBold" },
+    700: { normal: 'InterBold' },
   },
   size: {
     // Tailwind CSS sizes
@@ -42,14 +42,14 @@ const bodyFont = {
     true: 16, // base
     lg: 18,
     xl: 20,
-    "2xl": 24,
-    "3xl": 30,
-    "4xl": 36,
-    "5xl": 48,
-    "6xl": 64,
-    "7xl": 80,
-    "8xl": 96,
-    "9xl": 128,
+    '2xl': 24,
+    '3xl': 30,
+    '4xl': 36,
+    '5xl': 48,
+    '6xl': 64,
+    '7xl': 80,
+    '8xl': 96,
+    '9xl': 128,
 
     // Tailwind CSS sizes // numbers (key * 4 = value)
     3: 12,

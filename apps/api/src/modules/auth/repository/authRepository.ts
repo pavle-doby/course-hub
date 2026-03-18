@@ -4,10 +4,7 @@ import { eq } from 'drizzle-orm';
 
 export const authRepository = {
   getUserByEmail: async (email: string) => {
-    const [user] = await db
-      .select()
-      .from(schema.users)
-      .where(eq(schema.users.email, email));
+    const [user] = await db.select().from(schema.users).where(eq(schema.users.email, email));
     return user;
   },
   createUser: async (body: CreateUser) => {

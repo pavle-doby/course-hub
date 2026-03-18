@@ -1,27 +1,27 @@
-import { client, db, schema } from "@my/db";
-import { inArray } from "drizzle-orm";
+import { client, db, schema } from '@my/db';
+import { inArray } from 'drizzle-orm';
 
 const mockUsers: Array<typeof schema.users.$inferInsert> = [
   {
-    email: "default@email.com",
-    firstName: "Default",
-    lastName: "User",
-    role: "user",
-    status: "approved",
+    email: 'default@email.com',
+    firstName: 'Default',
+    lastName: 'User',
+    role: 'user',
+    status: 'approved',
   },
   {
-    email: "admin.mock@email.com",
-    firstName: "Admin",
-    lastName: "Mock",
-    role: "admin",
-    status: "approved",
+    email: 'admin.mock@email.com',
+    firstName: 'Admin',
+    lastName: 'Mock',
+    role: 'admin',
+    status: 'approved',
   },
   {
-    email: "reviewer.mock@email.com",
-    firstName: "Reviewer",
-    lastName: "Mock",
-    role: "user",
-    status: "pending",
+    email: 'reviewer.mock@email.com',
+    firstName: 'Reviewer',
+    lastName: 'Mock',
+    role: 'user',
+    status: 'pending',
   },
 ];
 
@@ -53,7 +53,7 @@ async function seedUsers() {
     console.log(`Inserted ${insertedUsers.length} mock user(s).`);
     console.table(usersInDb);
   } catch (error) {
-    console.error("Failed to populate mock users:", error);
+    console.error('Failed to populate mock users:', error);
     process.exitCode = 1;
   } finally {
     await client.end();

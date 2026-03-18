@@ -1,4 +1,4 @@
-import { Anchor, Button } from 'tamagui'
+import { Anchor, Button } from 'tamagui';
 
 export const SwitchRouterButton = ({ pagesMode = false }: { pagesMode?: boolean }) => {
   return (
@@ -9,5 +9,5 @@ export const SwitchRouterButton = ({ pagesMode = false }: { pagesMode?: boolean 
     >
       <Button>Change router: {pagesMode ? 'pages' : 'app'}</Button>
     </Anchor>
-  )
-}
+  );
+};

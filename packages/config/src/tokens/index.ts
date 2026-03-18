@@ -1,7 +1,7 @@
-import { COLOR_TOKENS_DARK } from "./colors";
-import { RADIUS_TOKENS } from "./radius";
-import { SIZE_TOKENS } from "./size";
-import { Z_INDEX } from "./z-index";
+import { COLOR_TOKENS_DARK } from './colors';
+import { RADIUS_TOKENS } from './radius';
+import { SIZE_TOKENS } from './size';
+import { Z_INDEX } from './z-index';
 
 /**
  * Tokens values are based on tailwindcss values.
@@ -12,8 +12,8 @@ export const CUSTOM_TOKENS = {
   color: {
     ...COLOR_TOKENS_DARK,
 
-    background: COLOR_TOKENS_DARK["base"],
-    color: COLOR_TOKENS_DARK["base-contrast"],
+    background: COLOR_TOKENS_DARK['base'],
+    color: COLOR_TOKENS_DARK['base-contrast'],
   },
   radius: {
     ...RADIUS_TOKENS,

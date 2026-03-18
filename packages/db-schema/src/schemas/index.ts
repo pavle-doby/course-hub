@@ -1,6 +1,6 @@
 // Enums exports
-export * from "./enums";
+export * from './enums';
 
 // Table exports
-export * from "./users";
-export * from "./file-uploads";
+export * from './users';
+export * from './file-uploads';

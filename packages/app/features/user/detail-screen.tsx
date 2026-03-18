@@ -1,13 +1,13 @@
-'use client'
+'use client';
 
-import { Button, Paragraph, YStack } from '@my/ui'
-import { ChevronLeft } from '@tamagui/lucide-icons'
-import { useRouter } from 'solito/navigation'
+import { Button, Paragraph, YStack } from '@my/ui';
+import { ChevronLeft } from '@tamagui/lucide-icons';
+import { useRouter } from 'solito/navigation';
 
 export function UserDetailScreen({ id }: { id: string }) {
-  const router = useRouter()
+  const router = useRouter();
   if (!id) {
-    return null
+    return null;
   }
   return (
     <YStack
@@ -29,5 +29,5 @@ export function UserDetailScreen({ id }: { id: string }) {
         Go Home
       </Button>
     </YStack>
-  )
+  );
 }

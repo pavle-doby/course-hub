@@ -1,8 +1,8 @@
-import Axios, { type AxiosRequestConfig } from "axios";
-import { env } from "../env";
+import Axios, { type AxiosRequestConfig } from 'axios';
+import { env } from '../env';
 
 export const apiClient = Axios.create({
-  baseURL: env.API_URL ?? "http://localhost:7007/api",
+  baseURL: env.API_URL ?? 'http://localhost:7007/api',
   withCredentials: true,
 });
 
@@ -12,7 +12,7 @@ export const apiClient = Axios.create({
  */
 export const customInstance = <T>(
   config: AxiosRequestConfig,
-  options?: AxiosRequestConfig,
+  options?: AxiosRequestConfig
 ): Promise<T> => {
   const source = Axios.CancelToken.source();
   const promise = apiClient({
@@ -23,7 +23,7 @@ export const customInstance = <T>(
 
   // @ts-expect-error — attach cancel to the promise so Orval can abort
   promise.cancel = () => {
-    source.cancel("Query was cancelled");
+    source.cancel('Query was cancelled');
   };
 
   return promise;

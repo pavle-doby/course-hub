@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { PaginationSchema, SearchSchema } from "./schemas";
+import { z } from 'zod';
+import { PaginationSchema, SearchSchema } from './schemas';
 
 export type PaginationReq = {
   page?: number;

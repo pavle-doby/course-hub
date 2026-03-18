@@ -14,9 +14,7 @@ export type GetAllFileUploadsResult = PaginationRes<FileUploadEntity>;
 
 export type CreateFileUploadData = Omit<FileUploadEntity, 'id' | 'uploadedAt'>;
 
-export type UpdateFileUploadData = Partial<
-  Omit<FileUploadEntity, 'id' | 'userId' | 'uploadedAt'>
->;
+export type UpdateFileUploadData = Partial<Omit<FileUploadEntity, 'id' | 'userId' | 'uploadedAt'>>;
 
 export const fileUploadsRepository = {
   /**
@@ -80,20 +78,14 @@ export const fileUploadsRepository = {
     query,
   }: PaginationReqExtended & FileUploadFilters): Promise<GetAllFileUploadsResult> {
     // Build search condition for fileName
-    const searchCondition = query
-      ? ilike(schema.fileUploads.fileName, `%${query}%`)
-      : undefined;
+    const searchCondition = query ? ilike(schema.fileUploads.fileName, `%${query}%`) : undefined;
 
     // Build filter conditions
-    const userFilterCondition = userId
-      ? eq(schema.fileUploads.userId, userId)
-      : undefined;
+    const userFilterCondition = userId ? eq(schema.fileUploads.userId, userId) : undefined;
 
     const fileTypeFilterCondition = type ? eq(schema.fileUploads.type, type) : undefined;
 
-    const bucketFilterCondition = bucket
-      ? eq(schema.fileUploads.bucket, bucket)
-      : undefined;
+    const bucketFilterCondition = bucket ? eq(schema.fileUploads.bucket, bucket) : undefined;
 
     // Combine all conditions
     const whereConditions = and(

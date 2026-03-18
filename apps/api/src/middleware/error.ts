@@ -12,11 +12,7 @@ import postgres from 'postgres';
 /**
  * Middleware to handle not found endpoints
  */
-export const handleErrorNotFound = (
-  _req: Request,
-  res: Response,
-  _next: NextFunction
-) => {
+export const handleErrorNotFound = (_req: Request, res: Response, _next: NextFunction) => {
   const error = new NotFoundError({
     code: ErrorCode.NOT_FOUND_ENDPOINT,
   });
@@ -31,12 +27,7 @@ export const handleErrorNotFound = (
  *
  * @param next - If removed as param `errorMiddleware` will not be called
  */
-export function handleError(
-  err: unknown,
-  _req: Request,
-  res: Response,
-  _next: NextFunction
-) {
+export function handleError(err: unknown, _req: Request, res: Response, _next: NextFunction) {
   const error = err as ApiError | Error;
 
   if (error instanceof ApiError) {

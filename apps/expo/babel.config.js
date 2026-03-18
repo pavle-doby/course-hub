@@ -1,5 +1,5 @@
 module.exports = (api) => {
-  api.cache(true)
+  api.cache(true);
   return {
     presets: [['babel-preset-expo', { jsxRuntime: 'automatic' }]],
     plugins: [
@@ -30,9 +30,12 @@ module.exports = (api) => {
               },
             ],
           ]),
-      ['transform-inline-environment-variables', {
-        include: ['TAMAGUI_USE_NATIVE_PORTAL'],
-      }],
+      [
+        'transform-inline-environment-variables',
+        {
+          include: ['TAMAGUI_USE_NATIVE_PORTAL'],
+        },
+      ],
     ],
-  }
-}
+  };
+};

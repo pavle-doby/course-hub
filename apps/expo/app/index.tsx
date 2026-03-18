@@ -1,8 +1,8 @@
-import { HomeScreen } from 'app/features/home/screen'
-import { Stack, useRouter } from 'expo-router'
+import { HomeScreen } from 'app/features/home/screen';
+import { Stack, useRouter } from 'expo-router';
 
 export default function Screen() {
-  const router = useRouter()
+  const router = useRouter();
 
   return (
     <>
@@ -13,5 +13,5 @@ export default function Screen() {
       />
       <HomeScreen onLinkPress={() => router.push('/user/nate')} />
     </>
-  )
+  );
 }

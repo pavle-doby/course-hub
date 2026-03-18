@@ -1,22 +1,22 @@
-import { Router } from "express";
+import { Router } from 'express';
 
-import { handleAuth } from "../middleware/auth";
+import { handleAuth } from '../middleware/auth';
 
-import authRoutes from "../modules/auth/routes/authRoutes";
-import usersRoutes from "../modules/users/routes/usersRoutes";
+import authRoutes from '../modules/auth/routes/authRoutes';
+import usersRoutes from '../modules/users/routes/usersRoutes';
 
 const api: Router = Router();
 
 api.use(
-  "/v1/auth",
+  '/v1/auth',
   //
-  authRoutes,
+  authRoutes
 );
 api.use(
-  "/v1/users",
+  '/v1/users',
   //
   handleAuth,
-  usersRoutes,
+  usersRoutes
 );
 
 export default api;

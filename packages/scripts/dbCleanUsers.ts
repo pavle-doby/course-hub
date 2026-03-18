@@ -1,4 +1,4 @@
-import { client, db, schema } from "@my/db";
+import { client, db, schema } from '@my/db';
 
 async function cleanUsers() {
   try {
@@ -8,7 +8,7 @@ async function cleanUsers() {
 
     console.log(`Deleted ${deletedUsers.length} user(s).`);
   } catch (error) {
-    console.error("Failed to clean users:", error);
+    console.error('Failed to clean users:', error);
     process.exitCode = 1;
   } finally {
     await client.end();
