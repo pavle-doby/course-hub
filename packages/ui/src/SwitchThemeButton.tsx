@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Button, useIsomorphicLayoutEffect } from 'tamagui';
 import { useThemeSetting, useRootTheme } from '@tamagui/next-theme';
+import { UIButton } from '@my/ui';
 
 export const SwitchThemeButton = () => {
   const themeSetting = useThemeSetting();
@@ -14,5 +15,5 @@ export const SwitchThemeButton = () => {
     setClientTheme(themeSetting.forcedTheme || themeSetting.current || theme);
   }, [themeSetting.current, themeSetting.resolvedTheme]);
 
-  return <Button onPress={themeSetting.toggle}>Change theme: {clientTheme}</Button>;
+  return <UIButton onPress={themeSetting.toggle}>Change theme: {clientTheme}</UIButton>;
 };

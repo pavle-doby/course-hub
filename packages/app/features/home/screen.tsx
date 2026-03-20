@@ -8,6 +8,7 @@ import {
   Separator,
   Sheet,
   SwitchThemeButton,
+  UIButton,
   useToastController,
   XStack,
   YStack,
@@ -58,7 +59,12 @@ export function HomeScreen({ onLinkPress }: { onLinkPress?: () => void }) {
         <Separator />
       </YStack>
 
-      <Button onPress={onLinkPress}>Link to user</Button>
+      <UIButton
+        primary
+        onPress={onLinkPress}
+      >
+        Link to user
+      </UIButton>
 
       <SheetDemo />
     </YStack>
