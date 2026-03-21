@@ -9,6 +9,8 @@ import {
   Sheet,
   SwitchThemeButton,
   UIButton,
+  UIFlex,
+  UISwitch,
   useToastController,
   XStack,
   YStack,
@@ -58,6 +60,20 @@ export function HomeScreen({ onLinkPress }: { onLinkPress?: () => void }) {
         </Paragraph>
         <Separator />
       </YStack>
+
+      <UIFlex
+        flexDirection="column"
+        gap={'$2'}
+      >
+        <UISwitch
+          accent
+          label="Accent Switch"
+        />
+        <UISwitch
+          primary
+          label="Primary Switch"
+        />
+      </UIFlex>
 
       <UIButton
         primary

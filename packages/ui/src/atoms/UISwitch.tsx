@@ -60,20 +60,22 @@ export function UISwitch(props: UISwitchProps): JSX.Element {
   const style = {
     ...(isChecked && {
       switch: {
-        backgroundColor: `${styling}-300`,
-        borderColor: `${styling}-300`,
+        background: `${styling}-700`,
+        backgroundColor: `${styling}-700`,
+        borderColor: `${styling}-700`,
       },
       thumb: {
-        backgroundColor: `${styling}-700`,
+        backgroundColor: `${styling}-100`,
       },
     }),
     ...(!isChecked && {
       switch: {
-        backgroundColor: `${styling}-200`,
-        borderColor: `${styling}-200`,
+        background: `${styling}-300`,
+        backgroundColor: `${styling}-300`,
+        borderColor: `${styling}-300`,
       },
       thumb: {
-        backgroundColor: `${styling}-400`,
+        backgroundColor: `${styling}-100`,
       },
     }),
   } as any;
@@ -97,12 +99,14 @@ export function UISwitch(props: UISwitchProps): JSX.Element {
       <StyledSwitch
         id={id}
         size={size}
+        transition="300ms"
         checked={checked}
         {...style.switch}
         {...other}
         onCheckedChange={handleCheckedChange}
       >
         <StyledThumb
+          transition="quickest"
           size={size}
           {...style.thumb}
         />
@@ -121,9 +125,12 @@ export function UISwitch(props: UISwitchProps): JSX.Element {
   );
 }
 
+const BORDER_WIDTH = 2;
+
 // `Switch` is styled so we can use custom `size` prop
 const StyledSwitch = styled(Switch, {
   backgroundColor: '$primary',
+  borderWidth: BORDER_WIDTH,
   cursor: 'pointer',
 
   variants: {
@@ -132,8 +139,8 @@ const StyledSwitch = styled(Switch, {
         const val = getValue(token);
 
         return {
-          height: getSwitchHeight(val) + 4,
-          width: getSwitchWidth(val) + 4,
+          height: getSwitchHeight(val) + BORDER_WIDTH * 2,
+          width: getSwitchWidth(val) + BORDER_WIDTH * 2,
         };
       },
     },
@@ -157,7 +164,7 @@ const StyledThumb = styled(Switch.Thumb, {
 });
 
 const getSwitchHeight = (size = 24) => size;
-const getSwitchWidth = (size = 24) => size * 2;
+const getSwitchWidth = (size = 24) => size * 2 + BORDER_WIDTH * 2;
 
 // TODO: Think of moving this to utils
 function getValue(token: SizeTokens) {
