@@ -1,4 +1,4 @@
-import { ErrorCode } from '@my/contract';
+import { ErrorCode } from './ErrorCode';
 import { ApiError, ApiErrorProps } from './ApiError';
 
 /**

@@ -1,10 +1,10 @@
 import type { Request, Response } from 'express';
 import { authService } from '../services/authService';
-import { LogInUserReq, SignUpUserReq, User } from '@my/contract';
+import { AuthLogInUserReq, AuthSignUpUserReq, User } from '@my/contract';
 
 export const authController = {
   signUp: async (_req: Request, res: Response) => {
-    const body: SignUpUserReq = res.locals.body;
+    const body: AuthSignUpUserReq = res.locals.body;
     const resDto: User = await authService.signUp({ dto: body, res });
     return res.status(201).json(resDto);
   },
@@ -13,7 +13,7 @@ export const authController = {
     const reqDto = {
       email: res.locals.body.email,
       password: res.locals.body.password,
-    } as LogInUserReq;
+    } as AuthLogInUserReq;
     const resDto: User = await authService.logIn({ dto: reqDto, res });
     return res.status(200).json(resDto);
   },

@@ -8,6 +8,7 @@ export * from './SwitchRouterButton';
 export * from './atoms';
 export * from './molecules';
 export * from './layouts';
+export * from './utils';
 
 // type augmentation for tamagui custom config
 import type { Conf } from '@my/config';

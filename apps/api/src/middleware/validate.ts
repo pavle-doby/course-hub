@@ -1,7 +1,7 @@
 import type { ZodType } from 'zod';
 import type { Request, Response, NextFunction } from 'express';
 import { ErrorCode } from '@my/contract';
-import { BadRequestError } from 'api/types/errors/BadRequestError';
+import { BadRequestError } from '@my/contract';
 
 type SourceType = 'body' | 'query' | 'params';
 

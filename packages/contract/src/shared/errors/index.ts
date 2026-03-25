@@ -8,7 +8,11 @@ export { NotFoundError } from './NotFoundError';
 export { MethodNotAllowedError } from './MethodNotAllowedError';
 export { ConflictError } from './ConflictError';
 export { UnprocessableEntityError } from './UnprocessableEntityError';
+export { TooManyRequestsError } from './TooManyRequestsError';
 
 // 5xx Server Errors
 export { InternalServerError } from './InternalServerError';
 export { ServiceUnavailableError } from './ServiceUnavailableError';
+
+export { ErrorCode } from './ErrorCode';
+export { ApiErrorSchema, type ApiErrorResponse } from './ApiErrorSchema';

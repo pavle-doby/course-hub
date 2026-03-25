@@ -1,11 +1,11 @@
 import type { NextFunction, Request, Response } from 'express';
-import { ErrorCode } from '@my/contract';
 import {
+  ErrorCode,
   NotFoundError,
   InternalServerError,
   UnprocessableEntityError,
   ApiError,
-} from 'api/types/errors';
+} from '@my/contract';
 import { logger } from 'api/logger';
 import postgres from 'postgres';
 

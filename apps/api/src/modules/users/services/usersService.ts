@@ -10,7 +10,7 @@ import {
   UpdateUserRes,
   User,
 } from '@my/contract';
-import { NotFoundError, ConflictError } from 'api/types/errors';
+import { NotFoundError, ConflictError } from '@my/contract';
 import { usersRepository } from '../repository/usersRepository';
 import { PaginationReqExtended } from 'api/middleware/pagination';
 

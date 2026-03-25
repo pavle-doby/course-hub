@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from 'express';
-import { ForbiddenError } from 'api/types/errors';
+import { ForbiddenError } from '@my/contract';
 import { usersService } from 'api/modules/users/services/usersService';
 import type { UserRole } from '@my/contract';
 

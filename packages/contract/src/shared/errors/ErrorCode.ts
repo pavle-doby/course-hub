@@ -1,3 +1,5 @@
+// TODO@pavle: In web create a map that shows proper messages for each error code, and use it in the error handling hook.
+
 /**
  * Global error codes used across the application.
  */

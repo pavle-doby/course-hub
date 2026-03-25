@@ -1,5 +1,5 @@
 import { logger } from './logger';
-import { randomUUID } from 'crypto';
+import { randomUUID } from 'node:crypto';
 import pinoHttp from 'pino-http';
 
 export const handleLogs = pinoHttp({

@@ -1,5 +1,5 @@
 import { JSX, Ref, forwardRef } from 'react';
-import { Button, ButtonProps, TamaguiElement } from 'tamagui';
+import { Button, ButtonProps, GetThemeValueForKey, TamaguiElement } from 'tamagui';
 import { getStylingColor, StylingProps } from '../utils/styling';
 
 // Omitting `variant` prop from `ButtonProps` because we want to use our own `variant` props
@@ -105,105 +105,132 @@ export const UIButton = forwardRef(
 
     const sizeStyles = {
       small: {
-        fontSize: '$3.5',
-        minHeight: '$8',
-
-        paddingVertical: '$0.5',
-        paddingHorizontal: '$2',
+        button: {
+          minHeight: '$8',
+          paddingVertical: '$0.5',
+          paddingHorizontal: '$2',
+        },
+        text: {
+          fontSize: '$3.5',
+          fontWeight: '400',
+        },
       },
       medium: {
-        fontSize: '$4',
-        minHeight: '$10',
-
-        paddingVertical: '$1',
-        paddingHorizontal: '$2',
+        button: {
+          minHeight: '$10',
+          paddingVertical: '$1',
+          paddingHorizontal: '$2',
+        },
+        text: {
+          fontSize: '$4',
+          fontWeight: '400',
+        },
       },
       large: {
-        fontSize: '$5',
-        minHeight: '$14',
-
-        paddingVertical: '$2',
-        paddingHorizontal: '$4',
+        button: {
+          minHeight: '$14',
+          paddingVertical: '$2',
+          paddingHorizontal: '$4',
+        },
+        text: {
+          fontSize: '$5',
+          fontWeight: '400',
+        },
       },
     };
 
     const variantStyles = {
       solid: {
-        color: contrast ? `${styling}` : `${styling}-contrast`,
-        backgroundColor: contrast ? `${styling}-contrast` : `${styling}`,
-        borderColor: contrast ? `${styling}-contrast` : `${styling}`,
-        hoverStyle: {
-          color: `${styling}-contrast`,
-          backgroundColor: `${styling}-500`,
-          borderColor: `${styling}-500`,
+        button: {
+          color: contrast ? `${styling}` : `${styling}-contrast`,
+          backgroundColor: contrast ? `${styling}-contrast` : `${styling}`,
+          borderColor: contrast ? `${styling}-contrast` : `${styling}`,
+          hoverStyle: {
+            color: `${styling}-contrast`,
+            backgroundColor: `${styling}-500`,
+            borderColor: `${styling}-500`,
+          },
+          pressStyle: {
+            color: `${styling}-contrast`,
+            backgroundColor: `${styling}-700`,
+            borderColor: `${styling}-700`,
+          },
+          disabledStyle: {
+            backgroundColor: `${styling}-400`,
+            borderColor: `${styling}-400`,
+          },
         },
-        pressStyle: {
-          color: `${styling}-contrast`,
-          backgroundColor: `${styling}-700`,
-          borderColor: `${styling}-700`,
-        },
-        disabledStyle: {
-          backgroundColor: `${styling}-400`,
-          borderColor: `${styling}-400`,
-        },
+        text: {},
       },
       outline: {
-        color: contrast ? `${styling}-contrast` : `${styling}`,
-        backgroundColor: `transparent`,
-        borderColor: contrast ? `${styling}-contrast` : `${styling}`,
-        borderWidth: 2,
-        hoverStyle: {
-          color: `${styling}-500`,
+        button: {
+          color: contrast ? `${styling}-contrast` : `${styling}`,
           backgroundColor: `transparent`,
-          borderColor: `${styling}-500`,
+          borderColor: contrast ? `${styling}-contrast` : `${styling}`,
+          borderWidth: 2,
+          hoverStyle: {
+            color: `${styling}-500`,
+            backgroundColor: `transparent`,
+            borderColor: `${styling}-500`,
+          },
+          pressStyle: {
+            color: `${styling}-700`,
+            backgroundColor: `transparent`,
+            borderColor: `${styling}-700`,
+          },
+          disabledStyle: {
+            color: `${styling}-400`,
+            borderColor: `${styling}-400`,
+          },
         },
-        pressStyle: {
-          color: `${styling}-700`,
-          backgroundColor: `transparent`,
-          borderColor: `${styling}-700`,
-        },
-        disabledStyle: {
-          color: `${styling}-400`,
-          borderColor: `${styling}-400`,
-        },
+        text: {},
       },
       clean: {
-        color: contrast ? `${styling}-contrast` : `${styling}`,
-        backgroundColor: `transparent`,
-        borderColor: `transparent`,
-        fontWeight: '500',
-        paddingVertical: 0,
-        paddingHorizontal: 0,
-        minHeight: 'auto',
-        hoverStyle: {
-          color: `${styling}-500`,
+        button: {
+          color: contrast ? `${styling}-contrast` : `${styling}`,
           backgroundColor: `transparent`,
           borderColor: `transparent`,
+          paddingVertical: 0,
+          paddingHorizontal: 0,
+          minHeight: 'auto',
+          hoverStyle: {
+            color: `${styling}-500`,
+            backgroundColor: `transparent`,
+            borderColor: `transparent`,
+          },
+          pressStyle: {
+            color: `${styling}-700`,
+            backgroundColor: `transparent`,
+            borderColor: `transparent`,
+          },
+          disabledStyle: {
+            color: `${styling}-400`,
+            borderColor: `transparent`,
+          },
         },
-        pressStyle: {
-          color: `${styling}-700`,
-          backgroundColor: `transparent`,
-          borderColor: `transparent`,
-        },
-        disabledStyle: {
-          color: `${styling}-400`,
-          borderColor: `transparent`,
+        text: {
+          fontWeight: '500',
         },
       },
     };
 
-    const style = {
-      ...sizeStyles[size],
-      ...variantStyles[variant],
-    } as UIButtonProps;
+    const buttonStyle = {
+      ...sizeStyles[size].button,
+      ...variantStyles[variant].button,
+    };
+
+    const textStyle = {
+      ...sizeStyles[size].text,
+      ...variantStyles[variant].text,
+    };
 
     return (
       <Button
         ref={ref}
-        {...style}
+        {...(buttonStyle as UIButtonProps)}
         {...otherProps}
       >
-        {props.children}
+        <Button.Text {...(textStyle as any)}>{props.children}</Button.Text>
       </Button>
     );
   }

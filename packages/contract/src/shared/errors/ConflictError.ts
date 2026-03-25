@@ -1,14 +1,14 @@
-import { ErrorCode } from '@my/contract';
+import { ErrorCode } from './ErrorCode';
 import { ApiError, ApiErrorProps } from './ApiError';
 
 /**
- * Bad Request Error - HTTP Status `400`
+ * Conflict Error - HTTP Status `409`
  */
-export class BadRequestError extends ApiError {
+export class ConflictError extends ApiError {
   constructor(error: ApiErrorProps = {}) {
     super({
       ...error,
-      status: 400,
+      status: 409,
       code: error.code || ErrorCode.VALIDATION_ERROR,
     });
   }

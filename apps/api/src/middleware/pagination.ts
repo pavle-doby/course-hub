@@ -1,5 +1,5 @@
 import { ErrorCode, PaginationReq } from '@my/contract';
-import { BadRequestError } from 'api/types/errors';
+import { BadRequestError } from '@my/contract';
 import type { Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
 

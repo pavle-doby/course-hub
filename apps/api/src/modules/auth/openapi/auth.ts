@@ -1,6 +1,6 @@
 import { registry } from 'api/openapi/registry';
 import { UserSchema } from 'api/openapi/schemas';
-import { AuthLoginQuerySchema, AuthSignUpQuerySchema } from '@my/contract';
+import { AuthLoginQuerySchema, AuthSignUpQuerySchema, ApiErrorSchema } from '@my/contract';
 
 registry.registerPath({
   method: 'post',
@@ -18,7 +18,10 @@ registry.registerPath({
       description: 'User signed up successfully',
       content: { 'application/json': { schema: UserSchema } },
     },
-    400: { description: 'Validation error or user already exists' },
+    default: {
+      description: 'Error',
+      content: { 'application/json': { schema: ApiErrorSchema } },
+    },
   },
 });
 
@@ -38,7 +41,10 @@ registry.registerPath({
       description: 'Logged in successfully',
       content: { 'application/json': { schema: UserSchema } },
     },
-    401: { description: 'Invalid credentials' },
+    default: {
+      description: 'Error',
+      content: { 'application/json': { schema: ApiErrorSchema } },
+    },
   },
 });
 

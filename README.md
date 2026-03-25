@@ -81,6 +81,14 @@ Happy coding! 🚀
 
 > Make sure the API server is running before generating the client, and that all API routes are properly documented with OpenAPI annotations.
 
+### Count lines of code
+
+```bash
+cloc . \
+  --exclude-dir=node_modules,.next,dist,build,Pods,.turbo,.expo,generated,playwright-report,ios \
+  --exclude-ext=sql
+```
+
 ## Dev Guide
 
 The app is designed with a modular architecture, where each feature is organized into its own module. This allows for better separation of concerns and easier maintenance.

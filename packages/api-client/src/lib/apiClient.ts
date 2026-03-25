@@ -6,6 +6,15 @@ export const apiClient = Axios.create({
   withCredentials: true,
 });
 
+apiClient.interceptors.response.use(null, async (error) => {
+  if (error.response?.status === 401 && !error.config._retry) {
+    error.config._retry = true;
+    await apiClient.post('/auth/refresh'); // sets new cookies
+    return apiClient(error.config);
+  }
+  return Promise.reject(error);
+});
+
 /**
  * Custom Orval mutator — wraps every generated request with the configured
  * Axios instance so credentials (cookies) are sent automatically.

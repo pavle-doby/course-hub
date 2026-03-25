@@ -1,5 +1,6 @@
 'use client';
 
+import { useAuthSignOut } from '@my/api-client';
 import {
   Anchor,
   Button,
@@ -9,17 +10,43 @@ import {
   Sheet,
   SwitchThemeButton,
   UIButton,
-  UIFlex,
   UISwitch,
   useToastController,
   XStack,
   YStack,
 } from '@my/ui';
 import { ChevronDown, ChevronUp } from '@tamagui/lucide-icons';
+import { useErrorHandling } from 'app/hooks/errors/useErrorHandling';
+import { useToastMessage } from 'app/hooks/toast/useToastMessage';
 import { useState } from 'react';
 import { Platform } from 'react-native';
+import { useRouter } from 'solito/navigation';
 
 export function HomeScreen({ onLinkPress }: { onLinkPress?: () => void }) {
+  const router = useRouter();
+
+  const { mutate: signOutMutate } = useAuthSignOut();
+
+  const { showMessage } = useToastMessage();
+  const { handleError: handleErrors } = useErrorHandling();
+
+  function signOut() {
+    signOutMutate(void 0, {
+      onSuccess: () => {
+        showMessage({
+          title: 'Sign Out successful',
+          message: 'You have successfully signed out',
+          style: 'success',
+        });
+
+        router.push('/auth/login');
+      },
+      onError: (error) => {
+        handleErrors(error as unknown as Error);
+      },
+    });
+  }
+
   return (
     <YStack
       flex={1}
@@ -61,26 +88,44 @@ export function HomeScreen({ onLinkPress }: { onLinkPress?: () => void }) {
         <Separator />
       </YStack>
 
-      <UIFlex
-        flexDirection="column"
-        gap={'$2'}
-      >
+      <YStack gap={'$2'}>
+        <UISwitch
+          primary
+          label="Primary Switch"
+        />
         <UISwitch
           accent
           label="Accent Switch"
         />
         <UISwitch
-          primary
-          label="Primary Switch"
+          secondary
+          label="Secondary Switch"
         />
-      </UIFlex>
+        <UISwitch
+          danger
+          label="Secondary Switch"
+        />
+        <UISwitch
+          success
+          label="Secondary Switch"
+        />
+      </YStack>
 
-      <UIButton
-        primary
-        onPress={onLinkPress}
-      >
-        Link to user
-      </UIButton>
+      <XStack gap="$4">
+        <UIButton
+          primary
+          onPress={onLinkPress}
+        >
+          Link to user
+        </UIButton>
+
+        <UIButton
+          secondary
+          onPress={signOut}
+        >
+          Sign Out
+        </UIButton>
+      </XStack>
 
       <SheetDemo />
     </YStack>

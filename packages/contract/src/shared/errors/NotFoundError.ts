@@ -1,4 +1,4 @@
-import { ErrorCode } from '@my/contract';
+import { ErrorCode } from './ErrorCode';
 import { ApiError, ApiErrorProps } from './ApiError';
 
 /**
@@ -6,6 +6,10 @@ import { ApiError, ApiErrorProps } from './ApiError';
  */
 export class NotFoundError extends ApiError {
   constructor(error: ApiErrorProps = {}) {
-    super({ ...error, status: 404, code: error.code || ErrorCode.NOT_FOUND });
+    super({
+      ...error,
+      status: 404,
+      code: error.code || ErrorCode.NOT_FOUND,
+    });
   }
 }

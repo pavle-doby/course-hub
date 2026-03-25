@@ -1,7 +1,7 @@
 import { registry } from 'api/openapi/registry';
 import { UserSchema, PaginatedUsersSchema } from 'api/openapi/schemas';
 import { UserGetAllQuerySchema, UserPostQuerySchema, UserPutQuerySchema } from '@my/contract';
-import { ParamsIdSchema, SearchSchema } from '@my/contract';
+import { ParamsIdSchema, SearchSchema, ApiErrorSchema } from '@my/contract';
 import { PaginationParams } from 'api/middleware/pagination';
 
 // GET /users/self
@@ -16,7 +16,7 @@ registry.registerPath({
       description: 'Current authenticated user',
       content: { 'application/json': { schema: UserSchema } },
     },
-    401: { description: 'Unauthorized' },
+    default: { description: 'Error', content: { 'application/json': { schema: ApiErrorSchema } } },
   },
 });
 
@@ -38,8 +38,7 @@ registry.registerPath({
       description: 'Paginated list of users',
       content: { 'application/json': { schema: PaginatedUsersSchema } },
     },
-    401: { description: 'Unauthorized' },
-    403: { description: 'Forbidden — admin only' },
+    default: { description: 'Error', content: { 'application/json': { schema: ApiErrorSchema } } },
   },
 });
 
@@ -58,9 +57,7 @@ registry.registerPath({
       description: 'User by ID',
       content: { 'application/json': { schema: UserSchema } },
     },
-    401: { description: 'Unauthorized' },
-    403: { description: 'Forbidden — admin only' },
-    404: { description: 'User not found' },
+    default: { description: 'Error', content: { 'application/json': { schema: ApiErrorSchema } } },
   },
 });
 
@@ -82,8 +79,7 @@ registry.registerPath({
       description: 'User created',
       content: { 'application/json': { schema: UserSchema } },
     },
-    400: { description: 'Validation error' },
-    403: { description: 'Forbidden — admin only' },
+    default: { description: 'Error', content: { 'application/json': { schema: ApiErrorSchema } } },
   },
 });
 
@@ -106,9 +102,7 @@ registry.registerPath({
       description: 'User updated',
       content: { 'application/json': { schema: UserSchema } },
     },
-    400: { description: 'Validation error' },
-    401: { description: 'Unauthorized' },
-    404: { description: 'User not found' },
+    default: { description: 'Error', content: { 'application/json': { schema: ApiErrorSchema } } },
   },
 });
 
@@ -127,8 +121,6 @@ registry.registerPath({
       description: 'User deleted',
       content: { 'application/json': { schema: UserSchema } },
     },
-    401: { description: 'Unauthorized' },
-    403: { description: 'Forbidden — admin only' },
-    404: { description: 'User not found' },
+    default: { description: 'Error', content: { 'application/json': { schema: ApiErrorSchema } } },
   },
 });

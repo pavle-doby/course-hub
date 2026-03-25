@@ -1,8 +1,7 @@
 import type { Request, Response, NextFunction } from 'express';
-import { UnauthorizedError, InternalServerError } from 'api/types/errors';
+import { UnauthorizedError, InternalServerError } from '@my/contract';
 import { supabase } from 'api/utils/supabase';
 import { ErrorCode } from '@my/contract';
-import { email } from 'zod';
 
 /**
  * Checks if Supabase `token` is valid and user is authenticated
@@ -15,12 +14,6 @@ export async function handleAuth(req: Request, res: Response, next: NextFunction
     const token = req.cookies.access_token;
 
     if (!token) {
-      // TODO@pavle: Remove this when auth is implemented on the client side and token is properly sent in cookies
-      res.locals.user = { email: 'default@email.com' };
-      next();
-      return;
-
-      // biome-ignore lint/correctness/noUnreachable: <explanation>
       const error = new UnauthorizedError({
         code: ErrorCode.NO_TOKEN,
       });

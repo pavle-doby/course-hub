@@ -1,7 +1,14 @@
 import { createInterFont } from '@tamagui/font-inter';
+import { SIZE_TOKENS } from './tokens/size';
+
+// Only numeric values are valid as font sizes
+const NUMERIC_SIZE_TOKENS = Object.fromEntries(
+  Object.entries(SIZE_TOKENS).filter(([, v]) => typeof v === 'number')
+) as Record<string, number>;
 
 export const headingFont = createInterFont({
   size: {
+    ...NUMERIC_SIZE_TOKENS,
     6: 15,
   },
   transform: {
@@ -37,9 +44,13 @@ export const bodyFont = createInterFont(
     face: {
       700: { normal: 'InterBold' },
     },
+    size: {
+      ...NUMERIC_SIZE_TOKENS,
+      true: SIZE_TOKENS['4'], // 16px default
+    },
   },
   {
-    sizeSize: (size) => Math.round(size * 1.1),
+    sizeSize: (size) => Math.round(size * 1),
     sizeLineHeight: (size) => Math.round(size * 1.1 + (size > 20 ? 10 : 10)),
   }
 );

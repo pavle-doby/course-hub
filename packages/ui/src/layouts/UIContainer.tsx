@@ -1,5 +1,5 @@
 import { JSX, ReactNode } from 'react';
-import { UIFlex } from '@my/ui';
+import { YStack } from 'tamagui';
 
 interface UIContainerProps {
   children: ReactNode;
@@ -10,15 +10,15 @@ interface UIContainerProps {
  */
 export function UIContainer({ children }: UIContainerProps): JSX.Element {
   return (
-    <UIFlex
+    <YStack
       alignItems="center"
       justifyContent="flex-start"
-      grow
+      flexGrow={1}
       height={'$full'}
       width={'$full'}
     >
-      <UIFlex
-        grow
+      <YStack
+        flexGrow={1}
         alignItems="center"
         justifyContent="center"
         gap={'$6'}
@@ -28,7 +28,7 @@ export function UIContainer({ children }: UIContainerProps): JSX.Element {
         padding={'$6'}
       >
         {children}
-      </UIFlex>
-    </UIFlex>
+      </YStack>
+    </YStack>
   );
 }

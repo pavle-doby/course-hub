@@ -2,10 +2,10 @@ import { Request, Response } from 'express';
 import {
   ErrorCodeAuth,
   ErrorCode,
-  LogInUserReq,
-  LogInUserRes,
-  SignUpUserReq,
-  SignUpUserRes,
+  AuthLogInUserReq,
+  AuthLogInUserRes,
+  AuthSignUpUserReq,
+  AuthSignUpUserRes,
 } from '@my/contract';
 import {
   BadRequestError,
@@ -13,7 +13,8 @@ import {
   NotFoundError,
   UnauthorizedError,
   InternalServerError,
-} from 'api/types/errors';
+  TooManyRequestsError,
+} from '@my/contract';
 import { supabase } from 'api/utils/supabase';
 import { authRepository } from '../repository/authRepository';
 import { CreateUser } from '../repository/types';
@@ -24,9 +25,9 @@ export const authService = {
     dto,
     res,
   }: {
-    dto: SignUpUserReq;
+    dto: AuthSignUpUserReq;
     res: Response;
-  }): Promise<SignUpUserRes> => {
+  }): Promise<AuthSignUpUserRes> => {
     const { data, error } = await supabase.auth.signUp({
       email: dto.email,
       password: dto.password,
@@ -34,6 +35,13 @@ export const authService = {
 
     // Handle Supabase auth errors
     if (error) {
+      if (error.status === 429) {
+        throw new TooManyRequestsError({
+          code: ErrorCodeAuth.RATE_LIMIT_EXCEEDED,
+          error,
+        });
+      }
+
       throw new BadRequestError({
         code: error.code || ErrorCodeAuth.BAD_REQUEST,
         error: error,
@@ -58,7 +66,7 @@ export const authService = {
 
     const userDb = await authRepository.createUser(user);
 
-    const userDto: SignUpUserRes = {
+    const userDto: AuthSignUpUserRes = {
       id: userDb.id,
       email: userDb.email,
       image: userDb.image,
@@ -81,9 +89,9 @@ export const authService = {
     dto,
     res,
   }: {
-    dto: LogInUserReq;
+    dto: AuthLogInUserReq;
     res: Response;
-  }): Promise<LogInUserRes> => {
+  }): Promise<AuthLogInUserRes> => {
     const { data, error } = await supabase.auth.signInWithPassword({
       email: dto.email,
       password: dto.password,
@@ -112,7 +120,7 @@ export const authService = {
       });
     }
 
-    const userDto: LogInUserRes = {
+    const userDto: AuthLogInUserRes = {
       id: user.id,
       email: user.email,
       image: user.image,

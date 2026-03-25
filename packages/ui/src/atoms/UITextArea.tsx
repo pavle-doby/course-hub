@@ -1,9 +1,8 @@
 import { JSX, ReactNode, useId } from 'react';
-import { GetProps, TextArea, YStack, YStackProps } from 'tamagui';
+import { GetProps, TextArea, XStack, YStack, YStackProps } from 'tamagui';
 import { UIMessage } from './UIMessage';
 import { UILabel } from './UILabel';
 import { UIButton, UIButtonProps } from './UIButton';
-import { UIFlex } from '../layouts/UIFlex';
 
 interface UITextAreaProps extends GetProps<typeof TextArea> {
   label?: string;
@@ -49,8 +48,7 @@ export function UITextArea(props: UITextAreaProps): JSX.Element {
       {...wrapperProps}
     >
       {(label || action) && (
-        <UIFlex
-          flexDirection="row"
+        <XStack
           justifyContent={label && action ? 'space-between' : label ? 'flex-start' : 'flex-end'}
           marginBottom={'$2'}
         >
@@ -76,7 +74,7 @@ export function UITextArea(props: UITextAreaProps): JSX.Element {
             ) : (
               action?.content
             ))}
-        </UIFlex>
+        </XStack>
       )}
       <TextArea
         id={id}
