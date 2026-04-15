@@ -4,39 +4,74 @@ Course Hub is a web platform for hosting and sharing online courses. It provides
 
 ## Tech stack
 
-- Next.js - for the web application
-- Tamagui - for the UI components
-- Express.js - for the backend API
-- Supabase - for database and authentication
-- Drizzle ORM - for database interactions
-- Orval + OpenAPI - for API client generation
+- **Next.js** — web application (App Router)
+- **Expo / React Native** — mobile application
+- **Tamagui** — cross-platform UI components
+- **Express.js** — REST API backend
+- **Supabase** — database & authentication
+- **Drizzle ORM** — type-safe database interactions
+- **Zod** — shared schema validation (`@my/contract`)
+- **Orval + OpenAPI** — auto-generated React Query API client
+- **Turborepo + Yarn 4** — monorepo build orchestration
 
 ## Project structure
 
 ```
 course-hub/
 ├── apps/
-│   ├── api/          # REST API (Express.js)
+│   ├── api/                        # REST API (Express.js)
 │   │   └── src/
-│   │       ├── modules/      # Feature modules (auth, users)
-│   │       ├── middleware/   # Auth, validation, error handling
-│   │       ├── repositories/ # Data access layer
-│   │       ├── services/     # Business logic
-│   │       ├── routes/       # Route definitions
-│   │       └── openapi/      # OpenAPI spec generation
-│   └── next/         # Next.js web app
-│       ├── app/              # App Router pages
-│       └── e2e/              # Playwright e2e tests
+│   │       ├── modules/            # Feature modules
+│   │       │   ├── auth/           # Auth module
+│   │       │   │   ├── controllers/
+│   │       │   │   ├── openapi/
+│   │       │   │   ├── repository/
+│   │       │   │   ├── routes/
+│   │       │   │   ├── services/
+│   │       │   │   └── utils/
+│   │       │   └── users/          # Users module (same structure)
+│   │       ├── middleware/         # Auth, validation, error handling
+│   │       ├── openapi/            # OpenAPI spec generation
+│   │       ├── repositories/       # Shared repository utilities
+│   │       ├── routes/             # Top-level route registration
+│   │       ├── services/           # Shared service utilities
+│   │       ├── logger/             # Logger setup
+│   │       ├── types/              # Shared API types
+│   │       └── utils/              # Shared utilities
+│   ├── next/                       # Next.js web app
+│   │   ├── app/                    # App Router pages
+│   │   │   ├── auth/[mode]/        # Sign in / sign up / forgot password
+│   │   │   └── user/[id]/          # User profile page
+│   │   └── e2e/                    # Playwright e2e tests
+│   └── expo/                       # Expo mobile app
+│       └── app/                    # Expo Router pages
+│           └── user/               # User screens
 │
-└── packages/
-    ├── app/          # Shared cross-platform app logic (features, providers)
-    ├── api-client/   # Auto-generated API client (OpenApi + Orval)
-    ├── contract/     # API contract / route types (drizzle-zod + TS types)
-    ├── db/           # Database client + migrations (Drizzle ORM)
-    ├── db-schema/    # Shared DB schema definitions
-    ├── config/       # Tamagui design tokens & theme config
-    ├── ui/           # Shared UI component library (Tamagui)
-    └── scripts/      # DB seed / cleanup scripts
+├── packages/
+│   ├── contract/                   # Zod schemas + TS types (source of truth for DTOs)
+│   │   └── src/
+│   │       ├── auth/               # Auth schemas & types
+│   │       ├── users/              # Users schemas & types
+│   │       └── shared/             # Shared schemas & types
+│   ├── db-schema/                  # Drizzle table definitions
+│   │   └── src/
+│   │       └── schemas/            # Table schema files
+│   ├── db/                         # DB client + migrations (Drizzle ORM)
+│   ├── api-client/                 # Auto-generated React Query hooks (never edit manually)
+│   │   └── src/
+│   │       └── generated/          # Orval output — do not edit
+│   ├── app/                        # Cross-platform feature screens & providers
+│   │   ├── features/
+│   │   │   ├── auth/               # Auth screens & forms
+│   │   │   ├── home/               # Home screen
+│   │   │   └── user/               # User profile screen
+│   │   ├── hooks/                  # Shared hooks (errors, toast)
+│   │   └── provider/               # App-level providers (Tamagui, Toast, etc.)
+│   ├── ui/                         # Shared Tamagui component library
+│   ├── config/                     # Tamagui design tokens & theme config
+│   └── scripts/                    # DB seed / cleanup scripts
+│
+└── spec/                           # Feature specifications & architecture docs
 ```
 
 ## How to run
