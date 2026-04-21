@@ -7,7 +7,7 @@ import {
   GetAllFileUploadsResult,
 } from '../repositories/fileUploadsRepository';
 import { PaginationReqExtended } from '../middleware/pagination';
-import { NotFoundError } from '../types/errors';
+import { NotFoundError } from '@my/contract';
 
 export interface UploadFileReq {
   userId: string;
@@ -331,7 +331,7 @@ export const fileService = {
   /**
    * Get recent files
    */
-  async getRecentFiles(limit: number = 10): Promise<FileUploadRes[]> {
+  async getRecentFiles(limit = 10): Promise<FileUploadRes[]> {
     const recentFiles = await fileUploadsRepository.getRecent(limit);
 
     return recentFiles.map((file) => ({

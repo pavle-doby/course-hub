@@ -9,7 +9,7 @@ export const apiClient = Axios.create({
 apiClient.interceptors.response.use(null, async (error) => {
   if (error.response?.status === 401 && !error.config._retry) {
     error.config._retry = true;
-    await apiClient.post('/auth/refresh'); // sets new cookies
+    await apiClient.post('/v1/auth/refresh'); // sets new cookies
     return apiClient(error.config);
   }
   return Promise.reject(error);

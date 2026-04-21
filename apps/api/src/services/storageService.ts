@@ -1,5 +1,5 @@
+import { BadRequestError, InternalServerError, NotFoundError } from '@my/contract';
 import { supabase } from '../utils/supabase';
-import { BadRequestError, InternalServerError, NotFoundError } from '../types/errors';
 
 export interface UploadFileOptions {
   bucketName: string;

@@ -12,7 +12,7 @@ export type UIButtonProps = Omit<ButtonProps, 'variant'> &
 
 export type UIButtonVariantProps = {
   solid?: boolean;
-  outline?: boolean;
+  outlined?: boolean;
   clean?: boolean;
 };
 
@@ -27,7 +27,7 @@ export type UIButtonSizeProps = {
 
 function getVariant(props: UIButtonVariantProps): keyof UIButtonVariantProps {
   if (props.solid) return 'solid';
-  if (props.outline) return 'outline';
+  if (props.outlined) return 'outlined';
   if (props.clean) return 'clean';
 
   return 'solid';
@@ -52,11 +52,11 @@ function getSize(props: UIButtonSizeProps): keyof UIButtonSizeProps {
  *
  * @example
  * // for `styling` and `variant` props
- * <UIButton primary outline>Primary Outline</UIButton>
+ * <UIButton primary outlined>Primary Outline</UIButton>
  *
  * @example
  * // for `styling` and `variant` props that are dynamically set
- * <UIButton primary={isPrimary} outline={isOutline}>Primary Outline</UIButton>
+ * <UIButton primary={isPrimary} outlined={isOutlined}>Primary Outline</UIButton>
  * <UIButton {...{ [styling]: true, [variant]: true }}>Dynamic</UIButton>
  */
 export const UIButton = forwardRef(
@@ -64,7 +64,7 @@ export const UIButton = forwardRef(
     const {
       // variant
       solid,
-      outline,
+      outlined,
       clean,
 
       // styling
@@ -100,7 +100,7 @@ export const UIButton = forwardRef(
       neutral,
     });
 
-    const variant = getVariant({ solid, outline, clean });
+    const variant = getVariant({ solid, outlined, clean });
     const size = getSize({ small, medium, large });
 
     const sizeStyles = {
@@ -162,7 +162,7 @@ export const UIButton = forwardRef(
         },
         text: {},
       },
-      outline: {
+      outlined: {
         button: {
           color: contrast ? `${styling}-contrast` : `${styling}`,
           backgroundColor: `transparent`,
