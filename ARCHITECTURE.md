@@ -71,6 +71,11 @@ Request → handleAuth middleware
 - OpenAPI spec generated at build time; Orval reads it to generate the client
 - Re-run `yarn api-client:generate` after any API change (API must be running)
 
+## Design Principles
+
+- **Separation of concerns**: Every layer has one explicit responsibility — routing, validation, business logic, and data access are never mixed. Controllers only call services; services only call repositories; repositories only talk to the DB.
+- **Feature-based organization**: Code is grouped by feature (e.g., `modules/<feature>/`, `features/<feature>/`), not by technical role. Each feature is self-contained — its routes, controller, service, repository, contract, and OpenAPI schema all live together and do not depend on the internals of other features.
+
 ## Key Architectural Rules
 
 - **Contract first**: Define `packages/contract/src/<feature>/` (schemas + types) before writing API or UI code
