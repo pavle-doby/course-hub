@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { NextTamaguiProvider } from 'app/provider/NextTamaguiProvider';
-import { ApiClientProvider } from '@my/api-client';
 
 export const metadata: Metadata = {
   title: 'Course Hub',
@@ -16,9 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       suppressHydrationWarning
     >
       <body>
-        <ApiClientProvider>
-          <NextTamaguiProvider>{children}</NextTamaguiProvider>
-        </ApiClientProvider>
+        <NextTamaguiProvider>{children}</NextTamaguiProvider>
       </body>
     </html>
   );

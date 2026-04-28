@@ -39,9 +39,7 @@ export function UISwitch(props: UISwitchProps): JSX.Element {
   function handleCheckedChange(value: boolean) {
     setIsChecked(value);
 
-    if (props.onCheckedChange) {
-      props.onCheckedChange(value);
-    }
+    props.onCheckedChange?.(value);
   }
 
   const styling = getStylingColor({
@@ -56,28 +54,26 @@ export function UISwitch(props: UISwitchProps): JSX.Element {
     neutral,
   });
 
-  // TODO@pavle: Test this styling
   const style = {
-    ...(isChecked && {
-      switch: {
-        background: `${styling}-700`,
-        backgroundColor: `${styling}-700`,
-        borderColor: `${styling}-700`,
-      },
-      thumb: {
-        backgroundColor: `${styling}-100`,
-      },
-    }),
-    ...(!isChecked && {
-      switch: {
-        background: `${styling}-300`,
-        backgroundColor: `${styling}-300`,
-        borderColor: `${styling}-300`,
-      },
-      thumb: {
-        backgroundColor: `${styling}-100`,
-      },
-    }),
+    switch: {
+      background: `${styling}-300`,
+      backgroundColor: `${styling}-300`,
+      borderColor: `${styling}-300`,
+    },
+    thumb: {
+      backgroundColor: `${styling}-100`,
+    },
+  } as any;
+
+  const activeStyle = {
+    switch: {
+      background: `${styling}-700`,
+      backgroundColor: `${styling}-700`,
+      borderColor: `${styling}-700`,
+    },
+    thumb: {
+      backgroundColor: `${styling}-100`,
+    },
   } as any;
 
   return (
@@ -100,15 +96,21 @@ export function UISwitch(props: UISwitchProps): JSX.Element {
         id={id}
         size={size}
         transition="300ms"
-        checked={checked}
-        {...style.switch}
+        checked={isChecked}
         {...other}
+        {...style.switch}
+        activeStyle={{
+          ...activeStyle.switch,
+        }}
         onCheckedChange={handleCheckedChange}
       >
         <StyledThumb
           transition="quickest"
           size={size}
           {...style.thumb}
+          activeStyle={{
+            ...activeStyle.thumb,
+          }}
         />
       </StyledSwitch>
 
@@ -129,7 +131,6 @@ const BORDER_WIDTH = 2;
 
 // `Switch` is styled so we can use custom `size` prop
 const StyledSwitch = styled(Switch, {
-  backgroundColor: '$primary',
   borderWidth: BORDER_WIDTH,
   cursor: 'pointer',
 

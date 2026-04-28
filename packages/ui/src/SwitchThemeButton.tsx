@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Button, useIsomorphicLayoutEffect } from 'tamagui';
+import { useIsomorphicLayoutEffect } from 'tamagui';
 import { useThemeSetting, useRootTheme } from '@tamagui/next-theme';
 import { UIButton } from '@my/ui';
 

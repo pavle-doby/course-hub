@@ -19,7 +19,6 @@ import { ChevronDown, ChevronUp } from '@tamagui/lucide-icons';
 import { useErrorHandling } from 'app/hooks/errors/useErrorHandling';
 import { useToastMessage } from 'app/hooks/toast/useToastMessage';
 import { useState } from 'react';
-import { Platform } from 'react-native';
 import { useRouter } from 'solito/navigation';
 
 export function HomeScreen({ onLinkPress }: { onLinkPress?: () => void }) {
@@ -65,7 +64,7 @@ export function HomeScreen({ onLinkPress }: { onLinkPress?: () => void }) {
         flexWrap="wrap"
         $sm={{ position: 'relative', t: 0 }}
       >
-        {Platform.OS === 'web' && <SwitchThemeButton />}
+        <SwitchThemeButton />
       </XStack>
 
       <YStack gap="$4">
@@ -103,11 +102,11 @@ export function HomeScreen({ onLinkPress }: { onLinkPress?: () => void }) {
         />
         <UISwitch
           danger
-          label="Secondary Switch"
+          label="Danger Switch"
         />
         <UISwitch
           success
-          label="Secondary Switch"
+          label="Success Switch"
         />
       </YStack>
 

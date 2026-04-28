@@ -24,6 +24,7 @@ export const config = createTamagui({
   settings: {
     ...defaultConfig.settings,
     onlyAllowShorthands: false,
+    disableRootThemeClass: true,
   },
 });
 

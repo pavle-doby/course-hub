@@ -4,6 +4,7 @@ import { ToastProvider } from '@tamagui/toast';
 import { config } from '@my/config';
 import { ToastViewport } from './ToastViewport';
 import { CustomToast } from '@my/ui';
+import { ApiClientProvider } from '@my/api-client';
 
 export function Provider({
   children,
@@ -14,16 +15,18 @@ export function Provider({
   const theme = defaultTheme || (colorScheme === 'dark' ? 'dark' : 'light');
 
   return (
-    <TamaguiProvider
-      config={config}
-      defaultTheme={theme}
-      {...rest}
-    >
-      <ToastProvider>
-        <CustomToast />
-        {children}
-        <ToastViewport />
-      </ToastProvider>
-    </TamaguiProvider>
+    <ApiClientProvider>
+      <TamaguiProvider
+        config={config}
+        defaultTheme={theme}
+        {...rest}
+      >
+        <ToastProvider>
+          <CustomToast />
+          {children}
+          <ToastViewport />
+        </ToastProvider>
+      </TamaguiProvider>
+    </ApiClientProvider>
   );
 }
