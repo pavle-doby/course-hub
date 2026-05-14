@@ -11,3 +11,7 @@ export const AuthLoginQuerySchema = z.object({
   email: z.email(),
   password: z.string().min(6),
 });
+
+export const AuthNativeRefreshQuerySchema = z.object({
+  refreshToken: z.string().min(1),
+});

@@ -6,6 +6,7 @@ import { JSX } from 'react';
 
 interface AuthScreenProps {
   mode: string;
+  onLoginSuccess?: () => void | Promise<void>;
 }
 
 enum AuthMode {
@@ -29,7 +30,7 @@ const AUTH_MODE_INFO = {
   },
 };
 
-export function AuthScreen({ mode }: AuthScreenProps): JSX.Element {
+export function AuthScreen({ mode, onLoginSuccess }: AuthScreenProps): JSX.Element {
   return (
     <UIContainer>
       <UIPageInfo
@@ -38,7 +39,7 @@ export function AuthScreen({ mode }: AuthScreenProps): JSX.Element {
       />
 
       <UICard>
-        {mode === 'login' && <LogInForm />}
+        {mode === 'login' && <LogInForm onLoginSuccess={onLoginSuccess} />}
         {mode === 'signup' && <SignUpForm />}
         {mode === 'forgot' && <ForgotPasswordForm />}
       </UICard>

@@ -11977,6 +11977,7 @@ __metadata:
     expo-linear-gradient: "npm:~15.0.8"
     expo-linking: "npm:~8.0.11"
     expo-router: "npm:~6.0.21"
+    expo-secure-store: "npm:~15.0.8"
     expo-splash-screen: "npm:~31.0.13"
     expo-status-bar: "npm:~3.0.9"
     expo-updates: "npm:~29.0.16"
@@ -11985,6 +11986,7 @@ __metadata:
     react-dom: "npm:19.1.0"
     react-native: "npm:0.81.5"
     react-native-gesture-handler: "npm:~2.28.0"
+    react-native-keyboard-aware-scroll-view: "npm:^0.9.5"
     react-native-safe-area-context: "npm:~5.6.0"
     react-native-screens: "npm:~4.16.0"
     react-native-svg: "npm:15.12.1"
@@ -12263,6 +12265,15 @@ __metadata:
     react-server-dom-webpack:
       optional: true
   checksum: 10/d4a07a686ab98df6c7fb84adfd52a0d2c99a76dc5453e37d1c3acf24a7941ad7d4729f556f678fbf1cd051117f53ca6ff6b037a0c0966d7d2b12d47fe1975e64
+  languageName: node
+  linkType: hard
+
+"expo-secure-store@npm:~15.0.8":
+  version: 15.0.8
+  resolution: "expo-secure-store@npm:15.0.8"
+  peerDependencies:
+    expo: "*"
+  checksum: 10/822af991ed80b32cf0c37f6f37e8fac30c654492d4074e70fb123361fe6ce0297178b6c7e55108670c75485e5062a39cf089fd8aee415467c3e4a6749c69d65d
   languageName: node
   linkType: hard
 
@@ -14721,7 +14732,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"loose-envify@npm:^1.0.0":
+"loose-envify@npm:^1.0.0, loose-envify@npm:^1.4.0":
   version: 1.4.0
   resolution: "loose-envify@npm:1.4.0"
   dependencies:
@@ -15999,7 +16010,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"object-assign@npm:^4, object-assign@npm:^4.0.1, object-assign@npm:^4.1.0":
+"object-assign@npm:^4, object-assign@npm:^4.0.1, object-assign@npm:^4.1.0, object-assign@npm:^4.1.1":
   version: 4.1.1
   resolution: "object-assign@npm:4.1.1"
   checksum: 10/fcc6e4ea8c7fe48abfbb552578b1c53e0d194086e2e6bbbf59e0a536381a292f39943c6e9628af05b5528aa5e3318bb30d6b2e53cadaf5b8fe9e12c4b69af23f
@@ -17019,6 +17030,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"prop-types@npm:^15.6.2":
+  version: 15.8.1
+  resolution: "prop-types@npm:15.8.1"
+  dependencies:
+    loose-envify: "npm:^1.4.0"
+    object-assign: "npm:^4.1.1"
+    react-is: "npm:^16.13.1"
+  checksum: 10/7d959caec002bc964c86cdc461ec93108b27337dabe6192fb97d69e16a0c799a03462713868b40749bfc1caf5f57ef80ac3e4ffad3effa636ee667582a75e2c0
+  languageName: node
+  linkType: hard
+
 "proxy-addr@npm:^2.0.7, proxy-addr@npm:~2.0.7":
   version: 2.0.7
   resolution: "proxy-addr@npm:2.0.7"
@@ -17266,7 +17288,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-is@npm:^16.7.0":
+"react-is@npm:^16.13.1, react-is@npm:^16.7.0":
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
   checksum: 10/5aa564a1cde7d391ac980bedee21202fc90bdea3b399952117f54fb71a932af1e5902020144fb354b4690b2414a0c7aafe798eb617b76a3d441d956db7726fdf
@@ -17301,6 +17323,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-iphone-x-helper@npm:^1.0.3":
+  version: 1.3.1
+  resolution: "react-native-iphone-x-helper@npm:1.3.1"
+  peerDependencies:
+    react-native: ">=0.42.0"
+  checksum: 10/024376646009a966e33e12fc2358751830818b0fb73b1c601a64eb5e490d2dc43eec23668991b985a8c412a84d087f20eb45bb9b593567c08b66e741b7bddda5
+  languageName: node
+  linkType: hard
+
 "react-native-is-edge-to-edge@npm:^1.1.6, react-native-is-edge-to-edge@npm:^1.2.1":
   version: 1.2.1
   resolution: "react-native-is-edge-to-edge@npm:1.2.1"
@@ -17308,6 +17339,18 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 10/8fb6d8ab7b953c7d7cec8c987cef24f1c5348a293a85cb49c7c53b54ef110c0ca746736ae730e297603c8c76020df912e93915fb17518c4f2f91143757177aba
+  languageName: node
+  linkType: hard
+
+"react-native-keyboard-aware-scroll-view@npm:^0.9.5":
+  version: 0.9.5
+  resolution: "react-native-keyboard-aware-scroll-view@npm:0.9.5"
+  dependencies:
+    prop-types: "npm:^15.6.2"
+    react-native-iphone-x-helper: "npm:^1.0.3"
+  peerDependencies:
+    react-native: ">=0.48.4"
+  checksum: 10/95d8ed8a46426b16e819713495d64766a3eed5d63a03fb4feca0351cce55d74197f75d8b01dd3f2c491cda29c155bb71c8063d2fba23e8a0044208aad03d0d91
   languageName: node
   linkType: hard
 

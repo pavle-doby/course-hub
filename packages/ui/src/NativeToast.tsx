@@ -40,7 +40,7 @@ export const NativeToast = () => {
         gap={'$2'}
       >
         <Toast.Title
-          lineHeight="$1"
+          lineHeight="$4"
           fontWeight={500}
           color={style.color}
         >

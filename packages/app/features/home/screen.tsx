@@ -16,22 +16,32 @@ import {
   YStack,
 } from '@my/ui';
 import { ChevronDown, ChevronUp } from '@tamagui/lucide-icons';
+import { useQueryClient } from '@tanstack/react-query';
 import { useErrorHandling } from 'app/hooks/errors/useErrorHandling';
 import { useToastMessage } from 'app/hooks/toast/useToastMessage';
 import { useState } from 'react';
-import { useRouter } from 'solito/navigation';
+import { useLink, useRouter } from 'solito/navigation';
 
-export function HomeScreen({ onLinkPress }: { onLinkPress?: () => void }) {
+export function HomeScreen({
+  onLinkPress,
+  onLogout,
+}: { onLinkPress?: () => void; onLogout?: () => void }) {
   const router = useRouter();
 
   const { mutate: signOutMutate } = useAuthSignOut();
+  const queryClient = useQueryClient();
+
+  const loginLink = useLink({ href: '/auth/login', replace: false });
 
   const { showMessage } = useToastMessage();
   const { handleError: handleErrors } = useErrorHandling();
 
   function signOut() {
     signOutMutate(void 0, {
-      onSuccess: () => {
+      onSuccess: async () => {
+        queryClient.clear();
+        onLogout?.();
+
         showMessage({
           title: 'Sign Out successful',
           message: 'You have successfully signed out',
@@ -116,6 +126,13 @@ export function HomeScreen({ onLinkPress }: { onLinkPress?: () => void }) {
           onPress={onLinkPress}
         >
           Link to user
+        </UIButton>
+
+        <UIButton
+          accent
+          {...loginLink}
+        >
+          Login
         </UIButton>
 
         <UIButton

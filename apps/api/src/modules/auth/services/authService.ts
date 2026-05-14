@@ -6,6 +6,10 @@ import {
   AuthLogInUserRes,
   AuthSignUpUserReq,
   AuthSignUpUserRes,
+  AuthNativeSignUpUserRes,
+  AuthNativeLogInUserRes,
+  AuthNativeRefreshTokenReq,
+  AuthNativeRefreshTokenRes,
 } from '@my/contract';
 import {
   BadRequestError,
@@ -195,5 +199,134 @@ export const authService = {
         code: ErrorCode.SERVER_ERROR,
       });
     }
+  },
+
+  signUpNative: async ({
+    dto,
+  }: {
+    dto: AuthSignUpUserReq;
+  }): Promise<AuthNativeSignUpUserRes> => {
+    const { data, error } = await supabase.auth.signUp({
+      email: dto.email,
+      password: dto.password,
+    });
+
+    if (error) {
+      if (error.status === 429) {
+        throw new TooManyRequestsError({
+          code: ErrorCodeAuth.RATE_LIMIT_EXCEEDED,
+          error,
+        });
+      }
+
+      throw new BadRequestError({
+        code: error.code || ErrorCodeAuth.BAD_REQUEST,
+        error: error,
+      });
+    }
+
+    const existingUser = await authRepository.getUserByEmail(dto.email);
+
+    if (existingUser) {
+      throw new ConflictError({
+        code: ErrorCodeAuth.USER_EXISTS,
+      });
+    }
+
+    const userDb = await authRepository.createUser({
+      email: dto.email,
+      firstName: dto.firstName,
+      lastName: dto.lastName,
+      role: 'user',
+      status: 'pending',
+    });
+
+    const user: AuthSignUpUserRes = {
+      id: userDb.id,
+      email: userDb.email,
+      image: userDb.image,
+      firstName: userDb.firstName,
+      lastName: userDb.lastName,
+      role: userDb.role,
+      status: userDb.status,
+    };
+
+    return {
+      user,
+      accessToken: data.session?.access_token ?? '',
+      refreshToken: data.session?.refresh_token ?? '',
+    };
+  },
+
+  logInNative: async ({
+    dto,
+  }: {
+    dto: AuthLogInUserReq;
+  }): Promise<AuthNativeLogInUserRes> => {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: dto.email,
+      password: dto.password,
+    });
+
+    if (error) {
+      throw new BadRequestError({
+        code: ErrorCodeAuth.INVALID_CREDENTIALS,
+        error,
+      });
+    }
+
+    const userDb = await authRepository.getUserByEmail(dto.email);
+
+    if (!userDb) {
+      throw new NotFoundError({
+        code: ErrorCodeAuth.USER_NOT_FOUND,
+      });
+    }
+
+    const user: AuthLogInUserRes = {
+      id: userDb.id,
+      email: userDb.email,
+      image: userDb.image,
+      firstName: userDb.firstName,
+      lastName: userDb.lastName,
+      role: userDb.role,
+      status: userDb.status,
+    };
+
+    return {
+      user,
+      accessToken: data.session?.access_token ?? '',
+      refreshToken: data.session?.refresh_token ?? '',
+    };
+  },
+
+  signOutNative: async ({ req }: { req: Request }) => {
+    const authHeader = req.headers.authorization;
+    if (authHeader?.startsWith('Bearer ')) {
+      await supabase.auth.signOut();
+    }
+    return;
+  },
+
+  refreshTokenNative: async ({
+    dto,
+  }: {
+    dto: AuthNativeRefreshTokenReq;
+  }): Promise<AuthNativeRefreshTokenRes> => {
+    const { data, error } = await supabase.auth.refreshSession({
+      refresh_token: dto.refreshToken,
+    });
+
+    if (error) {
+      throw new UnauthorizedError({
+        code: ErrorCodeAuth.INVALID_REFRESH_TOKEN,
+        error,
+      });
+    }
+
+    return {
+      accessToken: data.session?.access_token ?? '',
+      refreshToken: data.session?.refresh_token ?? '',
+    };
   },
 };

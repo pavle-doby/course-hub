@@ -1,7 +1,16 @@
 import axios from 'axios';
 import { FieldValues, UseFormSetError } from 'react-hook-form';
-import { useToastMessage } from '../toast/useToastMessage';
 import { useCallback, useEffect } from 'react';
+import { useToastMessage } from '../toast/useToastMessage';
+import { authErrorMessages } from './consts/authErrorMessages';
+import { userErrorMessages } from './consts/userErrorMessages';
+import { sharedErrorMessages } from './consts/sharedErrorMessages';
+
+const allErrorMessages = {
+  ...sharedErrorMessages,
+  ...authErrorMessages,
+  ...userErrorMessages,
+};
 
 /**
  * Custom hook for handling errors in forms and API responses.
@@ -36,10 +45,10 @@ export function useErrorHandling<T extends FieldValues>({
   );
 
   const showErrorToast = useCallback(
-    (message: string) => {
+    (title: string, message = 'Sorry this went wrong... Please try again!') => {
       showMessage({
-        title: message,
-        message: 'Sorry this went wrong... Please try again!',
+        title,
+        message,
         style: 'danger',
       });
     },
@@ -55,8 +64,8 @@ export function useErrorHandling<T extends FieldValues>({
       const data = responseError.response?.data as any | undefined;
       if (!data) return;
 
-      // Handle Zod validation errors (nested inside data.error by the validate middleware)
       if (Array.isArray(data.error?.issues) && data.error.issues.length > 0) {
+        // Handle Zod validation errors (nested inside data.error by the validate middleware)
         for (const issue of data.error.issues) {
           showErrorForm({ field: issue.path.join('.'), message: issue.message });
         }
@@ -64,7 +73,12 @@ export function useErrorHandling<T extends FieldValues>({
       }
 
       // Handle all other errors
-      showErrorToast(data.error?.message ?? responseError.message);
+      const mapped = allErrorMessages[data.code as keyof typeof allErrorMessages];
+      if (mapped) {
+        showErrorToast(mapped.title, mapped.message);
+      } else {
+        showErrorToast(data.error?.message ?? responseError.message);
+      }
     },
     [showErrorForm, showErrorToast]
   );

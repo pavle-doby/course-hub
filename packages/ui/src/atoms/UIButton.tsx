@@ -107,33 +107,39 @@ export const UIButton = forwardRef(
       small: {
         button: {
           minHeight: '$8',
+          height: '$8',
           paddingVertical: '$0.5',
           paddingHorizontal: '$2',
         },
         text: {
           fontSize: '$3.5',
+          lineHeight: '$3.5',
           fontWeight: '400',
         },
       },
       medium: {
         button: {
           minHeight: '$10',
+          height: '$10',
           paddingVertical: '$1',
           paddingHorizontal: '$2',
         },
         text: {
           fontSize: '$4',
+          lineHeight: '$4',
           fontWeight: '400',
         },
       },
       large: {
         button: {
           minHeight: '$14',
+          height: '$14',
           paddingVertical: '$2',
           paddingHorizontal: '$4',
         },
         text: {
           fontSize: '$5',
+          lineHeight: '$5',
           fontWeight: '400',
         },
       },
@@ -192,7 +198,7 @@ export const UIButton = forwardRef(
           borderColor: `transparent`,
           paddingVertical: 0,
           paddingHorizontal: 0,
-          minHeight: 'auto',
+          minHeight: 0,
           hoverStyle: {
             color: `${styling}-500`,
             backgroundColor: `transparent`,

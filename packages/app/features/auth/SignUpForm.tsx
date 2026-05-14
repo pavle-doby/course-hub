@@ -1,6 +1,6 @@
 import { JSX, useState } from 'react';
-import { Form, UIButton, UIInput, YStack } from '@my/ui';
-import { useRouter } from 'solito/navigation';
+import { Form, UIButton, UIInput, SizableText, XStack, YStack } from '@my/ui';
+import { useLink, useRouter } from 'solito/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -24,6 +24,8 @@ export function SignUpForm(): JSX.Element {
 
   const { showMessage } = useToastMessage();
   const { handleError: handleErrors } = useErrorHandling();
+
+  const loginLink = useLink({ href: '/auth/login' });
 
   const { mutate: signUpMutate, error } = useAuthSignUp();
 
@@ -121,9 +123,26 @@ export function SignUpForm(): JSX.Element {
         {/* // TODO@pavle: Add checkbox for T&C */}
       </YStack>
 
-      <Form.Trigger asChild>
-        <UIButton primary>Create Account</UIButton>
-      </Form.Trigger>
+      <YStack>
+        <Form.Trigger asChild>
+          <UIButton primary>Create Account</UIButton>
+        </Form.Trigger>
+
+        <XStack
+          alignItems="center"
+          marginTop={'$1.5'}
+        >
+          <SizableText>Already have an account?</SizableText>
+          <UIButton
+            primary
+            clean
+            {...loginLink}
+            marginLeft={'$1'}
+          >
+            Log In
+          </UIButton>
+        </XStack>
+      </YStack>
     </Form>
   );
 }

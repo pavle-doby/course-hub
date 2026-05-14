@@ -15,7 +15,9 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.yourprojectsname.app"
@@ -30,7 +32,16 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [["expo-router", { "root": "./app" }], "expo-font"],
+    "plugins": [
+      [
+        "expo-router",
+        {
+          "root": "./app"
+        }
+      ],
+      "expo-font",
+      "expo-secure-store"
+    ],
     "experiments": {
       "typedRoutes": true
     }

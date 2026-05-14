@@ -1,7 +1,34 @@
 import { useEffect } from 'react';
 import { useFonts } from 'expo-font';
-import { SplashScreen, Stack } from 'expo-router';
-import { ThemeProvider } from './provider/ThemeProvider';
+import { SplashScreen } from 'expo-router';
+import { ApiClientProvider, configureTokenProviders } from '@my/api-client';
+import { ThemeProvider } from './providers/ThemeProvider';
+import { AuthProvider } from './providers/AuthProvider';
+import { getAccessToken, getRefreshToken, saveTokens } from 'app/utils/tokenStorage';
+import { StackProvider } from './providers/StackProvider';
+
+// Configure the API client to use secure-store tokens for native auth.
+// This runs once at module evaluation time, before any requests are made.
+configureTokenProviders({
+  getToken: getAccessToken,
+  onRefresh: async () => {
+    const refreshToken = await getRefreshToken();
+    if (!refreshToken) return null;
+    // Inline fetch to avoid going through the interceptor loop
+    const res = await fetch(
+      `${process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:7007/api'}/v1/auth/refresh/native`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ refreshToken }),
+      }
+    );
+    if (!res.ok) return null;
+    const tokens = (await res.json()) as { accessToken: string; refreshToken: string };
+    await saveTokens(tokens.accessToken, tokens.refreshToken);
+    return tokens;
+  },
+});
 
 export const unstable_settings = {
   // Ensure that reloading on `/user` keeps a back button present.
@@ -28,13 +55,13 @@ export default function App() {
     return null;
   }
 
-  return <RootLayoutNav />;
-}
-
-function RootLayoutNav() {
   return (
-    <ThemeProvider>
-      <Stack />
-    </ThemeProvider>
+    <ApiClientProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <StackProvider />
+        </AuthProvider>
+      </ThemeProvider>
+    </ApiClientProvider>
   );
 }

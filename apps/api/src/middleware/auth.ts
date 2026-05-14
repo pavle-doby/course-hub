@@ -10,8 +10,16 @@ import { ErrorCode } from '@my/contract';
  */
 export async function handleAuth(req: Request, res: Response, next: NextFunction) {
   try {
-    // Get token from cookies instead of Authorization header
-    const token = req.cookies.access_token;
+    // Get token from HTTP-only cookie (for web)
+    const tokenCookie = req.cookies.access_token;
+
+    // Get token from Authorization header (for mobile)
+    const tokenHeaderFull = req.headers.authorization;
+    const tokenHeader = tokenHeaderFull?.startsWith('Bearer ')
+      ? tokenHeaderFull.slice(7)
+      : undefined;
+
+    const token = tokenCookie ?? tokenHeader;
 
     if (!token) {
       const error = new UnauthorizedError({

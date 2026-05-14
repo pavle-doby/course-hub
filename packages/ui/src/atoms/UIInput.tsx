@@ -1,4 +1,4 @@
-import { JSX, ReactNode, forwardRef, useId } from 'react';
+import { ReactNode, forwardRef, useId } from 'react';
 import { Input, InputProps, XStack, YStack, YStackProps } from 'tamagui';
 import { UIMessage } from './UIMessage';
 import { UILabel } from './UILabel';
