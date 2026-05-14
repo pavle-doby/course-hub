@@ -118,6 +118,9 @@ export function LogInForm({ onLoginSuccess }: LogInFormProps): JSX.Element {
             <UIInput
               label="Email"
               placeholder="your@email.com"
+              type="email"
+              keyboardType="email-address"
+              autoCapitalize="none"
               error={errors.email?.message}
               onChangeText={onChange}
               onBlur={onBlur}
@@ -135,6 +138,8 @@ export function LogInForm({ onLoginSuccess }: LogInFormProps): JSX.Element {
               label="Password"
               placeholder="•••••••••"
               type={`${hidePassword ? 'password' : 'text'}`}
+              autoCapitalize="none"
+              autoCorrect={false}
               error={errors.password?.message}
               onChangeText={onChange}
               onBlur={onBlur}

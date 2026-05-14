@@ -2,7 +2,7 @@ import { JSX, useState } from 'react';
 import { Form, UIButton, UIInput, SizableText, XStack, YStack } from '@my/ui';
 import { useLink, useRouter } from 'solito/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
 import { useErrorHandling } from 'app/hooks/errors/useErrorHandling';
 import { useToastMessage } from 'app/hooks/toast/useToastMessage';
@@ -23,23 +23,25 @@ export function SignUpForm(): JSX.Element {
   const router = useRouter();
 
   const { showMessage } = useToastMessage();
-  const { handleError: handleErrors } = useErrorHandling();
 
   const loginLink = useLink({ href: '/auth/login' });
 
-  const { mutate: signUpMutate, error } = useAuthSignUp();
+  const { mutate: signUpMutate } = useAuthSignUp();
 
   const [hidePassword, setHidePassword] = useState(true);
   const [hideConfirmPassword, setHideConfirmPassword] = useState(true);
 
   const {
-    register,
+    control,
     handleSubmit,
     watch,
     formState: { errors },
+    setError,
   } = useForm<SignUpFormValues>({
     resolver: zodResolver(SignUpFormSchema),
   });
+
+  const { handleError } = useErrorHandling({ setError });
 
   function onSubmit({ confirmPassword: _, ...data }: SignUpFormValues) {
     signUpMutate(
@@ -57,7 +59,7 @@ export function SignUpForm(): JSX.Element {
           router.push('/auth/login');
         },
         onError: (error) => {
-          handleErrors(error as unknown as Error);
+          handleError(error as unknown as Error);
         },
       }
     );
@@ -73,51 +75,105 @@ export function SignUpForm(): JSX.Element {
       onSubmit={handleSubmit(onSubmit)}
     >
       <YStack gap="$3.5">
-        <UIInput
-          label="First Name"
-          placeholder="John"
-          error={errors.firstName?.message}
-          {...register('firstName')}
+        <Controller
+          control={control}
+          name="firstName"
+          render={({ field: { onChange, onBlur, value, ref } }) => (
+            <UIInput
+              label="First Name"
+              placeholder="John"
+              autoCapitalize="words"
+              error={errors.firstName?.message}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              value={value}
+              ref={ref}
+            />
+          )}
         />
-        <UIInput
-          label="Last Name"
-          placeholder="Doe"
-          error={errors.lastName?.message}
-          {...register('lastName')}
+        <Controller
+          control={control}
+          name="lastName"
+          render={({ field: { onChange, onBlur, value, ref } }) => (
+            <UIInput
+              label="Last Name"
+              placeholder="Doe"
+              autoCapitalize="words"
+              error={errors.lastName?.message}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              value={value}
+              ref={ref}
+            />
+          )}
         />
-        <UIInput
-          label="Email"
-          placeholder="your@email.com"
-          error={errors.email?.message}
-          {...register('email')}
+        <Controller
+          control={control}
+          name="email"
+          render={({ field: { onChange, onBlur, value, ref } }) => (
+            <UIInput
+              label="Email"
+              placeholder="your@email.com"
+              type="email"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              error={errors.email?.message}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              value={value}
+              ref={ref}
+            />
+          )}
         />
-        <UIInput
-          label="Password"
-          placeholder="•••••••••"
-          type={`${hidePassword ? 'password' : 'text'}`}
-          error={errors.password?.message}
-          action={{
-            content: hidePassword ? 'Show password' : 'Hide password',
-            props: {
-              disabled: !watch('password')?.length,
-            },
-            onPress: () => setHidePassword(!hidePassword),
-          }}
-          {...register('password')}
+        <Controller
+          control={control}
+          name="password"
+          render={({ field: { onChange, onBlur, value, ref } }) => (
+            <UIInput
+              label="Password"
+              placeholder="•••••••••"
+              type={`${hidePassword ? 'password' : 'text'}`}
+              autoCapitalize="none"
+              autoCorrect={false}
+              error={errors.password?.message}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              value={value}
+              ref={ref}
+              action={{
+                content: hidePassword ? 'Show password' : 'Hide password',
+                props: {
+                  disabled: !watch('password')?.length,
+                },
+                onPress: () => setHidePassword(!hidePassword),
+              }}
+            />
+          )}
         />
-        <UIInput
-          label="Repeat Password"
-          placeholder="•••••••••"
-          type={`${hideConfirmPassword ? 'password' : 'text'}`}
-          error={errors.confirmPassword?.message}
-          action={{
-            content: hideConfirmPassword ? 'Show password' : 'Hide password',
-            props: {
-              disabled: !watch('confirmPassword')?.length,
-            },
-            onPress: () => setHideConfirmPassword(!hideConfirmPassword),
-          }}
-          {...register('confirmPassword')}
+        <Controller
+          control={control}
+          name="confirmPassword"
+          render={({ field: { onChange, onBlur, value, ref } }) => (
+            <UIInput
+              label="Repeat Password"
+              placeholder="•••••••••"
+              type={`${hideConfirmPassword ? 'password' : 'text'}`}
+              autoCapitalize="none"
+              autoCorrect={false}
+              error={errors.confirmPassword?.message}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              value={value}
+              ref={ref}
+              action={{
+                content: hideConfirmPassword ? 'Show password' : 'Hide password',
+                props: {
+                  disabled: !watch('confirmPassword')?.length,
+                },
+                onPress: () => setHideConfirmPassword(!hideConfirmPassword),
+              }}
+            />
+          )}
         />
 
         {/* // TODO@pavle: Add checkbox for T&C */}
