@@ -10,7 +10,6 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "tsBuildInfoFile": "./dist/.tsbuildinfo",
-    "baseUrl": ".",
     "noEmit": false,
     "paths": {
       "@my/db-schema": ["../db-schema/src/index.ts"],

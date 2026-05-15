@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
     "rootDir": ".",
     "importHelpers": true,
     "allowJs": false,
@@ -25,17 +24,10 @@
     "sourceMap": false,
     "strictNullChecks": true,
     "target": "es2020",
-    "types": [
-      "node"
-    ],
-    "lib": [
-      "dom",
-      "esnext"
-    ]
+    "types": ["node"],
+    "lib": ["dom", "esnext"]
   },
-  "exclude": [
-    "_"
-  ],
+  "exclude": ["_"],
   "typeAcquisition": {
     "enable": true
   }
