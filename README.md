@@ -1,4 +1,4 @@
-# Aura Monorepo
+# Course Hub
 
 A full-stack monorepo for building web and mobile applications. Provides a ready-to-use foundation with a REST API, Next.js web app, Expo mobile app, shared UI components, type-safe database access, and auto-generated API clients.
 

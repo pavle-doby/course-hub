@@ -4,8 +4,8 @@
   "rsc": false,
   "tsx": true,
   "tailwind": {
-    "config": "/Users/doby23/Desktop/Doby/Projects/aura-monorepo/apps/native/tailwind.config.js",
-    "css": "/Users/doby23/Desktop/Doby/Projects/aura-monorepo/apps/native/global.css",
+    "config": "/Users/doby23/Desktop/Doby/Projects/course-hub/apps/native/tailwind.config.js",
+    "css": "/Users/doby23/Desktop/Doby/Projects/course-hub/apps/native/global.css",
     "baseColor": "neutral",
     "cssVariables": true
   },

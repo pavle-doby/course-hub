@@ -11,25 +11,25 @@
 		256EF74D8EFD0810F8BE72AD /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFFEBB7F3F1C44593821DA21 /* ExpoModulesProvider.swift */; };
 		275FA7C16CCD7EFD05BB46A7 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = BDB633420565652FD0DAC8DF /* PrivacyInfo.xcprivacy */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
-		78957E2D3CCB7F7457DC4D3A /* libPods-aura.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A8BE9B81E88AA8C32EA582AA /* libPods-aura.a */; };
+		78957E2D3CCB7F7457DC4D3A /* libPods-CourseHub.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A8BE9B81E88AA8C32EA582AA /* libPods-CourseHub.a */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		13B07F961A680F5B00A75B9A /* aura.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = aura.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = aura/Images.xcassets; sourceTree = "<group>"; };
-		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = aura/Info.plist; sourceTree = "<group>"; };
-		58ABA17C8E5EE1C55411712C /* Pods-aura.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aura.debug.xcconfig"; path = "Target Support Files/Pods-aura/Pods-aura.debug.xcconfig"; sourceTree = "<group>"; };
-		A8BE9B81E88AA8C32EA582AA /* libPods-aura.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-aura.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = aura/SplashScreen.storyboard; sourceTree = "<group>"; };
-		AB189D3ADC58DAE9DE7A2BE3 /* Pods-aura.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aura.release.xcconfig"; path = "Target Support Files/Pods-aura/Pods-aura.release.xcconfig"; sourceTree = "<group>"; };
+		13B07F961A680F5B00A75B9A /* CourseHub.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CourseHub.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = CourseHub/Images.xcassets; sourceTree = "<group>"; };
+		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = CourseHub/Info.plist; sourceTree = "<group>"; };
+		58ABA17C8E5EE1C55411712C /* Pods-CourseHub.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CourseHub.debug.xcconfig"; path = "Target Support Files/Pods-CourseHub/Pods-CourseHub.debug.xcconfig"; sourceTree = "<group>"; };
+		A8BE9B81E88AA8C32EA582AA /* libPods-CourseHub.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CourseHub.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = CourseHub/SplashScreen.storyboard; sourceTree = "<group>"; };
+		AB189D3ADC58DAE9DE7A2BE3 /* Pods-CourseHub.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CourseHub.release.xcconfig"; path = "Target Support Files/Pods-CourseHub/Pods-CourseHub.release.xcconfig"; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
-		BDB633420565652FD0DAC8DF /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = aura/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		DFFEBB7F3F1C44593821DA21 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-aura/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		BDB633420565652FD0DAC8DF /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = CourseHub/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		DFFEBB7F3F1C44593821DA21 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-CourseHub/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = aura/AppDelegate.swift; sourceTree = "<group>"; };
-		F11748442D0722820044C1D9 /* aura-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "aura-Bridging-Header.h"; path = "aura/aura-Bridging-Header.h"; sourceTree = "<group>"; };
+		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = CourseHub/AppDelegate.swift; sourceTree = "<group>"; };
+		F11748442D0722820044C1D9 /* CourseHub-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CourseHub-Bridging-Header.h"; path = "CourseHub/CourseHub-Bridging-Header.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,32 +37,32 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				78957E2D3CCB7F7457DC4D3A /* libPods-aura.a in Frameworks */,
+				78957E2D3CCB7F7457DC4D3A /* libPods-CourseHub.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		13B07FAE1A68108700A75B9A /* aura */ = {
+		13B07FAE1A68108700A75B9A /* CourseHub */ = {
 			isa = PBXGroup;
 			children = (
 				F11748412D0307B40044C1D9 /* AppDelegate.swift */,
-				F11748442D0722820044C1D9 /* aura-Bridging-Header.h */,
+				F11748442D0722820044C1D9 /* CourseHub-Bridging-Header.h */,
 				BB2F792B24A3F905000567C9 /* Supporting */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
 				BDB633420565652FD0DAC8DF /* PrivacyInfo.xcprivacy */,
 			);
-			name = aura;
+			name = CourseHub;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				A8BE9B81E88AA8C32EA582AA /* libPods-aura.a */,
+				A8BE9B81E88AA8C32EA582AA /* libPods-CourseHub.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -70,7 +70,7 @@
 		531ACBFE3295C787932D9CA1 /* ExpoModulesProviders */ = {
 			isa = PBXGroup;
 			children = (
-				C900EC7E316149380B26900C /* aura */,
+				C900EC7E316149380B26900C /* CourseHub */,
 			);
 			name = ExpoModulesProviders;
 			sourceTree = "<group>";
@@ -78,8 +78,8 @@
 		5C105A791A9E6430778B2C32 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				58ABA17C8E5EE1C55411712C /* Pods-aura.debug.xcconfig */,
-				AB189D3ADC58DAE9DE7A2BE3 /* Pods-aura.release.xcconfig */,
+				58ABA17C8E5EE1C55411712C /* Pods-CourseHub.debug.xcconfig */,
+				AB189D3ADC58DAE9DE7A2BE3 /* Pods-CourseHub.release.xcconfig */,
 			);
 			name = Pods;
 			path = Pods;
@@ -95,7 +95,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				13B07FAE1A68108700A75B9A /* aura */,
+				13B07FAE1A68108700A75B9A /* CourseHub */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
@@ -110,7 +110,7 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* aura.app */,
+				13B07F961A680F5B00A75B9A /* CourseHub.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -121,23 +121,23 @@
 				BB2F792C24A3F905000567C9 /* Expo.plist */,
 			);
 			name = Supporting;
-			path = aura/Supporting;
+			path = CourseHub/Supporting;
 			sourceTree = "<group>";
 		};
-		C900EC7E316149380B26900C /* aura */ = {
+		C900EC7E316149380B26900C /* CourseHub */ = {
 			isa = PBXGroup;
 			children = (
 				DFFEBB7F3F1C44593821DA21 /* ExpoModulesProvider.swift */,
 			);
-			name = aura;
+			name = CourseHub;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		13B07F861A680F5B00A75B9A /* aura */ = {
+		13B07F861A680F5B00A75B9A /* CourseHub */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "aura" */;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "CourseHub" */;
 			buildPhases = (
 				08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */,
 				CDA638A1E4D604F67F060D24 /* [Expo] Configure project */,
@@ -152,9 +152,9 @@
 			);
 			dependencies = (
 			);
-			name = aura;
-			productName = aura;
-			productReference = 13B07F961A680F5B00A75B9A /* aura.app */;
+			name = CourseHub;
+			productName = CourseHub;
+			productReference = 13B07F961A680F5B00A75B9A /* CourseHub.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -170,7 +170,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "aura" */;
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "CourseHub" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -183,7 +183,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				13B07F861A680F5B00A75B9A /* aura */,
+				13B07F861A680F5B00A75B9A /* CourseHub */,
 			);
 		};
 /* End PBXProject section */
@@ -235,7 +235,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-aura-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-CourseHub-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -248,7 +248,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-aura/Pods-aura-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-CourseHub/Pods-CourseHub-frameworks.sh",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/React-Core-prebuilt/React.framework/React",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ReactNativeDependencies/ReactNativeDependencies.framework/ReactNativeDependencies",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermesvm.framework/hermesvm",
@@ -261,7 +261,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-aura/Pods-aura-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CourseHub/Pods-CourseHub-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */ = {
@@ -270,7 +270,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-aura/Pods-aura-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-CourseHub/Pods-CourseHub-resources.sh",
 				"${PODS_CONFIGURATION_BUILD_DIR}/EXConstants/EXConstants.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/EXConstants/ExpoConstants_privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/ExpoFileSystem/ExpoFileSystem_privacy.bundle",
@@ -287,7 +287,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-aura/Pods-aura-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CourseHub/Pods-CourseHub-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		CDA638A1E4D604F67F060D24 /* [Expo] Configure project */ = {
@@ -301,18 +301,18 @@
 			inputPaths = (
 				"$(SRCROOT)/.xcode.env",
 				"$(SRCROOT)/.xcode.env.local",
-				"$(SRCROOT)/aura/aura.entitlements",
-				"$(SRCROOT)/Pods/Target Support Files/Pods-aura/expo-configure-project.sh",
+				"$(SRCROOT)/CourseHub/CourseHub.entitlements",
+				"$(SRCROOT)/Pods/Target Support Files/Pods-CourseHub/expo-configure-project.sh",
 			);
 			name = "[Expo] Configure project";
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(SRCROOT)/Pods/Target Support Files/Pods-aura/ExpoModulesProvider.swift",
+				"$(SRCROOT)/Pods/Target Support Files/Pods-CourseHub/ExpoModulesProvider.swift",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-aura/expo-configure-project.sh\"\n";
+			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-CourseHub/expo-configure-project.sh\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -331,18 +331,18 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 58ABA17C8E5EE1C55411712C /* Pods-aura.debug.xcconfig */;
+			baseConfigurationReference = 58ABA17C8E5EE1C55411712C /* Pods-CourseHub.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = aura/aura.entitlements;
+				CODE_SIGN_ENTITLEMENTS = CourseHub/CourseHub.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"FB_SONARKIT_ENABLED=1",
 				);
-				INFOPLIST_FILE = aura/Info.plist;
+				INFOPLIST_FILE = CourseHub/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -355,9 +355,9 @@
 					"-lc++",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.pavle-test.aura";
-				PRODUCT_NAME = aura;
-				SWIFT_OBJC_BRIDGING_HEADER = "aura/aura-Bridging-Header.h";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pavle-test.coursehub";
+				PRODUCT_NAME = CourseHub;
+				SWIFT_OBJC_BRIDGING_HEADER = "CourseHub/CourseHub-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -367,13 +367,13 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AB189D3ADC58DAE9DE7A2BE3 /* Pods-aura.release.xcconfig */;
+			baseConfigurationReference = AB189D3ADC58DAE9DE7A2BE3 /* Pods-CourseHub.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = aura/aura.entitlements;
+				CODE_SIGN_ENTITLEMENTS = CourseHub/CourseHub.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
-				INFOPLIST_FILE = aura/Info.plist;
+				INFOPLIST_FILE = CourseHub/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -386,9 +386,9 @@
 					"-lc++",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.pavle-test.aura";
-				PRODUCT_NAME = aura;
-				SWIFT_OBJC_BRIDGING_HEADER = "aura/aura-Bridging-Header.h";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pavle-test.coursehub";
+				PRODUCT_NAME = CourseHub;
+				SWIFT_OBJC_BRIDGING_HEADER = "CourseHub/CourseHub-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -520,7 +520,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "aura" */ = {
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "CourseHub" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
@@ -529,7 +529,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "aura" */ = {
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "CourseHub" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,

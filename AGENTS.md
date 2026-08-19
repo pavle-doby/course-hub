@@ -1,6 +1,6 @@
-# Aura Monorepo — Copilot Instructions
+# Course Hub — Agent Instructions
 
-> Architecture map: [ARCHITECTURE.md](../ARCHITECTURE.md)
+> Architecture map: [ARCHITECTURE.md](ARCHITECTURE.md)
 
 ## Stack at a Glance
 
@@ -54,16 +54,16 @@ Throw `BadRequestError`, `UnauthorizedError`, `NotFoundError`, etc. from `@repo/
 
 Detailed conventions are auto-loaded when you work in these paths:
 
-| Path                     | Instruction file                                                      |
-| ------------------------ | --------------------------------------------------------------------- |
-| `apps/api/**`            | [api.instructions.md](instructions/api.instructions.md)               |
-| `packages/contract/**`   | [contract.instructions.md](instructions/contract.instructions.md)     |
-| `packages/db-schema/**`  | [db-schema.instructions.md](instructions/db-schema.instructions.md)   |
-| `packages/db/**`         | [db.instructions.md](instructions/db.instructions.md)                 |
-| `packages/api-client/**` | [api-client.instructions.md](instructions/api-client.instructions.md) |
-| `packages/ui-web/**`     | [ui.instructions.md](instructions/ui.instructions.md)                 |
-| `packages/ui-native/**`  | [ui-native.instructions.md](instructions/ui-native.instructions.md)   |
-| `packages/ui-theme/**`   | [ui-theme.instructions.md](instructions/ui-theme.instructions.md)     |
-| `packages/i18n/**`       | [i18n.instructions.md](instructions/i18n.instructions.md)             |
-| `packages/scripts/**`    | [scripts.instructions.md](instructions/scripts.instructions.md)       |
-| `apps/web/**` `apps/native/**` | [forms.instructions.md](instructions/forms.instructions.md)   |
+| Path                     | Instruction file                                                                          |
+| ------------------------ | ----------------------------------------------------------------------------------------- |
+| `apps/api/**`            | [api.instructions.md](.github/instructions/api.instructions.md)                          |
+| `packages/contract/**`   | [contract.instructions.md](.github/instructions/contract.instructions.md)                |
+| `packages/db-schema/**`  | [db-schema.instructions.md](.github/instructions/db-schema.instructions.md)              |
+| `packages/db/**`         | [db.instructions.md](.github/instructions/db.instructions.md)                            |
+| `packages/api-client/**` | [api-client.instructions.md](.github/instructions/api-client.instructions.md)            |
+| `packages/ui-web/**`     | [ui.instructions.md](.github/instructions/ui.instructions.md)                            |
+| `packages/ui-native/**`  | [ui-native.instructions.md](.github/instructions/ui-native.instructions.md)              |
+| `packages/ui-theme/**`   | [ui-theme.instructions.md](.github/instructions/ui-theme.instructions.md)                |
+| `packages/i18n/**`       | [i18n.instructions.md](.github/instructions/i18n.instructions.md)                        |
+| `packages/scripts/**`    | [scripts.instructions.md](.github/instructions/scripts.instructions.md)                  |
+| `apps/web/**` `apps/native/**` | [forms.instructions.md](.github/instructions/forms.instructions.md)               |

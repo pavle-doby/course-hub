@@ -1,4 +1,4 @@
 export const metadata = {
-  title: "Aura Monorepo",
+  title: "Course Hub",
   description: "Mesto gde ćete brzo početi!",
 };

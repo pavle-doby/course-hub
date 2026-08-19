@@ -1,9 +1,9 @@
 # Architecture
 
-High-level map of the `aura-monorepo`. Each node is a workspace package or app; arrows indicate major dependency directions (consumers → providers).
+High-level map of the `course-hub`. Each node is a workspace package or app; arrows indicate major dependency directions (consumers → providers).
 
 ```
-aura-monorepo/                    # pnpm + Turborepo monorepo
+course-hub/                       # pnpm + Turborepo monorepo
 │
 ├── apps/                         # Deployable applications
 │   ├── api/                      # REST API (Express 5, Node ≥20)
@@ -58,7 +58,7 @@ aura-monorepo/                    # pnpm + Turborepo monorepo
 │   └── theme/                    # Tailwind CSS + tw-animate-css (legacy/alias)
 │
 └── ios/                          # Native iOS project (Xcode / CocoaPods)
-    └── aura.xcworkspace/         #   Open this in Xcode, not .xcodeproj
+    └── CourseHub.xcworkspace/     #   Open this in Xcode, not .xcodeproj
 ```
 
 ## Data Flow
