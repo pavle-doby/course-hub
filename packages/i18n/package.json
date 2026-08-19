@@ -1,0 +1,48 @@
+{
+  "name": "@repo/i18n",
+  "version": "0.0.0",
+  "private": true,
+  "main": "src/index.ts",
+  "react-native": "src/native.ts",
+  "exports": {
+    ".": {
+      "react-native": "./src/native.ts",
+      "default": "./src/index.ts"
+    },
+    "./server": {
+      "default": "./src/server.ts"
+    },
+    "./constants": {
+      "default": "./src/constants.ts"
+    },
+    "./client": {
+      "default": "./src/client.ts"
+    },
+    "./native": {
+      "default": "./src/native.ts"
+    }
+  },
+  "dependencies": {
+    "i18next": "^26.2.0",
+    "i18next-react-native-language-detector": "^1.0.2",
+    "next-i18next": "^16.0.7",
+    "react-i18next": "^17.0.8",
+    "react-native-locale-detector": "^1.0.0"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "lint-staged": "^17.0.7"
+  },
+  "scripts": {
+    "lint-staged": "lint-staged"
+  },
+  "lint-staged": {
+    "**/*.{ts,tsx}": [
+      "pnpm exec eslint --fix",
+      "pnpm exec prettier --write"
+    ],
+    "**/*.{md,json}": [
+      "pnpm exec prettier --write"
+    ]
+  }
+}

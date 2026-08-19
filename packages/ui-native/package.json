@@ -1,0 +1,54 @@
+{
+  "name": "@repo/ui-native",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "lint": "eslint",
+    "format": "prettier --write \"**/*.{ts,tsx}\"",
+    "typecheck": "tsc --noEmit",
+    "lint-staged": "lint-staged"
+  },
+  "dependencies": {
+    "@repo/ui-theme": "workspace:*",
+    "@rn-primitives/label": "^1.5.2",
+    "@rn-primitives/separator": "^1.5.2",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "sonner-native": "^0.26.2",
+    "tailwind-merge": "^3.6.0"
+  },
+  "peerDependencies": {
+    "@rn-primitives/slot": ">=1.4.0",
+    "lucide-react-native": ">=0.400.0",
+    "nativewind": ">=4.0.0",
+    "react": ">=18.0.0",
+    "react-native": ">=0.73.0"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@rn-primitives/slot": "^1.4.0",
+    "@types/react": "^19",
+    "eslint": "^9",
+    "lint-staged": "^17.0.7",
+    "lucide-react-native": "^0.545.0",
+    "nativewind": "^4.2.3",
+    "react": "19.2.0",
+    "react-native": "0.83.6",
+    "typescript": "^5"
+  },
+  "exports": {
+    "./lib/*": "./src/lib/*.ts",
+    "./components/*": "./src/components/*.tsx",
+    "./hooks/*": "./src/hooks/*.ts"
+  },
+  "lint-staged": {
+    "**/*.{ts,tsx}": [
+      "pnpm exec eslint --fix",
+      "pnpm exec prettier --write"
+    ],
+    "**/*.{md,json}": [
+      "pnpm exec prettier --write"
+    ]
+  }
+}

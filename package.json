@@ -1,0 +1,44 @@
+{
+  "name": "aura",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "api": "cd apps/api && pnpm dev",
+    "web": "cd apps/web && pnpm dev",
+    "ios": "cd apps/native && pnpm ios:15",
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "check-types": "turbo run check-types",
+    "db:generate": "cd packages/db && pnpm drizzle-kit generate",
+    "db:push": "cd packages/db && pnpm drizzle-kit push",
+    "db:migrate": "cd packages/db && pnpm drizzle-kit migrate",
+    "db:studio": "cd packages/db && pnpm drizzle-kit studio",
+    "db:clean:users": "pnpm --filter @repo/scripts db:clean:users",
+    "db:seed:users": "pnpm --filter @repo/scripts db:seed:users",
+    "api-client:generate": "turbo run generate:openapi generate:api",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "eslint": "^9.39.1",
+    "husky": "^9.1.7",
+    "lint-staged": "17.0.7",
+    "prettier": "^3.8.3",
+    "prettier-plugin-tailwindcss": "^0.8.0",
+    "turbo": "^2.9.16",
+    "typescript": "5.9.2"
+  },
+  "packageManager": "pnpm@11.7.0+sha512.19cc852c120c7125760f2443ee6be0ca5b40f9f50598de1a09a1f177503e010e57c23c77646e01e761de59bf874fb22a3398c33ab9691fc13eb946b6f0f4d620",
+  "engines": {
+    "node": ">=20"
+  },
+  "version": "1.0.0",
+  "dependencies": {
+    "expo": "~55.0.26",
+    "react": "19.2.0",
+    "react-native": "0.83.6"
+  }
+}

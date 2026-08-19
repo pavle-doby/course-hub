@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "new-york",
+  "rsc": false,
+  "tsx": true,
+  "tailwind": {
+    "config": "/Users/doby23/Desktop/Doby/Projects/aura-monorepo/apps/native/tailwind.config.js",
+    "css": "/Users/doby23/Desktop/Doby/Projects/aura-monorepo/apps/native/global.css",
+    "baseColor": "neutral",
+    "cssVariables": true
+  },
+  "aliases": {
+    "components": "@repo/ui-native/components",
+    "utils": "@repo/ui-native/lib/utils",
+    "ui": "@repo/ui-native/components/ui",
+    "lib": "@repo/ui-native/lib",
+    "hooks": "@repo/ui-native/hooks"
+  }
+}
