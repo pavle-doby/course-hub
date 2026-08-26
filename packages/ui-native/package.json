@@ -14,7 +14,7 @@
     "@rn-primitives/separator": "^1.5.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "sonner-native": "^0.26.2",
+    "sonner-native": "^0.27.0",
     "tailwind-merge": "^3.6.0"
   },
   "peerDependencies": {
@@ -27,15 +27,15 @@
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@rn-primitives/slot": "^1.4.0",
-    "@types/react": "^19",
-    "eslint": "^9",
-    "lint-staged": "^17.0.7",
-    "lucide-react-native": "^0.545.0",
-    "nativewind": "^4.2.3",
-    "react": "19.2.0",
-    "react-native": "0.83.6",
-    "typescript": "^5"
+    "@rn-primitives/slot": "^1.5.2",
+    "@types/react": "^19.2.18",
+    "eslint": "^10.9.1",
+    "lint-staged": "^17.3.0",
+    "lucide-react-native": "^1.34.0",
+    "nativewind": "^4.2.6",
+    "react": "19.2.8",
+    "react-native": "0.87.0",
+    "typescript": "5.8.3"
   },
   "exports": {
     "./lib/*": "./src/lib/*.ts",

@@ -12,11 +12,9 @@ export type User = z.infer<typeof UserSchema>;
 
 export type UserExtended = User & {};
 
-export type UserStatus = UserEntity["status"];
 export type UserRole = UserEntity["role"];
 
 export type FilterUser = {
-  status?: UserStatus;
   role?: UserRole;
   requiresFileUpload?: boolean;
 };

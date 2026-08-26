@@ -15,12 +15,12 @@
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
-    "lint-staged": "^17.0.7"
+    "lint-staged": "^17.3.0"
   },
   "dependencies": {
     "@repo/db-schema": "workspace:*",
-    "drizzle-zod": "^0.7.0",
-    "zod": "^4.1.12"
+    "drizzle-zod": "^0.8.3",
+    "zod": "^4.4.3"
   },
   "lint-staged": {
     "**/*.{ts,tsx}": [

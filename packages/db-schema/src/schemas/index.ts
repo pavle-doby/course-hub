@@ -1,6 +1,12 @@
-// Enums exports
 export * from "./enums";
-
-// Table exports
 export * from "./users";
+export * from "./user-preferences";
 export * from "./file-uploads";
+export * from "./courses";
+export * from "./course-enrollments";
+export * from "./topics";
+export * from "./lectures";
+export * from "./videos";
+export * from "./course-progress";
+export * from "./lecture-progress";
+export * from "./relations";

@@ -23,15 +23,15 @@
     }
   },
   "dependencies": {
-    "i18next": "^26.2.0",
+    "i18next": "^26.4.0",
     "i18next-react-native-language-detector": "^1.0.2",
-    "next-i18next": "^16.0.7",
-    "react-i18next": "^17.0.8",
-    "react-native-locale-detector": "^1.0.0"
+    "next-i18next": "^16.0.11",
+    "react-i18next": "^17.0.12",
+    "react-native-locale-detector": "^1.0.1"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
-    "lint-staged": "^17.0.7"
+    "lint-staged": "^17.3.0"
   },
   "scripts": {
     "lint-staged": "lint-staged"

@@ -15,7 +15,7 @@ api.use(
 api.use(
   "/v1/users",
   //
-  // handleAuth,
+  handleAuth,
   usersRoutes
 );
 

@@ -10,12 +10,12 @@
   },
   "dependencies": {
     "@repo/db": "workspace:*",
-    "drizzle-orm": "^0.44.6"
+    "drizzle-orm": "^0.45.2"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
-    "tsx": "^4.20.6",
-    "lint-staged": "^17.0.7"
+    "lint-staged": "^17.3.0",
+    "tsx": "^4.23.12"
   },
   "lint-staged": {
     "**/*.{ts,tsx}": [

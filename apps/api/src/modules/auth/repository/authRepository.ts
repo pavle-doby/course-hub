@@ -3,8 +3,11 @@ import type { CreateUser } from "./types";
 import { eq } from "drizzle-orm";
 
 export const authRepository = {
-  getUserByEmail: async (email: string) => {
-    const [user] = await db.select().from(schema.users).where(eq(schema.users.email, email));
+  getUserByAuthUserId: async (authUserId: string) => {
+    const [user] = await db
+      .select()
+      .from(schema.users)
+      .where(eq(schema.users.authUserId, authUserId));
     return user;
   },
   createUser: async (body: CreateUser) => {

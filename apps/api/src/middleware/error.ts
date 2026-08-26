@@ -46,7 +46,7 @@ export function handleError(err: unknown, _req: Request, res: Response, _next: N
 
   const serverError = new InternalServerError({
     code: ErrorCode.SERVER_ERROR,
-    error: error,
+    error: error instanceof Error ? { message: error.message, name: error.name } : error,
   });
 
   logger.error({ error, serverError }, "Unhandled server error");

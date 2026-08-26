@@ -52,15 +52,19 @@ export const authService = {
       });
     }
 
+    const authUserId = data.user!.id;
+    const username = `${dto.email.split("@")[0]}_${Math.random().toString(36).slice(2, 8)}`;
+
     const user: CreateUser = {
+      authUserId,
       email: dto.email,
       firstName: dto.firstName,
       lastName: dto.lastName,
+      username,
       role: "user",
-      status: "pending",
     };
 
-    const existingUser = await authRepository.getUserByEmail(dto.email);
+    const existingUser = await authRepository.getUserByAuthUserId(authUserId);
 
     if (existingUser) {
       throw new ConflictError({
@@ -70,14 +74,17 @@ export const authService = {
 
     const userDb = await authRepository.createUser(user);
 
+    if (!userDb) throw new InternalServerError({ code: ErrorCode.SERVER_ERROR });
+
     const userDto: AuthSignUpUserRes = {
       id: userDb.id,
       email: userDb.email,
-      image: userDb.image,
       firstName: userDb.firstName,
       lastName: userDb.lastName,
+      username: userDb.username,
+      avatarUrl: userDb.avatarUrl,
+      bio: userDb.bio,
       role: userDb.role,
-      status: userDb.status,
     };
 
     setAuthTokens({
@@ -116,7 +123,7 @@ export const authService = {
       refreshToken: data.session?.refresh_token,
     });
 
-    const user = await authRepository.getUserByEmail(dto.email);
+    const user = await authRepository.getUserByAuthUserId(data.user.id);
 
     if (!user) {
       throw new NotFoundError({
@@ -127,11 +134,12 @@ export const authService = {
     const userDto: AuthLogInUserRes = {
       id: user.id,
       email: user.email,
-      image: user.image,
       firstName: user.firstName,
       lastName: user.lastName,
+      username: user.username,
+      avatarUrl: user.avatarUrl,
+      bio: user.bio,
       role: user.role,
-      status: user.status,
     };
 
     return userDto;
@@ -221,30 +229,36 @@ export const authService = {
       });
     }
 
-    const existingUser = await authRepository.getUserByEmail(dto.email);
+    const existingNativeUser = await authRepository.getUserByAuthUserId(data.user!.id);
 
-    if (existingUser) {
+    if (existingNativeUser) {
       throw new ConflictError({
         code: ErrorCodeAuth.USER_EXISTS,
       });
     }
 
+    const nativeUsername = `${dto.email.split("@")[0]}_${Math.random().toString(36).slice(2, 8)}`;
+
     const userDb = await authRepository.createUser({
+      authUserId: data.user!.id,
       email: dto.email,
       firstName: dto.firstName,
       lastName: dto.lastName,
+      username: nativeUsername,
       role: "user",
-      status: "pending",
     });
+
+    if (!userDb) throw new InternalServerError({ code: ErrorCode.SERVER_ERROR });
 
     const user: AuthSignUpUserRes = {
       id: userDb.id,
       email: userDb.email,
-      image: userDb.image,
       firstName: userDb.firstName,
       lastName: userDb.lastName,
+      username: userDb.username,
+      avatarUrl: userDb.avatarUrl,
+      bio: userDb.bio,
       role: userDb.role,
-      status: userDb.status,
     };
 
     return {
@@ -267,7 +281,7 @@ export const authService = {
       });
     }
 
-    const userDb = await authRepository.getUserByEmail(dto.email);
+    const userDb = await authRepository.getUserByAuthUserId(data.user.id);
 
     if (!userDb) {
       throw new NotFoundError({
@@ -278,11 +292,12 @@ export const authService = {
     const user: AuthLogInUserRes = {
       id: userDb.id,
       email: userDb.email,
-      image: userDb.image,
       firstName: userDb.firstName,
       lastName: userDb.lastName,
+      username: userDb.username,
+      avatarUrl: userDb.avatarUrl,
+      bio: userDb.bio,
       role: userDb.role,
-      status: userDb.status,
     };
 
     return {

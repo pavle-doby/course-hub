@@ -5,6 +5,8 @@ export default {
   schema: "./src/schema.ts", // Point directly to db-schema
   out: "./drizzle", // migrations output
   dialect: "postgresql",
+  // Do not introspect Supabase's auth, storage, extensions, etc.
+  schemaFilter: ["public"],
   dbCredentials: {
     url: env.DATABASE_URL!,
   },

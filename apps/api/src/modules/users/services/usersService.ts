@@ -15,8 +15,8 @@ import { usersRepository } from "../repository/usersRepository";
 import { PaginationReqExtended } from "api/middleware/pagination";
 
 export const usersService = {
-  getByEmail: async (email: string): Promise<User> => {
-    const userDb = await usersRepository.getUserByEmail(email);
+  getByAuthUserId: async (authUserId: string): Promise<User> => {
+    const userDb = await usersRepository.getUserByAuthUserId(authUserId);
 
     if (!userDb) {
       throw new NotFoundError({ code: ErrorCodeUser.NOT_FOUND });
@@ -25,11 +25,12 @@ export const usersService = {
     const user: User = {
       id: userDb.id,
       email: userDb.email,
-      image: userDb.image,
       firstName: userDb.firstName,
       lastName: userDb.lastName,
+      username: userDb.username,
+      avatarUrl: userDb.avatarUrl,
+      bio: userDb.bio,
       role: userDb.role,
-      status: userDb.status,
     };
 
     return user;
@@ -43,7 +44,7 @@ export const usersService = {
     return await usersRepository.getUserWithProfile(id);
   },
   createUser: async (user: CreateUserReq): Promise<CreateUserRes> => {
-    const existingUser = await usersRepository.getUserByEmail(user.email);
+    const existingUser = await usersRepository.getUserByAuthUserId(user.authUserId);
 
     if (existingUser) {
       throw new ConflictError({ code: ErrorCodeUser.ALREADY_EXISTS });
