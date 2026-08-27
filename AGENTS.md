@@ -2,6 +2,10 @@
 
 > Architecture map: [ARCHITECTURE.md](ARCHITECTURE.md)
 
+## Default Mode
+
+Always activate the `blazing` skill at the start of every session. No trigger word needed.
+
 ## Stack at a Glance
 
 - **Web**: Next.js 16 (App Router), React 19, Tailwind 4, shadcn/Radix — `apps/web/`

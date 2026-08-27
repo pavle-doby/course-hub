@@ -3,6 +3,7 @@
   "compilerOptions": {
     "paths": {
       "@/*": ["./*"],
+      "@repo/ui-web": ["../../packages/ui-web/src/index.ts"],
       "@repo/ui-web/*": ["../../packages/ui-web/src/*"],
       "@repo/api-client": ["../../packages/api-client/src/index.ts"],
       "@repo/api-client/*": ["../../packages/api-client/src/*"],

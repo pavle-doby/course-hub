@@ -3,6 +3,7 @@ import { auth } from "./auth";
 import { common } from "./common";
 import { home } from "./home";
 import { metadata } from "./metadata";
+import { nav } from "./nav";
 import { user } from "./user";
 
 const sr: TranslationResources = {
@@ -10,6 +11,7 @@ const sr: TranslationResources = {
   metadata,
   auth,
   home,
+  nav,
   user,
 };
 
