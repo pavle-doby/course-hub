@@ -102,8 +102,8 @@ export interface Course {
   name: string;
   /** @nullable */
   description: string | null;
-  /** @maxLength 255 */
-  slug: string;
+  /** @maxLength 12 */
+  publicId: string;
   status: CourseStatus;
   /** @nullable */
   publishedAt: string | null;
@@ -591,8 +591,6 @@ export type CreateCourseBody = {
   name: string;
   /** @nullable */
   description?: string | null;
-  /** @maxLength 255 */
-  slug: string;
   status?: CreateCourseBodyStatus;
   /** @nullable */
   publishedAt?: string | null;
@@ -667,8 +665,6 @@ export type UpdateCourseBody = {
   name?: string;
   /** @nullable */
   description?: string | null;
-  /** @maxLength 255 */
-  slug?: string;
   status?: UpdateCourseBodyStatus;
   /** @nullable */
   publishedAt?: string | null;

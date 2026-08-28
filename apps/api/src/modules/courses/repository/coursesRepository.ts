@@ -64,9 +64,9 @@ export const coursesRepository = {
     });
   },
 
-  getCourseBySlug: async (slug: string): Promise<Course | undefined> => {
+  getCourseByPublicId: async (publicId: string): Promise<Course | undefined> => {
     return await db.query.courses.findFirst({
-      where: eq(schema.courses.slug, slug),
+      where: eq(schema.courses.publicId, publicId),
       columns: { createdAt: false, updatedAt: false },
     });
   },
@@ -77,7 +77,7 @@ export const coursesRepository = {
       creatorId: schema.courses.creatorId,
       name: schema.courses.name,
       description: schema.courses.description,
-      slug: schema.courses.slug,
+      publicId: schema.courses.publicId,
       status: schema.courses.status,
       publishedAt: schema.courses.publishedAt,
     });
@@ -94,7 +94,7 @@ export const coursesRepository = {
         creatorId: schema.courses.creatorId,
         name: schema.courses.name,
         description: schema.courses.description,
-        slug: schema.courses.slug,
+        publicId: schema.courses.publicId,
         status: schema.courses.status,
         publishedAt: schema.courses.publishedAt,
       });
@@ -107,7 +107,7 @@ export const coursesRepository = {
       creatorId: schema.courses.creatorId,
       name: schema.courses.name,
       description: schema.courses.description,
-      slug: schema.courses.slug,
+      publicId: schema.courses.publicId,
       status: schema.courses.status,
       publishedAt: schema.courses.publishedAt,
     });

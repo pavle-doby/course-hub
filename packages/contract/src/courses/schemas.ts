@@ -19,6 +19,7 @@ export const CoursePostQuerySchema = createInsertSchema(courses, {
 }).omit({
   id: true,
   creatorId: true,
+  publicId: true,
   createdAt: true,
   updatedAt: true,
 });
@@ -29,6 +30,7 @@ export const CoursePutQuerySchema = createUpdateSchema(courses, {
   .omit({
     id: true,
     creatorId: true,
+    publicId: true,
     createdAt: true,
     updatedAt: true,
   })

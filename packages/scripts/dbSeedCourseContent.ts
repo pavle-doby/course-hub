@@ -14,8 +14,8 @@ const mockCourses: Array<
   }
 > = [
   {
+    id: "a1b2c3d4-0001-4000-8000-000000000001",
     name: "TypeScript Fundamentals",
-    slug: "typescript-fundamentals",
     description: "A comprehensive introduction to TypeScript from the ground up.",
     status: "published",
     topics: [
@@ -56,8 +56,8 @@ const mockCourses: Array<
     ],
   },
   {
+    id: "a1b2c3d4-0001-4000-8000-000000000002",
     name: "React for Beginners",
-    slug: "react-for-beginners",
     description: "Learn React from scratch — components, hooks, and state management.",
     status: "published",
     topics: [
@@ -96,8 +96,8 @@ const mockCourses: Array<
     ],
   },
   {
+    id: "a1b2c3d4-0001-4000-8000-000000000003",
     name: "Node.js & Express API Design",
-    slug: "nodejs-express-api-design",
     description: "Build production-ready REST APIs with Node.js and Express.",
     status: "draft",
     topics: [
@@ -146,20 +146,12 @@ async function seedCourseContent() {
       const [course] = await db
         .insert(schema.courses)
         .values({ ...courseData, creatorId: user.id })
-        .onConflictDoNothing({ target: schema.courses.slug })
-        .returning({ id: schema.courses.id, name: schema.courses.name, slug: schema.courses.slug });
+        .onConflictDoNothing({ target: schema.courses.id })
+        .returning({ id: schema.courses.id, name: schema.courses.name });
 
-      const courseId =
-        course?.id ??
-        (
-          await db
-            .select({ id: schema.courses.id })
-            .from(schema.courses)
-            .where(eq(schema.courses.slug, courseData.slug))
-            .limit(1)
-        )[0]?.id;
+      const courseId = course?.id ?? courseData.id;
 
-      if (!courseId) throw new Error(`Failed to resolve course id for slug: ${courseData.slug}`);
+      if (!courseId) throw new Error(`Failed to resolve course id for: ${courseData.name}`);
 
       const wasInserted = !!course;
       console.log(`${wasInserted ? "Created" : "Skipped (exists)"} course: "${courseData.name}"`);

@@ -8,7 +8,7 @@ import {
   UpdateCourseReq,
   UpdateCourseRes,
 } from "@repo/contract";
-import { ConflictError, NotFoundError } from "@repo/contract";
+import { NotFoundError } from "@repo/contract";
 import { usersRepository } from "api/modules/users/repository/usersRepository";
 import { coursesRepository } from "../repository/coursesRepository";
 import { PaginationReqExtended } from "api/middleware/pagination";
@@ -32,20 +32,12 @@ export const coursesService = {
     const user = await usersRepository.getUserByAuthUserId(authUserId);
     if (!user) throw new NotFoundError({ code: ErrorCodeCourse.NOT_FOUND });
 
-    const existing = await coursesRepository.getCourseBySlug(data.slug);
-    if (existing) throw new ConflictError({ code: ErrorCodeCourse.SLUG_TAKEN });
-
     return await coursesRepository.createCourse({ ...data, creatorId: user.id });
   },
 
   updateCourse: async (id: string, data: UpdateCourseReq): Promise<UpdateCourseRes> => {
     const existing = await coursesRepository.getCourseById(id);
     if (!existing) throw new NotFoundError({ code: ErrorCodeCourse.NOT_FOUND });
-
-    if (data.slug && data.slug !== existing.slug) {
-      const slugTaken = await coursesRepository.getCourseBySlug(data.slug);
-      if (slugTaken) throw new ConflictError({ code: ErrorCodeCourse.SLUG_TAKEN });
-    }
 
     return await coursesRepository.updateCourse(id, data);
   },

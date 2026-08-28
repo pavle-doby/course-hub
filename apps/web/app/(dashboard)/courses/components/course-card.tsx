@@ -42,11 +42,11 @@ export function CourseCard({ course, onDelete }: CourseCardProps) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => router.push(`/courses/${course.id}/edit`)}>
+              <DropdownMenuItem onClick={() => router.push(`/courses/${course.publicId}/edit`)}>
                 <Pencil className="size-4" />
                 Edit
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => router.push(`/courses/${course.id}`)}>
+              <DropdownMenuItem onClick={() => router.push(`/courses/${course.publicId}`)}>
                 <Eye className="size-4" />
                 Preview
               </DropdownMenuItem>

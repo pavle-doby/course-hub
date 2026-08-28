@@ -13,7 +13,7 @@
     "check-types": "turbo run check-types",
     "db:generate": "cd packages/db && pnpm drizzle-kit generate",
     "db:push": "cd packages/db && pnpm drizzle-kit push",
-    "db:migrate": "cd packages/db && pnpm drizzle-kit migrate",
+    "db:migrate": "cd packages/db && pnpm drizzle-kit migrate --verbose",
     "db:studio": "cd packages/db && pnpm drizzle-kit studio",
     "db:clean:users": "pnpm --filter @repo/scripts db:clean:users",
     "db:seed:users": "pnpm --filter @repo/scripts db:seed:users",
