@@ -382,6 +382,9 @@ importers:
       axios:
         specifier: ^1.19.0
         version: 1.19.0(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2)
+      react:
+        specifier: ^19.0.0
+        version: 19.2.8
     devDependencies:
       '@repo/typescript-config':
         specifier: workspace:*
@@ -7101,8 +7104,8 @@ packages:
     resolution: {integrity: sha512-dLsljMd9sqwRkby8zhO1gSg3PnJIBFid8f4CQj/sXx+7cKx+E7u0PKhZ+U4wmhx7EfmtvnA318oVaIkAB1lRJw==}
     hasBin: true
 
-  remeda@2.44.0:
-    resolution: {integrity: sha512-skNJFQ89qM8Tty8lgcH75UC/lP2FOrGwzszRuoKpS1RfEpbacHQFltIR/A5zUULdylzYQf2LVpXim6s0DMGnng==}
+  remeda@2.45.0:
+    resolution: {integrity: sha512-CTftZ0GJSox3CH77OhJemj20sXXUScH/kpkExD6t2LP3IG+mPKASBMFkbvWtsvzhU+54gKcgH38WWVihfr7bCA==}
     engines: {node: '>=18.0.0'}
 
   require-directory@2.1.1:
@@ -10275,7 +10278,7 @@ snapshots:
       fs-extra: 11.4.0
       jiti: 2.7.0
       jsesc: 3.1.0
-      remeda: 2.44.0
+      remeda: 2.45.0
       tinyglobby: 0.2.17
       typedoc: 0.28.20(typescript@5.8.3)
     transitivePeerDependencies:
@@ -10285,7 +10288,7 @@ snapshots:
   '@orval/effect@8.26.0(supports-color@10.2.2)(typescript@5.8.3)':
     dependencies:
       '@orval/core': 8.26.0(supports-color@10.2.2)(typescript@5.8.3)
-      remeda: 2.44.0
+      remeda: 2.45.0
     transitivePeerDependencies:
       - '@faker-js/faker'
       - supports-color
@@ -10323,7 +10326,7 @@ snapshots:
   '@orval/mock@8.26.0(supports-color@10.2.2)(typescript@5.8.3)':
     dependencies:
       '@orval/core': 8.26.0(supports-color@10.2.2)(typescript@5.8.3)
-      remeda: 2.44.0
+      remeda: 2.45.0
     transitivePeerDependencies:
       - '@faker-js/faker'
       - supports-color
@@ -10333,7 +10336,7 @@ snapshots:
     dependencies:
       '@orval/core': 8.26.0(supports-color@10.2.2)(typescript@5.8.3)
       '@orval/fetch': 8.26.0(supports-color@10.2.2)(typescript@5.8.3)
-      remeda: 2.44.0
+      remeda: 2.45.0
     transitivePeerDependencies:
       - '@faker-js/faker'
       - supports-color
@@ -10360,7 +10363,7 @@ snapshots:
     dependencies:
       '@orval/core': 8.26.0(supports-color@10.2.2)(typescript@5.8.3)
       jsesc: 3.1.0
-      remeda: 2.44.0
+      remeda: 2.45.0
     transitivePeerDependencies:
       - '@faker-js/faker'
       - supports-color
@@ -15249,7 +15252,7 @@ snapshots:
       get-tsconfig: 4.14.3
       jiti: 2.7.0
       js-yaml: 4.3.1
-      remeda: 2.44.0
+      remeda: 2.45.0
       string-argv: 0.3.2
       typedoc: 0.28.20(typescript@5.8.3)
       typedoc-plugin-coverage: 4.0.3(typedoc@0.28.20(typescript@5.8.3))
@@ -16036,7 +16039,7 @@ snapshots:
     dependencies:
       jsesc: 3.1.0
 
-  remeda@2.44.0: {}
+  remeda@2.45.0: {}
 
   require-directory@2.1.1: {}
 

@@ -10,13 +10,10 @@ export default defineConfig({
       httpClient: "axios",
       indexFiles: true,
       override: {
+        useNamedParameters: true,
         mutator: {
           path: "./src/lib/apiClient.ts",
           name: "customInstance",
-        },
-        query: {
-          useQuery: true,
-          useMutation: true,
         },
       },
     },

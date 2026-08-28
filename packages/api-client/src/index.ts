@@ -6,3 +6,4 @@ export { ApiClientProvider } from "./api-client-provider";
 export * from "./generated/courseHubAPI.schemas";
 export * from "./generated/auth/auth";
 export * from "./generated/users/users";
+export * from "./generated/courses/courses";

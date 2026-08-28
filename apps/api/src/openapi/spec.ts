@@ -5,6 +5,7 @@ import { registry } from "./registry";
 // Side-effect imports: register all paths into the registry
 import "../modules/auth/openapi/auth";
 import "../modules/users/openapi/users";
+import "../modules/courses/openapi/courses";
 
 export function generateOpenAPIDocument(): OpenAPIObject {
   const generator = new OpenApiGeneratorV31(registry.definitions);
