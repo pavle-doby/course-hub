@@ -16,7 +16,7 @@ import {
   DropdownMenuItem,
 } from "@repo/ui-web/components/dropdown-menu";
 import { Button } from "@repo/ui-web/components/button";
-import { BookOpen, EllipsisVertical, Trash2 } from "lucide-react";
+import { File, EllipsisVertical, Trash2 } from "lucide-react";
 import { Badge } from "@repo/ui-web/components/badge";
 
 type LessonCardProps = {
@@ -31,7 +31,7 @@ export function LessonCard({ lesson, onDelete }: LessonCardProps) {
     <Card className="min-h-25">
       <CardHeader>
         <div className="flex items-center gap-2 text-primary">
-          <BookOpen className="size-4 shrink-0" />
+          <File className="size-4 shrink-0" />
           <CardTitle>{lesson.name}</CardTitle>
         </div>
         <CardDescription className="line-clamp-2">{lesson.description}</CardDescription>

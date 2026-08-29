@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useGetLessons, useDeleteLesson } from "@repo/api-client";
 import { Input } from "@repo/ui-web/components/input";
-import { Search } from "lucide-react";
+import { Search, Folder, File } from "lucide-react";
 import { LessonCard } from "./components/lesson-card";
 import { LessonCardSkeleton } from "./components/lesson-card-skeleton";
 import { useDebounce } from "@/hooks/use-debounce";
@@ -36,23 +36,25 @@ export default function LessonsPage() {
         <Link
           href="/courses"
           className={cn(
-            "flex-1 py-3 text-center text-sm font-medium",
+            "flex flex-1 items-center justify-center gap-1.5 py-3 text-center text-sm font-medium",
             pathname === "/courses"
               ? "border-b-2 border-primary text-foreground"
               : "text-muted-foreground"
           )}
         >
+          <Folder className="size-4" />
           {t("nav.courses")}
         </Link>
         <Link
           href="/lessons"
           className={cn(
-            "flex-1 py-3 text-center text-sm font-medium",
+            "flex flex-1 items-center justify-center gap-1.5 py-3 text-center text-sm font-medium",
             pathname === "/lessons"
               ? "border-b-2 border-primary text-foreground"
               : "text-muted-foreground"
           )}
         >
+          <File className="size-4" />
           {t("nav.lessons")}
         </Link>
       </div>

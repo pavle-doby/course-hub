@@ -22,7 +22,9 @@ import {
   Apple,
   Bell,
   ChevronRight,
-  ChevronsLeftRight,
+  CirclePlus,
+  File,
+  Folder,
   LogOut,
   MessageCircle,
   Settings,
@@ -45,7 +47,7 @@ type NavKey =
   | "nav.feedback"
   | "nav.logOut";
 
-type NavSubItem = { label: NavKey; href: string };
+type NavSubItem = { label: NavKey; href: string; icon?: LucideIcon };
 type NavItem =
   | { label: NavKey; icon: LucideIcon; href: string; items?: never }
   | { label: NavKey; icon: LucideIcon; href?: never; items: NavSubItem[] };
@@ -56,10 +58,10 @@ type FooterItem =
 const NAV_ITEMS: NavItem[] = [
   {
     label: "nav.create",
-    icon: ChevronsLeftRight,
+    icon: CirclePlus,
     items: [
-      { label: "nav.courses", href: "/courses" },
-      { label: "nav.lessons", href: "/lessons" },
+      { label: "nav.courses", href: "/courses", icon: Folder },
+      { label: "nav.lessons", href: "/lessons", icon: File },
     ],
   },
   { label: "nav.learn", icon: Apple, href: "/learn" },
@@ -114,7 +116,10 @@ export function SideNavMenu() {
                               asChild
                               isActive={pathname === sub.href}
                             >
-                              <Link href={sub.href}>{t(sub.label)}</Link>
+                              <Link href={sub.href}>
+                                {sub.icon && <sub.icon />}
+                                {t(sub.label)}
+                              </Link>
                             </SidebarMenuSubButton>
                           </SidebarMenuSubItem>
                         ))}

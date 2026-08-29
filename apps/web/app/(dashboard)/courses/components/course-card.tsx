@@ -15,8 +15,9 @@ import {
   DropdownMenuItem,
 } from "@repo/ui-web/components/dropdown-menu";
 import { Button } from "@repo/ui-web/components/button";
-import { ChevronsLeftRight, EllipsisVertical, Pencil, Eye, Trash2 } from "lucide-react";
+import { Folder, EllipsisVertical, Pencil, Eye, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useT } from "@repo/i18n/client";
 
 type CourseCardProps = {
   course: Course;
@@ -25,12 +26,13 @@ type CourseCardProps = {
 
 export function CourseCard({ course, onDelete }: CourseCardProps) {
   const router = useRouter();
+  const { t } = useT();
 
   return (
     <Card className="min-h-25">
       <CardHeader>
         <div className="flex items-center gap-2 text-primary">
-          <ChevronsLeftRight className="size-4 shrink-0" />
+          <Folder className="size-4 shrink-0" />
           <CardTitle>{course.name}</CardTitle>
         </div>
         <CardDescription className="line-clamp-2">{course.description}</CardDescription>
@@ -44,18 +46,18 @@ export function CourseCard({ course, onDelete }: CourseCardProps) {
             <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={() => router.push(`/courses/${course.publicId}/edit`)}>
                 <Pencil className="size-4" />
-                Edit
+                {t("courses.card.edit")}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => router.push(`/courses/${course.publicId}`)}>
                 <Eye className="size-4" />
-                Preview
+                {t("courses.card.preview")}
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="text-destructive focus:text-destructive"
                 onClick={() => onDelete(course.id)}
               >
                 <Trash2 className="size-4" />
-                Delete
+                {t("courses.card.delete")}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
