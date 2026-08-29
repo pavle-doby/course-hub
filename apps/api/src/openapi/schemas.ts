@@ -4,6 +4,7 @@ import {
   PaginationSchema,
   UserSchema as UserSchemaBase,
   CourseSchema as CourseSchemaBase,
+  LessonSchema as LessonSchemaBase,
 } from "@repo/contract";
 
 export const UserSchema = registry.register("User", UserSchemaBase);
@@ -39,6 +40,16 @@ export const PaginatedCoursesSchema = registry.register(
   "Courses",
   z.object({
     data: z.array(CourseSchema),
+    pagination: PaginationSchema,
+  })
+);
+
+export const LessonSchema = registry.register("Lesson", LessonSchemaBase);
+
+export const PaginatedLessonsSchema = registry.register(
+  "Lessons",
+  z.object({
+    data: z.array(LessonSchema),
     pagination: PaginationSchema,
   })
 );

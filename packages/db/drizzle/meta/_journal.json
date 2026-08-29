@@ -15,6 +15,13 @@
       "when": 1787909655903,
       "tag": "0001_courses_replace_slug_with_public_id",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1788035726487,
+      "tag": "0002_rename_lectures_to_lessons",
+      "breakpoints": true
     }
   ]
 }

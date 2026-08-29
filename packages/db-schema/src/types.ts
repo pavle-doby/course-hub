@@ -6,10 +6,10 @@ import type {
   courses,
   courseEnrollments,
   topics,
-  lectures,
+  lessons,
   videos,
   courseProgress,
-  lectureProgress,
+  lessonProgress,
 } from "./schemas";
 
 export type UserEntity = InferSelectModel<typeof users>;
@@ -18,7 +18,7 @@ export type FileUploadEntity = InferSelectModel<typeof fileUploads>;
 export type CourseEntity = InferSelectModel<typeof courses>;
 export type CourseEnrollmentEntity = InferSelectModel<typeof courseEnrollments>;
 export type TopicEntity = InferSelectModel<typeof topics>;
-export type LectureEntity = InferSelectModel<typeof lectures>;
+export type LessonEntity = InferSelectModel<typeof lessons>;
 export type VideoEntity = InferSelectModel<typeof videos>;
 export type CourseProgressEntity = InferSelectModel<typeof courseProgress>;
-export type LectureProgressEntity = InferSelectModel<typeof lectureProgress>;
+export type LessonProgressEntity = InferSelectModel<typeof lessonProgress>;

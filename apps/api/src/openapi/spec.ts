@@ -6,6 +6,7 @@ import { registry } from "./registry";
 import "../modules/auth/openapi/auth";
 import "../modules/users/openapi/users";
 import "../modules/courses/openapi/courses";
+import "../modules/lessons/openapi/lessons";
 
 export function generateOpenAPIDocument(): OpenAPIObject {
   const generator = new OpenApiGeneratorV31(registry.definitions);

@@ -5,6 +5,7 @@ import { handleAuth } from "../middleware/auth";
 import authRoutes from "../modules/auth/routes/authRoutes";
 import usersRoutes from "../modules/users/routes/usersRoutes";
 import coursesRoutes from "../modules/courses/routes/coursesRoutes";
+import lessonsRoutes from "../modules/lessons/routes/lessonsRoutes";
 
 const api: Router = Router();
 
@@ -24,6 +25,12 @@ api.use(
   //
   handleAuth,
   coursesRoutes
+);
+api.use(
+  "/v1/lessons",
+  //
+  handleAuth,
+  lessonsRoutes
 );
 
 export default api;

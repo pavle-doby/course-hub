@@ -100,10 +100,10 @@ export interface Course {
   creatorId: string;
   /** @maxLength 255 */
   name: string;
-  /** @nullable */
-  description: string | null;
   /** @maxLength 12 */
   publicId: string;
+  /** @nullable */
+  description: string | null;
   status: CourseStatus;
   /** @nullable */
   publishedAt: string | null;
@@ -118,6 +118,32 @@ export type CoursesPagination = {
 export interface Courses {
   data: Course[];
   pagination: CoursesPagination;
+}
+
+export interface Lesson {
+  id: string;
+  topicId: string;
+  /** @maxLength 255 */
+  name: string;
+  /** @nullable */
+  description: string | null;
+  /**
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  position: number;
+  courseName: string;
+}
+
+export type LessonsPagination = {
+  total: number;
+  page: number;
+  limit: number;
+};
+
+export interface Lessons {
+  data: Lesson[];
+  pagination: LessonsPagination;
 }
 
 export type AuthSignUpBody = {
@@ -721,4 +747,179 @@ export type DeleteCourseDefault = {
   code: DeleteCourseDefaultCode;
   error?: unknown;
   details?: DeleteCourseDefaultDetails;
+};
+
+export type GetLessonsParams = {
+  /**
+   * @minimum 0
+   * @nullable
+   */
+  page?: number | null;
+  /**
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
+  query?: string;
+  topicId?: string;
+  courseId?: string;
+};
+
+export type GetLessonsDefaultCode =
+  (typeof GetLessonsDefaultCode)[keyof typeof GetLessonsDefaultCode];
+
+export const GetLessonsDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type GetLessonsDefaultDetails = { [key: string]: unknown };
+
+export type GetLessonsDefault = {
+  status: number;
+  code: GetLessonsDefaultCode;
+  error?: unknown;
+  details?: GetLessonsDefaultDetails;
+};
+
+export type CreateLessonBody = {
+  topicId: string;
+  /** @maxLength 255 */
+  name: string;
+  /** @nullable */
+  description?: string | null;
+  /**
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  position: number;
+};
+
+export type CreateLessonDefaultCode =
+  (typeof CreateLessonDefaultCode)[keyof typeof CreateLessonDefaultCode];
+
+export const CreateLessonDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type CreateLessonDefaultDetails = { [key: string]: unknown };
+
+export type CreateLessonDefault = {
+  status: number;
+  code: CreateLessonDefaultCode;
+  error?: unknown;
+  details?: CreateLessonDefaultDetails;
+};
+
+export type GetLessonPathParameters = {
+  id: string;
+};
+export type GetLessonDefaultCode = (typeof GetLessonDefaultCode)[keyof typeof GetLessonDefaultCode];
+
+export const GetLessonDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type GetLessonDefaultDetails = { [key: string]: unknown };
+
+export type GetLessonDefault = {
+  status: number;
+  code: GetLessonDefaultCode;
+  error?: unknown;
+  details?: GetLessonDefaultDetails;
+};
+
+export type UpdateLessonPathParameters = {
+  id: string;
+};
+export type UpdateLessonBody = {
+  topicId?: string;
+  /** @maxLength 255 */
+  name?: string;
+  /** @nullable */
+  description?: string | null;
+  /**
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  position?: number;
+};
+
+export type UpdateLessonDefaultCode =
+  (typeof UpdateLessonDefaultCode)[keyof typeof UpdateLessonDefaultCode];
+
+export const UpdateLessonDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type UpdateLessonDefaultDetails = { [key: string]: unknown };
+
+export type UpdateLessonDefault = {
+  status: number;
+  code: UpdateLessonDefaultCode;
+  error?: unknown;
+  details?: UpdateLessonDefaultDetails;
+};
+
+export type DeleteLessonPathParameters = {
+  id: string;
+};
+export type DeleteLessonDefaultCode =
+  (typeof DeleteLessonDefaultCode)[keyof typeof DeleteLessonDefaultCode];
+
+export const DeleteLessonDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type DeleteLessonDefaultDetails = { [key: string]: unknown };
+
+export type DeleteLessonDefault = {
+  status: number;
+  code: DeleteLessonDefaultCode;
+  error?: unknown;
+  details?: DeleteLessonDefaultDetails;
 };

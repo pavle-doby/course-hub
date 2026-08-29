@@ -1,12 +1,12 @@
 import { pgTable, uuid, varchar, text, integer, timestamp } from "drizzle-orm/pg-core";
-import { lectures } from "./lectures";
+import { lessons } from "./lessons";
 
 export const videos = pgTable("videos", {
   id: uuid("id").primaryKey().defaultRandom(),
-  lectureId: uuid("lecture_id")
+  lessonId: uuid("lesson_id")
     .notNull()
     .unique()
-    .references(() => lectures.id, { onDelete: "cascade" }),
+    .references(() => lessons.id, { onDelete: "cascade" }),
   name: varchar("name", { length: 255 }).notNull(),
   storagePath: text("storage_path").notNull(),
   durationSeconds: integer("duration_seconds"),

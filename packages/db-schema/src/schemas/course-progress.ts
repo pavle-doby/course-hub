@@ -2,7 +2,7 @@ import { pgTable, uuid, timestamp, unique } from "drizzle-orm/pg-core";
 import { users } from "./users";
 import { courses } from "./courses";
 import { topics } from "./topics";
-import { lectures } from "./lectures";
+import { lessons } from "./lessons";
 
 export const courseProgress = pgTable(
   "course_progress",
@@ -17,7 +17,7 @@ export const courseProgress = pgTable(
     currentTopicId: uuid("current_topic_id").references(() => topics.id, {
       onDelete: "set null",
     }),
-    currentLectureId: uuid("current_lecture_id").references(() => lectures.id, {
+    currentLessonId: uuid("current_lesson_id").references(() => lessons.id, {
       onDelete: "set null",
     }),
     startedAt: timestamp("started_at", { withTimezone: true }).defaultNow().notNull(),

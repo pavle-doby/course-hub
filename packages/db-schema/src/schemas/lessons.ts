@@ -1,7 +1,7 @@
 import { pgTable, uuid, varchar, text, integer, timestamp } from "drizzle-orm/pg-core";
 import { topics } from "./topics";
 
-export const lectures = pgTable("lectures", {
+export const lessons = pgTable("lessons", {
   id: uuid("id").primaryKey().defaultRandom(),
   topicId: uuid("topic_id")
     .notNull()
