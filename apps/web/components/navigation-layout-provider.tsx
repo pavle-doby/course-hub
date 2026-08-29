@@ -3,7 +3,7 @@ import { SideNavMenu } from "@/components/side-nav-menu";
 import { MobileHeader } from "@/components/mobile-header";
 import { MobileBottomNav } from "@/components/mobile-bottom-nav";
 
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+export function NavigationLayoutProvider({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
       {/* Desktop sidebar — hidden on mobile/tablet */}
