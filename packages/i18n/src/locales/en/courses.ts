@@ -46,6 +46,8 @@ export const courses = {
     newLessonName: "New Lesson",
     nameRequired: "Name is required",
     savedToast: "Saved",
+    autoSaveOnToast: "Auto save - On",
+    autoSaveOffToast: "Auto save - Off",
     publishedToast: "Course published",
     unpublishedToast: "Course unpublished",
     archive: "Archive",

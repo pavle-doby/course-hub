@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import {
   useCreateLesson,
@@ -51,6 +51,19 @@ export default function EditCoursePage() {
   const [isSaving, setIsSaving] = useState(false);
 
   const formRef = useRef<EntityFormHandle>(null);
+  const hasShownAutoSaveToast = useRef(false);
+
+  useEffect(() => {
+    if (hasShownAutoSaveToast.current) return;
+    hasShownAutoSaveToast.current = true;
+    toast.success(t("courses.editor.autoSaveOnToast"));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  function handleAutoSaveChange(value: boolean) {
+    setAutoSave(value);
+    toast.success(t(value ? "courses.editor.autoSaveOnToast" : "courses.editor.autoSaveOffToast"));
+  }
 
   const { data: courseData } = useGetCourseByPublicId({ publicId });
   const id = courseData?.id;
@@ -256,7 +269,7 @@ export default function EditCoursePage() {
           <CourseEditorHeader
             title={t("courses.editCourse")}
             autoSave={autoSave}
-            onAutoSaveChange={setAutoSave}
+            onAutoSaveChange={handleAutoSaveChange}
             isSaving={isSaving}
             isPublished={displayedCourse.status === "published"}
             onBack={handleBackOrCancel}

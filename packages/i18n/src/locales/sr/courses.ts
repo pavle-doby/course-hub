@@ -46,6 +46,8 @@ export const courses = {
     newLessonName: "Nova lekcija",
     nameRequired: "Naziv je obavezan",
     savedToast: "Sačuvano",
+    autoSaveOnToast: "Automatsko čuvanje - Uključeno",
+    autoSaveOffToast: "Automatsko čuvanje - Isključeno",
     publishedToast: "Kurs je objavljen",
     unpublishedToast: "Objavljivanje kursa je poništeno",
     archive: "Arhiviraj",
