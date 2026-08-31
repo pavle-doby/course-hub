@@ -3,10 +3,11 @@ import type { OpenAPIObject } from "openapi3-ts/oas31";
 import { registry } from "./registry";
 
 // Side-effect imports: register all paths into the registry
-import "../modules/auth/openapi/auth";
-import "../modules/users/openapi/users";
-import "../modules/courses/openapi/courses";
-import "../modules/lessons/openapi/lessons";
+import "../modules/auth/openapi/authOpenapi";
+import "../modules/users/openapi/usersOpenapi";
+import "../modules/courses/openapi/coursesOpenapi";
+import "../modules/lessons/openapi/lessonsOpenapi";
+import "../modules/topics/openapi/topicsOpenapi";
 
 export function generateOpenAPIDocument(): OpenAPIObject {
   const generator = new OpenApiGeneratorV31(registry.definitions);

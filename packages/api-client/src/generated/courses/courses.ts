@@ -27,6 +27,8 @@ import type {
   CreateCourseDefault,
   DeleteCourseDefault,
   DeleteCoursePathParameters,
+  GetCourseByPublicIdDefault,
+  GetCourseByPublicIdPathParameters,
   GetCourseDefault,
   GetCoursePathParameters,
   GetCoursesDefault,
@@ -506,3 +508,129 @@ export const useDeleteCourse = <TError = DeleteCourseDefault, TContext = unknown
 > => {
   return useMutation(getDeleteCourseMutationOptions(options), queryClient);
 };
+export const getCourseByPublicId = (
+  { publicId }: GetCourseByPublicIdPathParameters,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<Course>(
+    { url: `/v1/courses/public/${publicId}`, method: "GET", signal },
+    options
+  );
+};
+
+export const getGetCourseByPublicIdQueryKey = ({ publicId }: GetCourseByPublicIdPathParameters) => {
+  return [`/v1/courses/public/${publicId}`] as const;
+};
+
+export const getGetCourseByPublicIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCourseByPublicId>>,
+  TError = GetCourseByPublicIdDefault,
+>(
+  { publicId }: GetCourseByPublicIdPathParameters,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getCourseByPublicId>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetCourseByPublicIdQueryKey({ publicId });
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCourseByPublicId>>> = ({ signal }) =>
+    getCourseByPublicId({ publicId }, requestOptions, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: publicId !== null && publicId !== undefined,
+    ...queryOptions,
+  } as UseQueryOptions<Awaited<ReturnType<typeof getCourseByPublicId>>, TError, TData> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+};
+
+export type GetCourseByPublicIdQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCourseByPublicId>>
+>;
+export type GetCourseByPublicIdQueryError = GetCourseByPublicIdDefault;
+
+export function useGetCourseByPublicId<
+  TData = Awaited<ReturnType<typeof getCourseByPublicId>>,
+  TError = GetCourseByPublicIdDefault,
+>(
+  pathParams: GetCourseByPublicIdPathParameters,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getCourseByPublicId>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getCourseByPublicId>>,
+          TError,
+          Awaited<ReturnType<typeof getCourseByPublicId>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useGetCourseByPublicId<
+  TData = Awaited<ReturnType<typeof getCourseByPublicId>>,
+  TError = GetCourseByPublicIdDefault,
+>(
+  pathParams: GetCourseByPublicIdPathParameters,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getCourseByPublicId>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getCourseByPublicId>>,
+          TError,
+          Awaited<ReturnType<typeof getCourseByPublicId>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useGetCourseByPublicId<
+  TData = Awaited<ReturnType<typeof getCourseByPublicId>>,
+  TError = GetCourseByPublicIdDefault,
+>(
+  pathParams: GetCourseByPublicIdPathParameters,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getCourseByPublicId>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+export function useGetCourseByPublicId<
+  TData = Awaited<ReturnType<typeof getCourseByPublicId>>,
+  TError = GetCourseByPublicIdDefault,
+>(
+  { publicId }: GetCourseByPublicIdPathParameters,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getCourseByPublicId>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetCourseByPublicIdQueryOptions({ publicId }, options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}

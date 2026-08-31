@@ -41,7 +41,7 @@ pnpm build && pnpm lint && pnpm check-types
 `POST /auth/login` sets an HTTP-only cookie (web); `POST /auth/login/native` returns tokens in JSON (mobile). All non-auth endpoints serve both platforms from a single route.
 
 **OpenAPI is registered in code, not YAML.**  
-Add `registry.registerPath()` calls in `apps/api/src/modules/<feature>/openapi/<feature>.ts`, then import it side-effect style in `apps/api/src/openapi/spec.ts`.
+Add `registry.registerPath()` calls in `apps/api/src/modules/<feature>/openapi/<feature>Openapi.ts`, then import it side-effect style in `apps/api/src/openapi/spec.ts`.
 
 **Error handling uses typed classes.**  
 Throw `BadRequestError`, `UnauthorizedError`, `NotFoundError`, etc. from `@repo/contract`. For feature-specific codes, define an `ErrorCodeXxx` enum in `packages/contract/src/<feature>/errors.ts`.

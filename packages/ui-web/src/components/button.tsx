@@ -41,6 +41,8 @@ const buttonVariants = cva(
   }
 );
 
+// TODO@pavle: Add support for styling prop (primary, secondary, etc.) that works with variants (solid, outline, text, etc.).
+
 function Button({
   className,
   variant = "default",

@@ -21,6 +21,9 @@ export type GetAllCoursesRes = PaginationRes<Course>;
 // GET /courses/:id → get course by id
 export type GetCourseRes = Course | undefined;
 
+// GET /courses/public/:publicId → get course by public id
+export type GetCourseByPublicIdRes = Course | undefined;
+
 // POST /courses → create course
 export type CreateCourseReq = z.infer<typeof CoursePostQuerySchema>;
 export type CreateCourseRes = Course;

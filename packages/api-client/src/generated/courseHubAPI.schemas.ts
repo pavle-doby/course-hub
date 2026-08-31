@@ -132,7 +132,6 @@ export interface Lesson {
    * @maximum 2147483647
    */
   position: number;
-  courseName: string;
 }
 
 export type LessonsPagination = {
@@ -144,6 +143,31 @@ export type LessonsPagination = {
 export interface Lessons {
   data: Lesson[];
   pagination: LessonsPagination;
+}
+
+export interface Topic {
+  id: string;
+  courseId: string;
+  /** @maxLength 255 */
+  name: string;
+  /** @nullable */
+  description: string | null;
+  /**
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  position: number;
+}
+
+export type TopicsPagination = {
+  total: number;
+  page: number;
+  limit: number;
+};
+
+export interface Topics {
+  data: Topic[];
+  pagination: TopicsPagination;
 }
 
 export type AuthSignUpBody = {
@@ -749,6 +773,34 @@ export type DeleteCourseDefault = {
   details?: DeleteCourseDefaultDetails;
 };
 
+export type GetCourseByPublicIdPathParameters = {
+  publicId: string;
+};
+export type GetCourseByPublicIdDefaultCode =
+  (typeof GetCourseByPublicIdDefaultCode)[keyof typeof GetCourseByPublicIdDefaultCode];
+
+export const GetCourseByPublicIdDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type GetCourseByPublicIdDefaultDetails = { [key: string]: unknown };
+
+export type GetCourseByPublicIdDefault = {
+  status: number;
+  code: GetCourseByPublicIdDefaultCode;
+  error?: unknown;
+  details?: GetCourseByPublicIdDefaultDetails;
+};
+
 export type GetLessonsParams = {
   /**
    * @minimum 0
@@ -922,4 +974,177 @@ export type DeleteLessonDefault = {
   code: DeleteLessonDefaultCode;
   error?: unknown;
   details?: DeleteLessonDefaultDetails;
+};
+
+export type GetTopicsParams = {
+  /**
+   * @minimum 0
+   * @nullable
+   */
+  page?: number | null;
+  /**
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
+  query?: string;
+  courseId?: string;
+};
+
+export type GetTopicsDefaultCode = (typeof GetTopicsDefaultCode)[keyof typeof GetTopicsDefaultCode];
+
+export const GetTopicsDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type GetTopicsDefaultDetails = { [key: string]: unknown };
+
+export type GetTopicsDefault = {
+  status: number;
+  code: GetTopicsDefaultCode;
+  error?: unknown;
+  details?: GetTopicsDefaultDetails;
+};
+
+export type CreateTopicBody = {
+  courseId: string;
+  /** @maxLength 255 */
+  name: string;
+  /** @nullable */
+  description?: string | null;
+  /**
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  position: number;
+};
+
+export type CreateTopicDefaultCode =
+  (typeof CreateTopicDefaultCode)[keyof typeof CreateTopicDefaultCode];
+
+export const CreateTopicDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type CreateTopicDefaultDetails = { [key: string]: unknown };
+
+export type CreateTopicDefault = {
+  status: number;
+  code: CreateTopicDefaultCode;
+  error?: unknown;
+  details?: CreateTopicDefaultDetails;
+};
+
+export type GetTopicPathParameters = {
+  id: string;
+};
+export type GetTopicDefaultCode = (typeof GetTopicDefaultCode)[keyof typeof GetTopicDefaultCode];
+
+export const GetTopicDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type GetTopicDefaultDetails = { [key: string]: unknown };
+
+export type GetTopicDefault = {
+  status: number;
+  code: GetTopicDefaultCode;
+  error?: unknown;
+  details?: GetTopicDefaultDetails;
+};
+
+export type UpdateTopicPathParameters = {
+  id: string;
+};
+export type UpdateTopicBody = {
+  courseId?: string;
+  /** @maxLength 255 */
+  name?: string;
+  /** @nullable */
+  description?: string | null;
+  /**
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  position?: number;
+};
+
+export type UpdateTopicDefaultCode =
+  (typeof UpdateTopicDefaultCode)[keyof typeof UpdateTopicDefaultCode];
+
+export const UpdateTopicDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type UpdateTopicDefaultDetails = { [key: string]: unknown };
+
+export type UpdateTopicDefault = {
+  status: number;
+  code: UpdateTopicDefaultCode;
+  error?: unknown;
+  details?: UpdateTopicDefaultDetails;
+};
+
+export type DeleteTopicPathParameters = {
+  id: string;
+};
+export type DeleteTopicDefaultCode =
+  (typeof DeleteTopicDefaultCode)[keyof typeof DeleteTopicDefaultCode];
+
+export const DeleteTopicDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type DeleteTopicDefaultDetails = { [key: string]: unknown };
+
+export type DeleteTopicDefault = {
+  status: number;
+  code: DeleteTopicDefaultCode;
+  error?: unknown;
+  details?: DeleteTopicDefaultDetails;
 };

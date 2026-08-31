@@ -5,7 +5,7 @@ import {
   CoursePostQuerySchema,
   CoursePutQuerySchema,
 } from "@repo/contract";
-import { ParamsIdSchema, SearchSchema, ApiErrorSchema } from "@repo/contract";
+import { ParamsIdSchema, ParamsPublicIdSchema, SearchSchema, ApiErrorSchema } from "@repo/contract";
 import { PaginationParams } from "api/middleware/pagination";
 
 // GET /courses
@@ -43,6 +43,28 @@ registry.registerPath({
   responses: {
     200: {
       description: "Course by ID",
+      content: { "application/json": { schema: CourseSchema } },
+    },
+    default: {
+      description: "Error",
+      content: { "application/json": { schema: ApiErrorSchema } },
+    },
+  },
+});
+
+// GET /courses/public/:publicId
+registry.registerPath({
+  method: "get",
+  path: "/v1/courses/public/{publicId}",
+  operationId: "getCourseByPublicId",
+  tags: ["Courses"],
+  security: [{ cookieAuth: [] }],
+  request: {
+    params: ParamsPublicIdSchema,
+  },
+  responses: {
+    200: {
+      description: "Course by public ID",
       content: { "application/json": { schema: CourseSchema } },
     },
     default: {

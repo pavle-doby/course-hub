@@ -4,6 +4,7 @@ import {
   DeleteCourseRes,
   ErrorCodeCourse,
   GetAllCoursesRes,
+  GetCourseByPublicIdRes,
   GetCourseRes,
   UpdateCourseReq,
   UpdateCourseRes,
@@ -26,6 +27,10 @@ export const coursesService = {
 
   getCourse: async (id: string): Promise<GetCourseRes> => {
     return await coursesRepository.getCourseById(id);
+  },
+
+  getCourseByPublicId: async (publicId: string): Promise<GetCourseByPublicIdRes> => {
+    return await coursesRepository.getCourseByPublicId(publicId);
   },
 
   createCourse: async (authUserId: string, data: CreateCourseReq): Promise<CreateCourseRes> => {

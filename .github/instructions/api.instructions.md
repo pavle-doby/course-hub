@@ -110,7 +110,7 @@ Apply the `pagination()` middleware on list endpoints. It reads `page` (0-based)
 
 ## OpenAPI annotations
 
-Register paths in `apps/api/src/modules/<feature>/openapi/<feature>.ts` via `registry.registerPath()`. These are **not decorators** — they are plain side-effect calls:
+Register paths in `apps/api/src/modules/<feature>/openapi/<feature>Openapi.ts` via `registry.registerPath()`. These are **not decorators** — they are plain side-effect calls:
 
 ```ts
 import { registry } from "api/openapi/registry";

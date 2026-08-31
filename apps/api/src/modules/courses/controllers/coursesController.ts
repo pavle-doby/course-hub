@@ -4,6 +4,7 @@ import {
   DeleteCourseRes,
   GetAllCoursesReq,
   GetAllCoursesRes,
+  GetCourseByPublicIdRes,
   GetCourseRes,
   UpdateCourseReq,
   UpdateCourseRes,
@@ -27,6 +28,12 @@ export const coursesController = {
   getCourse: async (_req: Request, res: Response): Promise<void> => {
     const { id } = res.locals.params as { id: string };
     const course: GetCourseRes = await coursesService.getCourse(id);
+    res.status(200).json(course);
+  },
+
+  getCourseByPublicId: async (_req: Request, res: Response): Promise<void> => {
+    const { publicId } = res.locals.params as { publicId: string };
+    const course: GetCourseByPublicIdRes = await coursesService.getCourseByPublicId(publicId);
     res.status(200).json(course);
   },
 

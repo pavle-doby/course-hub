@@ -116,3 +116,24 @@ Cross-feature primitives belong in `src/shared/`:
 - **`errors/`** — HTTP error classes (`BadRequestError`, `NotFoundError`, …) and `ErrorCode` global enum
 
 Do **not** put feature-specific logic in `shared/`.
+
+## Date/datetime fields from the client — always use `isoDatetime`
+
+Any schema field that accepts a date/datetime value from the client (web/native) must use the
+`isoDatetime()` helper from `shared/schemas.ts`, not `z.date()` (drizzle-zod's default inference
+for `timestamp` columns) or `z.coerce.date()`. Clients send dates as JSON strings, and
+`z.date()` rejects a string with a `validation_error`/`invalid_type` issue.
+
+```ts
+import { isoDatetime } from "../shared";
+
+export const CoursePutQuerySchema = createUpdateSchema(courses, {
+  publishedAt: isoDatetime(), // overrides drizzle-zod's inferred z.date()
+})
+  .omit({ id: true, creatorId: true, publicId: true, createdAt: true, updatedAt: true })
+  .partial();
+```
+
+For nullable/optional columns, chain `.nullable()`/`.optional()` onto `isoDatetime()` as needed
+(or rely on a trailing `.partial()` on the whole schema for update schemas).
+

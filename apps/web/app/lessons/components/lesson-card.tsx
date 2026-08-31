@@ -6,8 +6,9 @@ import {
   Card,
   CardHeader,
   CardTitle,
-  CardDescription,
   CardAction,
+  CardContent,
+  CardFooter,
 } from "@repo/ui-web/components/card";
 import {
   DropdownMenu,
@@ -28,15 +29,11 @@ export function LessonCard({ lesson, onDelete }: LessonCardProps) {
   const { t } = useT();
 
   return (
-    <Card className="min-h-25">
+    <Card>
       <CardHeader>
         <div className="flex items-center gap-2 text-primary">
           <File className="size-4 shrink-0" />
           <CardTitle>{lesson.name}</CardTitle>
-        </div>
-        <CardDescription className="line-clamp-2">{lesson.description}</CardDescription>
-        <div className="mt-1">
-          <Badge variant="secondary">#{lesson.position}</Badge>
         </div>
         <CardAction>
           <DropdownMenu>
@@ -46,10 +43,7 @@ export function LessonCard({ lesson, onDelete }: LessonCardProps) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem
-                className="text-destructive focus:text-destructive"
-                onClick={() => onDelete(lesson.id)}
-              >
+              <DropdownMenuItem variant="destructive" onClick={() => onDelete(lesson.id)}>
                 <Trash2 className="size-4" />
                 {t("lessons.card.delete")}
               </DropdownMenuItem>
@@ -57,6 +51,12 @@ export function LessonCard({ lesson, onDelete }: LessonCardProps) {
           </DropdownMenu>
         </CardAction>
       </CardHeader>
+
+      <CardContent className="flex-1">{lesson.description}</CardContent>
+
+      <CardFooter>
+        <Badge variant="secondary">#{lesson.position}</Badge>
+      </CardFooter>
     </Card>
   );
 }

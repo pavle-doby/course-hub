@@ -1,6 +1,7 @@
 // Re-export the Axios client instance for consumers who need it directly
 export { apiClient, configureTokenProviders } from "./lib/apiClient";
 export { ApiClientProvider } from "./api-client-provider";
+export { useQueryClient } from "@tanstack/react-query";
 
 // Generated types and hooks (run `pnpm generate:api` to populate these)
 export * from "./generated/courseHubAPI.schemas";
@@ -8,3 +9,4 @@ export * from "./generated/auth/auth";
 export * from "./generated/users/users";
 export * from "./generated/courses/courses";
 export * from "./generated/lessons/lessons";
+export * from "./generated/topics/topics";

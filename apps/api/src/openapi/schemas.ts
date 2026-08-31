@@ -5,6 +5,7 @@ import {
   UserSchema as UserSchemaBase,
   CourseSchema as CourseSchemaBase,
   LessonSchema as LessonSchemaBase,
+  TopicSchema as TopicSchemaBase,
 } from "@repo/contract";
 
 export const UserSchema = registry.register("User", UserSchemaBase);
@@ -50,6 +51,16 @@ export const PaginatedLessonsSchema = registry.register(
   "Lessons",
   z.object({
     data: z.array(LessonSchema),
+    pagination: PaginationSchema,
+  })
+);
+
+export const TopicSchema = registry.register("Topic", TopicSchemaBase);
+
+export const PaginatedTopicsSchema = registry.register(
+  "Topics",
+  z.object({
+    data: z.array(TopicSchema),
     pagination: PaginationSchema,
   })
 );

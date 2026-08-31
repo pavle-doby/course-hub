@@ -7,6 +7,7 @@ import {
   CoursePostQuerySchema,
   CoursePutQuerySchema,
   ParamsIdSchema,
+  ParamsPublicIdSchema,
   SearchSchema,
 } from "@repo/contract";
 
@@ -20,6 +21,15 @@ router.get(
   validate(CourseGetAllQuerySchema, "query"),
   async (req: Request, res: Response) => {
     await coursesController.getAllCourses(req, res);
+  }
+);
+
+// GET /courses/public/:publicId → get course by public id (must be registered before /:id)
+router.get(
+  "/public/:publicId",
+  validate(ParamsPublicIdSchema, "params"),
+  async (req: Request, res: Response) => {
+    await coursesController.getCourseByPublicId(req, res);
   }
 );
 
