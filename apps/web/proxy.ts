@@ -12,11 +12,12 @@ export function proxy(request: NextRequest): NextResponse {
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
   if (token && isAuthRoute) {
-    return NextResponse.redirect(new URL("/", request.url));
+    return NextResponse.redirect(new URL("/learn", request.url));
+  }
+  if (token && request.nextUrl.pathname === "/") {
+    return NextResponse.redirect(new URL("/learn", request.url));
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
   return i18nProxy(request);
 }
 

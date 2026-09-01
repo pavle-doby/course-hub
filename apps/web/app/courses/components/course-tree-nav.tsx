@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronRight, Folder, Trash2, Archive, Plus } from "lucide-react";
+import { ChevronRight, File, Files, Folder, Trash2, Archive, Plus } from "lucide-react";
 import {
   Collapsible,
   CollapsibleContent,
@@ -75,6 +75,7 @@ export function CourseTreeNav({
             <SidebarMenuItem>
               <SidebarMenuButton
                 size="lg"
+                textWrap="compact"
                 isActive={selection.type === "course"}
                 onClick={onSelectCourse}
               >
@@ -88,10 +89,12 @@ export function CourseTreeNav({
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
                     <SidebarMenuButton
+                      textWrap="compact"
                       isActive={selection.type === "topic" && selection.id === topic.id}
                       onClick={() => onSelectTopic(topic.id)}
                     >
                       <ChevronRight className="transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                      <Files />
                       <span>{topic.name}</span>
                     </SidebarMenuButton>
                   </CollapsibleTrigger>
@@ -113,10 +116,12 @@ export function CourseTreeNav({
                           className="group/menu-sub-item relative"
                         >
                           <SidebarMenuSubButton
+                            textWrap="compact"
                             isActive={selection.type === "lesson" && selection.id === lesson.id}
                             onClick={() => onSelectLesson(lesson.id)}
                           >
-                            {lesson.name}
+                            <File />
+                            <span>{lesson.name}</span>
                           </SidebarMenuSubButton>
                           <button
                             type="button"

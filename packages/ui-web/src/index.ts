@@ -9,6 +9,7 @@ export * from "./components/dropdown-menu";
 export * from "./components/field";
 export * from "./components/input";
 export * from "./components/label";
+export * from "./components/pagination";
 export * from "./components/separator";
 export * from "./components/sheet";
 export * from "./components/sidebar";

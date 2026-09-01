@@ -2,6 +2,7 @@ import { auth } from "./auth";
 import { common } from "./common";
 import { courses } from "./courses";
 import { home } from "./home";
+import { learn } from "./learn";
 import { lessons } from "./lessons";
 import { metadata } from "./metadata";
 import { nav } from "./nav";
@@ -13,6 +14,7 @@ const en = {
   auth,
   courses,
   home,
+  learn,
   lessons,
   nav,
   user,

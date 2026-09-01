@@ -8,7 +8,7 @@ const mockCourses: Array<
   Omit<typeof schema.courses.$inferInsert, "creatorId"> & {
     topics: Array<
       Omit<typeof schema.topics.$inferInsert, "courseId"> & {
-        lectures: Array<Omit<typeof schema.lectures.$inferInsert, "topicId">>;
+        lessons: Array<Omit<typeof schema.lessons.$inferInsert, "topicId">>;
       }
     >;
   }
@@ -23,7 +23,7 @@ const mockCourses: Array<
         name: "Getting Started",
         description: "Installation, compiler setup, and your first TS file.",
         position: 1,
-        lectures: [
+        lessons: [
           { name: "What is TypeScript?", description: "Overview and motivation.", position: 1 },
           { name: "Installing the Compiler", description: "tsc setup via npm.", position: 2 },
           {
@@ -37,7 +37,7 @@ const mockCourses: Array<
         name: "Core Types",
         description: "Primitives, arrays, tuples, enums, and any.",
         position: 2,
-        lectures: [
+        lessons: [
           { name: "Primitive Types", description: "string, number, boolean.", position: 1 },
           { name: "Arrays & Tuples", description: "Typed collections.", position: 2 },
           { name: "Enums", description: "Numeric and string enums.", position: 3 },
@@ -47,7 +47,7 @@ const mockCourses: Array<
         name: "Interfaces & Types",
         description: "Structural typing with interfaces and type aliases.",
         position: 3,
-        lectures: [
+        lessons: [
           { name: "Interfaces", description: "Defining object shapes.", position: 1 },
           { name: "Type Aliases", description: "Reusable type expressions.", position: 2 },
           { name: "Union & Intersection Types", description: "Combining types.", position: 3 },
@@ -65,7 +65,7 @@ const mockCourses: Array<
         name: "React Basics",
         description: "JSX, components, and props.",
         position: 1,
-        lectures: [
+        lessons: [
           {
             name: "Introduction to React",
             description: "What React is and why it exists.",
@@ -83,7 +83,7 @@ const mockCourses: Array<
         name: "State & Events",
         description: "Managing UI state and handling user interactions.",
         position: 2,
-        lectures: [
+        lessons: [
           { name: "useState Hook", description: "Local component state.", position: 1 },
           { name: "Handling Events", description: "onClick, onChange, and friends.", position: 2 },
           {
@@ -105,7 +105,7 @@ const mockCourses: Array<
         name: "Express Fundamentals",
         description: "Routing, middleware, and request/response cycle.",
         position: 1,
-        lectures: [
+        lessons: [
           {
             name: "Setting Up Express",
             description: "Project scaffold and server bootstrap.",
@@ -119,7 +119,7 @@ const mockCourses: Array<
         name: "Data Validation",
         description: "Validating request payloads with Zod.",
         position: 2,
-        lectures: [
+        lessons: [
           { name: "Why Validate?", description: "Security and reliability.", position: 1 },
           { name: "Zod Schemas", description: "Defining and parsing schemas.", position: 2 },
         ],
@@ -156,7 +156,7 @@ async function seedCourseContent() {
       const wasInserted = !!course;
       console.log(`${wasInserted ? "Created" : "Skipped (exists)"} course: "${courseData.name}"`);
 
-      for (const { lectures, ...topicData } of topics) {
+      for (const { lessons, ...topicData } of topics) {
         const [topic] = await db
           .insert(schema.topics)
           .values({ ...topicData, courseId })
@@ -177,12 +177,12 @@ async function seedCourseContent() {
 
         console.log(`  ${topic ? "+" : "~"} Topic: "${topicData.name}"`);
 
-        for (const lectureData of lectures) {
+        for (const lectureData of lessons) {
           const [lecture] = await db
-            .insert(schema.lectures)
+            .insert(schema.lessons)
             .values({ ...lectureData, topicId })
             .onConflictDoNothing()
-            .returning({ id: schema.lectures.id, name: schema.lectures.name });
+            .returning({ id: schema.lessons.id, name: schema.lessons.name });
 
           console.log(`    ${lecture ? "+" : "~"} Lecture: "${lectureData.name}"`);
         }

@@ -56,6 +56,7 @@ type FooterItem =
   | { label: NavKey; icon: LucideIcon; href?: never; action: () => void };
 
 const NAV_ITEMS: NavItem[] = [
+  { label: "nav.learn", icon: Apple, href: "/learn" },
   {
     label: "nav.create",
     icon: CirclePlus,
@@ -64,7 +65,6 @@ const NAV_ITEMS: NavItem[] = [
       { label: "nav.lessons", href: "/lessons", icon: File },
     ],
   },
-  { label: "nav.learn", icon: Apple, href: "/learn" },
   { label: "nav.clients", icon: Users, href: "/clients" },
   { label: "nav.notifications", icon: Bell, href: "/notifications" },
   { label: "nav.profile", icon: User, href: "/profile" },

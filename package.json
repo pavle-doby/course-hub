@@ -18,6 +18,7 @@
     "db:clean:users": "pnpm --filter @repo/scripts db:clean:users",
     "db:seed:users": "pnpm --filter @repo/scripts db:seed:users",
     "db:seed:course-content": "pnpm --filter @repo/scripts db:seed:course-content",
+    "db:add:course-content": "pnpm --filter @repo/scripts db:add:course-content",
     "db:clean:course-content": "pnpm --filter @repo/scripts db:clean:course-content",
     "api-client:generate": "turbo run generate:openapi generate:api",
     "prepare": "husky"
