@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from "react";
 import { useGetCourses } from "@repo/api-client";
 import { Input } from "@repo/ui-web/components/input";
 import { Search } from "lucide-react";
 import { useT } from "@repo/i18n/client";
 import { useDebounce } from "@/hooks/use-debounce";
+import { usePagination } from "@/hooks/use-pagination";
 import { NavigationLayoutProvider } from "@/components/navigation-layout-provider";
-import { ChPagination } from "@/components/ch-pagination";
+import { ChPagination, ChPaginationSkeleton } from "@/components/ch-pagination";
 import { LearnCourseCard } from "./components/learn-course-card";
 import { LearnCourseCardSkeleton } from "./components/learn-course-card-skeleton";
 
@@ -17,14 +17,7 @@ const PAGE_LIMIT = 6;
 export default function LearnPage() {
   const { t } = useT();
   const { query, debouncedQuery, setQuery } = useDebounce("");
-  const [page, setPage] = useState(0);
-  const [prevQuery, setPrevQuery] = useState(debouncedQuery);
-
-  // Reset to the first page whenever the search term changes.
-  if (debouncedQuery !== prevQuery) {
-    setPrevQuery(debouncedQuery);
-    setPage(0);
-  }
+  const { page, setPage, trackTotalPages } = usePagination(debouncedQuery);
 
   const { data: courses, isPending } = useGetCourses({
     status: "published",
@@ -33,8 +26,7 @@ export default function LearnPage() {
     limit: PAGE_LIMIT,
   });
 
-  const pagination = courses?.pagination;
-  const totalPages = pagination ? Math.ceil(pagination.total / pagination.limit) : 0;
+  const { totalPages, knownTotalPages } = trackTotalPages(courses?.pagination);
 
   return (
     <NavigationLayoutProvider>
@@ -54,10 +46,14 @@ export default function LearnPage() {
 
         <div className="flex flex-1 flex-col p-4 pt-0 lg:px-6 lg:pb-6">
           {isPending ? (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {SKELETON_ITEMS.map((_, i) => (
-                <LearnCourseCardSkeleton key={i} />
-              ))}
+            <div className="flex flex-1 flex-col justify-between">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {SKELETON_ITEMS.map((_, i) => (
+                  <LearnCourseCardSkeleton key={i} />
+                ))}
+              </div>
+
+              <ChPaginationSkeleton className="mt-6" page={page} totalPages={knownTotalPages} />
             </div>
           ) : courses?.data.length ? (
             <div className="flex flex-1 flex-col justify-between">

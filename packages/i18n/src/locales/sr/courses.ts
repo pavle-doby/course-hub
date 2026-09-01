@@ -4,6 +4,10 @@ export const courses = {
   addCourse: "Dodaj kurs",
   editCourse: "Izmeni kurs",
   loading: "Učitavanje...",
+  pagination: {
+    previous: "Prethodna",
+    next: "Sledeća",
+  },
   card: {
     edit: "Izmeni",
     preview: "Pregled",

@@ -4,6 +4,10 @@ export const courses = {
   addCourse: "Add Course",
   editCourse: "Edit Course",
   loading: "Loading...",
+  pagination: {
+    previous: "Previous",
+    next: "Next",
+  },
   card: {
     edit: "Edit",
     preview: "Preview",

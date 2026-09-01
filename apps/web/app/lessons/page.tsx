@@ -8,8 +8,12 @@ import { Search, Folder, File } from "lucide-react";
 import { LessonCard } from "./components/lesson-card";
 import { LessonCardSkeleton } from "./components/lesson-card-skeleton";
 import { useDebounce } from "@/hooks/use-debounce";
+import { usePagination } from "@/hooks/use-pagination";
 import { useT } from "@repo/i18n/client";
 import { cn } from "@repo/ui-web/lib/utils";
+import { ChPagination, ChPaginationSkeleton } from "@/components/ch-pagination";
+
+const PAGE_LIMIT = 9;
 
 export default function LessonsPage() {
   const SKELETON_ITEMS = Array.from({ length: 6 });
@@ -17,9 +21,16 @@ export default function LessonsPage() {
   const pathname = usePathname();
   const { t } = useT();
   const { query, debouncedQuery, setQuery } = useDebounce("");
+  const { page, setPage, trackTotalPages } = usePagination(debouncedQuery);
 
-  const { data: lessons, isPending } = useGetLessons({ query: debouncedQuery || undefined });
+  const { data: lessons, isPending } = useGetLessons({
+    query: debouncedQuery || undefined,
+    page,
+    limit: PAGE_LIMIT,
+  });
   const { mutate: deleteLesson } = useDeleteLesson();
+
+  const { totalPages, knownTotalPages } = trackTotalPages(lessons?.pagination);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
@@ -30,7 +41,7 @@ export default function LessonsPage() {
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex h-full flex-col">
       {/* Mobile/tablet: Courses | Lessons tab strip */}
       <div className="sticky top-14 z-30 flex border-b bg-background lg:hidden">
         <Link
@@ -89,18 +100,33 @@ export default function LessonsPage() {
       </div>
 
       {/* Cards */}
-      <div className="p-4 pt-0 lg:px-6 lg:pb-6">
+      <div className="flex flex-1 flex-col p-4 pt-0 lg:px-6 lg:pb-6">
         {isPending ? (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {SKELETON_ITEMS.map((_, i) => (
-              <LessonCardSkeleton key={i} />
-            ))}
+          <div className="flex flex-1 flex-col justify-between">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {SKELETON_ITEMS.map((_, i) => (
+                <LessonCardSkeleton key={i} />
+              ))}
+            </div>
+
+            <ChPaginationSkeleton className="mt-6" page={page} totalPages={knownTotalPages} />
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {lessons?.data.map((lesson) => (
-              <LessonCard key={lesson.id} lesson={lesson} onDelete={handleDelete} />
-            ))}
+          <div className="flex flex-1 flex-col justify-between">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {lessons?.data.map((lesson) => (
+                <LessonCard key={lesson.id} lesson={lesson} onDelete={handleDelete} />
+              ))}
+            </div>
+
+            <ChPagination
+              className="mt-6"
+              page={page}
+              totalPages={totalPages}
+              onPageChange={setPage}
+              previousLabel={t("lessons.pagination.previous")}
+              nextLabel={t("lessons.pagination.next")}
+            />
           </div>
         )}
       </div>

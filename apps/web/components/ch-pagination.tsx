@@ -7,16 +7,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@repo/ui-web/components/pagination";
-
-interface ChPaginationProps {
-  /** 0-indexed current page */
-  page: number;
-  totalPages: number;
-  onPageChange: (page: number) => void;
-  previousLabel?: string;
-  nextLabel?: string;
-  className?: string;
-}
+import { Skeleton } from "@repo/ui-web/components/skeleton";
 
 // Builds a 1-indexed page list showing first, current-1, current, current+1, and
 // last, with ellipsis filling any gaps between them.
@@ -32,6 +23,45 @@ function getPaginationRange(current: number, total: number): Array<number | "ell
   });
 
   return range;
+}
+
+interface ChPaginationSkeletonProps {
+  /** 0-indexed current page */
+  page?: number;
+  totalPages?: number;
+  className?: string;
+}
+
+const FALLBACK_ITEM_COUNT = 6;
+
+// Mirrors ChPagination's item count (prev + numbered/ellipsis pages + next) so the
+// loading state doesn't shift layout once real data arrives.
+export function ChPaginationSkeleton({ page, totalPages, className }: ChPaginationSkeletonProps) {
+  const itemCount = !totalPages
+    ? FALLBACK_ITEM_COUNT
+    : getPaginationRange((page ?? 0) + 1, totalPages).length + 2;
+
+  return (
+    <Pagination className={className}>
+      <PaginationContent>
+        {Array.from({ length: itemCount }).map((_, i) => (
+          <PaginationItem key={i}>
+            <Skeleton className="size-8" />
+          </PaginationItem>
+        ))}
+      </PaginationContent>
+    </Pagination>
+  );
+}
+
+interface ChPaginationProps {
+  /** 0-indexed current page */
+  page: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+  previousLabel?: string;
+  nextLabel?: string;
+  className?: string;
 }
 
 export function ChPagination({
