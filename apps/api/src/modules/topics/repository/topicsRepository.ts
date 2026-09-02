@@ -72,6 +72,14 @@ export const topicsRepository = {
     });
   },
 
+  getTopicsByCourseId: async (courseId: string): Promise<Topic[]> => {
+    return await db
+      .select(topicColumns)
+      .from(schema.topics)
+      .where(eq(schema.topics.courseId, courseId))
+      .orderBy(asc(schema.topics.position));
+  },
+
   createTopic: async (data: CreateTopicReq): Promise<Topic> => {
     const [topic] = await db.insert(schema.topics).values(data).returning(topicColumns);
     return topic!;

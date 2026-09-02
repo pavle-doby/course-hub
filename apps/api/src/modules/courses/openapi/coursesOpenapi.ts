@@ -30,32 +30,10 @@ registry.registerPath({
   },
 });
 
-// GET /courses/:id
+// GET /courses/:publicId
 registry.registerPath({
   method: "get",
-  path: "/v1/courses/{id}",
-  operationId: "getCourse",
-  tags: ["Courses"],
-  security: [{ cookieAuth: [] }],
-  request: {
-    params: ParamsIdSchema,
-  },
-  responses: {
-    200: {
-      description: "Course by ID",
-      content: { "application/json": { schema: CourseSchema } },
-    },
-    default: {
-      description: "Error",
-      content: { "application/json": { schema: ApiErrorSchema } },
-    },
-  },
-});
-
-// GET /courses/public/:publicId
-registry.registerPath({
-  method: "get",
-  path: "/v1/courses/public/{publicId}",
+  path: "/v1/courses/{publicId}",
   operationId: "getCourseByPublicId",
   tags: ["Courses"],
   security: [{ cookieAuth: [] }],

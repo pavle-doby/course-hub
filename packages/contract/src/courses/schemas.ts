@@ -3,13 +3,26 @@ import { z } from "zod";
 import { courses } from "@repo/db-schema";
 import { courseStatusEnum } from "@repo/db-schema";
 import { isoDatetime } from "../shared";
+import { UserSchema } from "../users/schemas";
+
+export const CourseCreatorSchema = UserSchema.pick({
+  id: true,
+  firstName: true,
+  lastName: true,
+  username: true,
+  avatarUrl: true,
+});
 
 export const CourseSchema = createSelectSchema(courses, {
   status: z.enum(courseStatusEnum.enumValues),
-}).omit({
-  createdAt: true,
-  updatedAt: true,
-});
+})
+  .omit({
+    createdAt: true,
+    updatedAt: true,
+  })
+  .extend({
+    creator: CourseCreatorSchema.optional(),
+  });
 
 export const CourseGetAllQuerySchema = z.object({
   status: z.enum(courseStatusEnum.enumValues).optional(),

@@ -14,6 +14,9 @@ export type GetAllLessonsReq<Pagination = PaginationReq> = Pagination &
   z.infer<typeof LessonGetAllQuerySchema>;
 export type GetAllLessonsRes = PaginationRes<Lesson>;
 
+// GET /courses/public/:publicId/lessons → lessons for a published course
+export type GetPublicLessonsRes = Lesson[];
+
 export type GetLessonRes = Lesson | undefined;
 
 export type CreateLessonReq = z.infer<typeof LessonPostQuerySchema>;

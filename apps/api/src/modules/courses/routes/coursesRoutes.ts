@@ -24,19 +24,14 @@ router.get(
   }
 );
 
-// GET /courses/public/:publicId → get course by public id (must be registered before /:id)
+// GET /courses/:publicId → get course by publicId
 router.get(
-  "/public/:publicId",
+  "/:publicId",
   validate(ParamsPublicIdSchema, "params"),
   async (req: Request, res: Response) => {
     await coursesController.getCourseByPublicId(req, res);
   }
 );
-
-// GET /courses/:id → get course by id
-router.get("/:id", validate(ParamsIdSchema, "params"), async (req: Request, res: Response) => {
-  await coursesController.getCourse(req, res);
-});
 
 // POST /courses → create course
 router.post("/", validate(CoursePostQuerySchema), async (req: Request, res: Response) => {

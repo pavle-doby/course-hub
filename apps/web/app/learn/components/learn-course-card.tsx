@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Course } from "@repo/api-client";
 import { Card, CardContent } from "@repo/ui-web/components/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui-web/components/avatar";
 import { BookOpen } from "lucide-react";
 import { cn } from "@repo/ui-web/lib/utils";
 
@@ -21,6 +22,11 @@ function gradientFor(id: string) {
   return BANNER_GRADIENTS[hash % BANNER_GRADIENTS.length];
 }
 
+function creatorInitials(creator: Course["creator"]) {
+  const initials = `${creator?.firstName?.charAt(0) ?? ""}${creator?.lastName?.charAt(0) ?? ""}`;
+  return initials || (creator?.username.charAt(0).toUpperCase() ?? "?");
+}
+
 export function LearnCourseCard({ course }: LearnCourseCardProps) {
   return (
     <Link href={`/learn/${course.publicId}`} className="flex h-full">
@@ -36,9 +42,12 @@ export function LearnCourseCard({ course }: LearnCourseCardProps) {
 
         <CardContent className="flex flex-1 flex-col gap-2 p-4">
           <div className="flex items-center gap-2">
-            <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
-              {course.name.charAt(0).toUpperCase()}
-            </span>
+            <Avatar>
+              {course.creator?.avatarUrl && (
+                <AvatarImage src={course.creator.avatarUrl} alt={course.creator.username} />
+              )}
+              <AvatarFallback>{creatorInitials(course.creator)}</AvatarFallback>
+            </Avatar>
             <h3 className="line-clamp-1 font-semibold">{course.name}</h3>
           </div>
           {course.description && (

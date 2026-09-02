@@ -4,8 +4,12 @@ import {
   DeleteCourseRes,
   GetAllCoursesReq,
   GetAllCoursesRes,
+  GetAllPublicCoursesReq,
+  GetAllPublicCoursesRes,
   GetCourseByPublicIdRes,
   GetCourseRes,
+  GetPublicLessonsRes,
+  GetPublicTopicsRes,
   UpdateCourseReq,
   UpdateCourseRes,
 } from "@repo/contract";
@@ -35,6 +39,27 @@ export const coursesController = {
     const { publicId } = res.locals.params as { publicId: string };
     const course: GetCourseByPublicIdRes = await coursesService.getCourseByPublicId(publicId);
     res.status(200).json(course);
+  },
+
+  getAllPublicCourses: async (_req: Request, res: Response): Promise<void> => {
+    const dto: GetAllPublicCoursesReq<PaginationReqExtended> = {
+      ...res.locals.pagination,
+      query: res.locals.query?.query,
+    };
+    const courses: GetAllPublicCoursesRes = await coursesService.getAllPublicCourses(dto);
+    res.status(200).json(courses);
+  },
+
+  getPublicCourseTopics: async (_req: Request, res: Response): Promise<void> => {
+    const { publicId } = res.locals.params as { publicId: string };
+    const topics: GetPublicTopicsRes = await coursesService.getPublicCourseTopics(publicId);
+    res.status(200).json(topics);
+  },
+
+  getPublicCourseLessons: async (_req: Request, res: Response): Promise<void> => {
+    const { publicId } = res.locals.params as { publicId: string };
+    const lessons: GetPublicLessonsRes = await coursesService.getPublicCourseLessons(publicId);
+    res.status(200).json(lessons);
   },
 
   createCourse: async (_req: Request, res: Response): Promise<void> => {

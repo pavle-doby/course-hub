@@ -18,6 +18,10 @@ export type GetAllCoursesReq<Pagination = PaginationReq> = Pagination &
   z.infer<typeof CourseGetAllQuerySchema>;
 export type GetAllCoursesRes = PaginationRes<Course>;
 
+// GET /public/courses → get all published courses, no auth required
+export type GetAllPublicCoursesReq<Pagination = PaginationReq> = Pagination & Partial<Search>;
+export type GetAllPublicCoursesRes = PaginationRes<Course>;
+
 // GET /courses/:id → get course by id
 export type GetCourseRes = Course | undefined;
 

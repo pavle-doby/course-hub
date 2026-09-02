@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetCourses } from "@repo/api-client";
+import { useGetPublicCourses } from "@repo/api-client";
 import { Input } from "@repo/ui-web/components/input";
 import { Search } from "lucide-react";
 import { useT } from "@repo/i18n/client";
@@ -19,8 +19,7 @@ export default function LearnPage() {
   const { query, debouncedQuery, setQuery } = useDebounce("");
   const { page, setPage, trackTotalPages } = usePagination(debouncedQuery);
 
-  const { data: courses, isPending } = useGetCourses({
-    status: "published",
+  const { data: courses, isPending } = useGetPublicCourses({
     query: debouncedQuery || undefined,
     page,
     limit: PAGE_LIMIT,

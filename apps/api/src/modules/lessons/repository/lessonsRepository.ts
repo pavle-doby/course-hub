@@ -77,6 +77,15 @@ export const lessonsRepository = {
     });
   },
 
+  getLessonsByCourseId: async (courseId: string): Promise<Lesson[]> => {
+    return await db
+      .select(lessonColumns)
+      .from(schema.lessons)
+      .innerJoin(schema.topics, eq(schema.lessons.topicId, schema.topics.id))
+      .where(eq(schema.topics.courseId, courseId))
+      .orderBy(asc(schema.lessons.position));
+  },
+
   createLesson: async (data: CreateLessonReq): Promise<Lesson> => {
     const [lesson] = await db.insert(schema.lessons).values(data).returning(lessonColumns);
     return lesson!;

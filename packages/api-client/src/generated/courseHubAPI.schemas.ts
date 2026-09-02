@@ -95,6 +95,24 @@ export const CourseStatus = {
   archived: "archived",
 } as const;
 
+export type CourseCreator = {
+  id: string;
+  /**
+   * @maxLength 255
+   * @nullable
+   */
+  firstName: string | null;
+  /**
+   * @maxLength 255
+   * @nullable
+   */
+  lastName: string | null;
+  /** @maxLength 255 */
+  username: string;
+  /** @nullable */
+  avatarUrl: string | null;
+};
+
 export interface Course {
   id: string;
   creatorId: string;
@@ -107,6 +125,7 @@ export interface Course {
   status: CourseStatus;
   /** @nullable */
   publishedAt: string | null;
+  creator?: CourseCreator;
 }
 
 export type CoursesPagination = {
@@ -642,8 +661,7 @@ export type CreateCourseBody = {
   /** @nullable */
   description?: string | null;
   status?: CreateCourseBodyStatus;
-  /** @nullable */
-  publishedAt?: string | null;
+  publishedAt?: string;
 };
 
 export type CreateCourseDefaultCode =
@@ -671,12 +689,13 @@ export type CreateCourseDefault = {
   details?: CreateCourseDefaultDetails;
 };
 
-export type GetCoursePathParameters = {
-  id: string;
+export type GetCourseByPublicIdPathParameters = {
+  publicId: string;
 };
-export type GetCourseDefaultCode = (typeof GetCourseDefaultCode)[keyof typeof GetCourseDefaultCode];
+export type GetCourseByPublicIdDefaultCode =
+  (typeof GetCourseByPublicIdDefaultCode)[keyof typeof GetCourseByPublicIdDefaultCode];
 
-export const GetCourseDefaultCode = {
+export const GetCourseByPublicIdDefaultCode = {
   forbidden: "forbidden",
   unauthorized: "unauthorized",
   not_found: "not_found",
@@ -689,13 +708,13 @@ export const GetCourseDefaultCode = {
   invalid_pagination_params: "invalid_pagination_params",
 } as const;
 
-export type GetCourseDefaultDetails = { [key: string]: unknown };
+export type GetCourseByPublicIdDefaultDetails = { [key: string]: unknown };
 
-export type GetCourseDefault = {
+export type GetCourseByPublicIdDefault = {
   status: number;
-  code: GetCourseDefaultCode;
+  code: GetCourseByPublicIdDefaultCode;
   error?: unknown;
-  details?: GetCourseDefaultDetails;
+  details?: GetCourseByPublicIdDefaultDetails;
 };
 
 export type UpdateCoursePathParameters = {
@@ -716,8 +735,7 @@ export type UpdateCourseBody = {
   /** @nullable */
   description?: string | null;
   status?: UpdateCourseBodyStatus;
-  /** @nullable */
-  publishedAt?: string | null;
+  publishedAt?: string;
 };
 
 export type UpdateCourseDefaultCode =
@@ -773,13 +791,24 @@ export type DeleteCourseDefault = {
   details?: DeleteCourseDefaultDetails;
 };
 
-export type GetCourseByPublicIdPathParameters = {
-  publicId: string;
+export type GetPublicCoursesParams = {
+  /**
+   * @minimum 0
+   * @nullable
+   */
+  page?: number | null;
+  /**
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
+  query?: string;
 };
-export type GetCourseByPublicIdDefaultCode =
-  (typeof GetCourseByPublicIdDefaultCode)[keyof typeof GetCourseByPublicIdDefaultCode];
 
-export const GetCourseByPublicIdDefaultCode = {
+export type GetPublicCoursesDefaultCode =
+  (typeof GetPublicCoursesDefaultCode)[keyof typeof GetPublicCoursesDefaultCode];
+
+export const GetPublicCoursesDefaultCode = {
   forbidden: "forbidden",
   unauthorized: "unauthorized",
   not_found: "not_found",
@@ -792,13 +821,97 @@ export const GetCourseByPublicIdDefaultCode = {
   invalid_pagination_params: "invalid_pagination_params",
 } as const;
 
-export type GetCourseByPublicIdDefaultDetails = { [key: string]: unknown };
+export type GetPublicCoursesDefaultDetails = { [key: string]: unknown };
 
-export type GetCourseByPublicIdDefault = {
+export type GetPublicCoursesDefault = {
   status: number;
-  code: GetCourseByPublicIdDefaultCode;
+  code: GetPublicCoursesDefaultCode;
   error?: unknown;
-  details?: GetCourseByPublicIdDefaultDetails;
+  details?: GetPublicCoursesDefaultDetails;
+};
+
+export type GetPublicCourseByPublicIdPathParameters = {
+  publicId: string;
+};
+export type GetPublicCourseByPublicIdDefaultCode =
+  (typeof GetPublicCourseByPublicIdDefaultCode)[keyof typeof GetPublicCourseByPublicIdDefaultCode];
+
+export const GetPublicCourseByPublicIdDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type GetPublicCourseByPublicIdDefaultDetails = { [key: string]: unknown };
+
+export type GetPublicCourseByPublicIdDefault = {
+  status: number;
+  code: GetPublicCourseByPublicIdDefaultCode;
+  error?: unknown;
+  details?: GetPublicCourseByPublicIdDefaultDetails;
+};
+
+export type GetPublicCourseTopicsPathParameters = {
+  publicId: string;
+};
+export type GetPublicCourseTopicsDefaultCode =
+  (typeof GetPublicCourseTopicsDefaultCode)[keyof typeof GetPublicCourseTopicsDefaultCode];
+
+export const GetPublicCourseTopicsDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type GetPublicCourseTopicsDefaultDetails = { [key: string]: unknown };
+
+export type GetPublicCourseTopicsDefault = {
+  status: number;
+  code: GetPublicCourseTopicsDefaultCode;
+  error?: unknown;
+  details?: GetPublicCourseTopicsDefaultDetails;
+};
+
+export type GetPublicCourseLessonsPathParameters = {
+  publicId: string;
+};
+export type GetPublicCourseLessonsDefaultCode =
+  (typeof GetPublicCourseLessonsDefaultCode)[keyof typeof GetPublicCourseLessonsDefaultCode];
+
+export const GetPublicCourseLessonsDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type GetPublicCourseLessonsDefaultDetails = { [key: string]: unknown };
+
+export type GetPublicCourseLessonsDefault = {
+  status: number;
+  code: GetPublicCourseLessonsDefaultCode;
+  error?: unknown;
+  details?: GetPublicCourseLessonsDefaultDetails;
 };
 
 export type GetLessonsParams = {

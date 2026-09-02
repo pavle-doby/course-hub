@@ -29,10 +29,18 @@ import type {
   DeleteCoursePathParameters,
   GetCourseByPublicIdDefault,
   GetCourseByPublicIdPathParameters,
-  GetCourseDefault,
-  GetCoursePathParameters,
   GetCoursesDefault,
   GetCoursesParams,
+  GetPublicCourseByPublicIdDefault,
+  GetPublicCourseByPublicIdPathParameters,
+  GetPublicCourseLessonsDefault,
+  GetPublicCourseLessonsPathParameters,
+  GetPublicCourseTopicsDefault,
+  GetPublicCourseTopicsPathParameters,
+  GetPublicCoursesDefault,
+  GetPublicCoursesParams,
+  Lesson,
+  Topic,
   UpdateCourseBody,
   UpdateCourseDefault,
   UpdateCoursePathParameters,
@@ -247,60 +255,66 @@ export const useCreateCourse = <TError = CreateCourseDefault, TContext = unknown
 > => {
   return useMutation(getCreateCourseMutationOptions(options), queryClient);
 };
-export const getCourse = (
-  { id }: GetCoursePathParameters,
+export const getCourseByPublicId = (
+  { publicId }: GetCourseByPublicIdPathParameters,
   options?: SecondParameter<typeof customInstance>,
   signal?: AbortSignal
 ) => {
-  return customInstance<Course>({ url: `/v1/courses/${id}`, method: "GET", signal }, options);
+  return customInstance<Course>({ url: `/v1/courses/${publicId}`, method: "GET", signal }, options);
 };
 
-export const getGetCourseQueryKey = ({ id }: GetCoursePathParameters) => {
-  return [`/v1/courses/${id}`] as const;
+export const getGetCourseByPublicIdQueryKey = ({ publicId }: GetCourseByPublicIdPathParameters) => {
+  return [`/v1/courses/${publicId}`] as const;
 };
 
-export const getGetCourseQueryOptions = <
-  TData = Awaited<ReturnType<typeof getCourse>>,
-  TError = GetCourseDefault,
+export const getGetCourseByPublicIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCourseByPublicId>>,
+  TError = GetCourseByPublicIdDefault,
 >(
-  { id }: GetCoursePathParameters,
+  { publicId }: GetCourseByPublicIdPathParameters,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCourse>>, TError, TData>>;
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getCourseByPublicId>>, TError, TData>
+    >;
     request?: SecondParameter<typeof customInstance>;
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetCourseQueryKey({ id });
+  const queryKey = queryOptions?.queryKey ?? getGetCourseByPublicIdQueryKey({ publicId });
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCourse>>> = ({ signal }) =>
-    getCourse({ id }, requestOptions, signal);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCourseByPublicId>>> = ({ signal }) =>
+    getCourseByPublicId({ publicId }, requestOptions, signal);
 
   return {
     queryKey,
     queryFn,
-    enabled: id !== null && id !== undefined,
+    enabled: publicId !== null && publicId !== undefined,
     ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof getCourse>>, TError, TData> & {
+  } as UseQueryOptions<Awaited<ReturnType<typeof getCourseByPublicId>>, TError, TData> & {
     queryKey: DataTag<QueryKey, TData, TError>;
   };
 };
 
-export type GetCourseQueryResult = NonNullable<Awaited<ReturnType<typeof getCourse>>>;
-export type GetCourseQueryError = GetCourseDefault;
+export type GetCourseByPublicIdQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCourseByPublicId>>
+>;
+export type GetCourseByPublicIdQueryError = GetCourseByPublicIdDefault;
 
-export function useGetCourse<
-  TData = Awaited<ReturnType<typeof getCourse>>,
-  TError = GetCourseDefault,
+export function useGetCourseByPublicId<
+  TData = Awaited<ReturnType<typeof getCourseByPublicId>>,
+  TError = GetCourseByPublicIdDefault,
 >(
-  pathParams: GetCoursePathParameters,
+  pathParams: GetCourseByPublicIdPathParameters,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCourse>>, TError, TData>> &
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getCourseByPublicId>>, TError, TData>
+    > &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getCourse>>,
+          Awaited<ReturnType<typeof getCourseByPublicId>>,
           TError,
-          Awaited<ReturnType<typeof getCourse>>
+          Awaited<ReturnType<typeof getCourseByPublicId>>
         >,
         "initialData"
       >;
@@ -308,18 +322,20 @@ export function useGetCourse<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-export function useGetCourse<
-  TData = Awaited<ReturnType<typeof getCourse>>,
-  TError = GetCourseDefault,
+export function useGetCourseByPublicId<
+  TData = Awaited<ReturnType<typeof getCourseByPublicId>>,
+  TError = GetCourseByPublicIdDefault,
 >(
-  pathParams: GetCoursePathParameters,
+  pathParams: GetCourseByPublicIdPathParameters,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCourse>>, TError, TData>> &
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getCourseByPublicId>>, TError, TData>
+    > &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getCourse>>,
+          Awaited<ReturnType<typeof getCourseByPublicId>>,
           TError,
-          Awaited<ReturnType<typeof getCourse>>
+          Awaited<ReturnType<typeof getCourseByPublicId>>
         >,
         "initialData"
       >;
@@ -327,30 +343,34 @@ export function useGetCourse<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-export function useGetCourse<
-  TData = Awaited<ReturnType<typeof getCourse>>,
-  TError = GetCourseDefault,
+export function useGetCourseByPublicId<
+  TData = Awaited<ReturnType<typeof getCourseByPublicId>>,
+  TError = GetCourseByPublicIdDefault,
 >(
-  pathParams: GetCoursePathParameters,
+  pathParams: GetCourseByPublicIdPathParameters,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCourse>>, TError, TData>>;
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getCourseByPublicId>>, TError, TData>
+    >;
     request?: SecondParameter<typeof customInstance>;
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-export function useGetCourse<
-  TData = Awaited<ReturnType<typeof getCourse>>,
-  TError = GetCourseDefault,
+export function useGetCourseByPublicId<
+  TData = Awaited<ReturnType<typeof getCourseByPublicId>>,
+  TError = GetCourseByPublicIdDefault,
 >(
-  { id }: GetCoursePathParameters,
+  { publicId }: GetCourseByPublicIdPathParameters,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCourse>>, TError, TData>>;
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getCourseByPublicId>>, TError, TData>
+    >;
     request?: SecondParameter<typeof customInstance>;
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetCourseQueryOptions({ id }, options);
+  const queryOptions = getGetCourseByPublicIdQueryOptions({ publicId }, options);
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>;
@@ -508,69 +528,60 @@ export const useDeleteCourse = <TError = DeleteCourseDefault, TContext = unknown
 > => {
   return useMutation(getDeleteCourseMutationOptions(options), queryClient);
 };
-export const getCourseByPublicId = (
-  { publicId }: GetCourseByPublicIdPathParameters,
+export const getPublicCourses = (
+  params?: GetPublicCoursesParams,
   options?: SecondParameter<typeof customInstance>,
   signal?: AbortSignal
 ) => {
-  return customInstance<Course>(
-    { url: `/v1/courses/public/${publicId}`, method: "GET", signal },
+  return customInstance<Courses>(
+    { url: `/v1/public/courses`, method: "GET", params, signal },
     options
   );
 };
 
-export const getGetCourseByPublicIdQueryKey = ({ publicId }: GetCourseByPublicIdPathParameters) => {
-  return [`/v1/courses/public/${publicId}`] as const;
+export const getGetPublicCoursesQueryKey = (params?: GetPublicCoursesParams) => {
+  return [`/v1/public/courses`, ...(params ? [params] : [])] as const;
 };
 
-export const getGetCourseByPublicIdQueryOptions = <
-  TData = Awaited<ReturnType<typeof getCourseByPublicId>>,
-  TError = GetCourseByPublicIdDefault,
+export const getGetPublicCoursesQueryOptions = <
+  TData = Awaited<ReturnType<typeof getPublicCourses>>,
+  TError = GetPublicCoursesDefault,
 >(
-  { publicId }: GetCourseByPublicIdPathParameters,
+  params?: GetPublicCoursesParams,
   options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getCourseByPublicId>>, TError, TData>
-    >;
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getPublicCourses>>, TError, TData>>;
     request?: SecondParameter<typeof customInstance>;
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetCourseByPublicIdQueryKey({ publicId });
+  const queryKey = queryOptions?.queryKey ?? getGetPublicCoursesQueryKey(params);
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCourseByPublicId>>> = ({ signal }) =>
-    getCourseByPublicId({ publicId }, requestOptions, signal);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getPublicCourses>>> = ({ signal }) =>
+    getPublicCourses(params, requestOptions, signal);
 
-  return {
-    queryKey,
-    queryFn,
-    enabled: publicId !== null && publicId !== undefined,
-    ...queryOptions,
-  } as UseQueryOptions<Awaited<ReturnType<typeof getCourseByPublicId>>, TError, TData> & {
-    queryKey: DataTag<QueryKey, TData, TError>;
-  };
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getPublicCourses>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
 };
 
-export type GetCourseByPublicIdQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getCourseByPublicId>>
->;
-export type GetCourseByPublicIdQueryError = GetCourseByPublicIdDefault;
+export type GetPublicCoursesQueryResult = NonNullable<Awaited<ReturnType<typeof getPublicCourses>>>;
+export type GetPublicCoursesQueryError = GetPublicCoursesDefault;
 
-export function useGetCourseByPublicId<
-  TData = Awaited<ReturnType<typeof getCourseByPublicId>>,
-  TError = GetCourseByPublicIdDefault,
+export function useGetPublicCourses<
+  TData = Awaited<ReturnType<typeof getPublicCourses>>,
+  TError = GetPublicCoursesDefault,
 >(
-  pathParams: GetCourseByPublicIdPathParameters,
+  params: undefined | GetPublicCoursesParams,
   options: {
-    query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getCourseByPublicId>>, TError, TData>
-    > &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getPublicCourses>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getCourseByPublicId>>,
+          Awaited<ReturnType<typeof getPublicCourses>>,
           TError,
-          Awaited<ReturnType<typeof getCourseByPublicId>>
+          Awaited<ReturnType<typeof getPublicCourses>>
         >,
         "initialData"
       >;
@@ -578,20 +589,18 @@ export function useGetCourseByPublicId<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-export function useGetCourseByPublicId<
-  TData = Awaited<ReturnType<typeof getCourseByPublicId>>,
-  TError = GetCourseByPublicIdDefault,
+export function useGetPublicCourses<
+  TData = Awaited<ReturnType<typeof getPublicCourses>>,
+  TError = GetPublicCoursesDefault,
 >(
-  pathParams: GetCourseByPublicIdPathParameters,
+  params?: GetPublicCoursesParams,
   options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getCourseByPublicId>>, TError, TData>
-    > &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getPublicCourses>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getCourseByPublicId>>,
+          Awaited<ReturnType<typeof getPublicCourses>>,
           TError,
-          Awaited<ReturnType<typeof getCourseByPublicId>>
+          Awaited<ReturnType<typeof getPublicCourses>>
         >,
         "initialData"
       >;
@@ -599,34 +608,418 @@ export function useGetCourseByPublicId<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-export function useGetCourseByPublicId<
-  TData = Awaited<ReturnType<typeof getCourseByPublicId>>,
-  TError = GetCourseByPublicIdDefault,
+export function useGetPublicCourses<
+  TData = Awaited<ReturnType<typeof getPublicCourses>>,
+  TError = GetPublicCoursesDefault,
 >(
-  pathParams: GetCourseByPublicIdPathParameters,
+  params?: GetPublicCoursesParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getPublicCourses>>, TError, TData>>;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+export function useGetPublicCourses<
+  TData = Awaited<ReturnType<typeof getPublicCourses>>,
+  TError = GetPublicCoursesDefault,
+>(
+  params?: GetPublicCoursesParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getPublicCourses>>, TError, TData>>;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetPublicCoursesQueryOptions(params, options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+export const getPublicCourseByPublicId = (
+  { publicId }: GetPublicCourseByPublicIdPathParameters,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<Course>(
+    { url: `/v1/public/courses/${publicId}`, method: "GET", signal },
+    options
+  );
+};
+
+export const getGetPublicCourseByPublicIdQueryKey = ({
+  publicId,
+}: GetPublicCourseByPublicIdPathParameters) => {
+  return [`/v1/public/courses/${publicId}`] as const;
+};
+
+export const getGetPublicCourseByPublicIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getPublicCourseByPublicId>>,
+  TError = GetPublicCourseByPublicIdDefault,
+>(
+  { publicId }: GetPublicCourseByPublicIdPathParameters,
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getCourseByPublicId>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getPublicCourseByPublicId>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetPublicCourseByPublicIdQueryKey({ publicId });
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getPublicCourseByPublicId>>> = ({
+    signal,
+  }) => getPublicCourseByPublicId({ publicId }, requestOptions, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: publicId !== null && publicId !== undefined,
+    ...queryOptions,
+  } as UseQueryOptions<Awaited<ReturnType<typeof getPublicCourseByPublicId>>, TError, TData> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+};
+
+export type GetPublicCourseByPublicIdQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getPublicCourseByPublicId>>
+>;
+export type GetPublicCourseByPublicIdQueryError = GetPublicCourseByPublicIdDefault;
+
+export function useGetPublicCourseByPublicId<
+  TData = Awaited<ReturnType<typeof getPublicCourseByPublicId>>,
+  TError = GetPublicCourseByPublicIdDefault,
+>(
+  pathParams: GetPublicCourseByPublicIdPathParameters,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getPublicCourseByPublicId>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getPublicCourseByPublicId>>,
+          TError,
+          Awaited<ReturnType<typeof getPublicCourseByPublicId>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useGetPublicCourseByPublicId<
+  TData = Awaited<ReturnType<typeof getPublicCourseByPublicId>>,
+  TError = GetPublicCourseByPublicIdDefault,
+>(
+  pathParams: GetPublicCourseByPublicIdPathParameters,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getPublicCourseByPublicId>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getPublicCourseByPublicId>>,
+          TError,
+          Awaited<ReturnType<typeof getPublicCourseByPublicId>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useGetPublicCourseByPublicId<
+  TData = Awaited<ReturnType<typeof getPublicCourseByPublicId>>,
+  TError = GetPublicCourseByPublicIdDefault,
+>(
+  pathParams: GetPublicCourseByPublicIdPathParameters,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getPublicCourseByPublicId>>, TError, TData>
     >;
     request?: SecondParameter<typeof customInstance>;
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-export function useGetCourseByPublicId<
-  TData = Awaited<ReturnType<typeof getCourseByPublicId>>,
-  TError = GetCourseByPublicIdDefault,
+export function useGetPublicCourseByPublicId<
+  TData = Awaited<ReturnType<typeof getPublicCourseByPublicId>>,
+  TError = GetPublicCourseByPublicIdDefault,
 >(
-  { publicId }: GetCourseByPublicIdPathParameters,
+  { publicId }: GetPublicCourseByPublicIdPathParameters,
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getCourseByPublicId>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getPublicCourseByPublicId>>, TError, TData>
     >;
     request?: SecondParameter<typeof customInstance>;
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetCourseByPublicIdQueryOptions({ publicId }, options);
+  const queryOptions = getGetPublicCourseByPublicIdQueryOptions({ publicId }, options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+export const getPublicCourseTopics = (
+  { publicId }: GetPublicCourseTopicsPathParameters,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<Topic[]>(
+    { url: `/v1/public/courses/${publicId}/topics`, method: "GET", signal },
+    options
+  );
+};
+
+export const getGetPublicCourseTopicsQueryKey = ({
+  publicId,
+}: GetPublicCourseTopicsPathParameters) => {
+  return [`/v1/public/courses/${publicId}/topics`] as const;
+};
+
+export const getGetPublicCourseTopicsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getPublicCourseTopics>>,
+  TError = GetPublicCourseTopicsDefault,
+>(
+  { publicId }: GetPublicCourseTopicsPathParameters,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getPublicCourseTopics>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetPublicCourseTopicsQueryKey({ publicId });
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getPublicCourseTopics>>> = ({ signal }) =>
+    getPublicCourseTopics({ publicId }, requestOptions, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: publicId !== null && publicId !== undefined,
+    ...queryOptions,
+  } as UseQueryOptions<Awaited<ReturnType<typeof getPublicCourseTopics>>, TError, TData> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+};
+
+export type GetPublicCourseTopicsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getPublicCourseTopics>>
+>;
+export type GetPublicCourseTopicsQueryError = GetPublicCourseTopicsDefault;
+
+export function useGetPublicCourseTopics<
+  TData = Awaited<ReturnType<typeof getPublicCourseTopics>>,
+  TError = GetPublicCourseTopicsDefault,
+>(
+  pathParams: GetPublicCourseTopicsPathParameters,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getPublicCourseTopics>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getPublicCourseTopics>>,
+          TError,
+          Awaited<ReturnType<typeof getPublicCourseTopics>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useGetPublicCourseTopics<
+  TData = Awaited<ReturnType<typeof getPublicCourseTopics>>,
+  TError = GetPublicCourseTopicsDefault,
+>(
+  pathParams: GetPublicCourseTopicsPathParameters,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getPublicCourseTopics>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getPublicCourseTopics>>,
+          TError,
+          Awaited<ReturnType<typeof getPublicCourseTopics>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useGetPublicCourseTopics<
+  TData = Awaited<ReturnType<typeof getPublicCourseTopics>>,
+  TError = GetPublicCourseTopicsDefault,
+>(
+  pathParams: GetPublicCourseTopicsPathParameters,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getPublicCourseTopics>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+export function useGetPublicCourseTopics<
+  TData = Awaited<ReturnType<typeof getPublicCourseTopics>>,
+  TError = GetPublicCourseTopicsDefault,
+>(
+  { publicId }: GetPublicCourseTopicsPathParameters,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getPublicCourseTopics>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetPublicCourseTopicsQueryOptions({ publicId }, options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+export const getPublicCourseLessons = (
+  { publicId }: GetPublicCourseLessonsPathParameters,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<Lesson[]>(
+    { url: `/v1/public/courses/${publicId}/lessons`, method: "GET", signal },
+    options
+  );
+};
+
+export const getGetPublicCourseLessonsQueryKey = ({
+  publicId,
+}: GetPublicCourseLessonsPathParameters) => {
+  return [`/v1/public/courses/${publicId}/lessons`] as const;
+};
+
+export const getGetPublicCourseLessonsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getPublicCourseLessons>>,
+  TError = GetPublicCourseLessonsDefault,
+>(
+  { publicId }: GetPublicCourseLessonsPathParameters,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getPublicCourseLessons>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetPublicCourseLessonsQueryKey({ publicId });
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getPublicCourseLessons>>> = ({ signal }) =>
+    getPublicCourseLessons({ publicId }, requestOptions, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: publicId !== null && publicId !== undefined,
+    ...queryOptions,
+  } as UseQueryOptions<Awaited<ReturnType<typeof getPublicCourseLessons>>, TError, TData> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+};
+
+export type GetPublicCourseLessonsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getPublicCourseLessons>>
+>;
+export type GetPublicCourseLessonsQueryError = GetPublicCourseLessonsDefault;
+
+export function useGetPublicCourseLessons<
+  TData = Awaited<ReturnType<typeof getPublicCourseLessons>>,
+  TError = GetPublicCourseLessonsDefault,
+>(
+  pathParams: GetPublicCourseLessonsPathParameters,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getPublicCourseLessons>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getPublicCourseLessons>>,
+          TError,
+          Awaited<ReturnType<typeof getPublicCourseLessons>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useGetPublicCourseLessons<
+  TData = Awaited<ReturnType<typeof getPublicCourseLessons>>,
+  TError = GetPublicCourseLessonsDefault,
+>(
+  pathParams: GetPublicCourseLessonsPathParameters,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getPublicCourseLessons>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getPublicCourseLessons>>,
+          TError,
+          Awaited<ReturnType<typeof getPublicCourseLessons>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useGetPublicCourseLessons<
+  TData = Awaited<ReturnType<typeof getPublicCourseLessons>>,
+  TError = GetPublicCourseLessonsDefault,
+>(
+  pathParams: GetPublicCourseLessonsPathParameters,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getPublicCourseLessons>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+export function useGetPublicCourseLessons<
+  TData = Awaited<ReturnType<typeof getPublicCourseLessons>>,
+  TError = GetPublicCourseLessonsDefault,
+>(
+  { publicId }: GetPublicCourseLessonsPathParameters,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getPublicCourseLessons>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetPublicCourseLessonsQueryOptions({ publicId }, options);
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>;

@@ -4,13 +4,19 @@ import {
   DeleteCourseRes,
   ErrorCodeCourse,
   GetAllCoursesRes,
+  GetAllPublicCoursesReq,
+  GetAllPublicCoursesRes,
   GetCourseByPublicIdRes,
   GetCourseRes,
+  GetPublicLessonsRes,
+  GetPublicTopicsRes,
   UpdateCourseReq,
   UpdateCourseRes,
 } from "@repo/contract";
 import { NotFoundError } from "@repo/contract";
 import { usersRepository } from "api/modules/users/repository/usersRepository";
+import { topicsRepository } from "api/modules/topics/repository/topicsRepository";
+import { lessonsRepository } from "api/modules/lessons/repository/lessonsRepository";
 import { coursesRepository } from "../repository/coursesRepository";
 import { PaginationReqExtended } from "api/middleware/pagination";
 import { GetAllCoursesReq } from "@repo/contract";
@@ -31,6 +37,28 @@ export const coursesService = {
 
   getCourseByPublicId: async (publicId: string): Promise<GetCourseByPublicIdRes> => {
     return await coursesRepository.getCourseByPublicId(publicId);
+  },
+
+  getAllPublicCourses: async (
+    dto: GetAllPublicCoursesReq<PaginationReqExtended>
+  ): Promise<GetAllPublicCoursesRes> => {
+    return await coursesRepository.getAllPublishedCourses(dto);
+  },
+
+  getPublicCourseTopics: async (publicId: string): Promise<GetPublicTopicsRes> => {
+    const course = await coursesRepository.getCourseByPublicId(publicId);
+    if (!course || course.status !== "published") {
+      throw new NotFoundError({ code: ErrorCodeCourse.NOT_FOUND });
+    }
+    return await topicsRepository.getTopicsByCourseId(course.id);
+  },
+
+  getPublicCourseLessons: async (publicId: string): Promise<GetPublicLessonsRes> => {
+    const course = await coursesRepository.getCourseByPublicId(publicId);
+    if (!course || course.status !== "published") {
+      throw new NotFoundError({ code: ErrorCodeCourse.NOT_FOUND });
+    }
+    return await lessonsRepository.getLessonsByCourseId(course.id);
   },
 
   createCourse: async (authUserId: string, data: CreateCourseReq): Promise<CreateCourseRes> => {

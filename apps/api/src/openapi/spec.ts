@@ -6,6 +6,7 @@ import { registry } from "./registry";
 import "../modules/auth/openapi/authOpenapi";
 import "../modules/users/openapi/usersOpenapi";
 import "../modules/courses/openapi/coursesOpenapi";
+import "../modules/courses/openapi/coursesPublicOpenapi";
 import "../modules/lessons/openapi/lessonsOpenapi";
 import "../modules/topics/openapi/topicsOpenapi";
 

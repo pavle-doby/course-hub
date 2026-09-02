@@ -9,7 +9,8 @@ description: >
 
 # Blazing
 
-Activate all four tools simultaneously and keep them active for every response.
+- Always start with `AGENTS.md`
+- Activate all four tools simultaneously and keep them active for every response.
 
 ## Active stack
 

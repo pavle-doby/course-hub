@@ -14,6 +14,9 @@ export type GetAllTopicsReq<Pagination = PaginationReq> = Pagination &
   z.infer<typeof TopicGetAllQuerySchema>;
 export type GetAllTopicsRes = PaginationRes<Topic>;
 
+// GET /courses/public/:publicId/topics → topics for a published course
+export type GetPublicTopicsRes = Topic[];
+
 export type GetTopicRes = Topic | undefined;
 
 export type CreateTopicReq = z.infer<typeof TopicPostQuerySchema>;

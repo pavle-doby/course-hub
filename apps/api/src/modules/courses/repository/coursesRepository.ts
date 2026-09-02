@@ -4,12 +4,19 @@ import {
   Course,
   CreateCourseReq,
   GetAllCoursesRes,
+  GetAllPublicCoursesRes,
   GetCourseRes,
   Search,
   UpdateCourseReq,
 } from "@repo/contract";
 import { CourseGetAllQuerySchema } from "@repo/contract";
 import { z } from "zod";
+
+type GetAllPublishedCoursesParams = {
+  offset?: number;
+  limit?: number;
+  page: number;
+} & Partial<Search>;
 
 type GetAllCoursesParams = {
   offset?: number;
@@ -69,6 +76,50 @@ export const coursesRepository = {
       where: eq(schema.courses.publicId, publicId),
       columns: { createdAt: false, updatedAt: false },
     });
+  },
+
+  getAllPublishedCourses: async ({
+    offset,
+    limit,
+    page,
+    query,
+  }: GetAllPublishedCoursesParams): Promise<GetAllPublicCoursesRes> => {
+    const searchCondition = query
+      ? or(
+          ilike(schema.courses.name, `%${query}%`),
+          ilike(schema.courses.description, `%${query}%`)
+        )
+      : undefined;
+    const statusCondition = eq(schema.courses.status, "published");
+
+    const whereClause = and(statusCondition, searchCondition);
+
+    const countResult = await db.select({ count: count() }).from(schema.courses).where(whereClause);
+    const total = countResult[0]?.count ?? 0;
+
+    const data = await db.query.courses.findMany({
+      where: whereClause,
+      offset,
+      limit,
+      orderBy: [desc(schema.courses.createdAt)],
+      columns: { createdAt: false, updatedAt: false },
+      with: {
+        creator: {
+          columns: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            username: true,
+            avatarUrl: true,
+          },
+        },
+      },
+    });
+
+    return {
+      data,
+      pagination: { total, page, limit: limit || total },
+    };
   },
 
   createCourse: async (data: CreateCourseReq & { creatorId: string }): Promise<Course> => {

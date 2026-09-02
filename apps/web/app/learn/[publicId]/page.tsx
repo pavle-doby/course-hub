@@ -2,7 +2,11 @@
 
 import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { useGetCourseByPublicId, useGetLessons, useGetTopics } from "@repo/api-client";
+import {
+  useGetPublicCourseByPublicId,
+  useGetPublicCourseLessons,
+  useGetPublicCourseTopics,
+} from "@repo/api-client";
 import { useT } from "@repo/i18n/client";
 import { SidebarProvider } from "@repo/ui-web/components/sidebar";
 import { useCourseTree } from "@/app/courses/hooks/use-course-tree";
@@ -17,11 +21,10 @@ export default function LearnCourseDetailPage() {
   const { t } = useT();
   const [selection, setSelection] = useState<Selection>({ type: "course" });
 
-  const { data: course, isPending: isCoursePending } = useGetCourseByPublicId({ publicId });
-  const id = course?.id;
-  const { data: topicsData } = useGetTopics({ courseId: id }, { query: { enabled: !!id } });
-  const { data: lessonsData } = useGetLessons({ courseId: id }, { query: { enabled: !!id } });
-  const tree = useCourseTree(topicsData?.data, lessonsData?.data);
+  const { data: course, isPending: isCoursePending } = useGetPublicCourseByPublicId({ publicId });
+  const { data: topics } = useGetPublicCourseTopics({ publicId });
+  const { data: lessons } = useGetPublicCourseLessons({ publicId });
+  const tree = useCourseTree(topics, lessons);
   const flatLessons = tree.flatMap((topic) => topic.lessons);
 
   function handleBack() {
