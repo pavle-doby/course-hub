@@ -25,9 +25,10 @@ import { useErrorHandlingAction } from "@repo/shared";
 import { toast } from "@repo/ui-web/components/sonner";
 import { SidebarProvider } from "@repo/ui-web/components/sidebar";
 import { CourseEditorHeader } from "../components/course-editor-header";
+import { CourseBottomNav } from "../components/course-bottom-nav";
 import { CourseTreeNav } from "../components/course-tree-nav";
 import { CourseWorkingArea } from "../components/course-working-area";
-import { useCourseTree } from "../hooks/use-course-tree";
+import { useAdjacentSelection, useCourseTree } from "../hooks/use-course-tree";
 import type { EntityFormHandle, EntityFormValues } from "../components/entity-form";
 import type { Selection } from "../types";
 
@@ -79,6 +80,7 @@ export default function AddCoursePage() {
   const isLoadingTree = isTopicsLoading || isLessonsLoading;
   const tree = useCourseTree(topicsData?.data, lessonsData?.data);
   const flatLessons = tree.flatMap((topic) => topic.lessons);
+  const { previousItem, nextItem } = useAdjacentSelection(tree, selection);
 
   const { mutateAsync: createCourse } = useCreateCourse();
   const { mutateAsync: updateCourse } = useUpdateCourse();
@@ -385,6 +387,18 @@ export default function AddCoursePage() {
             onPublishCourse={handlePublish}
             onArchiveCourse={courseId ? handleArchiveCourse : undefined}
             onDeleteCourse={courseId ? handleDeleteCourse : undefined}
+          />
+
+          <CourseBottomNav
+            isSaving={isSaving}
+            isPublished={course.status === "published"}
+            onCancel={handleBackOrCancel}
+            onSave={handleSave}
+            onPublish={handlePublish}
+            hasPrevious={!!previousItem}
+            hasNext={!!nextItem}
+            onPrevious={() => previousItem && setSelection(previousItem)}
+            onNext={() => nextItem && setSelection(nextItem)}
           />
         </div>
       </div>

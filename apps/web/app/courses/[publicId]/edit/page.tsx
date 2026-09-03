@@ -26,10 +26,11 @@ import { useErrorHandlingAction } from "@repo/shared";
 import { toast } from "@repo/ui-web/components/sonner";
 import { SidebarProvider } from "@repo/ui-web/components/sidebar";
 import { CourseEditorHeader } from "../../components/course-editor-header";
+import { CourseBottomNav } from "../../components/course-bottom-nav";
 import { CourseEditSkeleton } from "../../components/course-edit-skeleton";
 import { CourseTreeNav } from "../../components/course-tree-nav";
 import { CourseWorkingArea } from "../../components/course-working-area";
-import { useCourseTree } from "../../hooks/use-course-tree";
+import { useAdjacentSelection, useCourseTree } from "../../hooks/use-course-tree";
 import type { EntityFormHandle, EntityFormValues } from "../../components/entity-form";
 import type { Selection } from "../../types";
 
@@ -55,20 +56,14 @@ export default function EditCoursePage() {
   const formRef = useRef<EntityFormHandle>(null);
   const hasShownAutoSaveToast = useRef(false);
 
-  useEffect(() => {
-    if (hasShownAutoSaveToast.current) return;
-    hasShownAutoSaveToast.current = true;
-    toast.success(t("courses.editor.autoSaveOnToast"));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   function handleAutoSaveChange(value: boolean) {
     setAutoSave(value);
     toast.success(t(value ? "courses.editor.autoSaveOnToast" : "courses.editor.autoSaveOffToast"));
   }
 
-  const { data: courseData } = useGetCourseByPublicId({ publicId });
+  const { data: courseData, isPending: isCourseLoading } = useGetCourseByPublicId({ publicId });
   const id = courseData?.id;
+
   const { data: topicsData, isLoading: isTopicsLoading } = useGetTopics(
     { courseId: id },
     { query: { enabled: !!id } }
@@ -77,9 +72,11 @@ export default function EditCoursePage() {
     { courseId: id },
     { query: { enabled: !!id } }
   );
+  const isLoading = isCourseLoading || isTopicsLoading || isLessonsLoading;
   const isLoadingTree = isTopicsLoading || isLessonsLoading;
   const tree = useCourseTree(topicsData?.data, lessonsData?.data);
   const flatLessons = tree.flatMap((topic) => topic.lessons);
+  const { previousItem, nextItem } = useAdjacentSelection(tree, selection);
 
   // seeded from the fetched course on first render (no effect needed, avoids a stale-defaultValues flash in EntityForm)
   const displayedCourse =
@@ -97,6 +94,17 @@ export default function EditCoursePage() {
   const { mutateAsync: createLesson } = useCreateLesson();
   const { mutateAsync: updateLesson } = useUpdateLesson();
   const { mutateAsync: deleteLesson } = useDeleteLesson();
+
+  useEffect(() => {
+    if (!isLoading || hasShownAutoSaveToast.current) return;
+    hasShownAutoSaveToast.current = true;
+
+    setTimeout(() => {
+      toast.success(t("courses.editor.autoSaveOnToast"));
+    }, 700);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading]);
 
   // real course id resolved above from the public id — narrowed for the rest of this render
   if (!id) {
@@ -387,6 +395,18 @@ export default function EditCoursePage() {
             onPublishCourse={handlePublish}
             onArchiveCourse={handleArchiveCourse}
             onDeleteCourse={handleDeleteCourse}
+          />
+
+          <CourseBottomNav
+            isSaving={isSaving}
+            isPublished={displayedCourse.status === "published"}
+            onCancel={handleBackOrCancel}
+            onSave={handleSave}
+            onPublish={handlePublish}
+            hasPrevious={!!previousItem}
+            hasNext={!!nextItem}
+            onPrevious={() => previousItem && setSelection(previousItem)}
+            onNext={() => nextItem && setSelection(nextItem)}
           />
         </div>
       </div>

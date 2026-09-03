@@ -29,6 +29,7 @@ export const courses = {
   },
   editor: {
     back: "Nazad",
+    contents: "Sadržaj kursa",
     autoSave: "Automatsko čuvanje",
     cancel: "Otkaži",
     save: "Sačuvaj",

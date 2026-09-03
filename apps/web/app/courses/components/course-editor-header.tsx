@@ -32,20 +32,20 @@ export function CourseEditorHeader({
   const { t } = useT();
 
   return (
-    <header className="sticky top-0 z-40 grid h-14 grid-cols-3 items-center gap-4 border-b bg-background px-4">
-      <div className="flex items-center gap-1 justify-self-start">
+    <header className="sticky top-0 z-40 flex items-center justify-between gap-2 border-b bg-background px-4 py-2 md:grid md:h-14 md:grid-cols-3 md:py-0">
+      <div className="flex min-w-0 items-center gap-1 justify-self-start">
         <Button variant="ghost" size="icon" onClick={onBack} aria-label={t("courses.editor.back")}>
           <ChevronLeft className="size-5" />
         </Button>
-        <span className="text-lg font-bold">{title}</span>
+        <span className="truncate text-lg font-bold">{title}</span>
       </div>
 
-      <Label className="flex items-center gap-2 justify-self-center text-sm">
-        {t("courses.editor.autoSave")}
+      <Label className="flex items-center gap-2 text-sm md:justify-self-center">
+        <span>{t("courses.editor.autoSave")}</span>
         <Switch checked={autoSave} onCheckedChange={onAutoSaveChange} />
       </Label>
 
-      <div className="flex items-center gap-2 justify-self-end">
+      <div className="hidden items-center gap-2 justify-self-end md:flex">
         <Button variant="outline" onClick={onCancel}>
           {t("courses.editor.cancel")}
         </Button>

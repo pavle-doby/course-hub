@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import {
   Archive,
   ChevronLeft,
@@ -28,13 +28,8 @@ import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@repo/ui-w
 import { Separator } from "@repo/ui-web/components/separator";
 import { useT } from "@repo/i18n/client";
 import { EntityForm, type EntityFormHandle, type EntityFormValues } from "./entity-form";
-import type { TopicWithLessons } from "../hooks/use-course-tree";
+import { useAdjacentSelection, type TopicWithLessons } from "../hooks/use-course-tree";
 import type { Selection } from "../types";
-
-function isSameSelection(a: Selection, b: Selection): boolean {
-  if (a.type !== b.type) return false;
-  return a.type === "course" || a.id === (b as { id: string }).id;
-}
 
 const coursePickedSchema = CoursePutQuerySchema.pick({
   name: true,
@@ -114,22 +109,7 @@ export function CourseWorkingArea({
       ? flatLessons.find((lesson) => lesson.id === selection.id)
       : undefined;
 
-  const flatItems = useMemo(() => {
-    const items: Selection[] = [{ type: "course" }];
-    for (const topic of tree) {
-      items.push({ type: "topic", id: topic.id });
-      for (const lesson of topic.lessons) {
-        items.push({ type: "lesson", id: lesson.id });
-      }
-    }
-    return items;
-  }, [tree]);
-  const currentIndex = flatItems.findIndex((item) => isSameSelection(item, selection));
-  const previousItem = currentIndex > 0 ? flatItems[currentIndex - 1] : undefined;
-  const nextItem =
-    currentIndex >= 0 && currentIndex < flatItems.length - 1
-      ? flatItems[currentIndex + 1]
-      : undefined;
+  const { previousItem, nextItem } = useAdjacentSelection(tree, selection);
 
   const selectionKey = selection.type === "course" ? "course" : `${selection.type}-${selection.id}`;
 
@@ -159,9 +139,9 @@ export function CourseWorkingArea({
   const showHeader = isCourseSelected || hasSelectedTopicOrLesson;
 
   return (
-    <div className="flex flex-1 flex-col gap-6 p-6">
+    <div className="flex flex-1 flex-col gap-6 p-4 md:p-6">
       {showHeader && (
-        <div className="flex items-center justify-center gap-2">
+        <div className="hidden items-center justify-center gap-2 md:flex">
           <Button
             className="min-w-30"
             variant="outline"
@@ -187,7 +167,7 @@ export function CourseWorkingArea({
 
       <Card className="mx-auto w-full max-w-2xl">
         {showHeader && (
-          <CardHeader className="flex flex-row items-center justify-between border-b">
+          <CardHeader className="flex flex-row flex-wrap items-center justify-between gap-2 border-b">
             <CardTitle>
               {isCourseSelected
                 ? t("courses.editor.courseLabel")
@@ -195,7 +175,7 @@ export function CourseWorkingArea({
                   ? t("courses.editor.topicLabel")
                   : t("courses.editor.lessonLabel")}
             </CardTitle>
-            <CardAction className="static flex items-center gap-2">
+            <CardAction className="static flex flex-wrap items-center gap-2">
               {(!isCourseSelected || onDuplicateCourse) && (
                 <Button
                   type="button"
@@ -220,14 +200,14 @@ export function CourseWorkingArea({
               )}
 
               {isCourseSelected && (onPublishCourse || onArchiveCourse) && (
-                <Separator orientation="vertical" className="h-8!" />
+                <Separator orientation="vertical" className="hidden h-8! sm:block" />
               )}
 
               {isCourseSelected && onPublishCourse && (
                 <Button
                   type="button"
                   variant="outline"
-                  className="gap-1.5"
+                  className="hidden gap-1.5 sm:inline-flex"
                   onClick={onPublishCourse}
                 >
                   {isCoursePublished ? <Undo2 /> : <Upload />}
@@ -238,7 +218,7 @@ export function CourseWorkingArea({
                 <Button
                   type="button"
                   variant="outline"
-                  className="gap-1.5"
+                  className="hidden gap-1.5 sm:inline-flex"
                   onClick={onArchiveCourse}
                 >
                   <Archive />
@@ -291,10 +271,10 @@ export function CourseWorkingArea({
         </CardContent>
       </Card>
 
-      <div className="mx-auto flex w-full max-w-2xl justify-center gap-2">
+      <div className="mx-auto flex w-full max-w-2xl flex-col justify-center gap-2 sm:flex-row">
         {selection.type !== "course" && (
           <Button
-            className="min-w-40 gap-2"
+            className="gap-2 sm:min-w-40"
             variant="outline"
             onClick={() =>
               onAddLesson(selection.type === "topic" ? selection.id : selectedLesson?.topicId)
@@ -304,7 +284,7 @@ export function CourseWorkingArea({
             {t("courses.editor.addNewLesson")}
           </Button>
         )}
-        <Button className="min-w-40 gap-2" variant="outline" onClick={onAddTopic}>
+        <Button className="gap-2 sm:min-w-40" variant="outline" onClick={onAddTopic}>
           <Plus className="size-4" />
           {t("courses.editor.addNewTopic")}
         </Button>

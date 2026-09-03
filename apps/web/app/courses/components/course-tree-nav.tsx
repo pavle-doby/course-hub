@@ -228,7 +228,7 @@ export function CourseTreeNav({
   }
 
   return (
-    <Sidebar collapsible="none" className="border-r">
+    <Sidebar collapsible="offcanvas" className="border-r">
       <SidebarContent>
         <SidebarGroup>
           <DndContext

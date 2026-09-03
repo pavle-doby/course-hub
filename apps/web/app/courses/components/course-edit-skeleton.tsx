@@ -21,12 +21,14 @@ const SKELETON_TOPICS = Array.from({ length: 2 }, (_, topicIndex) => ({
   ),
 }));
 
-/** Mirrors the tree nav / header / course card layout so the shell doesn't shift once real data arrives. */
+/** Mirrors the tree nav / header / course card / bottom nav layout so the shell doesn't shift
+ * once real data arrives — matches the same md breakpoint each real component switches on. */
 export function CourseEditSkeleton() {
   return (
     <SidebarProvider>
       <div className="flex min-h-svh flex-1 flex-row">
-        <Sidebar collapsible="none" className="border-r">
+        {/* Real tree nav is offcanvas (hidden) on mobile, opened via the bottom nav's contents button */}
+        <Sidebar collapsible="none" className="hidden border-r md:flex">
           <SidebarContent>
             <SidebarGroup>
               <SidebarMenu>
@@ -57,24 +59,29 @@ export function CourseEditSkeleton() {
         </Sidebar>
 
         <div className="flex flex-1 flex-col">
-          <header className="sticky top-0 z-40 grid h-14 grid-cols-3 items-center gap-4 border-b bg-background px-4">
-            <div className="flex items-center gap-2 justify-self-start">
-              <Skeleton className="size-5" />
+          <header className="sticky top-0 z-40 flex items-center justify-between gap-2 border-b bg-background px-4 py-2 md:grid md:h-14 md:grid-cols-3 md:py-0">
+            <div className="flex min-w-0 items-center gap-1 justify-self-start">
+              <Skeleton className="size-8 rounded-md" />
               <Skeleton className="h-5 w-32" />
             </div>
-            <Skeleton className="h-5 w-28 justify-self-center" />
-            <div className="flex items-center gap-2 justify-self-end">
+            <Skeleton className="hidden h-5 w-28 justify-self-center md:block" />
+            <div className="hidden items-center gap-2 justify-self-end md:flex">
               <Skeleton className="h-8 w-20" />
               <Skeleton className="h-8 w-20" />
               <Skeleton className="h-8 w-24" />
             </div>
           </header>
 
-          <div className="flex flex-1 flex-col gap-6 p-6">
+          <div className="flex flex-1 flex-col gap-6 p-4 md:p-6">
+            <div className="hidden items-center justify-center gap-2 md:flex">
+              <Skeleton className="h-8 w-30" />
+              <Skeleton className="h-8 w-30" />
+            </div>
+
             <Card className="mx-auto w-full max-w-2xl">
-              <CardHeader className="flex flex-row items-center justify-between border-b">
+              <CardHeader className="flex flex-row flex-wrap items-center justify-between gap-2 border-b">
                 <Skeleton className="h-5 w-16" />
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   <Skeleton className="h-8 w-24" />
                   <Skeleton className="h-8 w-20" />
                 </div>
@@ -96,7 +103,24 @@ export function CourseEditSkeleton() {
               </CardContent>
             </Card>
 
-            <Skeleton className="mx-auto h-9 w-32" />
+            <div className="mx-auto flex w-full max-w-2xl flex-col justify-center gap-2 sm:flex-row">
+              <Skeleton className="h-9 w-full sm:w-40" />
+              <Skeleton className="h-9 w-full sm:w-40" />
+            </div>
+          </div>
+
+          {/* Mirrors CourseBottomNav: mobile-only cancel/save/publish row + previous/contents/next */}
+          <div className="sticky bottom-0 z-40 flex flex-col border-t bg-background md:hidden">
+            <div className="flex items-center gap-2 px-4 py-2">
+              <Skeleton className="h-8 flex-1" />
+              <Skeleton className="h-8 flex-1" />
+              <Skeleton className="h-8 flex-1" />
+            </div>
+            <div className="flex items-center justify-between gap-2 border-t px-4 py-1">
+              <Skeleton className="h-8 w-30" />
+              <Skeleton className="size-8 rounded-md" />
+              <Skeleton className="h-8 w-30" />
+            </div>
           </div>
         </div>
       </div>

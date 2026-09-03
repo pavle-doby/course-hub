@@ -29,6 +29,7 @@ export const courses = {
   },
   editor: {
     back: "Back",
+    contents: "Course contents",
     autoSave: "Auto Save",
     cancel: "Cancel",
     save: "Save",
