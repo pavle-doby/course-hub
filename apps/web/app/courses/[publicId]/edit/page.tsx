@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import {
+  useCreateCourse,
   useCreateLesson,
   useCreateTopic,
   useDeleteCourse,
@@ -25,6 +26,7 @@ import { useErrorHandlingAction } from "@repo/shared";
 import { toast } from "@repo/ui-web/components/sonner";
 import { SidebarProvider } from "@repo/ui-web/components/sidebar";
 import { CourseEditorHeader } from "../../components/course-editor-header";
+import { CourseEditSkeleton } from "../../components/course-edit-skeleton";
 import { CourseTreeNav } from "../../components/course-tree-nav";
 import { CourseWorkingArea } from "../../components/course-working-area";
 import { useCourseTree } from "../../hooks/use-course-tree";
@@ -67,8 +69,15 @@ export default function EditCoursePage() {
 
   const { data: courseData } = useGetCourseByPublicId({ publicId });
   const id = courseData?.id;
-  const { data: topicsData } = useGetTopics({ courseId: id }, { query: { enabled: !!id } });
-  const { data: lessonsData } = useGetLessons({ courseId: id }, { query: { enabled: !!id } });
+  const { data: topicsData, isLoading: isTopicsLoading } = useGetTopics(
+    { courseId: id },
+    { query: { enabled: !!id } }
+  );
+  const { data: lessonsData, isLoading: isLessonsLoading } = useGetLessons(
+    { courseId: id },
+    { query: { enabled: !!id } }
+  );
+  const isLoadingTree = isTopicsLoading || isLessonsLoading;
   const tree = useCourseTree(topicsData?.data, lessonsData?.data);
   const flatLessons = tree.flatMap((topic) => topic.lessons);
 
@@ -81,6 +90,7 @@ export default function EditCoursePage() {
 
   const { mutateAsync: updateCourse } = useUpdateCourse();
   const { mutateAsync: deleteCourse } = useDeleteCourse();
+  const { mutateAsync: createCourse } = useCreateCourse();
   const { mutateAsync: createTopic } = useCreateTopic();
   const { mutateAsync: updateTopic } = useUpdateTopic();
   const { mutateAsync: deleteTopic } = useDeleteTopic();
@@ -90,11 +100,7 @@ export default function EditCoursePage() {
 
   // real course id resolved above from the public id — narrowed for the rest of this render
   if (!id) {
-    return (
-      <div className="flex min-h-svh flex-1 items-center justify-center">
-        {t("courses.loading")}
-      </div>
-    );
+    return <CourseEditSkeleton />;
   }
 
   async function invalidateTopicsAndLessons() {
@@ -166,6 +172,32 @@ export default function EditCoursePage() {
     }
   }
 
+  async function handleReorderTopics(orderedIds: string[]) {
+    try {
+      await Promise.all(
+        orderedIds.map((topicId, position) =>
+          updateTopic({ pathParams: { id: topicId }, data: { position } })
+        )
+      );
+      await invalidateTopicsAndLessons();
+    } catch (error) {
+      handleErrorAction(error as Error);
+    }
+  }
+
+  async function handleReorderLessons(orderedIds: string[]) {
+    try {
+      await Promise.all(
+        orderedIds.map((lessonId, position) =>
+          updateLesson({ pathParams: { id: lessonId }, data: { position } })
+        )
+      );
+      await invalidateTopicsAndLessons();
+    } catch (error) {
+      handleErrorAction(error as Error);
+    }
+  }
+
   async function handleDeleteTopic(topicId: string) {
     try {
       await deleteTopic({ pathParams: { id: topicId } });
@@ -178,6 +210,27 @@ export default function EditCoursePage() {
     }
   }
 
+  async function handleDuplicateTopic(topicId: string) {
+    if (!id) return;
+    try {
+      const topic = tree.find((t) => t.id === topicId);
+      if (!topic) return;
+      const created = await createTopic({
+        data: {
+          courseId: id,
+          name: topic.name,
+          description: topic.description ?? undefined,
+          position: tree.length,
+        },
+      });
+      await invalidateTopicsAndLessons();
+      setSelection({ type: "topic", id: created.id });
+      toast.success(t("courses.editor.duplicatedToast"));
+    } catch (error) {
+      handleErrorAction(error as Error);
+    }
+  }
+
   async function handleDeleteLesson(lessonId: string) {
     try {
       await deleteLesson({ pathParams: { id: lessonId } });
@@ -185,6 +238,27 @@ export default function EditCoursePage() {
       if (selection.type === "lesson" && selection.id === lessonId) {
         setSelection({ type: "course" });
       }
+    } catch (error) {
+      handleErrorAction(error as Error);
+    }
+  }
+
+  async function handleDuplicateLesson(lessonId: string) {
+    try {
+      const lesson = flatLessons.find((l) => l.id === lessonId);
+      if (!lesson) return;
+      const topic = tree.find((t) => t.id === lesson.topicId);
+      const created = await createLesson({
+        data: {
+          topicId: lesson.topicId,
+          name: lesson.name,
+          description: lesson.description,
+          position: topic?.lessons.length ?? 0,
+        },
+      });
+      await invalidateTopicsAndLessons();
+      setSelection({ type: "lesson", id: created.id });
+      toast.success(t("courses.editor.duplicatedToast"));
     } catch (error) {
       handleErrorAction(error as Error);
     }
@@ -247,6 +321,18 @@ export default function EditCoursePage() {
     }
   }
 
+  async function handleDuplicateCourse() {
+    try {
+      const created = await createCourse({
+        data: { name: displayedCourse.name, description: displayedCourse.description ?? undefined },
+      });
+      toast.success(t("courses.editor.duplicatedToast"));
+      router.push(`/courses/${created.publicId}/edit`);
+    } catch (error) {
+      handleErrorAction(error as Error);
+    }
+  }
+
   return (
     <SidebarProvider>
       <div className="flex min-h-svh flex-1 flex-row">
@@ -259,8 +345,9 @@ export default function EditCoursePage() {
           onSelectLesson={(lessonId) => setSelection({ type: "lesson", id: lessonId })}
           onAddTopic={handleAddTopic}
           onAddLesson={handleAddLesson}
-          onDeleteTopic={handleDeleteTopic}
-          onDeleteLesson={handleDeleteLesson}
+          onReorderTopics={handleReorderTopics}
+          onReorderLessons={handleReorderLessons}
+          isLoadingTree={isLoadingTree}
           onArchiveCourse={handleArchiveCourse}
           onDeleteCourse={handleDeleteCourse}
         />
@@ -290,8 +377,16 @@ export default function EditCoursePage() {
             onSaveLesson={handleSaveLesson}
             onAddTopic={handleAddTopic}
             onAddLesson={handleAddLesson}
-            onSelectLesson={(lessonId) => setSelection({ type: "lesson", id: lessonId })}
+            onDeleteTopic={handleDeleteTopic}
+            onDuplicateTopic={handleDuplicateTopic}
+            onDeleteLesson={handleDeleteLesson}
+            onDuplicateLesson={handleDuplicateLesson}
+            onNavigate={setSelection}
             onSavingChange={setIsSaving}
+            onDuplicateCourse={handleDuplicateCourse}
+            onPublishCourse={handlePublish}
+            onArchiveCourse={handleArchiveCourse}
+            onDeleteCourse={handleDeleteCourse}
           />
         </div>
       </div>

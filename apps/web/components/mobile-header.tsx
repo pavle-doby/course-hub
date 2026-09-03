@@ -2,16 +2,32 @@
 
 import Link from "next/link";
 import { Menu, Settings, MessageCircle, LogOut } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@repo/ui-web/components/sheet";
 import { Button } from "@repo/ui-web/components/button";
 import { useAuthSignOut } from "@repo/api-client";
 import { useT } from "@repo/i18n/client";
 
+const TITLE_BY_PATH: Record<
+  string,
+  "nav.courses" | "nav.lessons" | "nav.learn" | "nav.clients" | "nav.notifications" | "nav.profile"
+> = {
+  "/courses": "nav.courses",
+  "/lessons": "nav.lessons",
+  "/learn": "nav.learn",
+  "/clients": "nav.clients",
+  "/notifications": "nav.notifications",
+  "/profile": "nav.profile",
+};
+
 export function MobileHeader() {
   const { t } = useT();
   const router = useRouter();
+  const pathname = usePathname();
   const { mutate: signOut } = useAuthSignOut();
+
+  const titleKey =
+    Object.entries(TITLE_BY_PATH).find(([path]) => pathname.startsWith(path))?.[1] ?? "nav.courses";
 
   function handleSignOut() {
     signOut(undefined, { onSuccess: () => router.push("/auth/login") });
@@ -19,7 +35,7 @@ export function MobileHeader() {
 
   return (
     <header className="sticky top-0 z-40 flex h-14 items-center justify-between border-b bg-background px-4 lg:hidden">
-      <span className="text-lg font-bold">{t("courses.title")}</span>
+      <span className="text-lg font-bold">{t(titleKey)}</span>
       <Sheet>
         <SheetTrigger asChild>
           <Button variant="ghost" size="icon">

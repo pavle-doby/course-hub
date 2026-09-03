@@ -68,8 +68,15 @@ export default function AddCoursePage() {
     toast.success(t(value ? "courses.editor.autoSaveOnToast" : "courses.editor.autoSaveOffToast"));
   }
 
-  const { data: topicsData } = useGetTopics({ courseId }, { query: { enabled: !!courseId } });
-  const { data: lessonsData } = useGetLessons({ courseId }, { query: { enabled: !!courseId } });
+  const { data: topicsData, isLoading: isTopicsLoading } = useGetTopics(
+    { courseId },
+    { query: { enabled: !!courseId } }
+  );
+  const { data: lessonsData, isLoading: isLessonsLoading } = useGetLessons(
+    { courseId },
+    { query: { enabled: !!courseId } }
+  );
+  const isLoadingTree = isTopicsLoading || isLessonsLoading;
   const tree = useCourseTree(topicsData?.data, lessonsData?.data);
   const flatLessons = tree.flatMap((topic) => topic.lessons);
 
@@ -169,6 +176,28 @@ export default function AddCoursePage() {
     }
   }
 
+  async function handleReorderTopics(orderedIds: string[]) {
+    try {
+      await Promise.all(
+        orderedIds.map((id, position) => updateTopic({ pathParams: { id }, data: { position } }))
+      );
+      await invalidateTopicsAndLessons();
+    } catch (error) {
+      handleErrorAction(error as Error);
+    }
+  }
+
+  async function handleReorderLessons(orderedIds: string[]) {
+    try {
+      await Promise.all(
+        orderedIds.map((id, position) => updateLesson({ pathParams: { id }, data: { position } }))
+      );
+      await invalidateTopicsAndLessons();
+    } catch (error) {
+      handleErrorAction(error as Error);
+    }
+  }
+
   async function handleDeleteTopic(id: string) {
     try {
       await deleteTopic({ pathParams: { id } });
@@ -181,6 +210,26 @@ export default function AddCoursePage() {
     }
   }
 
+  async function handleDuplicateTopic(id: string) {
+    try {
+      const topic = tree.find((t) => t.id === id);
+      if (!topic || !courseId) return;
+      const created = await createTopic({
+        data: {
+          courseId,
+          name: topic.name,
+          description: topic.description,
+          position: tree.length,
+        },
+      });
+      await invalidateTopicsAndLessons();
+      setSelection({ type: "topic", id: created.id });
+      toast.success(t("courses.editor.duplicatedToast"));
+    } catch (error) {
+      handleErrorAction(error as Error);
+    }
+  }
+
   async function handleDeleteLesson(id: string) {
     try {
       await deleteLesson({ pathParams: { id } });
@@ -188,6 +237,27 @@ export default function AddCoursePage() {
       if (selection.type === "lesson" && selection.id === id) {
         setSelection({ type: "course" });
       }
+    } catch (error) {
+      handleErrorAction(error as Error);
+    }
+  }
+
+  async function handleDuplicateLesson(id: string) {
+    try {
+      const lesson = flatLessons.find((l) => l.id === id);
+      if (!lesson) return;
+      const topic = tree.find((t) => t.id === lesson.topicId);
+      const created = await createLesson({
+        data: {
+          topicId: lesson.topicId,
+          name: lesson.name,
+          description: lesson.description,
+          position: topic?.lessons.length ?? 0,
+        },
+      });
+      await invalidateTopicsAndLessons();
+      setSelection({ type: "lesson", id: created.id });
+      toast.success(t("courses.editor.duplicatedToast"));
     } catch (error) {
       handleErrorAction(error as Error);
     }
@@ -249,6 +319,18 @@ export default function AddCoursePage() {
     }
   }
 
+  async function handleDuplicateCourse() {
+    try {
+      const created = await createCourse({
+        data: { name: course.name, description: course.description ?? undefined },
+      });
+      toast.success(t("courses.editor.duplicatedToast"));
+      router.push(`/courses/${created.publicId}/edit`);
+    } catch (error) {
+      handleErrorAction(error as Error);
+    }
+  }
+
   return (
     <SidebarProvider>
       <div className="flex min-h-svh flex-1 flex-row">
@@ -261,8 +343,9 @@ export default function AddCoursePage() {
           onSelectLesson={(id) => setSelection({ type: "lesson", id })}
           onAddTopic={handleAddTopic}
           onAddLesson={handleAddLesson}
-          onDeleteTopic={handleDeleteTopic}
-          onDeleteLesson={handleDeleteLesson}
+          onReorderTopics={handleReorderTopics}
+          onReorderLessons={handleReorderLessons}
+          isLoadingTree={isLoadingTree}
           onArchiveCourse={courseId ? handleArchiveCourse : undefined}
           onDeleteCourse={courseId ? handleDeleteCourse : undefined}
         />
@@ -292,8 +375,16 @@ export default function AddCoursePage() {
             onSaveLesson={handleSaveLesson}
             onAddTopic={handleAddTopic}
             onAddLesson={handleAddLesson}
-            onSelectLesson={(id) => setSelection({ type: "lesson", id })}
+            onDeleteTopic={handleDeleteTopic}
+            onDuplicateTopic={handleDuplicateTopic}
+            onDeleteLesson={handleDeleteLesson}
+            onDuplicateLesson={handleDuplicateLesson}
+            onNavigate={setSelection}
             onSavingChange={setIsSaving}
+            onDuplicateCourse={handleDuplicateCourse}
+            onPublishCourse={handlePublish}
+            onArchiveCourse={courseId ? handleArchiveCourse : undefined}
+            onDeleteCourse={courseId ? handleDeleteCourse : undefined}
           />
         </div>
       </div>

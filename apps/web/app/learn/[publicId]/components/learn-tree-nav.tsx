@@ -11,12 +11,14 @@ import {
   SidebarContent,
   SidebarGroup,
   SidebarMenu,
+  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@repo/ui-web/components/sidebar";
+import { useT } from "@repo/i18n/client";
 import type { TopicWithLessons } from "@/app/courses/hooks/use-course-tree";
 import type { Selection } from "@/app/courses/types";
 
@@ -37,6 +39,8 @@ export function LearnTreeNav({
   onSelectTopic,
   onSelectLesson,
 }: LearnTreeNavProps) {
+  const { t } = useT();
+
   return (
     <Sidebar collapsible="none" className="border-r">
       <SidebarContent>
@@ -57,16 +61,22 @@ export function LearnTreeNav({
             {tree.map((topic) => (
               <Collapsible key={topic.id} defaultOpen className="group/collapsible">
                 <SidebarMenuItem>
+                  <SidebarMenuButton
+                    textWrap="default"
+                    className="pl-7"
+                    isActive={selection.type === "topic" && selection.id === topic.id}
+                    onClick={() => onSelectTopic(topic.id)}
+                  >
+                    <Files />
+                    <span>{topic.name}</span>
+                  </SidebarMenuButton>
                   <CollapsibleTrigger asChild>
-                    <SidebarMenuButton
-                      textWrap="default"
-                      isActive={selection.type === "topic" && selection.id === topic.id}
-                      onClick={() => onSelectTopic(topic.id)}
+                    <SidebarMenuAction
+                      className="right-auto left-1"
+                      aria-label={t("courses.editor.toggleTopic")}
                     >
                       <ChevronRight className="transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                      <Files />
-                      <span>{topic.name}</span>
-                    </SidebarMenuButton>
+                    </SidebarMenuAction>
                   </CollapsibleTrigger>
                   <CollapsibleContent>
                     <SidebarMenuSub>

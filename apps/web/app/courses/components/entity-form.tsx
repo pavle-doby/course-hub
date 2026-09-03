@@ -85,10 +85,12 @@ export const EntityForm = forwardRef<EntityFormHandle, EntityFormProps>(function
           />
           <FieldError errors={[errors.name]} />
         </Field>
+
         <Field>
           <FieldLabel>{t("courses.editor.mediaLabel")}</FieldLabel>
           <MediaInputPlaceholder />
         </Field>
+
         <Field>
           <FieldLabel htmlFor={`${id}-description`}>
             {t("courses.editor.descriptionLabel")}

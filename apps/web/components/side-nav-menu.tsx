@@ -96,7 +96,9 @@ export function SideNavMenu() {
                 <Collapsible
                   key={item.label}
                   asChild
-                  defaultOpen={item.items.some((s) => pathname === s.href)}
+                  defaultOpen={
+                    item.label === "nav.create" || item.items.some((s) => pathname === s.href)
+                  }
                   className="group/collapsible"
                 >
                   <SidebarMenuItem>
