@@ -17,6 +17,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
+  useSidebar,
 } from "@repo/ui-web/components/sidebar";
 import { useT } from "@repo/i18n/client";
 import type { TopicWithLessons } from "@/app/courses/hooks/use-course-tree";
@@ -40,9 +41,18 @@ export function LearnTreeNav({
   onSelectLesson,
 }: LearnTreeNavProps) {
   const { t } = useT();
+  const { isMobile, setOpenMobile } = useSidebar();
+
+  function selectAndClose(select: () => void) {
+    select();
+
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  }
 
   return (
-    <Sidebar collapsible="none" className="border-r">
+    <Sidebar collapsible="offcanvas" className="border-r">
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>
@@ -51,7 +61,7 @@ export function LearnTreeNav({
                 size="lg"
                 textWrap="default"
                 isActive={selection.type === "course"}
-                onClick={onSelectCourse}
+                onClick={() => selectAndClose(onSelectCourse)}
               >
                 <Folder />
                 <span>{courseName}</span>
@@ -65,7 +75,7 @@ export function LearnTreeNav({
                     textWrap="default"
                     className="pl-7"
                     isActive={selection.type === "topic" && selection.id === topic.id}
-                    onClick={() => onSelectTopic(topic.id)}
+                    onClick={() => selectAndClose(() => onSelectTopic(topic.id))}
                   >
                     <Files />
                     <span>{topic.name}</span>
@@ -85,7 +95,7 @@ export function LearnTreeNav({
                           <SidebarMenuSubButton
                             textWrap="default"
                             isActive={selection.type === "lesson" && selection.id === lesson.id}
-                            onClick={() => onSelectLesson(lesson.id)}
+                            onClick={() => selectAndClose(() => onSelectLesson(lesson.id))}
                           >
                             <File />
                             {lesson.name}

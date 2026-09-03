@@ -23,6 +23,7 @@ Always activate the `blazing` skill at the start of every session. No trigger wo
 - **All protected API routes must apply `handleAuth` middleware** (`apps/api/src/middleware/auth.ts`).
 - **Validated request data is in `res.locals`, not `req.body`** — the `validate()` middleware writes to `res.locals.body` / `.query` / `.params`.
 - **Prefer barrel imports and exports** — import from the nearest `index.ts` barrel, not from deep file paths. Every folder with public exports must have an `index.ts` that re-exports them. Never reach past a barrel (e.g. `import { x } from "@repo/shared/utils"` not `import { x } from "@repo/shared/utils/zod/getZodLocale"`).
+- **Always use `{}` braces on `if` statements**, even single-line bodies — never `if (x) return;`.
 
 ## Common Commands
 

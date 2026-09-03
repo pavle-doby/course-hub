@@ -10,6 +10,7 @@ export const learn = {
     back: "Back",
     previous: "Previous",
     next: "Next",
+    contents: "Contents",
     noDescription: "No description provided.",
     notFound: "Course not found",
   },

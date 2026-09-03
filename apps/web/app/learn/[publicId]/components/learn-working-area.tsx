@@ -48,9 +48,9 @@ export function LearnWorkingArea({
       : (selectedTopic?.description ?? selectedLesson?.description);
 
   return (
-    <div className="flex flex-1 flex-col gap-6 p-6">
+    <div className="flex flex-1 flex-col gap-6 p-4 md:p-6">
       {selection.type === "lesson" && selectedLesson && (
-        <div className="flex items-center justify-center gap-2">
+        <div className="hidden items-center justify-center gap-2 md:flex">
           <Button
             className="min-w-30"
             variant="outline"

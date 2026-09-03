@@ -46,6 +46,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
+  useSidebar,
 } from "@repo/ui-web/components/sidebar";
 import {
   AlertDialog,
@@ -168,11 +169,20 @@ export function CourseTreeNav({
   isLoadingTree = false,
 }: CourseTreeNavProps) {
   const { t } = useT();
+  const { isMobile, setOpenMobile } = useSidebar();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [reorderMode, setReorderMode] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [draftTree, setDraftTree] = useState<TopicWithLessons[] | null>(null);
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 8 } }));
+
+  function selectAndClose(select: () => void) {
+    select();
+
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  }
 
   const displayedTree = reorderMode && draftTree ? draftTree : tree;
   const showSkeleton = isLoadingTree || isSaving;
@@ -242,7 +252,7 @@ export function CourseTreeNav({
                   size="lg"
                   textWrap="compact"
                   isActive={selection.type === "course"}
-                  onClick={onSelectCourse}
+                  onClick={() => selectAndClose(onSelectCourse)}
                 >
                   <Folder />
                   <span>{courseName}</span>
@@ -273,7 +283,7 @@ export function CourseTreeNav({
                             textWrap="compact"
                             className="pl-7"
                             isActive={selection.type === "topic" && selection.id === topic.id}
-                            onClick={() => onSelectTopic(topic.id)}
+                            onClick={() => selectAndClose(() => onSelectTopic(topic.id))}
                           >
                             {reorderMode && <GripHorizontal className="size-3.5" />}
                             <Files />
@@ -304,7 +314,9 @@ export function CourseTreeNav({
                                       isActive={
                                         selection.type === "lesson" && selection.id === lesson.id
                                       }
-                                      onClick={() => onSelectLesson(lesson.id)}
+                                      onClick={() =>
+                                        selectAndClose(() => onSelectLesson(lesson.id))
+                                      }
                                     >
                                       {reorderMode && <GripHorizontal className="size-3.5" />}
                                       <File />

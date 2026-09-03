@@ -10,6 +10,7 @@ export const learn = {
     back: "Nazad",
     previous: "Prethodna",
     next: "Sledeća",
+    contents: "Sadržaj",
     noDescription: "Opis nije naveden.",
     notFound: "Kurs nije pronađen",
   },

@@ -9,8 +9,9 @@ import {
 } from "@repo/api-client";
 import { useT } from "@repo/i18n/client";
 import { SidebarProvider } from "@repo/ui-web/components/sidebar";
-import { useCourseTree } from "@/app/courses/hooks/use-course-tree";
+import { useAdjacentSelection, useCourseTree } from "@/app/courses/hooks/use-course-tree";
 import type { Selection } from "@/app/courses/types";
+import { LearnBottomNav } from "./components/learn-bottom-nav";
 import { LearnHeader } from "./components/learn-header";
 import { LearnTreeNav } from "./components/learn-tree-nav";
 import { LearnWorkingArea } from "./components/learn-working-area";
@@ -26,6 +27,7 @@ export default function LearnCourseDetailPage() {
   const { data: lessons } = useGetPublicCourseLessons({ publicId });
   const tree = useCourseTree(topics, lessons);
   const flatLessons = tree.flatMap((topic) => topic.lessons);
+  const { previousItem, nextItem } = useAdjacentSelection(tree, selection);
 
   function handleBack() {
     router.push("/learn");
@@ -68,6 +70,13 @@ export default function LearnCourseDetailPage() {
             tree={tree}
             flatLessons={flatLessons}
             onSelectLesson={(lessonId) => setSelection({ type: "lesson", id: lessonId })}
+          />
+
+          <LearnBottomNav
+            hasPrevious={!!previousItem}
+            hasNext={!!nextItem}
+            onPrevious={() => previousItem && setSelection(previousItem)}
+            onNext={() => nextItem && setSelection(nextItem)}
           />
         </div>
       </div>
