@@ -42,15 +42,17 @@ export const coursesService = {
   getAllPublicCourses: async (
     dto: GetAllPublicCoursesReq<PaginationReqExtended>
   ): Promise<GetAllPublicCoursesRes> => {
-    return await coursesRepository.getAllPublishedCourses(dto);
+    return await coursesRepository.getAllPublishedCourses({ ...dto });
   },
 
+  // Not-enrolled learners only see topic/lesson names, never description content
   getPublicCourseTopics: async (publicId: string): Promise<GetPublicTopicsRes> => {
     const course = await coursesRepository.getCourseByPublicId(publicId);
     if (!course || course.status !== "published") {
       throw new NotFoundError({ code: ErrorCodeCourse.NOT_FOUND });
     }
-    return await topicsRepository.getTopicsByCourseId(course.id);
+    const topics = await topicsRepository.getTopicsByCourseId(course.id);
+    return topics.map(({ id, courseId, name, position }) => ({ id, courseId, name, position }));
   },
 
   getPublicCourseLessons: async (publicId: string): Promise<GetPublicLessonsRes> => {
@@ -58,7 +60,8 @@ export const coursesService = {
     if (!course || course.status !== "published") {
       throw new NotFoundError({ code: ErrorCodeCourse.NOT_FOUND });
     }
-    return await lessonsRepository.getLessonsByCourseId(course.id);
+    const lessons = await lessonsRepository.getLessonsByCourseId(course.id);
+    return lessons.map(({ id, topicId, name, position }) => ({ id, topicId, name, position }));
   },
 
   createCourse: async (authUserId: string, data: CreateCourseReq): Promise<CreateCourseRes> => {

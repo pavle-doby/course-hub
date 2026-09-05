@@ -24,6 +24,8 @@ export const coursesController = {
       ...res.locals.pagination,
       query: res.locals.query?.query,
       status: res.locals.query?.status,
+      excludeEnrolled: res.locals.query?.excludeEnrolled,
+      showAllCreators: res.locals.query?.showAllCreators,
     };
     const courses: GetAllCoursesRes = await coursesService.getAllCourses(authUserId, dto);
     res.status(200).json(courses);

@@ -3,6 +3,8 @@ export const nav = {
   courses: "Kursevi",
   lessons: "Lekcije",
   learn: "Učenje",
+  learnExplore: "Istraži",
+  learnEnrolled: "Upisani",
   clients: "Klijenti",
   notifications: "Obaveštenja",
   profile: "Profil",

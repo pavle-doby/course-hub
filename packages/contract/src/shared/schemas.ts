@@ -1,4 +1,7 @@
 import z from "zod";
+import { extendZodWithOpenApi } from "@asteasolutions/zod-to-openapi";
+
+extendZodWithOpenApi(z);
 
 export const PaginationSchema = z.object({
   total: z.number(),
@@ -10,7 +13,8 @@ export const paramBoolean = () =>
   z
     .string()
     .transform((val) => val === "true")
-    .pipe(z.boolean());
+    .pipe(z.boolean())
+    .openapi({ type: "boolean" });
 
 export const isoDatetime = () => z.iso.datetime().transform((date) => new Date(date));
 

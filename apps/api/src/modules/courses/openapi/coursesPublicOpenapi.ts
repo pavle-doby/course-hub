@@ -1,9 +1,10 @@
+import z from "zod";
 import { registry } from "api/openapi/registry";
 import {
   CourseSchema,
   PaginatedCoursesSchema,
-  PaginatedTopicsSchema,
-  PaginatedLessonsSchema,
+  PublicTopicSchema,
+  PublicLessonSchema,
 } from "api/openapi/schemas";
 import { ParamsPublicIdSchema, SearchSchema, ApiErrorSchema } from "@repo/contract";
 import { PaginationParams } from "api/middleware/pagination";
@@ -64,8 +65,8 @@ registry.registerPath({
   },
   responses: {
     200: {
-      description: "Topics of a published course",
-      content: { "application/json": { schema: PaginatedTopicsSchema.shape.data } },
+      description: "Topic names of a published course (no description content)",
+      content: { "application/json": { schema: z.array(PublicTopicSchema) } },
     },
     default: {
       description: "Error",
@@ -86,8 +87,8 @@ registry.registerPath({
   },
   responses: {
     200: {
-      description: "Lessons of a published course",
-      content: { "application/json": { schema: PaginatedLessonsSchema.shape.data } },
+      description: "Lesson names of a published course (no description content)",
+      content: { "application/json": { schema: z.array(PublicLessonSchema) } },
     },
     default: {
       description: "Error",

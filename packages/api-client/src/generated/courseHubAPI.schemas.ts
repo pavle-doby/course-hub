@@ -164,6 +164,18 @@ export interface Lessons {
   pagination: LessonsPagination;
 }
 
+export interface PublicLesson {
+  id: string;
+  topicId: string;
+  /** @maxLength 255 */
+  name: string;
+  /**
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  position: number;
+}
+
 export interface Topic {
   id: string;
   courseId: string;
@@ -187,6 +199,27 @@ export type TopicsPagination = {
 export interface Topics {
   data: Topic[];
   pagination: TopicsPagination;
+}
+
+export interface PublicTopic {
+  id: string;
+  courseId: string;
+  /** @maxLength 255 */
+  name: string;
+  /**
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  position: number;
+}
+
+export interface CourseEnrollment {
+  id: string;
+  userId: string;
+  courseId: string;
+  enrolledAt: string;
+  /** @nullable */
+  completedAt: string | null;
 }
 
 export type AuthSignUpBody = {
@@ -611,6 +644,8 @@ export type GetCoursesParams = {
   limit?: number;
   query?: string;
   status?: GetCoursesStatus;
+  excludeEnrolled?: boolean;
+  showAllCreators?: boolean;
 };
 
 export type GetCoursesStatus = (typeof GetCoursesStatus)[keyof typeof GetCoursesStatus];
@@ -1260,4 +1295,189 @@ export type DeleteTopicDefault = {
   code: DeleteTopicDefaultCode;
   error?: unknown;
   details?: DeleteTopicDefaultDetails;
+};
+
+export type EnrollInCourseBody = {
+  /** @maxLength 12 */
+  publicId: string;
+};
+
+export type EnrollInCourseDefaultCode =
+  (typeof EnrollInCourseDefaultCode)[keyof typeof EnrollInCourseDefaultCode];
+
+export const EnrollInCourseDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type EnrollInCourseDefaultDetails = { [key: string]: unknown };
+
+export type EnrollInCourseDefault = {
+  status: number;
+  code: EnrollInCourseDefaultCode;
+  error?: unknown;
+  details?: EnrollInCourseDefaultDetails;
+};
+
+export type GetEnrollmentStatusPathParameters = {
+  publicId: string;
+};
+export type GetEnrollmentStatus200 = {
+  enrolled: boolean;
+};
+
+export type GetEnrollmentStatusDefaultCode =
+  (typeof GetEnrollmentStatusDefaultCode)[keyof typeof GetEnrollmentStatusDefaultCode];
+
+export const GetEnrollmentStatusDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type GetEnrollmentStatusDefaultDetails = { [key: string]: unknown };
+
+export type GetEnrollmentStatusDefault = {
+  status: number;
+  code: GetEnrollmentStatusDefaultCode;
+  error?: unknown;
+  details?: GetEnrollmentStatusDefaultDetails;
+};
+
+export type WithdrawFromCoursePathParameters = {
+  publicId: string;
+};
+export type WithdrawFromCourseDefaultCode =
+  (typeof WithdrawFromCourseDefaultCode)[keyof typeof WithdrawFromCourseDefaultCode];
+
+export const WithdrawFromCourseDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type WithdrawFromCourseDefaultDetails = { [key: string]: unknown };
+
+export type WithdrawFromCourseDefault = {
+  status: number;
+  code: WithdrawFromCourseDefaultCode;
+  error?: unknown;
+  details?: WithdrawFromCourseDefaultDetails;
+};
+
+export type GetEnrolledCourseTopicsPathParameters = {
+  publicId: string;
+};
+export type GetEnrolledCourseTopicsDefaultCode =
+  (typeof GetEnrolledCourseTopicsDefaultCode)[keyof typeof GetEnrolledCourseTopicsDefaultCode];
+
+export const GetEnrolledCourseTopicsDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type GetEnrolledCourseTopicsDefaultDetails = { [key: string]: unknown };
+
+export type GetEnrolledCourseTopicsDefault = {
+  status: number;
+  code: GetEnrolledCourseTopicsDefaultCode;
+  error?: unknown;
+  details?: GetEnrolledCourseTopicsDefaultDetails;
+};
+
+export type GetEnrolledCourseLessonsPathParameters = {
+  publicId: string;
+};
+export type GetEnrolledCourseLessonsDefaultCode =
+  (typeof GetEnrolledCourseLessonsDefaultCode)[keyof typeof GetEnrolledCourseLessonsDefaultCode];
+
+export const GetEnrolledCourseLessonsDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type GetEnrolledCourseLessonsDefaultDetails = { [key: string]: unknown };
+
+export type GetEnrolledCourseLessonsDefault = {
+  status: number;
+  code: GetEnrolledCourseLessonsDefaultCode;
+  error?: unknown;
+  details?: GetEnrolledCourseLessonsDefaultDetails;
+};
+
+export type GetEnrolledCoursesParams = {
+  /**
+   * @minimum 0
+   * @nullable
+   */
+  page?: number | null;
+  /**
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
+  query?: string;
+};
+
+export type GetEnrolledCoursesDefaultCode =
+  (typeof GetEnrolledCoursesDefaultCode)[keyof typeof GetEnrolledCoursesDefaultCode];
+
+export const GetEnrolledCoursesDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type GetEnrolledCoursesDefaultDetails = { [key: string]: unknown };
+
+export type GetEnrolledCoursesDefault = {
+  status: number;
+  code: GetEnrolledCoursesDefaultCode;
+  error?: unknown;
+  details?: GetEnrolledCoursesDefaultDetails;
 };

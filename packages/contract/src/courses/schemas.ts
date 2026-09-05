@@ -2,7 +2,7 @@ import { createInsertSchema, createSelectSchema, createUpdateSchema } from "driz
 import { z } from "zod";
 import { courses } from "@repo/db-schema";
 import { courseStatusEnum } from "@repo/db-schema";
-import { isoDatetime } from "../shared";
+import { isoDatetime, paramBoolean } from "../shared";
 import { UserSchema } from "../users/schemas";
 
 export const CourseCreatorSchema = UserSchema.pick({
@@ -26,6 +26,9 @@ export const CourseSchema = createSelectSchema(courses, {
 
 export const CourseGetAllQuerySchema = z.object({
   status: z.enum(courseStatusEnum.enumValues).optional(),
+  excludeEnrolled: paramBoolean().optional(),
+  // when false (default), only the current user's own courses are returned
+  showAllCreators: paramBoolean().optional(),
 });
 
 export const ParamsPublicIdSchema = z.object({

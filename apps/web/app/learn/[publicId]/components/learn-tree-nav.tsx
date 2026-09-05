@@ -14,6 +14,7 @@ import {
   SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSkeleton,
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
@@ -27,15 +28,29 @@ type LearnTreeNavProps = {
   courseName: string;
   tree: TopicWithLessons[];
   selection: Selection;
+  contentLocked: boolean;
+  isLoadingTree?: boolean;
   onSelectCourse: () => void;
   onSelectTopic: (id: string) => void;
   onSelectLesson: (id: string) => void;
 };
 
+type SkeletonTopic = { id: string; lessons: { id: string }[] };
+
+// shown while topics/lessons load after enrolling
+const PLACEHOLDER_TOPICS: SkeletonTopic[] = Array.from({ length: 3 }, (_, topicIndex) => ({
+  id: `placeholder-topic-${topicIndex}`,
+  lessons: Array.from({ length: 2 }, (_, lessonIndex) => ({
+    id: `placeholder-lesson-${topicIndex}-${lessonIndex}`,
+  })),
+}));
+
 export function LearnTreeNav({
   courseName,
   tree,
   selection,
+  contentLocked,
+  isLoadingTree = false,
   onSelectCourse,
   onSelectTopic,
   onSelectLesson,
@@ -68,45 +83,60 @@ export function LearnTreeNav({
               </SidebarMenuButton>
             </SidebarMenuItem>
 
-            {tree.map((topic) => (
-              <Collapsible key={topic.id} defaultOpen className="group/collapsible">
-                <SidebarMenuItem>
-                  <SidebarMenuButton
-                    textWrap="default"
-                    className="pl-7"
-                    isActive={selection.type === "topic" && selection.id === topic.id}
-                    onClick={() => selectAndClose(() => onSelectTopic(topic.id))}
-                  >
-                    <Files />
-                    <span>{topic.name}</span>
-                  </SidebarMenuButton>
-                  <CollapsibleTrigger asChild>
-                    <SidebarMenuAction
-                      className="right-auto left-1"
-                      aria-label={t("courses.editor.toggleTopic")}
-                    >
-                      <ChevronRight className="transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                    </SidebarMenuAction>
-                  </CollapsibleTrigger>
-                  <CollapsibleContent>
+            {isLoadingTree
+              ? PLACEHOLDER_TOPICS.map((topic) => (
+                  <SidebarMenuItem key={topic.id}>
+                    <SidebarMenuSkeleton showIcon className="pl-7" />
                     <SidebarMenuSub>
                       {topic.lessons.map((lesson) => (
                         <SidebarMenuSubItem key={lesson.id}>
-                          <SidebarMenuSubButton
-                            textWrap="default"
-                            isActive={selection.type === "lesson" && selection.id === lesson.id}
-                            onClick={() => selectAndClose(() => onSelectLesson(lesson.id))}
-                          >
-                            <File />
-                            {lesson.name}
-                          </SidebarMenuSubButton>
+                          <SidebarMenuSkeleton showIcon />
                         </SidebarMenuSubItem>
                       ))}
                     </SidebarMenuSub>
-                  </CollapsibleContent>
-                </SidebarMenuItem>
-              </Collapsible>
-            ))}
+                  </SidebarMenuItem>
+                ))
+              : tree.map((topic) => (
+                  <Collapsible key={topic.id} defaultOpen className="group/collapsible">
+                    <SidebarMenuItem>
+                      <SidebarMenuButton
+                        textWrap="default"
+                        className="pl-7"
+                        isActive={selection.type === "topic" && selection.id === topic.id}
+                        disabled={contentLocked}
+                        onClick={() => selectAndClose(() => onSelectTopic(topic.id))}
+                      >
+                        <Files />
+                        <span>{topic.name}</span>
+                      </SidebarMenuButton>
+                      <CollapsibleTrigger asChild>
+                        <SidebarMenuAction
+                          className="right-auto left-1"
+                          aria-label={t("courses.editor.toggleTopic")}
+                        >
+                          <ChevronRight className="transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                        </SidebarMenuAction>
+                      </CollapsibleTrigger>
+                      <CollapsibleContent>
+                        <SidebarMenuSub>
+                          {topic.lessons.map((lesson) => (
+                            <SidebarMenuSubItem key={lesson.id}>
+                              <SidebarMenuSubButton
+                                textWrap="default"
+                                isActive={selection.type === "lesson" && selection.id === lesson.id}
+                                aria-disabled={contentLocked}
+                                onClick={() => selectAndClose(() => onSelectLesson(lesson.id))}
+                              >
+                                <File />
+                                {lesson.name}
+                              </SidebarMenuSubButton>
+                            </SidebarMenuSubItem>
+                          ))}
+                        </SidebarMenuSub>
+                      </CollapsibleContent>
+                    </SidebarMenuItem>
+                  </Collapsible>
+                ))}
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>

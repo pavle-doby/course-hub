@@ -5,7 +5,10 @@ import {
   UserSchema as UserSchemaBase,
   CourseSchema as CourseSchemaBase,
   LessonSchema as LessonSchemaBase,
+  PublicLessonSchema as PublicLessonSchemaBase,
   TopicSchema as TopicSchemaBase,
+  PublicTopicSchema as PublicTopicSchemaBase,
+  CourseEnrollmentSchema as CourseEnrollmentSchemaBase,
 } from "@repo/contract";
 
 export const UserSchema = registry.register("User", UserSchemaBase);
@@ -55,6 +58,8 @@ export const PaginatedLessonsSchema = registry.register(
   })
 );
 
+export const PublicLessonSchema = registry.register("PublicLesson", PublicLessonSchemaBase);
+
 export const TopicSchema = registry.register("Topic", TopicSchemaBase);
 
 export const PaginatedTopicsSchema = registry.register(
@@ -63,4 +68,11 @@ export const PaginatedTopicsSchema = registry.register(
     data: z.array(TopicSchema),
     pagination: PaginationSchema,
   })
+);
+
+export const PublicTopicSchema = registry.register("PublicTopic", PublicTopicSchemaBase);
+
+export const CourseEnrollmentSchema = registry.register(
+  "CourseEnrollment",
+  CourseEnrollmentSchemaBase
 );

@@ -103,7 +103,7 @@ export default function LessonsPage() {
       <div className="flex flex-1 flex-col p-4 pt-0 lg:px-6 lg:pb-6">
         {isPending ? (
           <div className="flex flex-1 flex-col justify-between">
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {SKELETON_ITEMS.map((_, i) => (
                 <LessonCardSkeleton key={i} />
               ))}
@@ -113,7 +113,7 @@ export default function LessonsPage() {
           </div>
         ) : (
           <div className="flex flex-1 flex-col justify-between">
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {lessons?.data.map((lesson) => (
                 <LessonCard key={lesson.id} lesson={lesson} onDelete={handleDelete} />
               ))}

@@ -3,6 +3,8 @@ export const nav = {
   courses: "Courses",
   lessons: "Lessons",
   learn: "Learn",
+  learnExplore: "Explore",
+  learnEnrolled: "Enrolled",
   clients: "Clients",
   notifications: "Notifications",
   profile: "Profile",

@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetPublicCourses } from "@repo/api-client";
+import { useGetCourses } from "@repo/api-client";
 import { Input } from "@repo/ui-web/components/input";
 import { Search } from "lucide-react";
 import { useT } from "@repo/i18n/client";
@@ -8,20 +8,22 @@ import { useDebounce } from "@/hooks/use-debounce";
 import { usePagination } from "@/hooks/use-pagination";
 import { NavigationLayoutProvider } from "@/components/navigation-layout-provider";
 import { ChPagination, ChPaginationSkeleton } from "@/components/ch-pagination";
-import { LearnCourseCard } from "./learn/components/learn-course-card";
-import { LearnCourseCardSkeleton } from "./learn/components/learn-course-card-skeleton";
+import { LearnCourseCard } from "../components/learn-course-card";
+import { LearnCourseCardSkeleton } from "../components/learn-course-card-skeleton";
 
 const SKELETON_ITEMS = Array.from({ length: 6 });
 const PAGE_LIMIT = 6;
 
-// Public landing page — lists all published courses, no auth required.
-export default function Page() {
+export default function LearnExplorePage() {
   const { t } = useT();
   const { query, debouncedQuery, setQuery } = useDebounce("");
   const { page, setPage, trackTotalPages } = usePagination(debouncedQuery);
 
-  const { data: courses, isPending } = useGetPublicCourses({
+  const { data: courses, isPending } = useGetCourses({
     query: debouncedQuery || undefined,
+    excludeEnrolled: true,
+    showAllCreators: true,
+    status: "published",
     page,
     limit: PAGE_LIMIT,
   });
@@ -32,7 +34,7 @@ export default function Page() {
     <NavigationLayoutProvider>
       <div className="flex h-full flex-col">
         <div className="flex items-center gap-4 p-4 lg:p-6">
-          <h1 className="hidden text-xl font-semibold lg:block">{t("learn.title")}</h1>
+          <h1 className="hidden text-xl font-semibold lg:block">{t("learn.explore.title")}</h1>
           <div className="relative w-full max-w-sm">
             <Search className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
             <Input
@@ -73,7 +75,7 @@ export default function Page() {
               />
             </div>
           ) : (
-            <p className="text-sm text-muted-foreground">{t("learn.empty")}</p>
+            <p className="text-sm text-muted-foreground">{t("learn.explore.empty")}</p>
           )}
         </div>
       </div>

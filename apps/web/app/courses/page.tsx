@@ -117,7 +117,7 @@ export default function CoursesPage() {
         <div className="flex flex-1 flex-col p-4 pt-0 lg:px-6 lg:pb-6">
           {isPending ? (
             <div className="flex flex-1 flex-col justify-between">
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {SKELETON_ITEMS.map((_, i) => (
                   <CourseCardSkeleton key={i} />
                 ))}
@@ -127,7 +127,7 @@ export default function CoursesPage() {
             </div>
           ) : (
             <div className="flex flex-1 flex-col justify-between">
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {courses?.data.map((course) => (
                   <CourseCard key={course.id} course={course} onDelete={handleDelete} />
                 ))}

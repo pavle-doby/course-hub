@@ -7,14 +7,16 @@ const i18nProxy = createProxy(i18nConfig);
 export function proxy(request: NextRequest): NextResponse {
   const token = request.cookies.get("access_token");
   const isAuthRoute = request.nextUrl.pathname.includes("/auth");
+  const isHomeRoute = request.nextUrl.pathname === "/";
+  const isPublicRoute = isAuthRoute || isHomeRoute;
 
-  if (!token && !isAuthRoute) {
+  if (!token && !isPublicRoute) {
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
   if (token && isAuthRoute) {
     return NextResponse.redirect(new URL("/learn", request.url));
   }
-  if (token && request.nextUrl.pathname === "/") {
+  if (token && isHomeRoute) {
     return NextResponse.redirect(new URL("/learn", request.url));
   }
 

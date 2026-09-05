@@ -1,5 +1,5 @@
 import { db, schema } from "@repo/db";
-import { eq, ilike, or, and, count, desc } from "drizzle-orm";
+import { eq, ilike, or, and, count, desc, notInArray } from "drizzle-orm";
 import {
   Course,
   CreateCourseReq,
@@ -34,6 +34,8 @@ export const coursesRepository = {
     creatorId,
     query,
     status,
+    excludeEnrolled,
+    showAllCreators,
   }: GetAllCoursesParams): Promise<GetAllCoursesRes> => {
     const searchCondition = query
       ? or(
@@ -42,9 +44,23 @@ export const coursesRepository = {
         )
       : undefined;
     const statusCondition = status ? eq(schema.courses.status, status) : undefined;
-    const creatorCondition = eq(schema.courses.creatorId, creatorId);
+    const creatorCondition = showAllCreators ? undefined : eq(schema.courses.creatorId, creatorId);
+    const excludeEnrolledCondition = excludeEnrolled
+      ? notInArray(
+          schema.courses.id,
+          db
+            .select({ courseId: schema.courseEnrollments.courseId })
+            .from(schema.courseEnrollments)
+            .where(eq(schema.courseEnrollments.userId, creatorId))
+        )
+      : undefined;
 
-    const conditions = [creatorCondition, searchCondition, statusCondition].filter(Boolean);
+    const conditions = [
+      creatorCondition,
+      searchCondition,
+      statusCondition,
+      excludeEnrolledCondition,
+    ].filter(Boolean);
     const whereClause = and(...conditions);
 
     const countResult = await db.select({ count: count() }).from(schema.courses).where(whereClause);
@@ -56,6 +72,17 @@ export const coursesRepository = {
       limit,
       orderBy: [desc(schema.courses.createdAt)],
       columns: { createdAt: false, updatedAt: false },
+      with: {
+        creator: {
+          columns: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            username: true,
+            avatarUrl: true,
+          },
+        },
+      },
     });
 
     return {

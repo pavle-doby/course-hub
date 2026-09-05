@@ -7,6 +7,14 @@ export const LessonSchema = createSelectSchema(lessons).omit({
   updatedAt: true,
 });
 
+// Names-only shape for non-enrolled learners (no description)
+export const PublicLessonSchema = LessonSchema.pick({
+  id: true,
+  topicId: true,
+  name: true,
+  position: true,
+});
+
 export const LessonGetAllQuerySchema = z.object({
   topicId: z.uuid().optional(),
   courseId: z.uuid().optional(),

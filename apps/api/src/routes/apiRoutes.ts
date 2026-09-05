@@ -8,6 +8,7 @@ import coursesRoutes from "../modules/courses/routes/coursesRoutes";
 import coursesPublicRoutes from "../modules/courses/routes/coursesPublicRoutes";
 import lessonsRoutes from "../modules/lessons/routes/lessonsRoutes";
 import topicsRoutes from "../modules/topics/routes/topicsRoutes";
+import enrollmentsRoutes from "../modules/enrollments/routes/enrollmentsRoutes";
 
 const api: Router = Router();
 
@@ -44,6 +45,12 @@ api.use(
   "/v1/topics",
   handleAuth,
   topicsRoutes
+);
+api.use(
+  //
+  "/v1/enrollments",
+  handleAuth,
+  enrollmentsRoutes
 );
 
 export default api;

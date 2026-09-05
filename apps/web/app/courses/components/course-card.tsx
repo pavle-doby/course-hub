@@ -150,7 +150,7 @@ export function CourseCard({ course, onDelete }: CourseCardProps) {
         </CardAction>
       </CardHeader>
 
-      <CardContent className="flex-1">{course.description}</CardContent>
+      <CardContent className="line-clamp-3 flex-1">{course.description}</CardContent>
 
       <CardFooter>
         <Badge variant={statusVariant[course.status]}>{t(`courses.status.${course.status}`)}</Badge>

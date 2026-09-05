@@ -33,7 +33,7 @@ export function LearnCourseCard({ course }: LearnCourseCardProps) {
       <Card className="h-full w-full gap-0 py-0 transition-shadow hover:shadow-md">
         <div
           className={cn(
-            "flex aspect-video items-center justify-center bg-gradient-to-br",
+            "flex h-[178px] w-full items-center justify-center bg-gradient-to-br",
             gradientFor(course.id)
           )}
         >
@@ -51,7 +51,7 @@ export function LearnCourseCard({ course }: LearnCourseCardProps) {
             <h3 className="line-clamp-1 font-semibold">{course.name}</h3>
           </div>
           {course.description && (
-            <p className="line-clamp-2 text-sm text-muted-foreground">{course.description}</p>
+            <p className="line-clamp-3 text-sm text-muted-foreground">{course.description}</p>
           )}
         </CardContent>
       </Card>

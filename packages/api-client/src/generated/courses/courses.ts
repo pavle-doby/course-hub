@@ -39,8 +39,8 @@ import type {
   GetPublicCourseTopicsPathParameters,
   GetPublicCoursesDefault,
   GetPublicCoursesParams,
-  Lesson,
-  Topic,
+  PublicLesson,
+  PublicTopic,
   UpdateCourseBody,
   UpdateCourseDefault,
   UpdateCoursePathParameters,
@@ -775,7 +775,7 @@ export const getPublicCourseTopics = (
   options?: SecondParameter<typeof customInstance>,
   signal?: AbortSignal
 ) => {
-  return customInstance<Topic[]>(
+  return customInstance<PublicTopic[]>(
     { url: `/v1/public/courses/${publicId}/topics`, method: "GET", signal },
     options
   );
@@ -904,7 +904,7 @@ export const getPublicCourseLessons = (
   options?: SecondParameter<typeof customInstance>,
   signal?: AbortSignal
 ) => {
-  return customInstance<Lesson[]>(
+  return customInstance<PublicLesson[]>(
     { url: `/v1/public/courses/${publicId}/lessons`, method: "GET", signal },
     options
   );

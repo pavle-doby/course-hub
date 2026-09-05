@@ -23,8 +23,10 @@ import {
   Bell,
   ChevronRight,
   CirclePlus,
+  Compass,
   File,
   Folder,
+  GraduationCap,
   LogOut,
   MessageCircle,
   Settings,
@@ -40,6 +42,8 @@ type NavKey =
   | "nav.courses"
   | "nav.lessons"
   | "nav.learn"
+  | "nav.learnExplore"
+  | "nav.learnEnrolled"
   | "nav.clients"
   | "nav.notifications"
   | "nav.profile"
@@ -56,7 +60,14 @@ type FooterItem =
   | { label: NavKey; icon: LucideIcon; href?: never; action: () => void };
 
 const NAV_ITEMS: NavItem[] = [
-  { label: "nav.learn", icon: Apple, href: "/learn" },
+  {
+    label: "nav.learn",
+    icon: Apple,
+    items: [
+      { label: "nav.learnExplore", href: "/learn/explore", icon: Compass },
+      { label: "nav.learnEnrolled", href: "/learn/enrolled", icon: GraduationCap },
+    ],
+  },
   {
     label: "nav.create",
     icon: CirclePlus,
@@ -97,7 +108,9 @@ export function SideNavMenu() {
                   key={item.label}
                   asChild
                   defaultOpen={
-                    item.label === "nav.create" || item.items.some((s) => pathname === s.href)
+                    item.label === "nav.create" ||
+                    item.label === "nav.learn" ||
+                    item.items.some((s) => pathname === s.href)
                   }
                   className="group/collapsible"
                 >

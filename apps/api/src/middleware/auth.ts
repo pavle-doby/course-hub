@@ -3,6 +3,17 @@ import { UnauthorizedError, InternalServerError } from "@repo/contract";
 import { supabase } from "api/utils/supabase";
 import { ErrorCode } from "@repo/contract";
 
+function extractToken(req: Request): string | undefined {
+  // Get token from HTTP-only cookie (for web)
+  const tokenCookie = req.cookies.access_token;
+
+  // Get token from Authorization header (for mobile)
+  const tokenHeaderFull = req.headers.authorization;
+  const tokenHeader = tokenHeaderFull?.startsWith("Bearer ") ? tokenHeaderFull.slice(7) : undefined;
+
+  return tokenCookie ?? tokenHeader;
+}
+
 /**
  * Checks if Supabase `token` is valid and user is authenticated
  * If valid, Supabase user info is stored in `res.locals.user`
@@ -10,16 +21,7 @@ import { ErrorCode } from "@repo/contract";
  */
 export async function handleAuth(req: Request, res: Response, next: NextFunction) {
   try {
-    // Get token from HTTP-only cookie (for web)
-    const tokenCookie = req.cookies.access_token;
-
-    // Get token from Authorization header (for mobile)
-    const tokenHeaderFull = req.headers.authorization;
-    const tokenHeader = tokenHeaderFull?.startsWith("Bearer ")
-      ? tokenHeaderFull.slice(7)
-      : undefined;
-
-    const token = tokenCookie ?? tokenHeader;
+    const token = extractToken(req);
 
     if (!token) {
       const error = new UnauthorizedError({

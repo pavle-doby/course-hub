@@ -7,6 +7,14 @@ export const TopicSchema = createSelectSchema(topics).omit({
   updatedAt: true,
 });
 
+// Names-only shape for non-enrolled learners (no description)
+export const PublicTopicSchema = TopicSchema.pick({
+  id: true,
+  courseId: true,
+  name: true,
+  position: true,
+});
+
 export const TopicGetAllQuerySchema = z.object({
   courseId: z.uuid().optional(),
 });

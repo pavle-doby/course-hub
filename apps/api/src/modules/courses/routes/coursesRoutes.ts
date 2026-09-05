@@ -13,7 +13,7 @@ import {
 
 const router: Router = Router();
 
-// GET /courses → get all courses for current user
+// GET /courses → get all courses (own courses only unless showAllCreators=true)
 router.get(
   "/",
   pagination(),
