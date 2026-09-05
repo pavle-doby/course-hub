@@ -21,6 +21,16 @@ router.get(
   }
 );
 
+// GET /enrollments/students → students enrolled in courses created by the current user
+router.get(
+  "/students",
+  pagination(),
+  validate(SearchSchema, "query"),
+  async (req: Request, res: Response) => {
+    await enrollmentsController.getAllStudents(req, res);
+  }
+);
+
 // GET /enrollments/courses/:publicId → is current user enrolled in this course
 router.get(
   "/courses/:publicId",

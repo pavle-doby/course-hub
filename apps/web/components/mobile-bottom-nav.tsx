@@ -18,7 +18,7 @@ import { cn } from "@repo/ui-web/lib/utils";
 import { useT } from "@repo/i18n/client";
 
 const NAV_LINKS = [
-  { href: "/clients", icon: Users, labelKey: "nav.clients" as const },
+  { href: "/students", icon: Users, labelKey: "nav.students" as const },
   { href: "/notifications", icon: Bell, labelKey: "nav.notifications" as const },
   { href: "/profile", icon: User, labelKey: "nav.profile" as const },
 ];

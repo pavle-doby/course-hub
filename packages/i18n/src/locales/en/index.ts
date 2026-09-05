@@ -6,6 +6,7 @@ import { learn } from "./learn";
 import { lessons } from "./lessons";
 import { metadata } from "./metadata";
 import { nav } from "./nav";
+import { students } from "./students";
 import { user } from "./user";
 
 const en = {
@@ -17,6 +18,7 @@ const en = {
   learn,
   lessons,
   nav,
+  students,
   user,
 };
 

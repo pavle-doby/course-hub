@@ -4,6 +4,8 @@ import {
   EnrollCourseRes,
   GetAllEnrolledCoursesRes,
   GetAllEnrolledCoursesReq,
+  GetAllStudentsRes,
+  GetAllStudentsReq,
   GetEnrolledCourseLessonsRes,
   GetEnrolledCourseTopicsRes,
   GetEnrollmentStatusRes,
@@ -33,7 +35,10 @@ export const enrollmentsService = {
     const course = await getPublishedCourseOrThrow(publicId);
 
     const existing = await enrollmentsRepository.getEnrollment(user.id, course.id);
-    if (existing) throw new ConflictError({ code: ErrorCodeEnrollment.ALREADY_ENROLLED });
+    if (existing && !existing.withdrawnAt) {
+      throw new ConflictError({ code: ErrorCodeEnrollment.ALREADY_ENROLLED });
+    }
+    if (existing) return await enrollmentsRepository.reactivateEnrollment(existing.id);
 
     return await enrollmentsRepository.createEnrollment(user.id, course.id);
   },
@@ -47,10 +52,13 @@ export const enrollmentsService = {
 
     const course = await getPublishedCourseOrThrow(publicId);
 
-    const enrollment = await enrollmentsRepository.deleteEnrollment(user.id, course.id);
-    if (!enrollment) throw new NotFoundError({ code: ErrorCodeEnrollment.NOT_ENROLLED });
+    const existing = await enrollmentsRepository.getEnrollment(user.id, course.id);
+    if (!existing || existing.withdrawnAt) {
+      throw new NotFoundError({ code: ErrorCodeEnrollment.NOT_ENROLLED });
+    }
 
-    return enrollment;
+    const enrollment = await enrollmentsRepository.withdrawEnrollment(user.id, course.id);
+    return enrollment!;
   },
 
   getEnrollmentStatus: async (
@@ -62,7 +70,7 @@ export const enrollmentsService = {
 
     const course = await getPublishedCourseOrThrow(publicId);
     const enrollment = await enrollmentsRepository.getEnrollment(user.id, course.id);
-    return { enrolled: !!enrollment };
+    return { enrolled: !!enrollment && !enrollment.withdrawnAt };
   },
 
   getEnrolledCourseTopics: async (
@@ -74,7 +82,9 @@ export const enrollmentsService = {
 
     const course = await getPublishedCourseOrThrow(publicId);
     const enrollment = await enrollmentsRepository.getEnrollment(user.id, course.id);
-    if (!enrollment) throw new NotFoundError({ code: ErrorCodeEnrollment.NOT_ENROLLED });
+    if (!enrollment || enrollment.withdrawnAt) {
+      throw new NotFoundError({ code: ErrorCodeEnrollment.NOT_ENROLLED });
+    }
 
     return await topicsRepository.getTopicsByCourseId(course.id);
   },
@@ -88,7 +98,9 @@ export const enrollmentsService = {
 
     const course = await getPublishedCourseOrThrow(publicId);
     const enrollment = await enrollmentsRepository.getEnrollment(user.id, course.id);
-    if (!enrollment) throw new NotFoundError({ code: ErrorCodeEnrollment.NOT_ENROLLED });
+    if (!enrollment || enrollment.withdrawnAt) {
+      throw new NotFoundError({ code: ErrorCodeEnrollment.NOT_ENROLLED });
+    }
 
     return await lessonsRepository.getLessonsByCourseId(course.id);
   },
@@ -101,5 +113,15 @@ export const enrollmentsService = {
     if (!user) throw new NotFoundError({ code: ErrorCodeEnrollment.COURSE_NOT_FOUND });
 
     return await enrollmentsRepository.getEnrolledCourses({ ...dto, userId: user.id });
+  },
+
+  getAllStudents: async (
+    authUserId: string,
+    dto: GetAllStudentsReq<PaginationReqExtended>
+  ): Promise<GetAllStudentsRes> => {
+    const user = await usersRepository.getUserByAuthUserId(authUserId);
+    if (!user) throw new NotFoundError({ code: ErrorCodeEnrollment.COURSE_NOT_FOUND });
+
+    return await enrollmentsRepository.getStudents({ ...dto, creatorId: user.id });
   },
 };

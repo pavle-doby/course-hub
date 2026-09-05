@@ -10,12 +10,12 @@ import { useT } from "@repo/i18n/client";
 
 const TITLE_BY_PATH: Record<
   string,
-  "nav.courses" | "nav.lessons" | "nav.learn" | "nav.clients" | "nav.notifications" | "nav.profile"
+  "nav.courses" | "nav.lessons" | "nav.learn" | "nav.students" | "nav.notifications" | "nav.profile"
 > = {
   "/courses": "nav.courses",
   "/lessons": "nav.lessons",
   "/learn": "nav.learn",
-  "/clients": "nav.clients",
+  "/students": "nav.students",
   "/notifications": "nav.notifications",
   "/profile": "nav.profile",
 };

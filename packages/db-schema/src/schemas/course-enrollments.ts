@@ -14,6 +14,7 @@ export const courseEnrollments = pgTable(
       .references(() => courses.id, { onDelete: "cascade" }),
     enrolledAt: timestamp("enrolled_at", { withTimezone: true }).defaultNow().notNull(),
     completedAt: timestamp("completed_at", { withTimezone: true }),
+    withdrawnAt: timestamp("withdrawn_at", { withTimezone: true }),
   },
   (t) => [unique().on(t.userId, t.courseId)]
 );

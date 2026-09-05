@@ -10,7 +10,8 @@
     }
   },
   "scripts": {
-    "generate:api": "orval",
+    "generate:api": "orval && pnpm format:generated",
+    "format:generated": "prettier --write ./src/generated",
     "lint-staged": "lint-staged"
   },
   "dependencies": {

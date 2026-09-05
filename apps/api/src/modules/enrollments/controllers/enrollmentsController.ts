@@ -3,6 +3,8 @@ import {
   EnrollCourseRes,
   GetAllEnrolledCoursesRes,
   GetAllEnrolledCoursesReq,
+  GetAllStudentsRes,
+  GetAllStudentsReq,
   GetEnrolledCourseLessonsRes,
   GetEnrolledCourseTopicsRes,
   GetEnrollmentStatusRes,
@@ -71,5 +73,15 @@ export const enrollmentsController = {
       dto
     );
     res.status(200).json(courses);
+  },
+
+  getAllStudents: async (_req: Request, res: Response): Promise<void> => {
+    const authUserId: string = res.locals.user.id;
+    const dto: GetAllStudentsReq<PaginationReqExtended> = {
+      ...res.locals.pagination,
+      query: res.locals.query?.query,
+    };
+    const students: GetAllStudentsRes = await enrollmentsService.getAllStudents(authUserId, dto);
+    res.status(200).json(students);
   },
 };

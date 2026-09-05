@@ -220,6 +220,53 @@ export interface CourseEnrollment {
   enrolledAt: string;
   /** @nullable */
   completedAt: string | null;
+  /** @nullable */
+  withdrawnAt: string | null;
+}
+
+export type StudentCourse = {
+  id: string;
+  /** @maxLength 255 */
+  name: string;
+  /** @maxLength 12 */
+  publicId: string;
+};
+
+export interface Student {
+  id: string;
+  /**
+   * @maxLength 255
+   * @nullable
+   */
+  firstName: string | null;
+  /**
+   * @maxLength 255
+   * @nullable
+   */
+  lastName: string | null;
+  /** @maxLength 255 */
+  username: string;
+  /** @nullable */
+  avatarUrl: string | null;
+  /** @maxLength 255 */
+  email: string;
+  course: StudentCourse;
+  enrolledAt: string;
+  /** @nullable */
+  completedAt: string | null;
+  /** @nullable */
+  withdrawnAt: string | null;
+}
+
+export type StudentsPagination = {
+  total: number;
+  page: number;
+  limit: number;
+};
+
+export interface Students {
+  data: Student[];
+  pagination: StudentsPagination;
 }
 
 export type AuthSignUpBody = {
@@ -1480,4 +1527,43 @@ export type GetEnrolledCoursesDefault = {
   code: GetEnrolledCoursesDefaultCode;
   error?: unknown;
   details?: GetEnrolledCoursesDefaultDetails;
+};
+
+export type GetStudentsParams = {
+  /**
+   * @minimum 0
+   * @nullable
+   */
+  page?: number | null;
+  /**
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
+  query?: string;
+};
+
+export type GetStudentsDefaultCode =
+  (typeof GetStudentsDefaultCode)[keyof typeof GetStudentsDefaultCode];
+
+export const GetStudentsDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type GetStudentsDefaultDetails = { [key: string]: unknown };
+
+export type GetStudentsDefault = {
+  status: number;
+  code: GetStudentsDefaultCode;
+  error?: unknown;
+  details?: GetStudentsDefaultDetails;
 };

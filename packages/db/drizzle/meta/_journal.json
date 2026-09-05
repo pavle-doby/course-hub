@@ -22,6 +22,27 @@
       "when": 1788035726487,
       "tag": "0002_rename_lectures_to_lessons",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1788604829779,
+      "tag": "0003_add_course_enrollments_withdrawn_at",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1788605904326,
+      "tag": "0004_drop_course_enrollments_unique",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1788606287412,
+      "tag": "0005_restore_course_enrollments_unique",
+      "breakpoints": true
     }
   ]
 }

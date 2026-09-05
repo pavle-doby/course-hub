@@ -44,7 +44,7 @@ type NavKey =
   | "nav.learn"
   | "nav.learnExplore"
   | "nav.learnEnrolled"
-  | "nav.clients"
+  | "nav.students"
   | "nav.notifications"
   | "nav.profile"
   | "nav.settings"
@@ -76,7 +76,7 @@ const NAV_ITEMS: NavItem[] = [
       { label: "nav.lessons", href: "/lessons", icon: File },
     ],
   },
-  { label: "nav.clients", icon: Users, href: "/clients" },
+  { label: "nav.students", icon: Users, href: "/students" },
   { label: "nav.notifications", icon: Bell, href: "/notifications" },
   { label: "nav.profile", icon: User, href: "/profile" },
 ];

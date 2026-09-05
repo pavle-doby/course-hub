@@ -1,5 +1,5 @@
 import { db, schema } from "@repo/db";
-import { eq, ilike, or, and, count, desc, notInArray } from "drizzle-orm";
+import { eq, ilike, or, and, count, desc, notInArray, isNull } from "drizzle-orm";
 import {
   Course,
   CreateCourseReq,
@@ -51,7 +51,12 @@ export const coursesRepository = {
           db
             .select({ courseId: schema.courseEnrollments.courseId })
             .from(schema.courseEnrollments)
-            .where(eq(schema.courseEnrollments.userId, creatorId))
+            .where(
+              and(
+                eq(schema.courseEnrollments.userId, creatorId),
+                isNull(schema.courseEnrollments.withdrawnAt)
+              )
+            )
         )
       : undefined;
 

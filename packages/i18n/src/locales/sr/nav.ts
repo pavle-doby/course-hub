@@ -5,7 +5,7 @@ export const nav = {
   learn: "Učenje",
   learnExplore: "Istraži",
   learnEnrolled: "Upisani",
-  clients: "Klijenti",
+  students: "Studenti",
   notifications: "Obaveštenja",
   profile: "Profil",
   settings: "Podešavanja",

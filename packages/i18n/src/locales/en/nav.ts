@@ -5,7 +5,7 @@ export const nav = {
   learn: "Learn",
   learnExplore: "Explore",
   learnEnrolled: "Enrolled",
-  clients: "Clients",
+  students: "Students",
   notifications: "Notifications",
   profile: "Profile",
   settings: "Settings",

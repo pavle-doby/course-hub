@@ -5,6 +5,7 @@ import {
   LessonSchema,
   CourseEnrollmentSchema,
   PaginatedCoursesSchema,
+  PaginatedStudentsSchema,
 } from "api/openapi/schemas";
 import {
   EnrollCourseBodySchema,
@@ -141,6 +142,28 @@ registry.registerPath({
     200: {
       description: "Paginated list of courses the current user is enrolled in",
       content: { "application/json": { schema: PaginatedCoursesSchema } },
+    },
+    default: {
+      description: "Error",
+      content: { "application/json": { schema: ApiErrorSchema } },
+    },
+  },
+});
+
+// GET /enrollments/students → students enrolled in courses created by the current user
+registry.registerPath({
+  method: "get",
+  path: "/v1/enrollments/students",
+  operationId: "getStudents",
+  tags: ["Enrollments"],
+  security: [{ cookieAuth: [] }],
+  request: {
+    query: PaginationParams.extend(SearchSchema.shape),
+  },
+  responses: {
+    200: {
+      description: "Paginated list of students enrolled in courses created by the current user",
+      content: { "application/json": { schema: PaginatedStudentsSchema } },
     },
     default: {
       description: "Error",
