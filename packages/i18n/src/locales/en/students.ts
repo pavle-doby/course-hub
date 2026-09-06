@@ -1,6 +1,6 @@
 export const students = {
   title: "Students",
-  searchPlaceholder: "Search by name or course",
+  searchPlaceholder: "Search by email or a course name",
   empty: "No students found",
   table: {
     student: "Student",

@@ -1,6 +1,6 @@
 export const students = {
   title: "Studenti",
-  searchPlaceholder: "Pretraži po imenu ili kursu",
+  searchPlaceholder: "Pretraži po email-u ili kursu",
   empty: "Nema pronađenih studenata",
   table: {
     student: "Student",

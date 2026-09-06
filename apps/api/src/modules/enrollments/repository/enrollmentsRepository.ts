@@ -150,10 +150,9 @@ export const enrollmentsRepository = {
   }: GetStudentsParams): Promise<GetAllStudentsRes> => {
     const searchCondition = query
       ? or(
+          //
           ilike(schema.courses.name, `%${query}%`),
-          ilike(schema.users.firstName, `%${query}%`),
-          ilike(schema.users.lastName, `%${query}%`),
-          ilike(schema.users.username, `%${query}%`)
+          ilike(schema.users.email, `%${query}%`)
         )
       : undefined;
     const whereClause = and(eq(schema.courses.creatorId, creatorId), searchCondition);

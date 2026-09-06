@@ -18,6 +18,7 @@ import { useT } from "@repo/i18n/client";
 import { useDebounce } from "@/hooks/use-debounce";
 import { usePagination } from "@/hooks/use-pagination";
 import { ChPagination, ChPaginationSkeleton } from "@/components/ch-pagination";
+import { StudentCard, StudentCardSkeleton } from "@/app/students/components/student-card";
 
 const PAGE_LIMIT = 10;
 const SKELETON_ROWS = 5;
@@ -49,7 +50,7 @@ export default function StudentsPage() {
     <div className="flex h-full flex-col">
       <div className="flex items-center gap-4 p-4 lg:p-6">
         <h1 className="hidden text-xl font-semibold lg:block">{t("students.title")}</h1>
-        <div className="relative w-full max-w-sm">
+        <div className="relative w-full lg:max-w-sm">
           <Search className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             placeholder={t("students.searchPlaceholder")}
@@ -63,7 +64,7 @@ export default function StudentsPage() {
       <div className="flex flex-1 flex-col p-4 pt-0 lg:px-6 lg:pb-6">
         {isPending ? (
           <div className="flex flex-1 flex-col justify-between">
-            <div className="rounded-md border">
+            <div className="hidden rounded-md border lg:block">
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -103,11 +104,16 @@ export default function StudentsPage() {
                 </TableBody>
               </Table>
             </div>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:hidden">
+              {Array.from({ length: SKELETON_ROWS }).map((_, i) => (
+                <StudentCardSkeleton key={i} />
+              ))}
+            </div>
             <ChPaginationSkeleton className="mt-6" page={page} totalPages={knownTotalPages} />
           </div>
         ) : students?.data.length ? (
           <div className="flex flex-1 flex-col justify-between">
-            <div className="rounded-md border">
+            <div className="hidden rounded-md border lg:block">
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -151,6 +157,12 @@ export default function StudentsPage() {
                   ))}
                 </TableBody>
               </Table>
+            </div>
+
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:hidden">
+              {students.data.map((student) => (
+                <StudentCard key={`${student.id}-${student.course.id}`} student={student} />
+              ))}
             </div>
 
             <ChPagination
