@@ -9,6 +9,8 @@ export const StackProvider = () => {
       <Stack.Protected guard={isLoggedIn}>
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="user/[id]" options={{ headerShown: false }} />
+        <Stack.Screen name="profile/index" />
+        <Stack.Screen name="profile/edit" />
       </Stack.Protected>
 
       <Stack.Protected guard={!isLoggedIn}>

@@ -40,7 +40,7 @@ export function MobileBottomNav() {
   const isLearnActive = pathname.startsWith("/learn");
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 border-t bg-background lg:hidden">
+    <nav className="fixed inset-x-0 bottom-0 z-40 border-t bg-background md:hidden">
       <div className="flex h-16 items-center justify-around">
         <Drawer>
           <DrawerTrigger

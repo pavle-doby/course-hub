@@ -34,7 +34,7 @@ export function MobileHeader() {
   }
 
   return (
-    <header className="sticky top-0 z-40 flex h-14 items-center justify-between border-b bg-background px-4 lg:hidden">
+    <header className="sticky top-0 z-40 flex h-14 items-center justify-between border-b bg-background px-4 md:hidden">
       <span className="text-lg font-bold">{t(titleKey)}</span>
       <Sheet>
         <SheetTrigger asChild>

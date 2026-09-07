@@ -6,6 +6,7 @@ import {
   GetAllEnrolledCoursesReq,
   GetAllStudentsRes,
   GetAllStudentsReq,
+  GetEnrollmentsStatsRes,
   GetEnrolledCourseLessonsRes,
   GetEnrolledCourseTopicsRes,
   GetEnrollmentStatusRes,
@@ -123,5 +124,12 @@ export const enrollmentsService = {
     if (!user) throw new NotFoundError({ code: ErrorCodeEnrollment.COURSE_NOT_FOUND });
 
     return await enrollmentsRepository.getStudents({ ...dto, creatorId: user.id });
+  },
+
+  getStats: async (authUserId: string): Promise<GetEnrollmentsStatsRes> => {
+    const user = await usersRepository.getUserByAuthUserId(authUserId);
+    if (!user) throw new NotFoundError({ code: ErrorCodeEnrollment.COURSE_NOT_FOUND });
+
+    return await enrollmentsRepository.getStats(user.id);
   },
 };

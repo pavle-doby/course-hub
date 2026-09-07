@@ -6,6 +6,13 @@ export const common = {
     en: "EN",
   },
   errors: {
+    offline: {
+      title: "Nema internet konekcije",
+      message: "Niste povezani na internet. Proverite konekciju i pokušajte ponovo.",
+    },
+    backOnline: {
+      title: "Ponovo ste povezani",
+    },
     shared: {
       FORBIDDEN: { title: "Pristup odbijen", message: "Nemate dozvolu za izvršavanje ove radnje." },
       UNAUTHORIZED: {

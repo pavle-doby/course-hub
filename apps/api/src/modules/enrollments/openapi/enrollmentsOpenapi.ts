@@ -171,3 +171,26 @@ registry.registerPath({
     },
   },
 });
+
+// GET /enrollments/stats → student/enrollment counts for courses created by the current user
+registry.registerPath({
+  method: "get",
+  path: "/v1/enrollments/stats",
+  operationId: "getEnrollmentsStats",
+  tags: ["Enrollments"],
+  security: [{ cookieAuth: [] }],
+  responses: {
+    200: {
+      description: "Student/enrollment counts for courses created by the current user",
+      content: {
+        "application/json": {
+          schema: z.object({ studentsCount: z.number(), enrollmentsCount: z.number() }),
+        },
+      },
+    },
+    default: {
+      description: "Error",
+      content: { "application/json": { schema: ApiErrorSchema } },
+    },
+  },
+});

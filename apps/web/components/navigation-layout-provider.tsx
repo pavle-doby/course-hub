@@ -6,13 +6,13 @@ import { MobileBottomNav } from "@/components/mobile-bottom-nav";
 export function NavigationLayoutProvider({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
-      {/* Desktop sidebar — hidden on mobile/tablet */}
-      <div className="hidden lg:contents">
+      {/* Desktop sidebar — hidden on mobile */}
+      <div className="hidden md:contents">
         <SideNavMenu />
       </div>
       <div className="flex flex-1 flex-col">
         <MobileHeader />
-        <main className="flex flex-1 flex-col pb-32 lg:pb-0">{children}</main>
+        <main className="flex flex-1 flex-col pb-32 md:pb-0">{children}</main>
       </div>
       <MobileBottomNav />
     </SidebarProvider>

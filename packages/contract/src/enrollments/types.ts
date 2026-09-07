@@ -31,3 +31,6 @@ export type GetAllEnrolledCoursesRes = PaginationRes<Course>;
 // GET /enrollments/students → students enrolled in courses created by the current user
 export type GetAllStudentsReq<Pagination = PaginationReq> = Pagination & Partial<Search>;
 export type GetAllStudentsRes = PaginationRes<Student>;
+
+// GET /enrollments/stats → student/enrollment counts for courses created by the current user
+export type GetEnrollmentsStatsRes = { studentsCount: number; enrollmentsCount: number };

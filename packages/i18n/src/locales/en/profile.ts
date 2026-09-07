@@ -1,0 +1,23 @@
+export const profile = {
+  title: "Profile",
+  editProfile: "Edit profile",
+  statistics: "Statistics",
+  shareProfile: "Share profile",
+  courses: "Courses",
+  students: "Students",
+  enrollments: "Enrollments",
+  enrolled: "Enrolled",
+  edit: {
+    title: "Edit Profile",
+    username: "Username",
+    changePhoto: "Change",
+    firstName: "First Name",
+    lastName: "Last Name",
+    description: "Description",
+    save: "Save",
+    cancel: "Cancel",
+    delete: "Delete",
+    deleteConfirmTitle: "Delete account",
+    deleteConfirmMessage: "This will permanently delete your account. This cannot be undone.",
+  },
+};

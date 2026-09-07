@@ -9,14 +9,17 @@ Next.js 16 (App Router), React 19, Tailwind CSS 4, shadcn (radix-nova style). Th
 
 ## Component placement
 
-| Type                             | Location                          | Import alias                     |
-| -------------------------------- | --------------------------------- | -------------------------------- |
-| Primitive / shadcn UI            | `packages/ui-web/src/components/` | `@repo/ui-web/components/<name>` |
-| App-specific composed components | `apps/web/components/`            | `@/components/<name>`            |
-| App-specific hooks               | `apps/web/hooks/`                 | `@/hooks/<name>`                 |
-| App-specific providers           | `apps/web/providers/`             | `@/providers/<name>`             |
+| Type                                  | Location                           | Import alias                      |
+| ------------------------------------- | ---------------------------------- | --------------------------------- |
+| Primitive / shadcn UI                 | `packages/ui-web/src/components/`  | `@repo/ui-web/components/<name>`  |
+| Component used by a single route only | `apps/web/app/<route>/components/` | `@/app/<route>/components/<name>` |
+| Component shared by multiple routes   | `apps/web/components/`             | `@/components/<name>`             |
+| App-specific hooks                    | `apps/web/hooks/`                  | `@/hooks/<name>`                  |
+| App-specific providers                | `apps/web/providers/`              | `@/providers/<name>`              |
 
 Never define reusable primitives inline in the web app — add them to `@repo/ui-web`.
+
+Colocate a component under its route's `components/` folder if it's only used by that route. Only promote it to `apps/web/components/` once a second route needs it.
 
 ```tsx
 // ✅ correct
@@ -84,6 +87,19 @@ Never import i18n server utilities in client components or vice versa.
 ## Styling
 
 Use Tailwind utility classes and `cn()` from `@repo/ui-web/lib/utils` to conditionally merge them. Design tokens come from `@repo/ui-theme` via CSS variables — never hardcode colours or spacing.
+
+### Responsive breakpoint — mobile vs desktop split is `md`, not `lg`
+
+The mobile/desktop cutoff is the **tablet** breakpoint (`md`, 768px), not `lg`. Below `md` shows the mobile view (bottom nav, `Sheet`/`Drawer` offcanvas, stacked layout); `md` and above shows the desktop/tablet view (sidebar, grid layouts). Use `sm:`/`md:` prefixes for responsive layout — do not introduce new `lg:` breakpoints for mobile-vs-desktop switches (`lg:` is still fine as a component size variant, e.g. `size="lg"`, unrelated to breakpoints). `useIsMobile()` (`@repo/ui-web/hooks/use-mobile`) already matches this at `MOBILE_BREAKPOINT = 768`.
+
+```tsx
+// ✅ correct — tablet (md) and up is "desktop" view
+<div className="hidden md:flex" />
+<nav className="fixed inset-x-0 bottom-0 md:hidden" />
+
+// ❌ wrong — lg leaves tablet widths stuck on the mobile layout
+<div className="hidden lg:flex" />
+```
 
 ```tsx
 import { cn } from "@repo/ui-web/lib/utils";

@@ -1,6 +1,11 @@
 import { db, schema } from "@repo/db";
-import { and, count, desc, eq, ilike, isNull, or } from "drizzle-orm";
-import { CourseEnrollment, GetAllEnrolledCoursesRes, GetAllStudentsRes } from "@repo/contract";
+import { and, count, countDistinct, desc, eq, ilike, isNull, or } from "drizzle-orm";
+import {
+  CourseEnrollment,
+  GetAllEnrolledCoursesRes,
+  GetAllStudentsRes,
+  GetEnrollmentsStatsRes,
+} from "@repo/contract";
 
 type GetEnrolledCoursesParams = {
   userId: string;
@@ -190,6 +195,22 @@ export const enrollmentsRepository = {
         withdrawnAt: row.withdrawnAt,
       })),
       pagination: { total, page, limit: limit || total },
+    };
+  },
+
+  getStats: async (creatorId: string): Promise<GetEnrollmentsStatsRes> => {
+    const [result] = await db
+      .select({
+        studentsCount: countDistinct(schema.courseEnrollments.userId),
+        enrollmentsCount: count(),
+      })
+      .from(schema.courseEnrollments)
+      .innerJoin(schema.courses, eq(schema.courseEnrollments.courseId, schema.courses.id))
+      .where(eq(schema.courses.creatorId, creatorId));
+
+    return {
+      studentsCount: result?.studentsCount ?? 0,
+      enrollmentsCount: result?.enrollmentsCount ?? 0,
     };
   },
 };

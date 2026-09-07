@@ -3,6 +3,7 @@ import { Montserrat, Geist_Mono } from "next/font/google";
 import "@repo/ui-web/globals.css";
 import { cn } from "@repo/ui-web/lib/utils";
 import { ThemeProvider } from "@/providers/theme-provider";
+import { NetworkProvider } from "@/providers/network-provider";
 import { ApiClientProvider } from "@repo/api-client";
 import { I18nProvider } from "@repo/i18n/client";
 import i18nConfig, { getT, getResources, initServerI18next } from "@repo/i18n/server";
@@ -41,7 +42,9 @@ export default async function RootLayout({
         <body>
           <ApiClientProvider>
             <ThemeProvider>
-              <TooltipProvider>{children}</TooltipProvider>
+              <TooltipProvider>
+                <NetworkProvider>{children}</NetworkProvider>
+              </TooltipProvider>
               <Toaster />
             </ThemeProvider>
           </ApiClientProvider>

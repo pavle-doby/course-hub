@@ -1,0 +1,23 @@
+export const profile = {
+  title: "Profil",
+  editProfile: "Izmeni profil",
+  statistics: "Statistika",
+  shareProfile: "Podeli profil",
+  courses: "Kursevi",
+  students: "Studenti",
+  enrollments: "Upisi",
+  enrolled: "Upisan",
+  edit: {
+    title: "Izmena profila",
+    username: "Korisničko ime",
+    changePhoto: "Promeni",
+    firstName: "Ime",
+    lastName: "Prezime",
+    description: "Opis",
+    save: "Sačuvaj",
+    cancel: "Otkaži",
+    delete: "Obriši",
+    deleteConfirmTitle: "Brisanje naloga",
+    deleteConfirmMessage: "Ovo će trajno obrisati vaš nalog. Ova radnja se ne može poništiti.",
+  },
+};

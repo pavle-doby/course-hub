@@ -31,9 +31,9 @@ export default function Page() {
   return (
     <NavigationLayoutProvider>
       <div className="flex h-full flex-col">
-        <div className="flex items-center gap-4 p-4 lg:p-6">
-          <h1 className="hidden text-xl font-semibold lg:block">{t("learn.title")}</h1>
-          <div className="relative w-full max-w-sm">
+        <div className="flex items-center gap-4 p-4 md:p-6">
+          <h1 className="hidden text-xl font-semibold md:block">{t("learn.title")}</h1>
+          <div className="relative w-full md:max-w-sm">
             <Search className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               placeholder={t("learn.searchPlaceholder")}
@@ -44,10 +44,10 @@ export default function Page() {
           </div>
         </div>
 
-        <div className="flex flex-1 flex-col p-4 pt-0 lg:px-6 lg:pb-6">
+        <div className="flex flex-1 flex-col p-4 pt-0 md:px-6 md:pb-6">
           {isPending ? (
             <div className="flex flex-1 flex-col justify-between">
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
                 {SKELETON_ITEMS.map((_, i) => (
                   <LearnCourseCardSkeleton key={i} />
                 ))}
@@ -57,7 +57,7 @@ export default function Page() {
             </div>
           ) : courses?.data.length ? (
             <div className="flex flex-1 flex-col justify-between">
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
                 {courses.data.map((course) => (
                   <LearnCourseCard key={course.id} course={course} />
                 ))}

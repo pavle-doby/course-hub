@@ -80,6 +80,10 @@ import { ChevronDown } from "lucide-react";
 
 Use the `dark:` variant. The `dark` class is applied to a parent element — never rely on `prefers-color-scheme` media queries in component classes.
 
+## Responsive breakpoint
+
+Mobile/desktop split is the `md` breakpoint (768px, tablet), not `lg` — matches `useIsMobile()` (`src/hooks/use-mobile.ts`, `MOBILE_BREAKPOINT = 768`). Use `md:` prefixes for layout switches (`hidden md:flex`, etc.); `lg:` in `cva` size variants (e.g. `size: "lg"`) is a component size, unrelated to breakpoints.
+
 ## shadcn CLI
 
 When installing a new shadcn component, run the CLI from the **repo root** using the alias configured in `packages/ui-web/components.json`:

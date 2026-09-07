@@ -31,6 +31,11 @@ router.get(
   }
 );
 
+// GET /enrollments/stats → student/enrollment counts for courses created by the current user
+router.get("/stats", async (req: Request, res: Response) => {
+  await enrollmentsController.getStats(req, res);
+});
+
 // GET /enrollments/courses/:publicId → is current user enrolled in this course
 router.get(
   "/courses/:publicId",

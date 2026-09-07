@@ -34,6 +34,8 @@ import type {
   GetEnrollmentStatus200,
   GetEnrollmentStatusDefault,
   GetEnrollmentStatusPathParameters,
+  GetEnrollmentsStats200,
+  GetEnrollmentsStatsDefault,
   GetStudentsDefault,
   GetStudentsParams,
   Lesson,
@@ -823,6 +825,120 @@ export function useGetStudents<
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
   const queryOptions = getGetStudentsQueryOptions(params, options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+export const getEnrollmentsStats = (
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<GetEnrollmentsStats200>(
+    { url: `/v1/enrollments/stats`, method: "GET", signal },
+    options
+  );
+};
+
+export const getGetEnrollmentsStatsQueryKey = () => {
+  return [`/v1/enrollments/stats`] as const;
+};
+
+export const getGetEnrollmentsStatsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getEnrollmentsStats>>,
+  TError = GetEnrollmentsStatsDefault,
+>(options?: {
+  query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnrollmentsStats>>, TError, TData>>;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetEnrollmentsStatsQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getEnrollmentsStats>>> = ({ signal }) =>
+    getEnrollmentsStats(requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getEnrollmentsStats>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetEnrollmentsStatsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getEnrollmentsStats>>
+>;
+export type GetEnrollmentsStatsQueryError = GetEnrollmentsStatsDefault;
+
+export function useGetEnrollmentsStats<
+  TData = Awaited<ReturnType<typeof getEnrollmentsStats>>,
+  TError = GetEnrollmentsStatsDefault,
+>(
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getEnrollmentsStats>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getEnrollmentsStats>>,
+          TError,
+          Awaited<ReturnType<typeof getEnrollmentsStats>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useGetEnrollmentsStats<
+  TData = Awaited<ReturnType<typeof getEnrollmentsStats>>,
+  TError = GetEnrollmentsStatsDefault,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getEnrollmentsStats>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getEnrollmentsStats>>,
+          TError,
+          Awaited<ReturnType<typeof getEnrollmentsStats>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useGetEnrollmentsStats<
+  TData = Awaited<ReturnType<typeof getEnrollmentsStats>>,
+  TError = GetEnrollmentsStatsDefault,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getEnrollmentsStats>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+export function useGetEnrollmentsStats<
+  TData = Awaited<ReturnType<typeof getEnrollmentsStats>>,
+  TError = GetEnrollmentsStatsDefault,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getEnrollmentsStats>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetEnrollmentsStatsQueryOptions(options);
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>;

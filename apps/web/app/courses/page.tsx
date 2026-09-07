@@ -18,6 +18,7 @@ import { usePagination } from "@/hooks/use-pagination";
 import { useT } from "@repo/i18n/client";
 import { cn } from "@repo/ui-web/lib/utils";
 import { NavigationLayoutProvider } from "@/components/navigation-layout-provider";
+import { PageHeader } from "@/components/page-header";
 import { ChPagination, ChPaginationSkeleton } from "@/components/ch-pagination";
 
 const PAGE_LIMIT = 9;
@@ -56,7 +57,7 @@ export default function CoursesPage() {
     <NavigationLayoutProvider>
       <div className="flex h-full flex-col">
         {/* Mobile/tablet: Courses | Lessons tab strip */}
-        <div className="sticky top-14 z-30 flex border-b bg-background lg:hidden">
+        <div className="sticky top-14 z-30 flex border-b bg-background md:hidden">
           <Link
             href="/courses"
             className={cn(
@@ -84,24 +85,21 @@ export default function CoursesPage() {
         </div>
 
         {/* Desktop: title + search + add button */}
-        <div className="hidden items-center gap-4 p-6 lg:flex">
-          <h1 className="text-xl font-semibold">{t("courses.title")}</h1>
-          <div className="relative flex flex-1 justify-center">
-            <div className="relative w-full max-w-sm">
-              <Search className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                placeholder={t("courses.searchPlaceholder")}
-                className="pl-8"
-                value={query}
-                onChange={handleSearch}
-              />
-            </div>
-          </div>
-          <Button onClick={() => router.push("/courses/add")}>{t("courses.addCourse")}</Button>
-        </div>
+        <PageHeader
+          className="mb-6 hidden md:flex"
+          title={t("courses.title")}
+          search={{
+            placeholder: t("courses.searchPlaceholder"),
+            value: query,
+            onChange: handleSearch,
+          }}
+          action={
+            <Button onClick={() => router.push("/courses/add")}>{t("courses.addCourse")}</Button>
+          }
+        />
 
         {/* Mobile/tablet: search */}
-        <div className="p-4 lg:hidden">
+        <div className="p-4 md:hidden">
           <div className="relative">
             <Search className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
             <Input
@@ -114,10 +112,10 @@ export default function CoursesPage() {
         </div>
 
         {/* Cards */}
-        <div className="flex flex-1 flex-col p-4 pt-0 lg:px-6 lg:pb-6">
+        <div className="flex flex-1 flex-col p-4 pt-0 md:px-6 md:pb-6">
           {isPending ? (
             <div className="flex flex-1 flex-col justify-between">
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
                 {SKELETON_ITEMS.map((_, i) => (
                   <CourseCardSkeleton key={i} />
                 ))}
@@ -127,7 +125,7 @@ export default function CoursesPage() {
             </div>
           ) : (
             <div className="flex flex-1 flex-col justify-between">
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
                 {courses?.data.map((course) => (
                   <CourseCard key={course.id} course={course} onDelete={handleDelete} />
                 ))}
@@ -146,7 +144,7 @@ export default function CoursesPage() {
         </div>
 
         {/* Mobile/tablet: fixed primary button above the bottom nav */}
-        <div className="fixed inset-x-0 bottom-16 px-4 pb-2 lg:hidden">
+        <div className="fixed inset-x-0 bottom-16 px-4 pb-2 md:hidden">
           <Button className="w-full" onClick={() => router.push("/courses/add")}>
             {t("courses.addCourse")}
           </Button>

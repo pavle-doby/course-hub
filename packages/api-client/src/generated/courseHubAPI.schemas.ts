@@ -1567,3 +1567,33 @@ export type GetStudentsDefault = {
   error?: unknown;
   details?: GetStudentsDefaultDetails;
 };
+
+export type GetEnrollmentsStats200 = {
+  studentsCount: number;
+  enrollmentsCount: number;
+};
+
+export type GetEnrollmentsStatsDefaultCode =
+  (typeof GetEnrollmentsStatsDefaultCode)[keyof typeof GetEnrollmentsStatsDefaultCode];
+
+export const GetEnrollmentsStatsDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type GetEnrollmentsStatsDefaultDetails = { [key: string]: unknown };
+
+export type GetEnrollmentsStatsDefault = {
+  status: number;
+  code: GetEnrollmentsStatsDefaultCode;
+  error?: unknown;
+  details?: GetEnrollmentsStatsDefaultDetails;
+};

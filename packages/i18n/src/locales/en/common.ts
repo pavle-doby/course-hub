@@ -6,6 +6,13 @@ export const common = {
     en: "EN",
   },
   errors: {
+    offline: {
+      title: "No Internet Connection",
+      message: "You're offline. Please check your connection and try again.",
+    },
+    backOnline: {
+      title: "Back Online",
+    },
     shared: {
       FORBIDDEN: {
         title: "Access Denied",

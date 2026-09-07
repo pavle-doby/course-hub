@@ -5,6 +5,7 @@ import {
   GetAllEnrolledCoursesReq,
   GetAllStudentsRes,
   GetAllStudentsReq,
+  GetEnrollmentsStatsRes,
   GetEnrolledCourseLessonsRes,
   GetEnrolledCourseTopicsRes,
   GetEnrollmentStatusRes,
@@ -83,5 +84,11 @@ export const enrollmentsController = {
     };
     const students: GetAllStudentsRes = await enrollmentsService.getAllStudents(authUserId, dto);
     res.status(200).json(students);
+  },
+
+  getStats: async (_req: Request, res: Response): Promise<void> => {
+    const authUserId: string = res.locals.user.id;
+    const stats: GetEnrollmentsStatsRes = await enrollmentsService.getStats(authUserId);
+    res.status(200).json(stats);
   },
 };
