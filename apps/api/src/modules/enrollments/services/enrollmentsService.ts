@@ -29,11 +29,15 @@ async function getPublishedCourseOrThrow(publicId: string) {
 }
 
 export const enrollmentsService = {
+  // Private courses can only be joined via an accepted invitation, never self-enrolled.
   enrollInCourse: async (authUserId: string, publicId: string): Promise<EnrollCourseRes> => {
     const user = await usersRepository.getUserByAuthUserId(authUserId);
     if (!user) throw new NotFoundError({ code: ErrorCodeEnrollment.COURSE_NOT_FOUND });
 
     const course = await getPublishedCourseOrThrow(publicId);
+    if (course.visibility === "private") {
+      throw new ConflictError({ code: ErrorCodeEnrollment.COURSE_PRIVATE });
+    }
 
     const existing = await enrollmentsRepository.getEnrollment(user.id, course.id);
     if (existing && !existing.withdrawnAt) {

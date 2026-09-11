@@ -8,7 +8,8 @@ export function proxy(request: NextRequest): NextResponse {
   const token = request.cookies.get("access_token");
   const isAuthRoute = request.nextUrl.pathname.includes("/auth");
   const isHomeRoute = request.nextUrl.pathname === "/";
-  const isPublicRoute = isAuthRoute || isHomeRoute;
+  const isInviteRoute = request.nextUrl.pathname.startsWith("/invite");
+  const isPublicRoute = isAuthRoute || isHomeRoute || isInviteRoute;
 
   if (!token && !isPublicRoute) {
     return NextResponse.redirect(new URL("/auth/login", request.url));

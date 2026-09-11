@@ -9,6 +9,8 @@ import coursesPublicRoutes from "../modules/courses/routes/coursesPublicRoutes";
 import lessonsRoutes from "../modules/lessons/routes/lessonsRoutes";
 import topicsRoutes from "../modules/topics/routes/topicsRoutes";
 import enrollmentsRoutes from "../modules/enrollments/routes/enrollmentsRoutes";
+import invitationsRoutes from "../modules/invitations/routes/invitationsRoutes";
+import invitationsPublicRoutes from "../modules/invitations/routes/invitationsPublicRoutes";
 
 const api: Router = Router();
 
@@ -51,6 +53,17 @@ api.use(
   "/v1/enrollments",
   handleAuth,
   enrollmentsRoutes
+);
+api.use(
+  //
+  "/v1/public/invitations",
+  invitationsPublicRoutes
+);
+api.use(
+  //
+  "/v1/invitations",
+  handleAuth,
+  invitationsRoutes
 );
 
 export default api;

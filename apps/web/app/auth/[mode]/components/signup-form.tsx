@@ -2,13 +2,13 @@
 
 import { useId, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import type { TFunction } from "@repo/i18n";
 import { AlertCircleIcon, Eye, EyeOff } from "lucide-react";
-import { useAuthSignUp } from "@repo/api-client";
+import { useAcceptInvitation, useAuthSignUp } from "@repo/api-client";
 import { AuthSignUpQuerySchema } from "@repo/contract";
 import { useT } from "@repo/i18n/client";
 import { useErrorHandlingForm, useZodLocale } from "@repo/shared";
@@ -32,6 +32,9 @@ type SignupFormData = z.infer<ReturnType<typeof createSignupFormSchema>>;
 export function SignupForm({ className, ...props }: React.ComponentProps<"div">) {
   const id = useId();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const inviteToken = searchParams.get("token");
+  const inviteEmail = searchParams.get("email");
 
   const { t, i18n } = useT();
   useZodLocale(i18n);
@@ -42,6 +45,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const { mutate: signupMutate, isPending } = useAuthSignUp();
+  const { mutateAsync: acceptInvitation } = useAcceptInvitation();
 
   const {
     register,
@@ -50,6 +54,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
     formState: { errors },
   } = useForm<SignupFormData>({
     resolver: zodResolver(SignupFormSchema),
+    defaultValues: inviteEmail ? { email: inviteEmail } : undefined,
   });
 
   const { handleErrorForm } = useErrorHandlingForm<SignupFormData>({
@@ -63,7 +68,16 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
     signupMutate(
       { data: { firstName, lastName, email, password } },
       {
-        onSuccess: () => {
+        onSuccess: async () => {
+          if (inviteToken) {
+            try {
+              const result = await acceptInvitation({ pathParams: { token: inviteToken } });
+              router.replace(`/learn/${result.course.publicId}`);
+              return;
+            } catch {
+              // fall through to default redirect if the invitation could not be accepted
+            }
+          }
           router.replace("/");
         },
         onError: (error: unknown) => {
@@ -115,6 +129,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
                   type="email"
                   placeholder={t("auth.signup.emailPlaceholder")}
                   autoComplete="email"
+                  readOnly={!!inviteEmail}
                   {...register("email")}
                 />
                 <FieldError errors={[errors.email]} />

@@ -7,3 +7,4 @@ export * from "./courses";
 export * from "./lessons";
 export * from "./topics";
 export * from "./enrollments";
+export * from "./invitations";

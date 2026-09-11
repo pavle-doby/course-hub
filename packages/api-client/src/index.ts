@@ -11,3 +11,4 @@ export * from "./generated/courses/courses";
 export * from "./generated/lessons/lessons";
 export * from "./generated/topics/topics";
 export * from "./generated/enrollments/enrollments";
+export * from "./generated/invitations/invitations";

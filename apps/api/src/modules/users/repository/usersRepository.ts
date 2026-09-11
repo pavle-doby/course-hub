@@ -34,12 +34,13 @@ export const usersRepository = {
     const whereClause = conditions.length > 1 ? and(...conditions) : conditions[0];
 
     // Get total count
-    const [{ count: dataCount }] = await db
+    const [countResult] = await db
+      //
       .select({ count: count() })
       .from(schema.users)
       .where(whereClause);
 
-    const total = dataCount || 0;
+    const total = countResult?.count || 0;
 
     // Get paginated data
     const data = await db.query.users.findMany({

@@ -1,6 +1,6 @@
 import { randomBytes } from "node:crypto";
 import { pgTable, uuid, varchar, text, timestamp } from "drizzle-orm/pg-core";
-import { courseStatusEnum } from "./enums";
+import { courseStatusEnum, courseVisibilityEnum } from "./enums";
 import { users } from "./users";
 
 export const courses = pgTable("courses", {
@@ -15,6 +15,7 @@ export const courses = pgTable("courses", {
     .$defaultFn(() => randomBytes(6).toString("hex")),
   description: text("description"),
   status: courseStatusEnum("status").notNull().default("draft"),
+  visibility: courseVisibilityEnum("visibility").notNull().default("private"),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
   publishedAt: timestamp("published_at", { withTimezone: true }),

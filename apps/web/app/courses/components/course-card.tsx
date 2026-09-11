@@ -38,6 +38,7 @@ import {
   Upload,
   Undo2,
   Archive,
+  UserPlus,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useT } from "@repo/i18n/client";
@@ -69,6 +70,7 @@ export function CourseCard({ course, onDelete }: CourseCardProps) {
 
   const isPublished = course.status === "published";
   const isArchived = course.status === "archived";
+  const isPrivate = course.visibility === "private";
 
   async function handleTogglePublish() {
     try {
@@ -114,6 +116,15 @@ export function CourseCard({ course, onDelete }: CourseCardProps) {
                 <Pencil className="size-4" />
                 {t("courses.card.edit")}
               </DropdownMenuItem>
+
+              {isPrivate && (
+                <DropdownMenuItem
+                  onClick={() => router.push(`/courses/${course.publicId}/edit?tab=invite`)}
+                >
+                  <UserPlus className="size-4" />
+                  {t("courses.card.invite")}
+                </DropdownMenuItem>
+              )}
 
               <DropdownMenuItem onClick={() => router.push(`/courses/${course.publicId}`)}>
                 <Eye className="size-4" />

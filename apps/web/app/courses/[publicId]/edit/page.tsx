@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import {
   useCreateCourse,
   useCreateLesson,
@@ -20,6 +20,7 @@ import {
   getGetCoursesQueryKey,
   useQueryClient,
   type CourseStatus,
+  type CourseVisibility,
 } from "@repo/api-client";
 import { useT } from "@repo/i18n/client";
 import { useErrorHandlingAction } from "@repo/shared";
@@ -37,6 +38,7 @@ import type { Selection } from "../../types";
 export default function EditCoursePage() {
   const { publicId } = useParams<{ publicId: string }>();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { t } = useT();
   const queryClient = useQueryClient();
   const { handleErrorAction } = useErrorHandlingAction({
@@ -48,10 +50,30 @@ export default function EditCoursePage() {
     name: string;
     description?: string | null;
     status?: CourseStatus;
+    visibility?: CourseVisibility;
   }>();
   const [selection, setSelection] = useState<Selection>({ type: "course" });
   const [autoSave, setAutoSave] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [activeTab, setActiveTab] = useState<"edit" | "invite">(
+    searchParams.get("tab") === "invite" ? "invite" : "edit"
+  );
+
+  function handleActiveTabChange(value: "edit" | "invite") {
+    setActiveTab(value);
+    const params = new URLSearchParams(searchParams.toString());
+    if (value === "invite") params.set("tab", value);
+    else params.delete("tab");
+    const qs = params.toString();
+    router.replace(qs ? `/courses/${publicId}/edit?${qs}` : `/courses/${publicId}/edit`, {
+      scroll: false,
+    });
+  }
+
+  function handleInviteClick() {
+    setSelection({ type: "course" });
+    handleActiveTabChange("invite");
+  }
 
   const formRef = useRef<EntityFormHandle>(null);
   const hasShownAutoSaveToast = useRef(false);
@@ -82,8 +104,15 @@ export default function EditCoursePage() {
   const displayedCourse =
     course ??
     (courseData
-      ? { name: courseData.name, description: courseData.description, status: courseData.status }
+      ? {
+          name: courseData.name,
+          description: courseData.description,
+          status: courseData.status,
+          visibility: courseData.visibility,
+        }
       : { name: "", description: "" });
+
+  const showInviteTab = selection.type === "course" && displayedCourse.visibility === "private";
 
   const { mutateAsync: updateCourse } = useUpdateCourse();
   const { mutateAsync: deleteCourse } = useDeleteCourse();
@@ -124,7 +153,30 @@ export default function EditCoursePage() {
     try {
       const updated = await updateCourse({ pathParams: { id }, data });
       if (updated)
-        setCourse({ name: updated.name, description: updated.description, status: updated.status });
+        setCourse({
+          name: updated.name,
+          description: updated.description,
+          status: updated.status,
+          visibility: updated.visibility,
+        });
+    } catch (error) {
+      handleErrorAction(error as Error);
+    }
+  }
+
+  async function handleVisibilityChange(visibility: CourseVisibility) {
+    if (!id) return;
+    try {
+      const updated = await updateCourse({ pathParams: { id }, data: { visibility } });
+      if (updated) {
+        setCourse({
+          name: updated.name,
+          description: updated.description,
+          status: updated.status,
+          visibility: updated.visibility,
+        });
+        toast.success(t("courses.editor.visibilityChangedToast"));
+      }
     } catch (error) {
       handleErrorAction(error as Error);
     }
@@ -295,7 +347,12 @@ export default function EditCoursePage() {
             : { status: nextStatus },
       });
       if (updated)
-        setCourse({ name: updated.name, description: updated.description, status: updated.status });
+        setCourse({
+          name: updated.name,
+          description: updated.description,
+          status: updated.status,
+          visibility: updated.visibility,
+        });
       toast.success(
         nextStatus === "published"
           ? t("courses.editor.publishedToast")
@@ -356,8 +413,13 @@ export default function EditCoursePage() {
           onReorderTopics={handleReorderTopics}
           onReorderLessons={handleReorderLessons}
           isLoadingTree={isLoadingTree}
+          visibility={displayedCourse.visibility}
+          onVisibilityChange={handleVisibilityChange}
+          isPublished={displayedCourse.status === "published"}
+          onPublishCourse={handlePublish}
           onArchiveCourse={handleArchiveCourse}
           onDeleteCourse={handleDeleteCourse}
+          onInviteClick={handleInviteClick}
         />
 
         <div className="flex flex-1 flex-col">
@@ -371,6 +433,9 @@ export default function EditCoursePage() {
             onCancel={handleBackOrCancel}
             onSave={handleSave}
             onPublish={handlePublish}
+            showInviteTab={showInviteTab}
+            activeTab={activeTab}
+            onActiveTabChange={handleActiveTabChange}
           />
 
           <CourseWorkingArea
@@ -378,6 +443,9 @@ export default function EditCoursePage() {
             selection={selection}
             autoSave={autoSave}
             course={displayedCourse}
+            visibility={displayedCourse.visibility}
+            publicId={publicId}
+            activeTab={activeTab}
             tree={tree}
             flatLessons={flatLessons}
             onSaveCourse={handleSaveCourse}
@@ -392,8 +460,6 @@ export default function EditCoursePage() {
             onNavigate={setSelection}
             onSavingChange={setIsSaving}
             onDuplicateCourse={handleDuplicateCourse}
-            onPublishCourse={handlePublish}
-            onArchiveCourse={handleArchiveCourse}
             onDeleteCourse={handleDeleteCourse}
           />
 

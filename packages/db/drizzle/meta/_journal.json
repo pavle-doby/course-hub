@@ -43,6 +43,20 @@
       "when": 1788606287412,
       "tag": "0005_restore_course_enrollments_unique",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1788816880261,
+      "tag": "0006_add_private_courses_and_invitations",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1789051203546,
+      "tag": "0007_course_visibility_default_private",
+      "breakpoints": true
     }
   ]
 }

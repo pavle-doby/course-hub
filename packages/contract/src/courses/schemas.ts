@@ -1,7 +1,7 @@
 import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-zod";
 import { z } from "zod";
 import { courses } from "@repo/db-schema";
-import { courseStatusEnum } from "@repo/db-schema";
+import { courseStatusEnum, courseVisibilityEnum } from "@repo/db-schema";
 import { isoDatetime, paramBoolean } from "../shared";
 import { UserSchema } from "../users/schemas";
 
@@ -15,6 +15,7 @@ export const CourseCreatorSchema = UserSchema.pick({
 
 export const CourseSchema = createSelectSchema(courses, {
   status: z.enum(courseStatusEnum.enumValues),
+  visibility: z.enum(courseVisibilityEnum.enumValues),
 })
   .omit({
     createdAt: true,
@@ -37,6 +38,7 @@ export const ParamsPublicIdSchema = z.object({
 
 export const CoursePostQuerySchema = createInsertSchema(courses, {
   status: z.enum(courseStatusEnum.enumValues).optional(),
+  visibility: z.enum(courseVisibilityEnum.enumValues).optional(),
   publishedAt: isoDatetime().optional(),
 }).omit({
   id: true,
@@ -48,6 +50,7 @@ export const CoursePostQuerySchema = createInsertSchema(courses, {
 
 export const CoursePutQuerySchema = createUpdateSchema(courses, {
   status: z.enum(courseStatusEnum.enumValues).optional(),
+  visibility: z.enum(courseVisibilityEnum.enumValues).optional(),
   publishedAt: isoDatetime(),
 })
   .omit({

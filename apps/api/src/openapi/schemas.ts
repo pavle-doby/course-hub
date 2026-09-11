@@ -10,6 +10,7 @@ import {
   PublicTopicSchema as PublicTopicSchemaBase,
   CourseEnrollmentSchema as CourseEnrollmentSchemaBase,
   StudentSchema as StudentSchemaBase,
+  CourseInvitationSchema as CourseInvitationSchemaBase,
 } from "@repo/contract";
 
 export const UserSchema = registry.register("User", UserSchemaBase);
@@ -84,6 +85,19 @@ export const PaginatedStudentsSchema = registry.register(
   "Students",
   z.object({
     data: z.array(StudentSchema),
+    pagination: PaginationSchema,
+  })
+);
+
+export const CourseInvitationSchema = registry.register(
+  "CourseInvitation",
+  CourseInvitationSchemaBase
+);
+
+export const PaginatedCourseInvitationsSchema = registry.register(
+  "CourseInvitations",
+  z.object({
+    data: z.array(CourseInvitationSchema),
     pagination: PaginationSchema,
   })
 );

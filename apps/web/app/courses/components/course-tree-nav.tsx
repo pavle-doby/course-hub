@@ -25,9 +25,15 @@ import {
   GripHorizontal,
   Trash2,
   Archive,
+  Globe,
+  Lock,
   Plus,
   Shuffle,
+  Undo2,
+  Upload,
+  UserPlus,
 } from "lucide-react";
+import type { CourseVisibility } from "@repo/api-client";
 import {
   Collapsible,
   CollapsibleContent,
@@ -59,6 +65,8 @@ import {
   AlertDialogAction,
 } from "@repo/ui-web/components/alert-dialog";
 import { Button } from "@repo/ui-web/components/button";
+import { ButtonGroup } from "@repo/ui-web/components/button-group";
+import { Separator } from "@repo/ui-web/components/separator";
 import { useT } from "@repo/i18n/client";
 import type { TopicWithLessons } from "../hooks/use-course-tree";
 import type { Selection } from "../types";
@@ -74,6 +82,11 @@ type CourseTreeNavProps = {
   onAddLesson: (topicId: string) => void;
   onReorderTopics: (orderedIds: string[]) => Promise<void> | void;
   onReorderLessons: (orderedIds: string[]) => Promise<void> | void;
+  visibility?: CourseVisibility;
+  onVisibilityChange?: (value: CourseVisibility) => void;
+  onInviteClick?: () => void;
+  isPublished?: boolean;
+  onPublishCourse?: () => void;
   onArchiveCourse?: () => void;
   onDeleteCourse?: () => void;
   isLoadingTree?: boolean;
@@ -164,6 +177,11 @@ export function CourseTreeNav({
   onAddLesson,
   onReorderTopics,
   onReorderLessons,
+  visibility,
+  onVisibilityChange,
+  onInviteClick,
+  isPublished = false,
+  onPublishCourse,
   onArchiveCourse,
   onDeleteCourse,
   isLoadingTree = false,
@@ -174,6 +192,7 @@ export function CourseTreeNav({
   const [reorderMode, setReorderMode] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [draftTree, setDraftTree] = useState<TopicWithLessons[] | null>(null);
+  const isPrivate = visibility === "private";
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 8 } }));
 
   function selectAndClose(select: () => void) {
@@ -240,6 +259,18 @@ export function CourseTreeNav({
   return (
     <Sidebar collapsible="offcanvas" className="border-r">
       <SidebarContent>
+        <div className="sticky top-0 z-10 flex h-14 shrink-0 items-center border-b bg-sidebar p-2">
+          <Button
+            variant="outline"
+            className="w-full justify-center gap-2"
+            disabled={isSaving || isLoadingTree}
+            onClick={reorderMode ? handleDoneReorder : handleStartReorder}
+          >
+            {reorderMode ? <Check className="size-4" /> : <Shuffle className="size-4" />}
+            {reorderMode ? t("courses.editor.reorderDone") : t("courses.editor.reorder")}
+          </Button>
+        </div>
+
         <SidebarGroup>
           <DndContext
             sensors={sensors}
@@ -354,21 +385,61 @@ export function CourseTreeNav({
             </SidebarMenu>
           </DndContext>
         </SidebarGroup>
-
-        <div className="border-t p-2">
-          <Button
-            variant="outline"
-            className="w-full justify-center gap-2"
-            disabled={isSaving || isLoadingTree}
-            onClick={reorderMode ? handleDoneReorder : handleStartReorder}
-          >
-            {reorderMode ? <Check className="size-4" /> : <Shuffle className="size-4" />}
-            {reorderMode ? t("courses.editor.reorderDone") : t("courses.editor.reorder")}
-          </Button>
-        </div>
       </SidebarContent>
 
-      <SidebarFooter>
+      <SidebarFooter className="gap-3 bg-background py-4">
+        {onVisibilityChange && (
+          <>
+            <ButtonGroup className="w-full">
+              <Button
+                type="button"
+                variant={isPrivate ? "outline" : "default"}
+                className="w-1/2 gap-1.5"
+                disabled={reorderMode || isSaving}
+                onClick={() => onVisibilityChange("public")}
+              >
+                <Globe className="size-4" />
+                {t("courses.editor.visibilityPublic")}
+              </Button>
+              <Button
+                type="button"
+                variant={isPrivate ? "default" : "outline"}
+                className="w-1/2 gap-1.5"
+                disabled={reorderMode || isSaving}
+                onClick={() => onVisibilityChange("private")}
+              >
+                <Lock className="size-4" />
+                {t("courses.editor.visibilityPrivate")}
+              </Button>
+            </ButtonGroup>
+            {isPrivate && onInviteClick && (
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full gap-1.5"
+                disabled={reorderMode || isSaving}
+                onClick={onInviteClick}
+              >
+                <UserPlus className="size-4" />
+                {t("courses.editor.invite")}
+              </Button>
+            )}
+            <Separator className="-mx-2 !w-auto" />
+          </>
+        )}
+
+        {onPublishCourse && (
+          <Button
+            variant="outline"
+            className="w-full justify-start gap-2"
+            disabled={reorderMode || isSaving}
+            onClick={onPublishCourse}
+          >
+            {isPublished ? <Undo2 className="size-4" /> : <Upload className="size-4" />}
+            {isPublished ? t("courses.editor.unpublish") : t("courses.editor.publish")}
+          </Button>
+        )}
+
         {onArchiveCourse && (
           <Button
             variant="destructive"
@@ -380,6 +451,8 @@ export function CourseTreeNav({
             {t("courses.editor.archive")}
           </Button>
         )}
+
+        {onArchiveCourse && onDeleteCourse && <Separator className="-mx-2 !w-auto" />}
 
         {onDeleteCourse && (
           <Button

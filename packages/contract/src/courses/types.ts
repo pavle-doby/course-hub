@@ -11,6 +11,7 @@ import {
 export type Course = z.infer<typeof CourseSchema>;
 
 export type CourseStatus = CourseEntity["status"];
+export type CourseVisibility = CourseEntity["visibility"];
 
 // GET /courses → get all courses
 export type GetAllCoursesReq<Pagination = PaginationReq> = Pagination &

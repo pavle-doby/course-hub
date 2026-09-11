@@ -3,6 +3,7 @@ import { users } from "./users";
 import { userPreferences } from "./user-preferences";
 import { courses } from "./courses";
 import { courseEnrollments } from "./course-enrollments";
+import { courseInvitations } from "./course-invitations";
 import { topics } from "./topics";
 import { lessons } from "./lessons";
 import { videos } from "./videos";
@@ -27,12 +28,25 @@ export const coursesRelations = relations(courses, ({ one, many }) => ({
   creator: one(users, { fields: [courses.creatorId], references: [users.id] }),
   topics: many(topics),
   enrollments: many(courseEnrollments),
+  invitations: many(courseInvitations),
   progress: many(courseProgress),
 }));
 
 export const courseEnrollmentsRelations = relations(courseEnrollments, ({ one }) => ({
   user: one(users, { fields: [courseEnrollments.userId], references: [users.id] }),
   course: one(courses, { fields: [courseEnrollments.courseId], references: [courses.id] }),
+}));
+
+export const courseInvitationsRelations = relations(courseInvitations, ({ one }) => ({
+  course: one(courses, { fields: [courseInvitations.courseId], references: [courses.id] }),
+  invitedByUser: one(users, {
+    fields: [courseInvitations.invitedBy],
+    references: [users.id],
+  }),
+  acceptedByUser: one(users, {
+    fields: [courseInvitations.acceptedByUserId],
+    references: [users.id],
+  }),
 }));
 
 export const topicsRelations = relations(topics, ({ one, many }) => ({

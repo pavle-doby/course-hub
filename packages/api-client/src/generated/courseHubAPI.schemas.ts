@@ -95,6 +95,13 @@ export const CourseStatus = {
   archived: "archived",
 } as const;
 
+export type CourseVisibility = (typeof CourseVisibility)[keyof typeof CourseVisibility];
+
+export const CourseVisibility = {
+  public: "public",
+  private: "private",
+} as const;
+
 export type CourseCreator = {
   id: string;
   /**
@@ -123,6 +130,7 @@ export interface Course {
   /** @nullable */
   description: string | null;
   status: CourseStatus;
+  visibility: CourseVisibility;
   /** @nullable */
   publishedAt: string | null;
   creator?: CourseCreator;
@@ -267,6 +275,105 @@ export type StudentsPagination = {
 export interface Students {
   data: Student[];
   pagination: StudentsPagination;
+}
+
+export type CourseInvitationType = (typeof CourseInvitationType)[keyof typeof CourseInvitationType];
+
+export const CourseInvitationType = {
+  email: "email",
+  link: "link",
+} as const;
+
+export type CourseInvitationStatus =
+  (typeof CourseInvitationStatus)[keyof typeof CourseInvitationStatus];
+
+export const CourseInvitationStatus = {
+  pending: "pending",
+  accepted: "accepted",
+  revoked: "revoked",
+  expired: "expired",
+} as const;
+
+/**
+ * @nullable
+ */
+export type CourseInvitationAcceptedByUser = {
+  id: string;
+  /**
+   * @maxLength 255
+   * @nullable
+   */
+  firstName: string | null;
+  /**
+   * @maxLength 255
+   * @nullable
+   */
+  lastName: string | null;
+  /** @maxLength 255 */
+  username: string;
+  /** @nullable */
+  avatarUrl: string | null;
+  /** @maxLength 255 */
+  email: string;
+} | null;
+
+/**
+ * @nullable
+ */
+export type CourseInvitationInvitedUser = {
+  id: string;
+  /**
+   * @maxLength 255
+   * @nullable
+   */
+  firstName: string | null;
+  /**
+   * @maxLength 255
+   * @nullable
+   */
+  lastName: string | null;
+  /** @maxLength 255 */
+  username: string;
+  /** @nullable */
+  avatarUrl: string | null;
+  /** @maxLength 255 */
+  email: string;
+} | null;
+
+export interface CourseInvitation {
+  id: string;
+  courseId: string;
+  invitedBy: string;
+  /** @maxLength 64 */
+  token: string;
+  type: CourseInvitationType;
+  /**
+   * @maxLength 255
+   * @nullable
+   */
+  email: string | null;
+  status: CourseInvitationStatus;
+  expiresAt: string;
+  createdAt: string;
+  /** @nullable */
+  acceptedAt: string | null;
+  /** @nullable */
+  acceptedByUserId: string | null;
+  /** @nullable */
+  acceptedByUser?: CourseInvitationAcceptedByUser;
+  /** @nullable */
+  invitedUser?: CourseInvitationInvitedUser;
+}
+
+export type CourseInvitationsPagination = {
+  total: number;
+  page: number;
+  limit: number;
+};
+
+export interface CourseInvitations {
+  data: CourseInvitation[];
+  pagination: CourseInvitationsPagination;
 }
 
 export type AuthSignUpBody = {
@@ -737,12 +844,21 @@ export const CreateCourseBodyStatus = {
   archived: "archived",
 } as const;
 
+export type CreateCourseBodyVisibility =
+  (typeof CreateCourseBodyVisibility)[keyof typeof CreateCourseBodyVisibility];
+
+export const CreateCourseBodyVisibility = {
+  public: "public",
+  private: "private",
+} as const;
+
 export type CreateCourseBody = {
   /** @maxLength 255 */
   name: string;
   /** @nullable */
   description?: string | null;
   status?: CreateCourseBodyStatus;
+  visibility?: CreateCourseBodyVisibility;
   publishedAt?: string;
 };
 
@@ -811,12 +927,21 @@ export const UpdateCourseBodyStatus = {
   archived: "archived",
 } as const;
 
+export type UpdateCourseBodyVisibility =
+  (typeof UpdateCourseBodyVisibility)[keyof typeof UpdateCourseBodyVisibility];
+
+export const UpdateCourseBodyVisibility = {
+  public: "public",
+  private: "private",
+} as const;
+
 export type UpdateCourseBody = {
   /** @maxLength 255 */
   name?: string;
   /** @nullable */
   description?: string | null;
   status?: UpdateCourseBodyStatus;
+  visibility?: UpdateCourseBodyVisibility;
   publishedAt?: string;
 };
 
@@ -1596,4 +1721,221 @@ export type GetEnrollmentsStatsDefault = {
   code: GetEnrollmentsStatsDefaultCode;
   error?: unknown;
   details?: GetEnrollmentsStatsDefaultDetails;
+};
+
+export type CreateEmailInvitationPathParameters = {
+  publicId: string;
+};
+export type CreateEmailInvitationBody = {
+  email: string;
+};
+
+export type CreateEmailInvitationDefaultCode =
+  (typeof CreateEmailInvitationDefaultCode)[keyof typeof CreateEmailInvitationDefaultCode];
+
+export const CreateEmailInvitationDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type CreateEmailInvitationDefaultDetails = { [key: string]: unknown };
+
+export type CreateEmailInvitationDefault = {
+  status: number;
+  code: CreateEmailInvitationDefaultCode;
+  error?: unknown;
+  details?: CreateEmailInvitationDefaultDetails;
+};
+
+export type GetCourseInvitationsPathParameters = {
+  publicId: string;
+};
+export type GetCourseInvitationsParams = {
+  /**
+   * @minimum 0
+   * @nullable
+   */
+  page?: number | null;
+  /**
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
+  query?: string;
+};
+
+export type GetCourseInvitationsDefaultCode =
+  (typeof GetCourseInvitationsDefaultCode)[keyof typeof GetCourseInvitationsDefaultCode];
+
+export const GetCourseInvitationsDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type GetCourseInvitationsDefaultDetails = { [key: string]: unknown };
+
+export type GetCourseInvitationsDefault = {
+  status: number;
+  code: GetCourseInvitationsDefaultCode;
+  error?: unknown;
+  details?: GetCourseInvitationsDefaultDetails;
+};
+
+export type CreateInviteLinkPathParameters = {
+  publicId: string;
+};
+export type CreateInviteLinkDefaultCode =
+  (typeof CreateInviteLinkDefaultCode)[keyof typeof CreateInviteLinkDefaultCode];
+
+export const CreateInviteLinkDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type CreateInviteLinkDefaultDetails = { [key: string]: unknown };
+
+export type CreateInviteLinkDefault = {
+  status: number;
+  code: CreateInviteLinkDefaultCode;
+  error?: unknown;
+  details?: CreateInviteLinkDefaultDetails;
+};
+
+export type RevokeInvitationPathParameters = {
+  id: string;
+};
+export type RevokeInvitationDefaultCode =
+  (typeof RevokeInvitationDefaultCode)[keyof typeof RevokeInvitationDefaultCode];
+
+export const RevokeInvitationDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type RevokeInvitationDefaultDetails = { [key: string]: unknown };
+
+export type RevokeInvitationDefault = {
+  status: number;
+  code: RevokeInvitationDefaultCode;
+  error?: unknown;
+  details?: RevokeInvitationDefaultDetails;
+};
+
+export type AcceptInvitationPathParameters = {
+  token: string;
+};
+export type AcceptInvitation200Course = {
+  publicId: string;
+};
+
+export type AcceptInvitation200 = {
+  enrolled: true;
+  course: AcceptInvitation200Course;
+};
+
+export type AcceptInvitationDefaultCode =
+  (typeof AcceptInvitationDefaultCode)[keyof typeof AcceptInvitationDefaultCode];
+
+export const AcceptInvitationDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type AcceptInvitationDefaultDetails = { [key: string]: unknown };
+
+export type AcceptInvitationDefault = {
+  status: number;
+  code: AcceptInvitationDefaultCode;
+  error?: unknown;
+  details?: AcceptInvitationDefaultDetails;
+};
+
+export type GetInvitationInfoPathParameters = {
+  token: string;
+};
+export type GetInvitationInfo200Course = {
+  name: string;
+  publicId: string;
+  /** @nullable */
+  description: string | null;
+};
+
+export type GetInvitationInfo200Type =
+  (typeof GetInvitationInfo200Type)[keyof typeof GetInvitationInfo200Type];
+
+export const GetInvitationInfo200Type = {
+  email: "email",
+  link: "link",
+} as const;
+
+export type GetInvitationInfo200 = {
+  course: GetInvitationInfo200Course;
+  type: GetInvitationInfo200Type;
+  /** @nullable */
+  email: string | null;
+};
+
+export type GetInvitationInfoDefaultCode =
+  (typeof GetInvitationInfoDefaultCode)[keyof typeof GetInvitationInfoDefaultCode];
+
+export const GetInvitationInfoDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type GetInvitationInfoDefaultDetails = { [key: string]: unknown };
+
+export type GetInvitationInfoDefault = {
+  status: number;
+  code: GetInvitationInfoDefaultCode;
+  error?: unknown;
+  details?: GetInvitationInfoDefaultDetails;
 };

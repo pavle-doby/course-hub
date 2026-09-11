@@ -3,6 +3,7 @@ import { auth } from "./auth";
 import { common } from "./common";
 import { courses } from "./courses";
 import { home } from "./home";
+import { invite } from "./invite";
 import { learn } from "./learn";
 import { lessons } from "./lessons";
 import { metadata } from "./metadata";
@@ -17,6 +18,7 @@ const sr: TranslationResources = {
   auth,
   courses,
   home,
+  invite,
   learn,
   lessons,
   nav,

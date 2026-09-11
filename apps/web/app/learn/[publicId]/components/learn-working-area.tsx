@@ -12,7 +12,10 @@ type LearnWorkingAreaProps = {
   course: { name: string; description?: string | null };
   tree: TopicWithLessons[];
   flatLessons: Lesson[];
-  onSelectLesson: (id: string) => void;
+  hasPrevious: boolean;
+  hasNext: boolean;
+  onPrevious: () => void;
+  onNext: () => void;
 };
 
 export function LearnWorkingArea({
@@ -20,7 +23,10 @@ export function LearnWorkingArea({
   course,
   tree,
   flatLessons,
-  onSelectLesson,
+  hasPrevious,
+  hasNext,
+  onPrevious,
+  onNext,
 }: LearnWorkingAreaProps) {
   const { t } = useT();
 
@@ -29,15 +35,6 @@ export function LearnWorkingArea({
   const selectedLesson =
     selection.type === "lesson"
       ? flatLessons.find((lesson) => lesson.id === selection.id)
-      : undefined;
-
-  const lessonIndex = selectedLesson
-    ? flatLessons.findIndex((l) => l.id === selectedLesson.id)
-    : -1;
-  const previousLesson = lessonIndex > 0 ? flatLessons[lessonIndex - 1] : undefined;
-  const nextLesson =
-    lessonIndex >= 0 && lessonIndex < flatLessons.length - 1
-      ? flatLessons[lessonIndex + 1]
       : undefined;
 
   const name =
@@ -49,30 +46,28 @@ export function LearnWorkingArea({
 
   return (
     <div className="flex flex-1 flex-col gap-6 p-4 md:p-6">
-      {selection.type === "lesson" && selectedLesson && (
-        <div className="hidden items-center justify-center gap-2 md:flex">
-          <Button
-            className="min-w-30"
-            variant="outline"
-            size="sm"
-            disabled={!previousLesson}
-            onClick={() => previousLesson && onSelectLesson(previousLesson.id)}
-          >
-            <ChevronLeft className="size-4" />
-            {t("learn.detail.previous")}
-          </Button>
-          <Button
-            className="min-w-30"
-            variant="outline"
-            size="sm"
-            disabled={!nextLesson}
-            onClick={() => nextLesson && onSelectLesson(nextLesson.id)}
-          >
-            {t("learn.detail.next")}
-            <ChevronRight className="size-4" />
-          </Button>
-        </div>
-      )}
+      <div className="hidden items-center justify-center gap-2 md:flex">
+        <Button
+          className="min-w-30"
+          variant="outline"
+          size="sm"
+          disabled={!hasPrevious}
+          onClick={onPrevious}
+        >
+          <ChevronLeft className="size-4" />
+          {t("learn.detail.previous")}
+        </Button>
+        <Button
+          className="min-w-30"
+          variant="outline"
+          size="sm"
+          disabled={!hasNext}
+          onClick={onNext}
+        >
+          {t("learn.detail.next")}
+          <ChevronRight className="size-4" />
+        </Button>
+      </div>
 
       <div className="mx-auto w-full max-w-2xl">
         <h2 className="text-2xl font-semibold">{name}</h2>

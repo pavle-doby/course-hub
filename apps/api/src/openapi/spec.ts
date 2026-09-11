@@ -10,6 +10,8 @@ import "../modules/courses/openapi/coursesPublicOpenapi";
 import "../modules/lessons/openapi/lessonsOpenapi";
 import "../modules/topics/openapi/topicsOpenapi";
 import "../modules/enrollments/openapi/enrollmentsOpenapi";
+import "../modules/invitations/openapi/invitationsOpenapi";
+import "../modules/invitations/openapi/invitationsPublicOpenapi";
 
 export function generateOpenAPIDocument(): OpenAPIObject {
   const generator = new OpenApiGeneratorV31(registry.definitions);

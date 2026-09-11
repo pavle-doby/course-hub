@@ -4,6 +4,7 @@ export * from "./user-preferences";
 export * from "./file-uploads";
 export * from "./courses";
 export * from "./course-enrollments";
+export * from "./course-invitations";
 export * from "./topics";
 export * from "./lessons";
 export * from "./videos";

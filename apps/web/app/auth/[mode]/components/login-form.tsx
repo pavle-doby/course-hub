@@ -2,11 +2,11 @@
 
 import { useId, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircleIcon, Eye, EyeOff } from "lucide-react";
-import { useAuthLogin } from "@repo/api-client";
+import { useAcceptInvitation, useAuthLogin } from "@repo/api-client";
 import { AuthLoginQuerySchema, type AuthLogInUserReq } from "@repo/contract";
 import { useT } from "@repo/i18n/client";
 import { useErrorHandlingForm, useZodLocale } from "@repo/shared";
@@ -21,6 +21,8 @@ import { cn } from "@repo/ui-web/lib/utils";
 export function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
   const id = useId();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const inviteToken = searchParams.get("token");
 
   const { t, i18n } = useT();
   useZodLocale(i18n);
@@ -28,6 +30,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
   const [showPassword, setShowPassword] = useState(false);
 
   const { mutate: loginMutate, isPending } = useAuthLogin();
+  const { mutateAsync: acceptInvitation } = useAcceptInvitation();
 
   const {
     register,
@@ -48,7 +51,16 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
     loginMutate(
       { data },
       {
-        onSuccess: () => {
+        onSuccess: async () => {
+          if (inviteToken) {
+            try {
+              const result = await acceptInvitation({ pathParams: { token: inviteToken } });
+              router.replace(`/learn/${result.course.publicId}`);
+              return;
+            } catch {
+              // fall through to default redirect if the invitation could not be accepted
+            }
+          }
           router.replace("/");
         },
         onError: (error: unknown) => {

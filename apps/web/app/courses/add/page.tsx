@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   useCreateCourse,
   useCreateLesson,
@@ -19,6 +19,7 @@ import {
   getGetCoursesQueryKey,
   useQueryClient,
   type CourseStatus,
+  type CourseVisibility,
 } from "@repo/api-client";
 import { useT } from "@repo/i18n/client";
 import { useErrorHandlingAction } from "@repo/shared";
@@ -34,6 +35,7 @@ import type { Selection } from "../types";
 
 export default function AddCoursePage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { t } = useT();
   const queryClient = useQueryClient();
   const { handleErrorAction } = useErrorHandlingAction({
@@ -42,10 +44,12 @@ export default function AddCoursePage() {
   });
 
   const [courseId, setCourseId] = useState<string>();
+  const [coursePublicId, setCoursePublicId] = useState<string>();
   const [course, setCourse] = useState<{
     name: string;
     description?: string | null;
     status?: CourseStatus;
+    visibility?: CourseVisibility;
   }>({
     name: "",
     description: "",
@@ -53,6 +57,25 @@ export default function AddCoursePage() {
   const [selection, setSelection] = useState<Selection>({ type: "course" });
   const [autoSave, setAutoSave] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [activeTab, setActiveTab] = useState<"edit" | "invite">(
+    searchParams.get("tab") === "invite" ? "invite" : "edit"
+  );
+
+  function handleActiveTabChange(value: "edit" | "invite") {
+    setActiveTab(value);
+    const params = new URLSearchParams(searchParams.toString());
+    if (value === "invite") params.set("tab", value);
+    else params.delete("tab");
+    const qs = params.toString();
+    router.replace(qs ? `/courses/add?${qs}` : "/courses/add", { scroll: false });
+  }
+
+  function handleInviteClick() {
+    setSelection({ type: "course" });
+    handleActiveTabChange("invite");
+  }
+
+  const showInviteTab = selection.type === "course" && course.visibility === "private";
 
   const formRef = useRef<EntityFormHandle>(null);
   const hasShownAutoSaveToast = useRef(false);
@@ -105,8 +128,27 @@ export default function AddCoursePage() {
       data: { name: course.name || t("courses.editor.untitledCourse") },
     });
     setCourseId(created.id);
-    setCourse({ name: created.name, description: created.description, status: created.status });
+    setCoursePublicId(created.publicId);
+    setCourse({
+      name: created.name,
+      description: created.description,
+      status: created.status,
+      visibility: created.visibility,
+    });
     return created.id;
+  }
+
+  async function handleVisibilityChange(visibility: CourseVisibility) {
+    try {
+      const id = await ensureCourseId();
+      const updated = await updateCourse({ pathParams: { id }, data: { visibility } });
+      if (updated) {
+        setCourse((prev) => ({ ...prev, visibility: updated.visibility }));
+        toast.success(t("courses.editor.visibilityChangedToast"));
+      }
+    } catch (error) {
+      handleErrorAction(error as Error);
+    }
   }
 
   async function handleSaveCourse(data: EntityFormValues) {
@@ -114,7 +156,13 @@ export default function AddCoursePage() {
       if (!courseId) {
         const created = await createCourse({ data });
         setCourseId(created.id);
-        setCourse({ name: created.name, description: created.description, status: created.status });
+        setCoursePublicId(created.publicId);
+        setCourse({
+          name: created.name,
+          description: created.description,
+          status: created.status,
+          visibility: created.visibility,
+        });
       } else {
         const updated = await updateCourse({ pathParams: { id: courseId }, data });
         if (updated)
@@ -122,6 +170,7 @@ export default function AddCoursePage() {
             name: updated.name,
             description: updated.description,
             status: updated.status,
+            visibility: updated.visibility,
           });
       }
     } catch (error) {
@@ -287,7 +336,12 @@ export default function AddCoursePage() {
             : { status: nextStatus },
       });
       if (updated)
-        setCourse({ name: updated.name, description: updated.description, status: updated.status });
+        setCourse({
+          name: updated.name,
+          description: updated.description,
+          status: updated.status,
+          visibility: updated.visibility,
+        });
       toast.success(
         nextStatus === "published"
           ? t("courses.editor.publishedToast")
@@ -348,8 +402,13 @@ export default function AddCoursePage() {
           onReorderTopics={handleReorderTopics}
           onReorderLessons={handleReorderLessons}
           isLoadingTree={isLoadingTree}
+          visibility={course.visibility}
+          onVisibilityChange={handleVisibilityChange}
+          isPublished={course.status === "published"}
+          onPublishCourse={courseId ? handlePublish : undefined}
           onArchiveCourse={courseId ? handleArchiveCourse : undefined}
           onDeleteCourse={courseId ? handleDeleteCourse : undefined}
+          onInviteClick={handleInviteClick}
         />
 
         <div className="flex flex-1 flex-col">
@@ -363,6 +422,9 @@ export default function AddCoursePage() {
             onCancel={handleBackOrCancel}
             onSave={handleSave}
             onPublish={handlePublish}
+            showInviteTab={showInviteTab}
+            activeTab={activeTab}
+            onActiveTabChange={handleActiveTabChange}
           />
 
           <CourseWorkingArea
@@ -370,6 +432,9 @@ export default function AddCoursePage() {
             selection={selection}
             autoSave={autoSave}
             course={course}
+            visibility={course.visibility}
+            publicId={coursePublicId}
+            activeTab={activeTab}
             tree={tree}
             flatLessons={flatLessons}
             onSaveCourse={handleSaveCourse}
@@ -384,8 +449,6 @@ export default function AddCoursePage() {
             onNavigate={setSelection}
             onSavingChange={setIsSaving}
             onDuplicateCourse={handleDuplicateCourse}
-            onPublishCourse={handlePublish}
-            onArchiveCourse={courseId ? handleArchiveCourse : undefined}
             onDeleteCourse={courseId ? handleDeleteCourse : undefined}
           />
 

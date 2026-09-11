@@ -87,5 +87,36 @@ export const common = {
         message: "An account with this information already exists.",
       },
     },
+    invitation: {
+      COURSE_NOT_FOUND: {
+        title: "Course Not Found",
+        message: "The course for this invitation could not be found.",
+      },
+      COURSE_NOT_PRIVATE: {
+        title: "Invitations Unavailable",
+        message: "This course is not private, so invitations cannot be used.",
+      },
+      INVALID_TOKEN: {
+        title: "Invalid Invitation",
+        message: "This invitation link is not valid.",
+      },
+      EXPIRED: {
+        title: "Invitation Expired",
+        message: "This invitation has expired.",
+      },
+      ALREADY_USED: {
+        title: "Invitation Unavailable",
+        message: "This invitation has already been used or revoked.",
+      },
+      NOT_FOUND: {
+        title: "Invitation Not Found",
+        message: "The requested invitation could not be found.",
+      },
+      EMAIL_MISMATCH: {
+        title: "Email Mismatch",
+        message:
+          "This invitation was sent to a different email address. Sign in with that email to accept it.",
+      },
+    },
   },
 };

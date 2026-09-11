@@ -171,7 +171,10 @@ export default function LearnCourseDetailPage() {
             course={course}
             tree={tree}
             flatLessons={flatLessons}
-            onSelectLesson={handleSelectLesson}
+            hasPrevious={isEnrolled && !!previousItem}
+            hasNext={isEnrolled && !!nextItem}
+            onPrevious={() => previousItem && setSelection(previousItem)}
+            onNext={() => nextItem && setSelection(nextItem)}
           />
 
           <LearnBottomNav

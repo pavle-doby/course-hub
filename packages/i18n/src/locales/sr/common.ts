@@ -84,5 +84,36 @@ export const common = {
         message: "Nalog sa ovim podacima već postoji.",
       },
     },
+    invitation: {
+      COURSE_NOT_FOUND: {
+        title: "Kurs nije pronađen",
+        message: "Kurs za ovu pozivnicu nije pronađen.",
+      },
+      COURSE_NOT_PRIVATE: {
+        title: "Pozivnice nisu dostupne",
+        message: "Ovaj kurs nije privatan, pa se pozivnice ne mogu koristiti.",
+      },
+      INVALID_TOKEN: {
+        title: "Nevažeća pozivnica",
+        message: "Ova pozivnica nije važeća.",
+      },
+      EXPIRED: {
+        title: "Pozivnica je istekla",
+        message: "Ova pozivnica je istekla.",
+      },
+      ALREADY_USED: {
+        title: "Pozivnica nije dostupna",
+        message: "Ova pozivnica je već iskorišćena ili opozvana.",
+      },
+      NOT_FOUND: {
+        title: "Pozivnica nije pronađena",
+        message: "Tražena pozivnica nije pronađena.",
+      },
+      EMAIL_MISMATCH: {
+        title: "Email se ne poklapa",
+        message:
+          "Ova pozivnica je poslata na drugu email adresu. Prijavite se sa tom adresom da biste je prihvatili.",
+      },
+    },
   },
 };
