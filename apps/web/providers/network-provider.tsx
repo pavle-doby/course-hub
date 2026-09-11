@@ -2,10 +2,12 @@
 
 import { useT } from "@repo/i18n/client";
 import { toast } from "@repo/ui-web/components/sonner";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 
 export function NetworkProvider({ children }: { children: React.ReactNode }) {
   const { t } = useT();
+  const router = useRouter();
   const wasOffline = useRef(false);
 
   useEffect(() => {
@@ -17,6 +19,7 @@ export function NetworkProvider({ children }: { children: React.ReactNode }) {
     function handleOnline() {
       if (wasOffline.current) {
         toast.success(t("errors.backOnline.title"));
+        router.refresh();
       }
       wasOffline.current = false;
     }
@@ -31,7 +34,7 @@ export function NetworkProvider({ children }: { children: React.ReactNode }) {
       window.removeEventListener("offline", handleOffline);
       window.removeEventListener("online", handleOnline);
     };
-  }, [t]);
+  }, [t, router]);
 
   return children;
 }
