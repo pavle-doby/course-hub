@@ -89,6 +89,12 @@ export enum ErrorCodeUser {
 
 Global/cross-cutting codes live in `packages/contract/src/shared/errors/ErrorCode.ts`. Only add to the global enum for truly infrastructure-level codes (`NO_TOKEN`, `VALIDATION_ERROR`, etc.). Feature business errors always go in their own enum.
 
+**Whenever you add or change an `ErrorCode` value, wire up its user-facing message in the same change** — an unmapped code falls through to a raw, untranslated server string in the UI. Two steps:
+
+1. Add the code to its feature message map in `packages/shared/src/consts/<feature>ErrorMessages.ts` (create the file typed as `Record<ErrorCode<Feature>, { title: string; message: string }>` and spread it into `allErrorMessages.ts` if it doesn't exist yet). The `Record` type makes a missing code a compile error.
+2. Add matching `errors.<feature>.<KEY>.{title,message}` entries to **every** locale in `packages/i18n/src/locales/<locale>/common.ts` (currently `en` and `sr`).
+
+
 ## Barrel exports
 
 Each feature `index.ts` re-exports all three files:

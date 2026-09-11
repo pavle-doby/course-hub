@@ -117,6 +117,42 @@ export const common = {
         message:
           "This invitation was sent to a different email address. Sign in with that email to accept it.",
       },
+      course: {
+        NOT_FOUND: {
+          title: "Course Not Found",
+          message: "The requested course could not be found.",
+        },
+      },
+      enrollment: {
+        ALREADY_ENROLLED: {
+          title: "Already Enrolled",
+          message: "You are already enrolled in this course.",
+        },
+        COURSE_NOT_FOUND: {
+          title: "Course Not Found",
+          message: "The course you are trying to enroll in could not be found.",
+        },
+        COURSE_PRIVATE: {
+          title: "Course Is Private",
+          message: "This course is private. You need an invitation to enroll.",
+        },
+        NOT_ENROLLED: {
+          title: "Not Enrolled",
+          message: "You are not enrolled in this course.",
+        },
+      },
+      lesson: {
+        NOT_FOUND: {
+          title: "Lesson Not Found",
+          message: "The requested lesson could not be found.",
+        },
+      },
+      topic: {
+        NOT_FOUND: {
+          title: "Topic Not Found",
+          message: "The requested topic could not be found.",
+        },
+      },
     },
   },
 };

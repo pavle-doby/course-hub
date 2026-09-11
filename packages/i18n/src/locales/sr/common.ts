@@ -114,6 +114,42 @@ export const common = {
         message:
           "Ova pozivnica je poslata na drugu email adresu. Prijavite se sa tom adresom da biste je prihvatili.",
       },
+      course: {
+        NOT_FOUND: {
+          title: "Kurs nije pronađen",
+          message: "Traženi kurs nije pronađen.",
+        },
+      },
+      enrollment: {
+        ALREADY_ENROLLED: {
+          title: "Već ste upisani",
+          message: "Već ste upisani na ovaj kurs.",
+        },
+        COURSE_NOT_FOUND: {
+          title: "Kurs nije pronađen",
+          message: "Kurs na koji pokušavate da se upišete nije pronađen.",
+        },
+        COURSE_PRIVATE: {
+          title: "Kurs je privatan",
+          message: "Ovaj kurs je privatan. Potrebna vam je pozivnica da biste se upisali.",
+        },
+        NOT_ENROLLED: {
+          title: "Niste upisani",
+          message: "Niste upisani na ovaj kurs.",
+        },
+      },
+      lesson: {
+        NOT_FOUND: {
+          title: "Lekcija nije pronađena",
+          message: "Tražena lekcija nije pronađena.",
+        },
+      },
+      topic: {
+        NOT_FOUND: {
+          title: "Tema nije pronađena",
+          message: "Tražena tema nije pronađena.",
+        },
+      },
     },
   },
 };
