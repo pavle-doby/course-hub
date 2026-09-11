@@ -1,8 +1,3 @@
----
-description: "Use when adding or editing web UI components, hooks, or styles in packages/ui-web. Covers shadcn/radix-nova components, cva variant patterns, cn utility, Tailwind CSS variables, and how to add new components."
-applyTo: "packages/ui-web/**"
----
-
 # UI Package Conventions (`@repo/ui-web`)
 
 `@repo/ui-web` is the shared web component library built on shadcn (radix-nova style), Radix UI primitives, Tailwind CSS 4, and `class-variance-authority`. All web UI components live here — never define reusable components inline in `apps/web`.

@@ -1,8 +1,3 @@
----
-description: "Use when adding or editing Drizzle table definitions, enums, relations, or entity types in packages/db-schema/. Covers file structure, column naming, standard columns, enums, foreign keys, and entity type exports."
-applyTo: packages/db-schema/**
----
-
 # DB Schema Conventions (`@repo/db-schema`)
 
 This package is the **source of truth for all database structure**. Changes here drive Drizzle migrations and are consumed by `@repo/contract` (via drizzle-zod) and `@repo/db` (via re-export). Never define table shapes anywhere else.

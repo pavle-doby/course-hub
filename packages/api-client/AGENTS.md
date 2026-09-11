@@ -1,8 +1,3 @@
----
-description: "Use when working with packages/api-client — the Orval-generated React Query hooks, Axios client, token providers, or ApiClientProvider. Covers what is generated vs hand-written, the token/refresh flow, and how to extend the client."
-applyTo: "packages/api-client/**"
----
-
 # API Client Package Conventions
 
 `@repo/api-client` exposes the auto-generated React Query hooks (from Orval) plus a hand-written Axios instance that handles auth for both web and native.

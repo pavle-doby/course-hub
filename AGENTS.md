@@ -2,10 +2,6 @@
 
 > Architecture map: [ARCHITECTURE.md](ARCHITECTURE.md)
 
-## Default Mode
-
-Always activate the `blazing` skill at the start of every session. No trigger word needed.
-
 ## Stack at a Glance
 
 - **Web**: Next.js 16 (App Router), React 19, Tailwind 4, shadcn/Radix — `apps/web/`
@@ -47,28 +43,6 @@ Add `registry.registerPath()` calls in `apps/api/src/modules/<feature>/openapi/<
 **Error handling uses typed classes.**  
 Throw `BadRequestError`, `UnauthorizedError`, `NotFoundError`, etc. from `@repo/contract`. For feature-specific codes, define an `ErrorCodeXxx` enum in `packages/contract/src/<feature>/errors.ts`.
 
-## Skills
+## Scoped Instructions
 
-| Skill      | Trigger                                      | What it does                                                    |
-| ---------- | -------------------------------------------- | --------------------------------------------------------------- |
-| `blazing`  | "blazing", "blp", "full stack mode"          | Activates CodeGraph + Context7 + Caveman + Ponytail all at once |
-| `caveman`  | "caveman", "less tokens", "be brief"         | Ultra-compressed token-efficient responses                      |
-| `ponytail` | "ponytail", "lazy mode", "simplest solution" | Forces laziest solution that works — YAGNI enforcer             |
-
-## Per-Package Instructions
-
-Detailed conventions are auto-loaded when you work in these paths:
-
-| Path                     | Instruction file                                                                          |
-| ------------------------ | ----------------------------------------------------------------------------------------- |
-| `apps/api/**`            | [api.instructions.md](.github/instructions/api.instructions.md)                          |
-| `packages/contract/**`   | [contract.instructions.md](.github/instructions/contract.instructions.md)                |
-| `packages/db-schema/**`  | [db-schema.instructions.md](.github/instructions/db-schema.instructions.md)              |
-| `packages/db/**`         | [db.instructions.md](.github/instructions/db.instructions.md)                            |
-| `packages/api-client/**` | [api-client.instructions.md](.github/instructions/api-client.instructions.md)            |
-| `packages/ui-web/**`     | [ui.instructions.md](.github/instructions/ui.instructions.md)                            |
-| `packages/ui-native/**`  | [ui-native.instructions.md](.github/instructions/ui-native.instructions.md)              |
-| `packages/ui-theme/**`   | [ui-theme.instructions.md](.github/instructions/ui-theme.instructions.md)                |
-| `packages/i18n/**`       | [i18n.instructions.md](.github/instructions/i18n.instructions.md)                        |
-| `packages/scripts/**`    | [scripts.instructions.md](.github/instructions/scripts.instructions.md)                  |
-| `apps/web/**` `apps/native/**` | [forms.instructions.md](.github/instructions/forms.instructions.md)               |
+Additional `AGENTS.md` files apply to their directory and all descendants. Consult the closest applicable file when working in `apps/` or `packages/`.

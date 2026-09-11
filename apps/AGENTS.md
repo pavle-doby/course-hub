@@ -1,8 +1,3 @@
----
-description: "Use when adding or editing forms in apps/web or apps/native. Covers react-hook-form + zod setup, schema sourcing, localization, and error handling patterns."
-applyTo: "apps/web/**,apps/native/**"
----
-
 # Form Conventions
 
 ## Stack

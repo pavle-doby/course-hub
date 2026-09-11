@@ -1,8 +1,3 @@
----
-description: "Use when adding or editing React Native UI components, hooks, or styles in packages/ui-native. Covers NativeWind cva patterns, Platform.select for web fallbacks, TextClassContext, cssInterop for icons, and component exports."
-applyTo: "packages/ui-native/**"
----
-
 # UI Native Package Conventions (`@repo/ui-native`)
 
 `@repo/ui-native` is the shared React Native component library built on NativeWind, `class-variance-authority`, and `@rn-primitives/slot`. All shared native UI components live here — never define reusable components inline in `apps/native`.

@@ -1,8 +1,3 @@
----
-description: "Use when adding or editing translations, locale files, i18n config, or using useT/Trans in packages/i18n. Covers locale structure, adding keys, type safety, and platform entry points."
-applyTo: "packages/i18n/**"
----
-
 # i18n Package Conventions
 
 `@repo/i18n` is the single source of truth for all translations. It uses i18next with a single `common` namespace. Serbian (`sr`) is the **default** locale; English (`en`) is the fallback.

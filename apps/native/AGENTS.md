@@ -1,8 +1,3 @@
----
-description: "Use when adding or editing screens, navigation, components, hooks, providers, or styles in apps/native. Covers Expo Router file conventions, component placement, NativeWind theming, API call patterns, i18n, and import aliases."
-applyTo: "apps/native/**"
----
-
 # Native App Conventions (`apps/native`)
 
 Expo 55, React Native 0.83, Expo Router, NativeWind 4. The app is intentionally thin — reusable UI lives in `@repo/ui-native`, design tokens in `@repo/ui-theme`.

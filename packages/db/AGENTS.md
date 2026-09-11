@@ -1,8 +1,3 @@
----
-description: "Use when editing packages/db/ — the Drizzle client, env config, schema re-export, or drizzle.config.ts. Covers what to export, how env is validated, the connection setup, and migration workflow."
-applyTo: packages/db/**
----
-
 # DB Package Conventions (`@repo/db`)
 
 This package owns the **Drizzle ORM client**, the **database connection**, and the **migration toolchain**. It does not define table shapes — those live in `@repo/db-schema`.

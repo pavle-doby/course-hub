@@ -1,8 +1,3 @@
----
-description: "Use when writing or editing Express API code: controllers, services, repositories, routes, middleware, or OpenAPI annotations in apps/api/."
-applyTo: "apps/api/**"
----
-
 # API Conventions
 
 ## Module structure

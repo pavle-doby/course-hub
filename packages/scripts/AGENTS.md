@@ -1,8 +1,3 @@
----
-description: "Use when adding or editing database scripts in packages/scripts/ — seed, clean, or one-off data migration scripts. Covers file placement, imports, connection teardown, error handling, type inference, and how to register and run scripts."
-applyTo: packages/scripts/**
----
-
 # Scripts Package Conventions (`@repo/scripts`)
 
 Scripts are standalone TypeScript files that run against the database outside the API process. They are executed directly with `tsx` — no build step, no `src/` folder, no `dist/`.

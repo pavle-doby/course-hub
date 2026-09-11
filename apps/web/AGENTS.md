@@ -1,8 +1,3 @@
----
-description: "Use when adding or editing pages, components, hooks, providers, or styles in apps/web. Covers Next.js App Router conventions, component placement, API call patterns, i18n, theming, and import aliases."
-applyTo: "apps/web/**"
----
-
 # Web App Conventions (`apps/web`)
 
 Next.js 16 (App Router), React 19, Tailwind CSS 4, shadcn (radix-nova style). The app is intentionally thin — logic and reusable UI live in monorepo packages.

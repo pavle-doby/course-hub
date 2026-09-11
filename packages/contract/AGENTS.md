@@ -1,8 +1,3 @@
----
-description: "Use when adding or editing schemas, types, or error codes in packages/contract/. Covers drizzle-zod derivation, file structure, type exports, and error enum conventions."
-applyTo: "packages/contract/**"
----
-
 # Contract Package Conventions
 
 `@repo/contract` is the single source of truth for all DTOs, validation schemas, and error types shared across `api`, `web`, and `native`. Every schema and type must live here — never define them inline in an app.
@@ -94,7 +89,6 @@ Global/cross-cutting codes live in `packages/contract/src/shared/errors/ErrorCod
 1. Add the code to its feature message map in `packages/shared/src/consts/<feature>ErrorMessages.ts` (create the file typed as `Record<ErrorCode<Feature>, { title: string; message: string }>` and spread it into `allErrorMessages.ts` if it doesn't exist yet). The `Record` type makes a missing code a compile error.
 2. Add matching `errors.<feature>.<KEY>.{title,message}` entries to **every** locale in `packages/i18n/src/locales/<locale>/common.ts` (currently `en` and `sr`).
 
-
 ## Barrel exports
 
 Each feature `index.ts` re-exports all three files:
@@ -142,4 +136,3 @@ export const CoursePutQuerySchema = createUpdateSchema(courses, {
 
 For nullable/optional columns, chain `.nullable()`/`.optional()` onto `isoDatetime()` as needed
 (or rely on a trailing `.partial()` on the whole schema for update schemas).
-

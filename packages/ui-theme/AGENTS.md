@@ -1,7 +1,3 @@
----
-applyTo: "packages/ui-theme/**"
----
-
 # ui-theme package
 
 See [`packages/ui-theme/README.md`](./README.md) for the full package overview, structure, and entry points.
