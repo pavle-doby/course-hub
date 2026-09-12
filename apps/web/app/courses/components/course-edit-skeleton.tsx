@@ -124,19 +124,37 @@ export function CourseEditSkeleton() {
         </div>
 
         <Sidebar side="right" collapsible="none" className="hidden border-l md:flex">
-          <SidebarContent>
+          <SidebarContent className="flex flex-col">
             <div className="flex h-14 shrink-0 items-center justify-between border-b p-2">
-              <Skeleton className="h-5 w-24" />
               <Skeleton className="size-8 rounded-md" />
+              <Skeleton className="h-8 w-28" />
             </div>
-            <SidebarGroup>
-              <Skeleton className="h-9 w-full" />
+
+            <div className="flex items-center justify-between border-b px-4 py-3">
+              <Skeleton className="h-4 w-12" />
+              <Skeleton className="h-5 w-20 rounded-full" />
+            </div>
+
+            <SidebarGroup className="gap-4 px-4 py-5">
+              <Skeleton className="h-5 w-20" />
+              <div className="flex overflow-hidden rounded-md border">
+                <Skeleton className="h-10 flex-1 rounded-none" />
+                <Skeleton className="h-10 flex-1 rounded-none border-l" />
+              </div>
+              <Skeleton className="h-10 w-full" />
+            </SidebarGroup>
+
+            <div className="border-t" />
+
+            <SidebarGroup className="gap-4 px-4 py-5">
+              <Skeleton className="h-5 w-12" />
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-10 w-full" />
             </SidebarGroup>
           </SidebarContent>
-          <SidebarFooter className="gap-3 bg-background py-4">
-            <Skeleton className="h-9 w-full" />
-            <Skeleton className="h-9 w-full" />
-            <Skeleton className="h-9 w-full" />
+
+          <SidebarFooter className="border-t bg-background p-4">
+            <Skeleton className="h-10 w-full" />
           </SidebarFooter>
         </Sidebar>
       </div>

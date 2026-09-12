@@ -18,26 +18,31 @@
 ## 🔴 High severity (5)
 
 ### H1 — Forgot-password form is non-functional (dead feature)
+
 - **Files/lines:** `app/auth/[mode]/components/forgot-form.tsx` (form lines 17–49; submit button line 34; hardcoded copy lines 23–24, 30–31, 38); entry: `app/auth/[mode]/page.tsx:27`; link: `app/auth/[mode]/components/login-form.tsx:114–115`; unused i18n keys: `packages/i18n/src/locales/en/auth.ts:11–13`.
 - **Issue:** No `onSubmit`, no mutation, no state handling — the submit button triggers a native form submit/reload. **Verified:** no forgot/reset endpoint exists in the API, no hook exists in `@repo/api-client`, nothing in `@repo/contract`. The native app mirrors the stub (`apps/native/app/(auth)/forgot.tsx`, with `'/forgot' as any` at `apps/native/components/login-form.tsx:29`). Users clicking "Forgot your password?" land on an inert form on both platforms.
 - **Fix:** Implement the API route + `registry.registerPath()` + regenerate the API client, then wire the form per convention (`useForm` + `zodResolver` + `useErrorHandlingForm`, `noValidate`, `t()`, success state); or remove the entry points until the feature exists.
 
 ### H2 [done] — ~~`useSearchParams()` in a statically prerendered route without Suspense~~
+
 - **Files/lines:** `app/auth/[mode]/page.tsx:11` (`generateStaticParams`); `app/auth/[mode]/components/login-form.tsx:24`; `app/auth/[mode]/components/signup-form.tsx:36`. No `<Suspense>` exists in `apps/web` (verified).
 - **Issue:** These pages are static, and `useSearchParams` without a Suspense boundary fails the production build in Next 16 ("useSearchParams() should be wrapped in a suspense boundary") — breaks `pnpm build`, a root AGENTS.md requirement. Works in dev only, so likely uncaught.
 - **Fix:** Wrap the conditional form in `<Suspense>` inside `app/auth/[mode]/page.tsx` (or drop `generateStaticParams` to make the route dynamic).
 
-### H3 — Course add and edit pages are ~75% copy-paste duplicates
+### H3 [done] — ~~Course add and edit pages are ~75% copy-paste duplicates~~
+
 - **Files/lines:** `app/courses/add/page.tsx` (489 lines) vs `app/courses/[publicId]/edit/page.tsx` (497 lines). Verified diff: ~370 identical lines per file; only ~121 lines/file differ (imports + create-vs-fetch branching).
 - **Issue:** Every handler is duplicated verbatim (`invalidateTopicsAndLessons`, `handleSaveCourse/Topic/Lesson`, `handleAdd/Duplicate/Delete/Reorder`, `handlePublish`, `handleArchiveCourse`, `handleDeleteCourse`, `handleBackOrCancel`, 3-pane render). Any fix must be applied twice and they will drift.
 - **Fix:** Extract one `CourseEditor { mode: "create" | "edit" }` component; keep thin wrapper pages. Largest maintainability win in the app.
 
 ### H4 — Course-edit page renders an infinite skeleton on API error / 404
+
 - **Files/lines:** `app/courses/[publicId]/edit/page.tsx:88–143`, esp. the `if (!id) return <CourseEditSkeleton />` at lines 141–143.
 - **Issue:** `useGetCourseByPublicId`'s `isError` is never read. On failure/404 `courseData` is undefined, `isPending` is false, so the skeleton branch renders **forever**. Topic/lesson fetch failures after course load also leave the tree spinning indefinitely.
 - **Fix:** Add `if (isError ...) return notFound()/error card with retry`; surface `isError` for the dependency fetches too.
 
 ### H5 — Data-fetching pages have no API error handling (silent empty states)
+
 - **Files/lines:** `app/page.tsx:23`, `app/learn/explore/page.tsx:21`, `app/learn/enrolled/page.tsx:21`, `app/courses/page.tsx:35`, `app/lessons/page.tsx:27`, `app/students/page.tsx:40`, `app/courses/components/invites-list.tsx:33`, `app/profile/page.tsx:35–37` — all read `data?.length` but never `isError`/`error`. Sole exception: `app/invite/[token]/page.tsx:23,50`.
 - **Issue:** Any network/API failure renders the empty state ("no courses") as if valid; no error message, no retry. In `invites-list` a failure is indistinguishable from "no invites".
 - **Fix:** Mechanical, consistent: check `isError`, render an error card, retry via `refetch`/`invalidateQueries`.
@@ -45,60 +50,72 @@
 ## 🟠 Medium severity (12)
 
 ### M1 — "Preview" menu item links to a non-existent route
+
 - **File/lines:** `app/courses/components/course-card.tsx:120` — `router.push(`/courses/${course.publicId}`)`.
 - **Issue:** No `app/courses/[publicId]/page.tsx` exists (only the `edit` sub-route). Clicking Preview → 404.
 - **Fix:** Point to the real public route (`/learn/${publicId}`) or remove the item until a preview page exists.
 
 ### M2 — Google sign-in button is inert; inline icon recreated per render
+
 - **File/lines:** `app/auth/[mode]/components/login-form.tsx:134–137` (no `onClick`), `:150–161` (`GoogleIcon` defined inline — new component type each render → remounts subtree), `:125` "Logging in…" and `:131` "or" hardcoded (not `t()`), `:150` unresolved TODO.
 - **Issue:** Dead CTA on the login page; violates the "no inline component definitions" convention; i18n gaps.
 - **Fix:** Wire the OAuth flow or remove the button; extract `GoogleIcon` to `@repo/ui-web`; translate the two strings.
 
 ### M3 — Learn route imports across into the `courses` route internals
+
 - **Files/lines:** `app/learn/[publicId]/page.tsx:20–21`, `app/learn/[publicId]/components/learn-tree-nav.tsx:24–25`, `app/learn/[publicId]/components/learn-working-area.tsx:7–8` — import `@/app/courses/hooks/use-course-tree` and `@/app/courses/types`.
 - **Issue:** `useCourseTree`/`useAdjacentSelection` (and `Selection`) are shared by two route folders but live under `app/courses/` — violates the web AGENTS.md placement table and couples the learn route to courses internals.
 - **Fix:** Move hooks → `apps/web/hooks/`, promote shared types out of `app/courses/types.ts`, update the ~6 import sites.
 
 ### M4 — Navigation shell wired inconsistently (inline per page vs route layout)
+
 - **Files/lines:** Inline `NavigationLayoutProvider` in `app/page.tsx:32`, `app/courses/page.tsx:57`, `app/learn/explore/page.tsx:33`, `app/learn/enrolled/page.tsx:30`, `app/learn/[publicId]/page.tsx:144`; route `layout.tsx` for lessons/notifications/profile/settings/students/feedback.
 - **Issue:** Same route group mounts `SidebarProvider` + sidebar + mobile nav either per-page or per-layout depending on which file — the surrounding shell is torn down/remounted on client navigation between these two patterns.
 - **Fix:** Introduce a single `app/(app)/layout.tsx` route group holding the provider; remove inline wrappers.
 
 ### M5 — Public landing page renders the full authenticated app chrome
+
 - **File/lines:** `app/page.tsx:32` (wraps `NavigationLayoutProvider`).
-- **Issue:** Logged-out visitors on `/` see `MobileHeader` with *Log out*, the `SideNavMenu`, and `MobileBottomNav` linking to auth-gated `/students`, `/notifications`, `/profile` — every one redirects to login. Wrong chrome for the public landing page (SEO/LCP also hurt; see M6).
+- **Issue:** Logged-out visitors on `/` see `MobileHeader` with _Log out_, the `SideNavMenu`, and `MobileBottomNav` linking to auth-gated `/students`, `/notifications`, `/profile` — every one redirects to login. Wrong chrome for the public landing page (SEO/LCP also hurt; see M6).
 - **Fix:** Render a public, stripped-down layout for `/` (no signed-in nav items or mobile shell).
 
 ### M6 — Course-grid pages are triplicated
+
 - **Files/lines:** `app/page.tsx`, `app/learn/explore/page.tsx`, `app/learn/enrolled/page.tsx` — structurally identical (header + `useDebounce` search + 6-skeleton grid + `ChPagination` + `trackTotalPages` + empty state), differing only in the query hook and empty-state copy.
 - **Issue:** Three near-identical pages; search/pagination wiring repeated verbatim.
 - **Fix:** Extract a shared `CourseGridView { queryKey, emptyLabel, fetchFn }` under `apps/web/components/`; reduce each page to data wiring.
 
 ### M7 — Courses/Lessons tab strip and mobile search duplicated verbatim
+
 - **Files/lines:** `app/courses/page.tsx:59–85` (tab strip) and `:101–112` (mobile search) duplicate `app/lessons/page.tsx:46–72` and `:85–96`.
 - **Fix:** Extract one shared tab-strip component (+ mobile search) used by both pages.
 
 ### M8 — Missing `noValidate` on two zod-managed forms
+
 - **Files/lines:** `app/auth/[mode]/components/login-form.tsx:78`; `app/profile/edit/page.tsx:113`. (Compliant: `signup-form.tsx:95`, `invite-form.tsx:114`.)
 - **Issue:** Repo form convention is `noValidate` so zod owns validation; native browser checks (e.g. `type="email"`) fire first and mask localized field errors.
 - **Fix:** Add `noValidate` to both `<form>` tags.
 
 ### M9 — `useCourseTree` memo defeated on learn-detail when not enrolled
+
 - **File/lines:** `app/learn/[publicId]/page.tsx:70–75` (`publicTopics.map(...)` / `publicLessons.map(...)` create new array identities each render).
 - **Issue:** `useCourseTree`'s `useMemo` deps change every render, so the whole tree is re-sorted/re-filtered on any state change (selection, enrollment toggle) — and this is the common first view (locked/preview state).
 - **Fix:** Memoize the mapped arrays (`useMemo`) or shape the transformation keyed on stable source data.
 
 ### M10 — "use client" directive missing on effectively-client modules
+
 - **Files/lines:** `components/ch-pagination.tsx` (receives `onPageChange`/onClick), `components/page-header.tsx` (`search.onChange`), `components/ch-alert-dialog.tsx` (onClick/children triggers), `app/students/components/student-card.tsx:18` (calls `useT()`), `hooks/use-debounce.ts` (vs `hooks/use-pagination.ts`, which has the directive).
 - **Issue:** They only work because every importer is a client component today; a server component importing any of them throws. Directive usage is inconsistent across the two hooks.
 - **Fix:** Add `"use client"` to the five modules (and align `use-debounce`/`use-pagination`).
 
 ### M11 — 24 unbraced single-line `if` statements (hard-rule violation)
+
 - **Files/lines:** `app/courses/add/page.tsx:86,215,269,301,359,380`; `app/courses/[publicId]/edit/page.tsx:130,153,170,206,220,276,279,311,339,370,388`; `app/courses/components/course-tree-nav.tsx:177,179,184,193,196`; `app/profile/edit/page.tsx:70,81`.
 - **Issue:** All are `if (…) return;`. Root AGENTS.md: "Always use `{}` braces on `if` statements, even single-line bodies — never `if (x) return;`."
 - **Fix:** Mechanical — add braces; enforce with ESLint `curly: error` to prevent regressions.
 
 ### M12 — No `index.ts` barrels anywhere in `apps/web`
+
 - **Files/folders:** `components/` (7 files), `hooks/`, `providers/`, `app/courses/components/`, `app/courses/hooks/` — none have a barrel; all imports use deep file paths.
 - **Issue:** Root AGENTS.md requires a barrel in every folder with public exports. (Note the conflict: web AGENTS.md examples import by file path — one of the two instruction files should change.)
 - **Fix:** Add `index.ts` barrels and unify import style, or explicitly amend the root rule to exempt web route-colocated imports.
@@ -106,52 +123,64 @@
 ## 🟡 Low severity (12)
 
 ### L1 — `t as (key: string) => string` cast repeated; two resolver casts
+
 - **Files/lines:** `app/courses/add/page.tsx:43`, `app/courses/[publicId]/edit/page.tsx:46`, `app/courses/components/course-card.tsx:56`, `app/courses/components/invite-form.tsx:38`, `app/learn/[publicId]/page.tsx:34`; `app/courses/components/entity-form.tsx:44` (`schema as any` — the sole lint warning); `app/profile/edit/page.tsx:53` (`as unknown as Resolver`).
 - **Issue:** `useErrorHandlingAction` types `t` as `(key: string) => string`, forcing the same cast in 5 call sites.
 - **Fix:** Retype the shared hook param to the i18n `TFunction`; revisit the two resolver casts after the zod/drizzle-zod upgrade noted in the comment.
 
 ### L2 — Person name/initials helpers duplicated (4 copies)
+
 - **Files/lines:** `app/students/page.tsx:25–33`, `app/students/components/student-card.tsx:7–15`, `app/courses/components/invite-card.tsx:22–30`, `app/learn/components/learn-course-card.tsx:25–28`.
 - **Fix:** Single `userInitials`/`userName` util in `@repo/shared/utils` (or `apps/web/lib`).
 
 ### L3 — Invites-list reimplements pagination differently
+
 - **File/lines:** `app/courses/components/invites-list.tsx:24–38` — local `useState(page)`, manual `Math.ceil(total/limit)`, render-phase reset; URL-synced `usePagination` + `trackTotalPages` used everywhere else.
 - **Fix:** Adopt `usePagination`/`trackTotalPages` for consistency (survives refresh/share; one reset path).
 
 ### L4 — `SKELETON_ITEMS` allocated inside render
+
 - **Files/lines:** `app/courses/page.tsx:27`, `app/lessons/page.tsx:20` — `Array.from` on every render; `app/page.tsx:14` and learn pages already use module constants.
 - **Fix:** Hoist to module scope.
 
 ### L5 — Redundant fragment and duplicated derivation in the editor
+
 - **Files/lines:** `app/courses/components/course-working-area.tsx:196–209` (fragment around a single conditional), `:97` re-runs `useAdjacentSelection` already computed at `add/page.tsx:108` / `edit/page.tsx:103`; `showInviteTab` derived in both parents (`add:80`, `edit:117`) and child (`course-working-area.tsx:86–88`).
 - **Fix:** Drop the fragment; compute adjacent-selection and `showInviteTab` in one place and pass down.
 
 ### L6 — Cross-namespace i18n key in learn tree nav
+
 - **File/lines:** `app/learn/[publicId]/components/learn-tree-nav.tsx:115` — `t("courses.editor.toggleTopic")`.
 - **Fix:** Add a `learn.detail` key (or shared namespace) so namespaces stay decoupled.
 
 ### L7 — Native `alert()` stub for profile photo change
+
 - **File/lines:** `app/profile/edit/page.tsx:121`.
 - **Fix:** Implement the upload flow or disable the button with a "coming soon" label.
 
 ### L8 — Profile page query sprawl, no error state, unhandled clipboard rejection
+
 - **File/lines:** `app/profile/page.tsx:35–37` (3 parallel queries, two `limit: 1` list fetches used only for `pagination.total`), no `isError` UI; `:84` clipboard copy without `try/catch` → unhandled rejection when permission denied.
 - **Fix:** Add an aggregate endpoint (or keep queries but render `isError`), and wrap clipboard in `try/catch`.
 
 ### L9 — Type-only imports missing `type` modifier
+
 - **Files/lines:** `app/lessons/components/lesson-card.tsx:3` (`import { Lesson }`), `app/courses/components/course-card.tsx:4` (`import { Course }`) — elsewhere the codebase already uses `import type` (`students/page.tsx:4`).
 - **Fix:** Adopt `@typescript-eslint/consistent-type-imports`.
 
 ### L10 — Hardcoded gradient colors in course card banner
+
 - **File/lines:** `app/learn/components/learn-course-card.tsx:12–17` (`from-orange-500 to-rose-600` etc.).
 - **Issue:** Borderline with AGENTS.md's "never hardcode colours" (these are accent variants, not theme colors) — flagged for awareness, especially dark mode.
 - **Fix:** If dark-mode sensitivity is wanted, token-derived classes; otherwise document as intentional brand accents.
 
 ### L11 — Misc correctness details
+
 - **Files/lines:** `app/courses/components/invite-form.tsx:128` (root API errors conflated into the email `FieldError`, losing the destructive `Alert` treatment used elsewhere); `app/courses/add/page.tsx:323–326` and `edit/page.tsx:333–336` (always toasts "Saved" even when the flush failed validation or nothing changed); `app/courses/components/course-card.tsx:136` (redundant expression braces around an icon).
 - **Fix:** Dedicated root-error surface; gate the toast on a successful `flush`; remove the braces.
 
 ### L12 — Pre-existing monorepo type errors block `check-types`
+
 - **Files/lines:** `packages/shared/src/hooks/errors/useErrorHandlingForm.ts:78` (i18n `t` signature) and `packages/api-client/src/api-client-provider.tsx:4` (React types not resolved in that package's tsconfig).
 - **Issue:** Root AGENTS.md requires `pnpm check-types`; it currently fails even though `apps/web` source is clean.
 - **Fix:** Fix the shared-package type wiring (`t` → i18n `TFunction`; ensure `api-client` resolves `@types/react`).

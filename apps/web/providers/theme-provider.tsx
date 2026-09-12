@@ -2,6 +2,8 @@
 
 import * as React from "react";
 import { ThemeProvider as NextThemesProvider, useTheme } from "next-themes";
+import { useEffect } from "react";
+import { isTypingTarget } from "@/utils/is-typing-target";
 
 function ThemeProvider({ children, ...props }: React.ComponentProps<typeof NextThemesProvider>) {
   return (
@@ -18,23 +20,10 @@ function ThemeProvider({ children, ...props }: React.ComponentProps<typeof NextT
   );
 }
 
-function isTypingTarget(target: EventTarget | null) {
-  if (!(target instanceof HTMLElement)) {
-    return false;
-  }
-
-  return (
-    target.isContentEditable ||
-    target.tagName === "INPUT" ||
-    target.tagName === "TEXTAREA" ||
-    target.tagName === "SELECT"
-  );
-}
-
 function ThemeHotkey() {
   const { resolvedTheme, setTheme } = useTheme();
 
-  React.useEffect(() => {
+  useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
       if (event.defaultPrevented || event.repeat) {
         return;
