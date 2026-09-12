@@ -4,19 +4,10 @@ import { useState } from "react";
 import { ChevronLeft, ChevronRight, Copy, Plus, Trash2 } from "lucide-react";
 import { CoursePutQuerySchema, LessonPutQuerySchema, TopicPutQuerySchema } from "@repo/contract";
 import type { CourseStatus, CourseVisibility, Lesson } from "@repo/api-client";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@repo/ui-web/components/alert-dialog";
 import { Button } from "@repo/ui-web/components/button";
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@repo/ui-web/components/card";
 import { useT } from "@repo/i18n/client";
+import { ChAlertDialog } from "@/components/ch-alert-dialog";
 import { EntityForm, type EntityFormHandle, type EntityFormValues } from "./entity-form";
 import { InviteForm } from "./invite-form";
 import { useAdjacentSelection, type TopicWithLessons } from "../hooks/use-course-tree";
@@ -269,28 +260,23 @@ export function CourseWorkingArea({
       </div>
 
       {showHeader && (
-        <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>
-                {isCourseSelected
-                  ? t("courses.editor.deleteDialog.title")
-                  : t("courses.editor.entityDeleteDialog.title")}
-              </AlertDialogTitle>
-              <AlertDialogDescription>
-                {isCourseSelected
-                  ? t("courses.editor.deleteDialog.description")
-                  : t("courses.editor.entityDeleteDialog.description")}
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>{t("courses.editor.entityDeleteDialog.cancel")}</AlertDialogCancel>
-              <AlertDialogAction variant="destructive" onClick={onDeleteSelected}>
-                {t("courses.editor.entityDeleteDialog.confirm")}
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+        <ChAlertDialog
+          open={deleteDialogOpen}
+          onOpenChange={setDeleteDialogOpen}
+          title={
+            isCourseSelected
+              ? t("courses.editor.deleteDialog.title")
+              : t("courses.editor.entityDeleteDialog.title")
+          }
+          description={
+            isCourseSelected
+              ? t("courses.editor.deleteDialog.description")
+              : t("courses.editor.entityDeleteDialog.description")
+          }
+          cancelLabel={t("courses.editor.entityDeleteDialog.cancel")}
+          actionLabel={t("courses.editor.entityDeleteDialog.confirm")}
+          actionProps={{ variant: "destructive", onClick: onDeleteSelected }}
+        />
       )}
     </div>
   );

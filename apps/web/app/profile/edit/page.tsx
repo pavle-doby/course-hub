@@ -11,23 +11,14 @@ import { useT } from "@repo/i18n/client";
 import { useErrorHandlingForm, useZodLocale } from "@repo/shared";
 import { Alert, AlertTitle } from "@repo/ui-web/components/alert";
 import { Card, CardContent } from "@repo/ui-web/components/card";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@repo/ui-web/components/alert-dialog";
+import { AlertDialogTrigger } from "@repo/ui-web/components/alert-dialog";
 import { Button } from "@repo/ui-web/components/button";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@repo/ui-web/components/field";
 import { Input } from "@repo/ui-web/components/input";
 import { Skeleton } from "@repo/ui-web/components/skeleton";
 import { Textarea } from "@repo/ui-web/components/textarea";
 import { ProfileAvatar } from "@/app/profile/components/profile-avatar";
+import { ChAlertDialog } from "@/components/ch-alert-dialog";
 import { PageHeader } from "@/components/page-header";
 
 // drizzle-zod's createUpdateSchema infers field types as `never` with the
@@ -166,27 +157,21 @@ export default function ProfileEditPage() {
               </FieldGroup>
 
               <div className="flex gap-3">
-                <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+                <ChAlertDialog
+                  open={deleteDialogOpen}
+                  onOpenChange={setDeleteDialogOpen}
+                  title={t("profile.edit.deleteConfirmTitle")}
+                  description={t("profile.edit.deleteConfirmMessage")}
+                  cancelLabel={t("profile.edit.cancel")}
+                  actionLabel={t("profile.edit.delete")}
+                  actionProps={{ variant: "destructive", onClick: onDelete }}
+                >
                   <AlertDialogTrigger asChild>
                     <Button type="button" variant="destructive" disabled={isDeleting}>
                       {t("profile.edit.delete")}
                     </Button>
                   </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>{t("profile.edit.deleteConfirmTitle")}</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        {t("profile.edit.deleteConfirmMessage")}
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>{t("profile.edit.cancel")}</AlertDialogCancel>
-                      <AlertDialogAction variant="destructive" onClick={onDelete}>
-                        {t("profile.edit.delete")}
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
+                </ChAlertDialog>
                 <Button type="button" variant="outline" onClick={() => router.back()}>
                   {t("profile.edit.cancel")}
                 </Button>

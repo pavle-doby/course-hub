@@ -23,17 +23,11 @@ import {
   Files,
   Folder,
   GripHorizontal,
-  Trash2,
-  Archive,
-  Globe,
-  Lock,
+  PanelLeftClose,
+  PanelLeftOpen,
   Plus,
   Shuffle,
-  Undo2,
-  Upload,
-  UserPlus,
 } from "lucide-react";
-import type { CourseVisibility } from "@repo/api-client";
 import {
   Collapsible,
   CollapsibleContent,
@@ -42,7 +36,6 @@ import {
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarMenu,
   SidebarMenuAction,
@@ -52,21 +45,10 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
+  SidebarRail,
   useSidebar,
 } from "@repo/ui-web/components/sidebar";
-import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogCancel,
-  AlertDialogAction,
-} from "@repo/ui-web/components/alert-dialog";
 import { Button } from "@repo/ui-web/components/button";
-import { ButtonGroup } from "@repo/ui-web/components/button-group";
-import { Separator } from "@repo/ui-web/components/separator";
 import { useT } from "@repo/i18n/client";
 import type { TopicWithLessons } from "../hooks/use-course-tree";
 import type { Selection } from "../types";
@@ -82,13 +64,6 @@ type CourseTreeNavProps = {
   onAddLesson: (topicId: string) => void;
   onReorderTopics: (orderedIds: string[]) => Promise<void> | void;
   onReorderLessons: (orderedIds: string[]) => Promise<void> | void;
-  visibility?: CourseVisibility;
-  onVisibilityChange?: (value: CourseVisibility) => void;
-  onInviteClick?: () => void;
-  isPublished?: boolean;
-  onPublishCourse?: () => void;
-  onArchiveCourse?: () => void;
-  onDeleteCourse?: () => void;
   isLoadingTree?: boolean;
 };
 
@@ -177,22 +152,13 @@ export function CourseTreeNav({
   onAddLesson,
   onReorderTopics,
   onReorderLessons,
-  visibility,
-  onVisibilityChange,
-  onInviteClick,
-  isPublished = false,
-  onPublishCourse,
-  onArchiveCourse,
-  onDeleteCourse,
   isLoadingTree = false,
 }: CourseTreeNavProps) {
   const { t } = useT();
-  const { isMobile, setOpenMobile } = useSidebar();
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const { isMobile, setOpenMobile, state, toggleSidebar } = useSidebar();
   const [reorderMode, setReorderMode] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [draftTree, setDraftTree] = useState<TopicWithLessons[] | null>(null);
-  const isPrivate = visibility === "private";
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 8 } }));
 
   function selectAndClose(select: () => void) {
@@ -243,6 +209,7 @@ export function CourseTreeNav({
       setReorderMode(false);
       return;
     }
+
     setIsSaving(true);
     try {
       await onReorderTopics(draftTree.map((topic) => topic.id));
@@ -257,17 +224,31 @@ export function CourseTreeNav({
   }
 
   return (
-    <Sidebar collapsible="offcanvas" className="border-r">
+    <Sidebar collapsible="icon" className="border-r">
       <SidebarContent>
-        <div className="sticky top-0 z-10 flex h-14 shrink-0 items-center border-b bg-sidebar p-2">
+        <div className="sticky top-0 z-10 flex h-14 shrink-0 items-center justify-between gap-1 border-b bg-sidebar p-2">
           <Button
             variant="outline"
-            className="w-full justify-center gap-2"
+            size="sm"
+            className="flex-1 justify-center gap-2 group-data-[collapsible=icon]:hidden"
             disabled={isSaving || isLoadingTree}
             onClick={reorderMode ? handleDoneReorder : handleStartReorder}
           >
             {reorderMode ? <Check className="size-4" /> : <Shuffle className="size-4" />}
             {reorderMode ? t("courses.editor.reorderDone") : t("courses.editor.reorder")}
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="hidden md:flex"
+            onClick={toggleSidebar}
+            aria-label={t("courses.editor.collapseNavigation")}
+          >
+            {state === "collapsed" ? (
+              <PanelLeftOpen className="size-4" />
+            ) : (
+              <PanelLeftClose className="size-4" />
+            )}
           </Button>
         </div>
 
@@ -282,11 +263,12 @@ export function CourseTreeNav({
                 <SidebarMenuButton
                   size="lg"
                   textWrap="compact"
+                  className="group-data-[collapsible=icon]:justify-center"
                   isActive={selection.type === "course"}
                   onClick={() => selectAndClose(onSelectCourse)}
                 >
                   <Folder />
-                  <span>{courseName}</span>
+                  <span className="group-data-[collapsible=icon]:hidden">{courseName}</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
 
@@ -296,7 +278,10 @@ export function CourseTreeNav({
               >
                 {showSkeleton
                   ? skeletonTopics.map((topic) => (
-                      <SidebarMenuItem key={topic.id}>
+                      <SidebarMenuItem
+                        key={topic.id}
+                        className="group-data-[collapsible=icon]:hidden"
+                      >
                         <SidebarMenuSkeleton showIcon className="pl-7" />
                         <SidebarMenuSub>
                           {topic.lessons.map((lesson) => (
@@ -329,7 +314,7 @@ export function CourseTreeNav({
                             </SidebarMenuAction>
                           </CollapsibleTrigger>
                           <CollapsibleContent>
-                            <SidebarMenuSub>
+                            <SidebarMenuSub className="group-data-[collapsible=icon]:mx-0! group-data-[collapsible=icon]:flex! group-data-[collapsible=icon]:border-0 group-data-[collapsible=icon]:px-0">
                               <SortableContext
                                 items={topic.lessons.map((lesson) => lesson.id)}
                                 strategy={verticalListSortingStrategy}
@@ -342,6 +327,7 @@ export function CourseTreeNav({
                                   >
                                     <SidebarMenuSubButton
                                       textWrap="compact"
+                                      className="group-data-[collapsible=icon]:flex! group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
                                       isActive={
                                         selection.type === "lesson" && selection.id === lesson.id
                                       }
@@ -351,13 +337,15 @@ export function CourseTreeNav({
                                     >
                                       {reorderMode && <GripHorizontal className="size-3.5" />}
                                       <File />
-                                      <span>{lesson.name}</span>
+                                      <span className="group-data-[collapsible=icon]:hidden">
+                                        {lesson.name}
+                                      </span>
                                     </SidebarMenuSubButton>
                                   </SortableLesson>
                                 ))}
                               </SortableContext>
                               {!reorderMode && (
-                                <SidebarMenuSubItem>
+                                <SidebarMenuSubItem className="group-data-[collapsible=icon]:hidden">
                                   <SidebarMenuSubButton
                                     className="my-1 border border-dashed"
                                     onClick={() => onAddLesson(topic.id)}
@@ -375,7 +363,7 @@ export function CourseTreeNav({
               </SortableContext>
 
               {!reorderMode && !isLoadingTree && (
-                <SidebarMenuItem>
+                <SidebarMenuItem className="group-data-[collapsible=icon]:hidden">
                   <SidebarMenuButton className="my-1 border border-dashed" onClick={onAddTopic}>
                     <Plus />
                     <span>{t("courses.editor.addNewTopic")}</span>
@@ -386,105 +374,7 @@ export function CourseTreeNav({
           </DndContext>
         </SidebarGroup>
       </SidebarContent>
-
-      <SidebarFooter className="gap-3 bg-background py-4">
-        {onVisibilityChange && (
-          <>
-            <ButtonGroup className="w-full">
-              <Button
-                type="button"
-                variant={isPrivate ? "outline" : "default"}
-                className="w-1/2 gap-1.5"
-                disabled={reorderMode || isSaving}
-                onClick={() => onVisibilityChange("public")}
-              >
-                <Globe className="size-4" />
-                {t("courses.editor.visibilityPublic")}
-              </Button>
-              <Button
-                type="button"
-                variant={isPrivate ? "default" : "outline"}
-                className="w-1/2 gap-1.5"
-                disabled={reorderMode || isSaving}
-                onClick={() => onVisibilityChange("private")}
-              >
-                <Lock className="size-4" />
-                {t("courses.editor.visibilityPrivate")}
-              </Button>
-            </ButtonGroup>
-            {isPrivate && onInviteClick && (
-              <Button
-                type="button"
-                variant="outline"
-                className="w-full gap-1.5"
-                disabled={reorderMode || isSaving}
-                onClick={onInviteClick}
-              >
-                <UserPlus className="size-4" />
-                {t("courses.editor.invite")}
-              </Button>
-            )}
-            <Separator className="-mx-2 !w-auto" />
-          </>
-        )}
-
-        {onPublishCourse && (
-          <Button
-            variant="outline"
-            className="w-full justify-start gap-2"
-            disabled={reorderMode || isSaving}
-            onClick={onPublishCourse}
-          >
-            {isPublished ? <Undo2 className="size-4" /> : <Upload className="size-4" />}
-            {isPublished ? t("courses.editor.unpublish") : t("courses.editor.publish")}
-          </Button>
-        )}
-
-        {onArchiveCourse && (
-          <Button
-            variant="destructive"
-            className="w-full justify-start gap-2"
-            disabled={reorderMode || isSaving}
-            onClick={onArchiveCourse}
-          >
-            <Archive className="size-4" />
-            {t("courses.editor.archive")}
-          </Button>
-        )}
-
-        {onArchiveCourse && onDeleteCourse && <Separator className="-mx-2 !w-auto" />}
-
-        {onDeleteCourse && (
-          <Button
-            variant="destructive"
-            className="w-full justify-start gap-2"
-            disabled={reorderMode || isSaving}
-            onClick={() => setDeleteDialogOpen(true)}
-          >
-            <Trash2 className="size-4" />
-            {t("courses.editor.delete")}
-          </Button>
-        )}
-      </SidebarFooter>
-
-      {onDeleteCourse && (
-        <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>{t("courses.editor.deleteDialog.title")}</AlertDialogTitle>
-              <AlertDialogDescription>
-                {t("courses.editor.deleteDialog.description")}
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>{t("courses.editor.deleteDialog.cancel")}</AlertDialogCancel>
-              <AlertDialogAction variant="destructive" onClick={onDeleteCourse}>
-                {t("courses.editor.deleteDialog.confirm")}
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-      )}
+      <SidebarRail />
     </Sidebar>
   );
 }

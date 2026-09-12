@@ -4,17 +4,8 @@ import { useState } from "react";
 import { ChevronLeft } from "lucide-react";
 import { Button } from "@repo/ui-web/components/button";
 import { Skeleton } from "@repo/ui-web/components/skeleton";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@repo/ui-web/components/alert-dialog";
 import { useT } from "@repo/i18n/client";
+import { ChAlertDialog } from "@/components/ch-alert-dialog";
 
 type LearnHeaderProps = {
   title: string;
@@ -57,22 +48,15 @@ export function LearnHeader({
           >
             {isWithdrawing ? t("learn.detail.withdrawing") : t("learn.detail.withdraw")}
           </Button>
-          <AlertDialog open={withdrawDialogOpen} onOpenChange={setWithdrawDialogOpen}>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>{t("learn.detail.withdrawDialog.title")}</AlertDialogTitle>
-                <AlertDialogDescription>
-                  {t("learn.detail.withdrawDialog.description")}
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>{t("learn.detail.withdrawDialog.cancel")}</AlertDialogCancel>
-                <AlertDialogAction variant="destructive" onClick={onWithdraw}>
-                  {t("learn.detail.withdrawDialog.confirm")}
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          <ChAlertDialog
+            open={withdrawDialogOpen}
+            onOpenChange={setWithdrawDialogOpen}
+            title={t("learn.detail.withdrawDialog.title")}
+            description={t("learn.detail.withdrawDialog.description")}
+            cancelLabel={t("learn.detail.withdrawDialog.cancel")}
+            actionLabel={t("learn.detail.withdrawDialog.confirm")}
+            actionProps={{ variant: "destructive", onClick: onWithdraw }}
+          />
         </>
       ) : (
         <Button onClick={onEnroll} disabled={isEnrolling}>

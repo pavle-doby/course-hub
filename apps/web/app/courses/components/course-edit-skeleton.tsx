@@ -109,10 +109,9 @@ export function CourseEditSkeleton() {
             </div>
           </div>
 
-          {/* Mirrors CourseBottomNav: mobile-only cancel/save/publish row + previous/contents/next */}
+          {/* Mirrors CourseBottomNav: mobile-only cancel/save row + previous/contents/next */}
           <div className="sticky bottom-0 z-40 flex flex-col border-t bg-background md:hidden">
             <div className="flex items-center gap-2 px-4 py-2">
-              <Skeleton className="h-8 flex-1" />
               <Skeleton className="h-8 flex-1" />
               <Skeleton className="h-8 flex-1" />
             </div>
@@ -123,6 +122,23 @@ export function CourseEditSkeleton() {
             </div>
           </div>
         </div>
+
+        <Sidebar side="right" collapsible="none" className="hidden border-l md:flex">
+          <SidebarContent>
+            <div className="flex h-14 shrink-0 items-center justify-between border-b p-2">
+              <Skeleton className="h-5 w-24" />
+              <Skeleton className="size-8 rounded-md" />
+            </div>
+            <SidebarGroup>
+              <Skeleton className="h-9 w-full" />
+            </SidebarGroup>
+          </SidebarContent>
+          <SidebarFooter className="gap-3 bg-background py-4">
+            <Skeleton className="h-9 w-full" />
+            <Skeleton className="h-9 w-full" />
+            <Skeleton className="h-9 w-full" />
+          </SidebarFooter>
+        </Sidebar>
       </div>
     </SidebarProvider>
   );

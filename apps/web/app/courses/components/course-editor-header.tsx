@@ -12,11 +12,9 @@ type CourseEditorHeaderProps = {
   autoSave: boolean;
   onAutoSaveChange: (value: boolean) => void;
   isSaving?: boolean;
-  isPublished: boolean;
   onBack: () => void;
   onCancel: () => void;
   onSave: () => void;
-  onPublish: () => void;
   showInviteTab?: boolean;
   activeTab?: "edit" | "invite";
   onActiveTabChange?: (value: "edit" | "invite") => void;
@@ -27,11 +25,9 @@ export function CourseEditorHeader({
   autoSave,
   onAutoSaveChange,
   isSaving,
-  isPublished,
   onBack,
   onCancel,
   onSave,
-  onPublish,
   showInviteTab,
   activeTab = "edit",
   onActiveTabChange,
@@ -66,9 +62,6 @@ export function CourseEditorHeader({
           </Button>
           <Button variant="outline" onClick={onSave} disabled={isSaving}>
             {isSaving ? t("courses.editor.saving") : t("courses.editor.save")}
-          </Button>
-          <Button onClick={onPublish} variant={isPublished ? "destructive" : "default"}>
-            {isPublished ? t("courses.editor.unpublish") : t("courses.editor.publish")}
           </Button>
         </div>
       </div>

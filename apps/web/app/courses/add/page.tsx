@@ -27,6 +27,7 @@ import { toast } from "@repo/ui-web/components/sonner";
 import { SidebarProvider } from "@repo/ui-web/components/sidebar";
 import { CourseEditorHeader } from "../components/course-editor-header";
 import { CourseBottomNav } from "../components/course-bottom-nav";
+import { CourseActions } from "../components/course-actions";
 import { CourseTreeNav } from "../components/course-tree-nav";
 import { CourseWorkingArea } from "../components/course-working-area";
 import { useAdjacentSelection, useCourseTree } from "../hooks/use-course-tree";
@@ -57,6 +58,7 @@ export default function AddCoursePage() {
   const [selection, setSelection] = useState<Selection>({ type: "course" });
   const [autoSave, setAutoSave] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [actionsOpenMobile, setActionsOpenMobile] = useState(false);
   const [activeTab, setActiveTab] = useState<"edit" | "invite">(
     searchParams.get("tab") === "invite" ? "invite" : "edit"
   );
@@ -335,19 +337,19 @@ export default function AddCoursePage() {
             ? { status: nextStatus, publishedAt: new Date().toISOString() }
             : { status: nextStatus },
       });
-      if (updated)
+      if (updated) {
         setCourse({
           name: updated.name,
           description: updated.description,
           status: updated.status,
           visibility: updated.visibility,
         });
+      }
       toast.success(
         nextStatus === "published"
           ? t("courses.editor.publishedToast")
           : t("courses.editor.unpublishedToast")
       );
-      router.push("/courses");
     } catch (error) {
       handleErrorAction(error as Error);
     }
@@ -356,9 +358,19 @@ export default function AddCoursePage() {
   async function handleArchiveCourse() {
     if (!courseId) return;
     try {
-      await updateCourse({ pathParams: { id: courseId }, data: { status: "archived" } });
+      const updated = await updateCourse({
+        pathParams: { id: courseId },
+        data: { status: "archived" },
+      });
+      if (updated) {
+        setCourse({
+          name: updated.name,
+          description: updated.description,
+          status: updated.status,
+          visibility: updated.visibility,
+        });
+      }
       toast.success(t("courses.editor.archivedToast"));
-      router.push("/courses");
     } catch (error) {
       handleErrorAction(error as Error);
     }
@@ -402,13 +414,6 @@ export default function AddCoursePage() {
           onReorderTopics={handleReorderTopics}
           onReorderLessons={handleReorderLessons}
           isLoadingTree={isLoadingTree}
-          visibility={course.visibility}
-          onVisibilityChange={handleVisibilityChange}
-          isPublished={course.status === "published"}
-          onPublishCourse={courseId ? handlePublish : undefined}
-          onArchiveCourse={courseId ? handleArchiveCourse : undefined}
-          onDeleteCourse={courseId ? handleDeleteCourse : undefined}
-          onInviteClick={handleInviteClick}
         />
 
         <div className="flex flex-1 flex-col">
@@ -417,11 +422,9 @@ export default function AddCoursePage() {
             autoSave={autoSave}
             onAutoSaveChange={handleAutoSaveChange}
             isSaving={isSaving}
-            isPublished={course.status === "published"}
             onBack={handleBackOrCancel}
             onCancel={handleBackOrCancel}
             onSave={handleSave}
-            onPublish={handlePublish}
             showInviteTab={showInviteTab}
             activeTab={activeTab}
             onActiveTabChange={handleActiveTabChange}
@@ -454,16 +457,32 @@ export default function AddCoursePage() {
 
           <CourseBottomNav
             isSaving={isSaving}
-            isPublished={course.status === "published"}
             onCancel={handleBackOrCancel}
             onSave={handleSave}
-            onPublish={handlePublish}
             hasPrevious={!!previousItem}
             hasNext={!!nextItem}
             onPrevious={() => previousItem && setSelection(previousItem)}
             onNext={() => nextItem && setSelection(nextItem)}
+            onOpenActions={() => setActionsOpenMobile(true)}
           />
         </div>
+
+        <SidebarProvider
+          className="contents"
+          openMobile={actionsOpenMobile}
+          onOpenMobileChange={setActionsOpenMobile}
+        >
+          <CourseActions
+            status={course.status ?? "draft"}
+            visibility={course.visibility}
+            onVisibilityChange={handleVisibilityChange}
+            onInviteClick={handleInviteClick}
+            isPublished={course.status === "published"}
+            onPublishCourse={courseId ? handlePublish : undefined}
+            onArchiveCourse={courseId ? handleArchiveCourse : undefined}
+            onDeleteCourse={courseId ? handleDeleteCourse : undefined}
+          />
+        </SidebarProvider>
       </div>
     </SidebarProvider>
   );

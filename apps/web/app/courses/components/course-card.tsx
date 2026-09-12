@@ -17,16 +17,6 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "@repo/ui-web/components/dropdown-menu";
-import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogCancel,
-  AlertDialogAction,
-} from "@repo/ui-web/components/alert-dialog";
 import { Button } from "@repo/ui-web/components/button";
 import { Badge } from "@repo/ui-web/components/badge";
 import {
@@ -44,6 +34,7 @@ import { useRouter } from "next/navigation";
 import { useT } from "@repo/i18n/client";
 import { useErrorHandlingAction } from "@repo/shared";
 import { toast } from "@repo/ui-web/components/sonner";
+import { ChAlertDialog } from "@/components/ch-alert-dialog";
 
 type CourseCardProps = {
   course: Course;
@@ -167,22 +158,15 @@ export function CourseCard({ course, onDelete }: CourseCardProps) {
         <Badge variant={statusVariant[course.status]}>{t(`courses.status.${course.status}`)}</Badge>
       </CardFooter>
 
-      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>{t("courses.card.deleteDialog.title")}</AlertDialogTitle>
-            <AlertDialogDescription>
-              {t("courses.card.deleteDialog.description", { name: course.name })}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>{t("courses.card.deleteDialog.cancel")}</AlertDialogCancel>
-            <AlertDialogAction variant="destructive" onClick={() => onDelete(course.id)}>
-              {t("courses.card.deleteDialog.confirm")}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <ChAlertDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        title={t("courses.card.deleteDialog.title")}
+        description={t("courses.card.deleteDialog.description", { name: course.name })}
+        cancelLabel={t("courses.card.deleteDialog.cancel")}
+        actionLabel={t("courses.card.deleteDialog.confirm")}
+        actionProps={{ variant: "destructive", onClick: () => onDelete(course.id) }}
+      />
     </Card>
   );
 }

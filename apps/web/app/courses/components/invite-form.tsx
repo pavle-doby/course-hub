@@ -112,14 +112,15 @@ export function InviteForm({ publicId }: InviteFormProps) {
       <Field>
         <FieldLabel htmlFor={`${id}-email`}>{t("invite.dialog.emailLabel")}</FieldLabel>
         <form onSubmit={handleSubmit(handleCreateEmailInvite)} noValidate>
-          <div className="flex gap-2">
+          <div className="flex flex-col gap-2 md:flex-row">
             <Input
               id={`${id}-email`}
               type="email"
+              className="md:flex-1"
               placeholder={t("invite.dialog.emailPlaceholder")}
               {...register("email")}
             />
-            <Button type="submit" disabled={isCreatingEmail}>
+            <Button type="submit" className="w-full md:w-auto" disabled={isCreatingEmail}>
               <Mail /> {t("invite.dialog.sendEmailInvite")}
             </Button>
           </div>
