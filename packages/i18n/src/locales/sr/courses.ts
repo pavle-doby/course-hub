@@ -30,6 +30,7 @@ export const courses = {
   },
   editor: {
     back: "Nazad",
+    retry: "Pokušaj ponovo",
     contents: "Sadržaj kursa",
     actions: "Radnje kursa",
     collapseNavigation: "Skupi sadržaj kursa",

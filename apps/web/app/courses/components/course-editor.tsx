@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { notFound, useRouter, useSearchParams } from "next/navigation";
 import {
   useCreateCourse,
   useCreateLesson,
@@ -31,6 +31,7 @@ import { CourseEditorHeader } from "./course-editor-header";
 import { CourseBottomNav } from "./course-bottom-nav";
 import { CourseActions } from "./course-actions";
 import { CourseEditSkeleton } from "./course-edit-skeleton";
+import { CourseEditError } from "./course-edit-error";
 import { CourseTreeNav } from "./course-tree-nav";
 import { CourseWorkingArea } from "./course-working-area";
 import { useAdjacentSelection, useCourseTree } from "../hooks/use-course-tree";
@@ -75,10 +76,13 @@ export function CourseEditor({ mode, publicId }: CourseEditorProps) {
   );
 
   // disabled (and never queried) in create mode
-  const { data: fetchedCourse, isPending: isCourseLoading } = useGetCourseByPublicId(
-    { publicId: publicId ?? "" },
-    { query: { enabled: mode === "edit" } }
-  );
+  const {
+    data: fetchedCourse,
+    isLoading: isCourseLoading,
+    isError: isCourseError,
+    error: courseError,
+    refetch: refetchCourse,
+  } = useGetCourseByPublicId({ publicId: publicId ?? "" }, { query: { enabled: mode === "edit" } });
 
   const courseId = mode === "edit" ? fetchedCourse?.id : createdCourseId;
   const workingAreaPublicId = mode === "edit" ? publicId : createdCoursePublicId;
@@ -95,16 +99,19 @@ export function CourseEditor({ mode, publicId }: CourseEditorProps) {
         }
       : { name: "", description: "" });
 
-  const { data: topicsData, isLoading: isTopicsLoading } = useGetTopics(
-    { courseId },
-    { query: { enabled: !!courseId } }
-  );
-  const { data: lessonsData, isLoading: isLessonsLoading } = useGetLessons(
-    { courseId },
-    { query: { enabled: !!courseId } }
-  );
+  const {
+    data: topicsData,
+    isLoading: isTopicsLoading,
+    isError: isTopicsError,
+  } = useGetTopics({ courseId }, { query: { enabled: !!courseId } });
+  const {
+    data: lessonsData,
+    isLoading: isLessonsLoading,
+    isError: isLessonsError,
+  } = useGetLessons({ courseId }, { query: { enabled: !!courseId } });
   const isLoading = isCourseLoading || isTopicsLoading || isLessonsLoading;
   const isLoadingTree = isTopicsLoading || isLessonsLoading;
+  const isTreeError = isTopicsError || isLessonsError;
   const tree = useCourseTree(topicsData?.data, lessonsData?.data);
   const flatLessons = tree.flatMap((topic) => topic.lessons);
   const { previousItem, nextItem } = useAdjacentSelection(tree, selection);
@@ -182,7 +189,15 @@ export function CourseEditor({ mode, publicId }: CourseEditorProps) {
   const { mutateAsync: deleteLesson } = useDeleteLesson();
 
   // real course id resolved above from the public id in edit mode — narrowed for the rest of this render
-  if (mode === "edit" && !courseId) {
+  if (mode === "edit" && isCourseError) {
+    const status = (courseError as { response?: { status?: number } } | undefined)?.response
+      ?.status;
+    if (status === 404) {
+      notFound();
+    }
+    return <CourseEditError onRetry={refetchCourse} onBack={handleBackOrCancel} />;
+  }
+  if (mode === "edit" && isCourseLoading) {
     return <CourseEditSkeleton />;
   }
 
@@ -492,6 +507,8 @@ export function CourseEditor({ mode, publicId }: CourseEditorProps) {
           onReorderTopics={handleReorderTopics}
           onReorderLessons={handleReorderLessons}
           isLoadingTree={isLoadingTree}
+          isTreeError={isTreeError}
+          onRetryTree={() => invalidateTopicsAndLessons()}
         />
 
         <div className="flex flex-1 flex-col">

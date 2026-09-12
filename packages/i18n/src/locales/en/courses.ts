@@ -30,6 +30,7 @@ export const courses = {
   },
   editor: {
     back: "Back",
+    retry: "Retry",
     contents: "Course contents",
     actions: "Course actions",
     collapseNavigation: "Collapse course contents",

@@ -35,7 +35,7 @@
 - **Issue:** Every handler is duplicated verbatim (`invalidateTopicsAndLessons`, `handleSaveCourse/Topic/Lesson`, `handleAdd/Duplicate/Delete/Reorder`, `handlePublish`, `handleArchiveCourse`, `handleDeleteCourse`, `handleBackOrCancel`, 3-pane render). Any fix must be applied twice and they will drift.
 - **Fix:** Extract one `CourseEditor { mode: "create" | "edit" }` component; keep thin wrapper pages. Largest maintainability win in the app.
 
-### H4 — Course-edit page renders an infinite skeleton on API error / 404
+### H4 [done] — ~~Course-edit page renders an infinite skeleton on API error / 404~~
 
 - **Files/lines:** `app/courses/[publicId]/edit/page.tsx:88–143`, esp. the `if (!id) return <CourseEditSkeleton />` at lines 141–143.
 - **Issue:** `useGetCourseByPublicId`'s `isError` is never read. On failure/404 `courseData` is undefined, `isPending` is false, so the skeleton branch renders **forever**. Topic/lesson fetch failures after course load also leave the tree spinning indefinitely.

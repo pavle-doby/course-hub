@@ -26,6 +26,7 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   Plus,
+  RefreshCw,
   Shuffle,
 } from "lucide-react";
 import {
@@ -65,6 +66,8 @@ type CourseTreeNavProps = {
   onReorderTopics: (orderedIds: string[]) => Promise<void> | void;
   onReorderLessons: (orderedIds: string[]) => Promise<void> | void;
   isLoadingTree?: boolean;
+  isTreeError?: boolean;
+  onRetryTree?: () => void;
 };
 
 /** Draggable topic row — disabled outside reorder mode so a plain click still selects it. */
@@ -153,6 +156,8 @@ export function CourseTreeNav({
   onReorderTopics,
   onReorderLessons,
   isLoadingTree = false,
+  isTreeError = false,
+  onRetryTree,
 }: CourseTreeNavProps) {
   const { t } = useT();
   const { isMobile, setOpenMobile, state, toggleSidebar } = useSidebar();
@@ -272,103 +277,120 @@ export function CourseTreeNav({
                 </SidebarMenuButton>
               </SidebarMenuItem>
 
-              <SortableContext
-                items={displayedTree.map((topic) => topic.id)}
-                strategy={verticalListSortingStrategy}
-              >
-                {showSkeleton
-                  ? skeletonTopics.map((topic) => (
-                      <SidebarMenuItem
-                        key={topic.id}
-                        className="group-data-[collapsible=icon]:hidden"
-                      >
-                        <SidebarMenuSkeleton showIcon className="pl-7" />
-                        <SidebarMenuSub>
-                          {topic.lessons.map((lesson) => (
-                            <SidebarMenuSubItem key={lesson.id}>
-                              <SidebarMenuSkeleton showIcon />
-                            </SidebarMenuSubItem>
-                          ))}
-                        </SidebarMenuSub>
-                      </SidebarMenuItem>
-                    ))
-                  : displayedTree.map((topic) => (
-                      <SortableTopic key={topic.id} id={topic.id} disabled={!reorderMode}>
-                        <SidebarMenuItem>
-                          <SidebarMenuButton
-                            textWrap="compact"
-                            className="pl-7"
-                            isActive={selection.type === "topic" && selection.id === topic.id}
-                            onClick={() => selectAndClose(() => onSelectTopic(topic.id))}
-                          >
-                            {reorderMode && <GripHorizontal className="size-3.5" />}
-                            <Files />
-                            <span>{topic.name}</span>
-                          </SidebarMenuButton>
-                          <CollapsibleTrigger asChild>
-                            <SidebarMenuAction
-                              className="right-auto left-1"
-                              aria-label={t("courses.editor.toggleTopic")}
-                            >
-                              <ChevronRight className="transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                            </SidebarMenuAction>
-                          </CollapsibleTrigger>
-                          <CollapsibleContent>
-                            <SidebarMenuSub className="group-data-[collapsible=icon]:mx-0! group-data-[collapsible=icon]:flex! group-data-[collapsible=icon]:border-0 group-data-[collapsible=icon]:px-0">
-                              <SortableContext
-                                items={topic.lessons.map((lesson) => lesson.id)}
-                                strategy={verticalListSortingStrategy}
-                              >
-                                {topic.lessons.map((lesson) => (
-                                  <SortableLesson
-                                    key={lesson.id}
-                                    id={lesson.id}
-                                    disabled={!reorderMode}
-                                  >
-                                    <SidebarMenuSubButton
-                                      textWrap="compact"
-                                      className="group-data-[collapsible=icon]:flex! group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
-                                      isActive={
-                                        selection.type === "lesson" && selection.id === lesson.id
-                                      }
-                                      onClick={() =>
-                                        selectAndClose(() => onSelectLesson(lesson.id))
-                                      }
-                                    >
-                                      {reorderMode && <GripHorizontal className="size-3.5" />}
-                                      <File />
-                                      <span className="group-data-[collapsible=icon]:hidden">
-                                        {lesson.name}
-                                      </span>
-                                    </SidebarMenuSubButton>
-                                  </SortableLesson>
-                                ))}
-                              </SortableContext>
-                              {!reorderMode && (
-                                <SidebarMenuSubItem className="group-data-[collapsible=icon]:hidden">
-                                  <SidebarMenuSubButton
-                                    className="my-1 border border-dashed"
-                                    onClick={() => onAddLesson(topic.id)}
-                                  >
-                                    <Plus className="size-3.5" />
-                                    {t("courses.editor.addNewLesson")}
-                                  </SidebarMenuSubButton>
-                                </SidebarMenuSubItem>
-                              )}
-                            </SidebarMenuSub>
-                          </CollapsibleContent>
-                        </SidebarMenuItem>
-                      </SortableTopic>
-                    ))}
-              </SortableContext>
-
-              {!reorderMode && !isLoadingTree && (
+              {isTreeError ? (
                 <SidebarMenuItem className="group-data-[collapsible=icon]:hidden">
-                  <SidebarMenuButton className="my-1 border border-dashed" onClick={onAddTopic}>
-                    <Plus />
-                    <span>{t("courses.editor.addNewTopic")}</span>
-                  </SidebarMenuButton>
+                  <div className="flex flex-col items-start gap-2 px-3 py-4">
+                    <p className="text-sm text-muted-foreground">
+                      {t("errors.shared.SERVER_ERROR.message")}
+                    </p>
+                    <Button size="sm" variant="outline" onClick={onRetryTree}>
+                      <RefreshCw className="size-4" />
+                      {t("courses.editor.retry")}
+                    </Button>
+                  </div>
                 </SidebarMenuItem>
+              ) : (
+                <>
+                  <SortableContext
+                    items={displayedTree.map((topic) => topic.id)}
+                    strategy={verticalListSortingStrategy}
+                  >
+                    {showSkeleton
+                      ? skeletonTopics.map((topic) => (
+                          <SidebarMenuItem
+                            key={topic.id}
+                            className="group-data-[collapsible=icon]:hidden"
+                          >
+                            <SidebarMenuSkeleton showIcon className="pl-7" />
+                            <SidebarMenuSub>
+                              {topic.lessons.map((lesson) => (
+                                <SidebarMenuSubItem key={lesson.id}>
+                                  <SidebarMenuSkeleton showIcon />
+                                </SidebarMenuSubItem>
+                              ))}
+                            </SidebarMenuSub>
+                          </SidebarMenuItem>
+                        ))
+                      : displayedTree.map((topic) => (
+                          <SortableTopic key={topic.id} id={topic.id} disabled={!reorderMode}>
+                            <SidebarMenuItem>
+                              <SidebarMenuButton
+                                textWrap="compact"
+                                className="pl-7"
+                                isActive={selection.type === "topic" && selection.id === topic.id}
+                                onClick={() => selectAndClose(() => onSelectTopic(topic.id))}
+                              >
+                                {reorderMode && <GripHorizontal className="size-3.5" />}
+                                <Files />
+                                <span>{topic.name}</span>
+                              </SidebarMenuButton>
+                              <CollapsibleTrigger asChild>
+                                <SidebarMenuAction
+                                  className="right-auto left-1"
+                                  aria-label={t("courses.editor.toggleTopic")}
+                                >
+                                  <ChevronRight className="transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                                </SidebarMenuAction>
+                              </CollapsibleTrigger>
+                              <CollapsibleContent>
+                                <SidebarMenuSub className="group-data-[collapsible=icon]:mx-0! group-data-[collapsible=icon]:flex! group-data-[collapsible=icon]:border-0 group-data-[collapsible=icon]:px-0">
+                                  <SortableContext
+                                    items={topic.lessons.map((lesson) => lesson.id)}
+                                    strategy={verticalListSortingStrategy}
+                                  >
+                                    {topic.lessons.map((lesson) => (
+                                      <SortableLesson
+                                        key={lesson.id}
+                                        id={lesson.id}
+                                        disabled={!reorderMode}
+                                      >
+                                        <SidebarMenuSubButton
+                                          textWrap="compact"
+                                          className="group-data-[collapsible=icon]:flex! group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
+                                          isActive={
+                                            selection.type === "lesson" &&
+                                            selection.id === lesson.id
+                                          }
+                                          onClick={() =>
+                                            selectAndClose(() => onSelectLesson(lesson.id))
+                                          }
+                                        >
+                                          {reorderMode && <GripHorizontal className="size-3.5" />}
+                                          <File />
+                                          <span className="group-data-[collapsible=icon]:hidden">
+                                            {lesson.name}
+                                          </span>
+                                        </SidebarMenuSubButton>
+                                      </SortableLesson>
+                                    ))}
+                                  </SortableContext>
+                                  {!reorderMode && (
+                                    <SidebarMenuSubItem className="group-data-[collapsible=icon]:hidden">
+                                      <SidebarMenuSubButton
+                                        className="my-1 border border-dashed"
+                                        onClick={() => onAddLesson(topic.id)}
+                                      >
+                                        <Plus className="size-3.5" />
+                                        {t("courses.editor.addNewLesson")}
+                                      </SidebarMenuSubButton>
+                                    </SidebarMenuSubItem>
+                                  )}
+                                </SidebarMenuSub>
+                              </CollapsibleContent>
+                            </SidebarMenuItem>
+                          </SortableTopic>
+                        ))}
+                  </SortableContext>
+
+                  {!reorderMode && !isLoadingTree && (
+                    <SidebarMenuItem className="group-data-[collapsible=icon]:hidden">
+                      <SidebarMenuButton className="my-1 border border-dashed" onClick={onAddTopic}>
+                        <Plus />
+                        <span>{t("courses.editor.addNewTopic")}</span>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  )}
+                </>
               )}
             </SidebarMenu>
           </DndContext>
