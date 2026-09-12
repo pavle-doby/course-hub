@@ -10,8 +10,11 @@ import { useT } from "@repo/i18n/client";
 import { ChAlertDialog } from "@/components/ch-alert-dialog";
 import { EntityForm, type EntityFormHandle, type EntityFormValues } from "./entity-form";
 import { InviteForm } from "./invite-form";
-import { useAdjacentSelection, type TopicWithLessons } from "../hooks/use-course-tree";
-import type { Selection } from "../types";
+import {
+  useAdjacentSelection,
+  type Selection,
+  type TopicWithLessons,
+} from "@/hooks/use-course-tree";
 
 const coursePickedSchema = CoursePutQuerySchema.pick({
   name: true,

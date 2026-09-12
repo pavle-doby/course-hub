@@ -1,6 +1,8 @@
 import { useMemo } from "react";
 import type { Lesson, Topic } from "@repo/api-client";
-import type { Selection } from "../types";
+
+export type Selection =
+  { type: "course" } | { type: "topic"; id: string } | { type: "lesson"; id: string };
 
 export type TopicWithLessons = Topic & { lessons: Lesson[] };
 

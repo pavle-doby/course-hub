@@ -34,9 +34,8 @@ import { CourseEditSkeleton } from "./course-edit-skeleton";
 import { CourseEditError } from "./course-edit-error";
 import { CourseTreeNav } from "./course-tree-nav";
 import { CourseWorkingArea } from "./course-working-area";
-import { useAdjacentSelection, useCourseTree } from "../hooks/use-course-tree";
+import { useAdjacentSelection, useCourseTree, type Selection } from "@/hooks/use-course-tree";
 import type { EntityFormHandle, EntityFormValues } from "./entity-form";
-import type { Selection } from "../types";
 
 type CourseDraft = {
   name: string;

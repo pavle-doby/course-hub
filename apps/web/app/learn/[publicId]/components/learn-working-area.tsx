@@ -4,8 +4,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { Lesson } from "@repo/api-client";
 import { Button } from "@repo/ui-web/components/button";
 import { useT } from "@repo/i18n/client";
-import type { TopicWithLessons } from "@/app/courses/hooks/use-course-tree";
-import type { Selection } from "@/app/courses/types";
+import type { Selection, TopicWithLessons } from "@/hooks/use-course-tree";
 
 type LearnWorkingAreaProps = {
   selection: Selection;

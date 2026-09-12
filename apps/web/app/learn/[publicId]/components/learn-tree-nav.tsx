@@ -21,8 +21,7 @@ import {
   useSidebar,
 } from "@repo/ui-web/components/sidebar";
 import { useT } from "@repo/i18n/client";
-import type { TopicWithLessons } from "@/app/courses/hooks/use-course-tree";
-import type { Selection } from "@/app/courses/types";
+import type { Selection, TopicWithLessons } from "@/hooks/use-course-tree";
 
 type LearnTreeNavProps = {
   courseName: string;

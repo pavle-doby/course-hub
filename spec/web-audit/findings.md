@@ -61,7 +61,7 @@
 - **Issue:** Dead CTA on the login page; violates the "no inline component definitions" convention; i18n gaps.
 - **Fix:** Wire the OAuth flow or remove the button; extract `GoogleIcon` to `@repo/ui-web`; translate the two strings.
 
-### M3 — Learn route imports across into the `courses` route internals
+### M3 [done] — ~~Learn route imports across into the `courses` route internals~~
 
 - **Files/lines:** `app/learn/[publicId]/page.tsx:20–21`, `app/learn/[publicId]/components/learn-tree-nav.tsx:24–25`, `app/learn/[publicId]/components/learn-working-area.tsx:7–8` — import `@/app/courses/hooks/use-course-tree` and `@/app/courses/types`.
 - **Issue:** `useCourseTree`/`useAdjacentSelection` (and `Selection`) are shared by two route folders but live under `app/courses/` — violates the web AGENTS.md placement table and couples the learn route to courses internals.

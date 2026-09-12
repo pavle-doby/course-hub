@@ -51,8 +51,7 @@ import {
 } from "@repo/ui-web/components/sidebar";
 import { Button } from "@repo/ui-web/components/button";
 import { useT } from "@repo/i18n/client";
-import type { TopicWithLessons } from "../hooks/use-course-tree";
-import type { Selection } from "../types";
+import type { Selection, TopicWithLessons } from "@/hooks/use-course-tree";
 
 type CourseTreeNavProps = {
   courseName: string;
