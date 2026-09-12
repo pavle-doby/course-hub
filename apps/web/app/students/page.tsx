@@ -13,6 +13,8 @@ import {
   TableRow,
 } from "@repo/ui-web/components/table";
 import { useT } from "@repo/i18n/client";
+import { useErrorHandlingQuery } from "@repo/shared";
+import { toast } from "@repo/ui-web/components/sonner";
 import { useDebounce } from "@/hooks/use-debounce";
 import { usePagination } from "@/hooks/use-pagination";
 import { PageHeader } from "@/components/page-header";
@@ -37,10 +39,19 @@ export default function StudentsPage() {
   const { query, debouncedQuery, setQuery } = useDebounce("");
   const { page, setPage, trackTotalPages } = usePagination(debouncedQuery);
 
-  const { data: students, isPending } = useGetStudents({
+  const {
+    data: students,
+    isPending,
+    error,
+  } = useGetStudents({
     query: debouncedQuery || undefined,
     page,
     limit: PAGE_LIMIT,
+  });
+  useErrorHandlingQuery({
+    t: t as (key: string) => string,
+    error,
+    showToastError: ({ title, description }) => toast.error(title, { description }),
   });
 
   const { totalPages, knownTotalPages } = trackTotalPages(students?.pagination);

@@ -4,6 +4,8 @@ import { useGetPublicCourses } from "@repo/api-client";
 import { Input } from "@repo/ui-web/components/input";
 import { Search } from "lucide-react";
 import { useT } from "@repo/i18n/client";
+import { useErrorHandlingQuery } from "@repo/shared";
+import { toast } from "@repo/ui-web/components/sonner";
 import { useDebounce } from "@/hooks/use-debounce";
 import { usePagination } from "@/hooks/use-pagination";
 import { NavigationLayoutProvider } from "@/components/navigation-layout-provider";
@@ -20,10 +22,19 @@ export default function Page() {
   const { query, debouncedQuery, setQuery } = useDebounce("");
   const { page, setPage, trackTotalPages } = usePagination(debouncedQuery);
 
-  const { data: courses, isPending } = useGetPublicCourses({
+  const {
+    data: courses,
+    isPending,
+    error,
+  } = useGetPublicCourses({
     query: debouncedQuery || undefined,
     page,
     limit: PAGE_LIMIT,
+  });
+  useErrorHandlingQuery({
+    t: t as (key: string) => string,
+    error,
+    showToastError: ({ title, description }) => toast.error(title, { description }),
   });
 
   const { totalPages, knownTotalPages } = trackTotalPages(courses?.pagination);

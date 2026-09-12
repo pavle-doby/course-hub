@@ -14,7 +14,7 @@ export function useErrorHandlingQuery({
   t,
   showToastError,
 }: {
-  error: Error | null;
+  error: unknown;
   t: (key: string) => string;
   showToastError: ({
     title,

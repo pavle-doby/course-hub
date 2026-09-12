@@ -16,7 +16,7 @@ import {
 import { useT } from "@repo/i18n/client";
 import { SidebarProvider } from "@repo/ui-web/components/sidebar";
 import { toast } from "@repo/ui-web/components/sonner";
-import { useErrorHandlingAction } from "@repo/shared";
+import { useErrorHandlingQuery } from "@repo/shared";
 import { useAdjacentSelection, useCourseTree } from "@/app/courses/hooks/use-course-tree";
 import type { Selection } from "@/app/courses/types";
 import { LearnBottomNav } from "./components/learn-bottom-nav";
@@ -30,17 +30,16 @@ export default function LearnCourseDetailPage() {
   const { t } = useT();
   const [selection, setSelection] = useState<Selection>({ type: "course" });
 
-  const { handleErrorAction } = useErrorHandlingAction({
-    t: t as (key: string) => string,
-    showToastError: ({ title, description }) => toast.error(title, { description }),
-  });
-
   const { data: currentUser, isPending: isUserPending } = useGetUserSelf({
     query: { retry: false },
   });
   const isLoggedIn = !!currentUser;
 
-  const { data: course, isPending: isCoursePending } = useGetPublicCourseByPublicId({ publicId });
+  const {
+    data: course,
+    isPending: isCoursePending,
+    error: courseError,
+  } = useGetPublicCourseByPublicId({ publicId });
 
   const {
     data: enrollmentStatus,
@@ -50,22 +49,54 @@ export default function LearnCourseDetailPage() {
   const isEnrolled = !!enrollmentStatus?.enrolled;
   const isLoadingEnrollment = isUserPending || (isLoggedIn && isEnrollmentStatusPending);
 
-  const { data: publicTopics } = useGetPublicCourseTopics(
+  const { data: publicTopics, error: publicTopicsError } = useGetPublicCourseTopics(
     { publicId },
     { query: { enabled: !isEnrolled } }
   );
-  const { data: publicLessons } = useGetPublicCourseLessons(
+  const { data: publicLessons, error: publicLessonsError } = useGetPublicCourseLessons(
     { publicId },
     { query: { enabled: !isEnrolled } }
   );
-  const { data: fullTopics, isLoading: isFullTopicsLoading } = useGetEnrolledCourseTopics(
-    { publicId },
-    { query: { enabled: isEnrolled } }
-  );
-  const { data: fullLessons, isLoading: isFullLessonsLoading } = useGetEnrolledCourseLessons(
-    { publicId },
-    { query: { enabled: isEnrolled } }
-  );
+  const {
+    data: fullTopics,
+    isLoading: isFullTopicsLoading,
+    error: fullTopicsError,
+  } = useGetEnrolledCourseTopics({ publicId }, { query: { enabled: isEnrolled } });
+  const {
+    data: fullLessons,
+    isLoading: isFullLessonsLoading,
+    error: fullLessonsError,
+  } = useGetEnrolledCourseLessons({ publicId }, { query: { enabled: isEnrolled } });
+
+  const showToastError = ({ title, description }: { title: string; description: string }) =>
+    toast.error(title, { description });
+
+  const { handleErrorAction } = useErrorHandlingQuery({
+    t: t as (key: string) => string,
+    error: courseError,
+    showToastError,
+  });
+
+  useErrorHandlingQuery({
+    t: t as (key: string) => string,
+    error: publicTopicsError,
+    showToastError,
+  });
+  useErrorHandlingQuery({
+    t: t as (key: string) => string,
+    error: publicLessonsError,
+    showToastError,
+  });
+  useErrorHandlingQuery({
+    t: t as (key: string) => string,
+    error: fullTopicsError,
+    showToastError,
+  });
+  useErrorHandlingQuery({
+    t: t as (key: string) => string,
+    error: fullLessonsError,
+    showToastError,
+  });
 
   const topics = isEnrolled
     ? fullTopics

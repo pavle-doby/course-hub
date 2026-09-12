@@ -8,7 +8,7 @@ import { AlertCircleIcon } from "lucide-react";
 import { useAuthSignOut, useDeleteUser, useGetUserSelf, useUpdateUser } from "@repo/api-client";
 import { UserPutQuerySchema } from "@repo/contract";
 import { useT } from "@repo/i18n/client";
-import { useErrorHandlingForm, useZodLocale } from "@repo/shared";
+import { useErrorHandlingForm, useErrorHandlingQuery, useZodLocale } from "@repo/shared";
 import { Alert, AlertTitle } from "@repo/ui-web/components/alert";
 import { Card, CardContent } from "@repo/ui-web/components/card";
 import { AlertDialogTrigger } from "@repo/ui-web/components/alert-dialog";
@@ -17,6 +17,7 @@ import { Field, FieldError, FieldGroup, FieldLabel } from "@repo/ui-web/componen
 import { Input } from "@repo/ui-web/components/input";
 import { Skeleton } from "@repo/ui-web/components/skeleton";
 import { Textarea } from "@repo/ui-web/components/textarea";
+import { toast } from "@repo/ui-web/components/sonner";
 import { ProfileAvatar } from "@/app/profile/components/profile-avatar";
 import { ChAlertDialog } from "@/components/ch-alert-dialog";
 import { PageHeader } from "@/components/page-header";
@@ -38,7 +39,13 @@ export default function ProfileEditPage() {
   useZodLocale(i18n);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
-  const { data: user, isPending } = useGetUserSelf();
+  const { data: user, isPending, error } = useGetUserSelf();
+
+  const { handleErrorAction } = useErrorHandlingQuery({
+    t: t as (key: string) => string,
+    error,
+    showToastError: ({ title, description }) => toast.error(title, { description }),
+  });
   const { mutate: updateUser, isPending: isSaving } = useUpdateUser();
   const { mutate: deleteUser, isPending: isDeleting } = useDeleteUser();
   const { mutate: signOut } = useAuthSignOut();
@@ -81,7 +88,14 @@ export default function ProfileEditPage() {
     if (!user) return;
     deleteUser(
       { pathParams: { id: user.id } },
-      { onSuccess: () => signOut(undefined, { onSuccess: () => router.push("/auth/login") }) }
+      {
+        onSuccess: () =>
+          signOut(undefined, {
+            onSuccess: () => router.push("/auth/login"),
+            onError: (err: unknown) => handleErrorAction(err),
+          }),
+        onError: (err: unknown) => handleErrorAction(err),
+      }
     );
   }
 

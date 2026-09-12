@@ -2,6 +2,8 @@
 
 import { useGetCourses } from "@repo/api-client";
 import { useT } from "@repo/i18n/client";
+import { useErrorHandlingQuery } from "@repo/shared";
+import { toast } from "@repo/ui-web/components/sonner";
 import { useDebounce } from "@/hooks/use-debounce";
 import { usePagination } from "@/hooks/use-pagination";
 import { NavigationLayoutProvider } from "@/components/navigation-layout-provider";
@@ -18,13 +20,22 @@ export default function LearnExplorePage() {
   const { query, debouncedQuery, setQuery } = useDebounce("");
   const { page, setPage, trackTotalPages } = usePagination(debouncedQuery);
 
-  const { data: courses, isPending } = useGetCourses({
+  const {
+    data: courses,
+    isPending,
+    error,
+  } = useGetCourses({
     query: debouncedQuery || undefined,
     excludeEnrolled: true,
     showAllCreators: true,
     status: "published",
     page,
     limit: PAGE_LIMIT,
+  });
+  useErrorHandlingQuery({
+    t: t as (key: string) => string,
+    error,
+    showToastError: ({ title, description }) => toast.error(title, { description }),
   });
 
   const { totalPages, knownTotalPages } = trackTotalPages(courses?.pagination);

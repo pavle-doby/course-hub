@@ -41,7 +41,7 @@
 - **Issue:** `useGetCourseByPublicId`'s `isError` is never read. On failure/404 `courseData` is undefined, `isPending` is false, so the skeleton branch renders **forever**. Topic/lesson fetch failures after course load also leave the tree spinning indefinitely.
 - **Fix:** Add `if (isError ...) return notFound()/error card with retry`; surface `isError` for the dependency fetches too.
 
-### H5 — Data-fetching pages have no API error handling (silent empty states)
+### H5 [done] — ~~Data-fetching pages have no API error handling (silent empty states)~~
 
 - **Files/lines:** `app/page.tsx:23`, `app/learn/explore/page.tsx:21`, `app/learn/enrolled/page.tsx:21`, `app/courses/page.tsx:35`, `app/lessons/page.tsx:27`, `app/students/page.tsx:40`, `app/courses/components/invites-list.tsx:33`, `app/profile/page.tsx:35–37` — all read `data?.length` but never `isError`/`error`. Sole exception: `app/invite/[token]/page.tsx:23,50`.
 - **Issue:** Any network/API failure renders the empty state ("no courses") as if valid; no error message, no retry. In `invites-list` a failure is indistinguishable from "no invites".

@@ -24,7 +24,7 @@ export function useErrorHandlingAction({
   }) => string | number;
 }) {
   const handleErrorAction = useCallback(
-    (responseError: Error) => {
+    (responseError: unknown) => {
       if (!axios.isAxiosError(responseError)) return;
 
       const data = responseError.response?.data as any | undefined;

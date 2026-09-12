@@ -11,11 +11,13 @@ import {
 import { Button } from "@repo/ui-web/components/button";
 import { Input } from "@repo/ui-web/components/input";
 import { Search, Folder, File } from "lucide-react";
+import { useT } from "@repo/i18n/client";
+import { useErrorHandlingQuery } from "@repo/shared";
+import { toast } from "@repo/ui-web/components/sonner";
 import { CourseCard } from "./components/course-card";
 import { CourseCardSkeleton } from "./components/course-card-skeleton";
 import { useDebounce } from "@/hooks/use-debounce";
 import { usePagination } from "@/hooks/use-pagination";
-import { useT } from "@repo/i18n/client";
 import { cn } from "@repo/ui-web/lib/utils";
 import { NavigationLayoutProvider } from "@/components/navigation-layout-provider";
 import { PageHeader } from "@/components/page-header";
@@ -32,10 +34,19 @@ export default function CoursesPage() {
   const { query, debouncedQuery, setQuery } = useDebounce("");
   const { page, setPage, trackTotalPages } = usePagination(debouncedQuery);
 
-  const { data: courses, isPending } = useGetCourses({
+  const {
+    data: courses,
+    isPending,
+    error,
+  } = useGetCourses({
     query: debouncedQuery || undefined,
     page,
     limit: PAGE_LIMIT,
+  });
+  const { handleErrorAction } = useErrorHandlingQuery({
+    t: t as (key: string) => string,
+    error,
+    showToastError: ({ title, description }) => toast.error(title, { description }),
   });
   const { mutate: deleteCourse } = useDeleteCourse();
   const queryClient = useQueryClient();
@@ -49,7 +60,10 @@ export default function CoursesPage() {
   const handleDelete = async (id: string) => {
     deleteCourse(
       { pathParams: { id } },
-      { onSuccess: () => queryClient.invalidateQueries({ queryKey: getGetCoursesQueryKey() }) }
+      {
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: getGetCoursesQueryKey() }),
+        onError: (deleteError: unknown) => handleErrorAction(deleteError),
+      }
     );
   };
 

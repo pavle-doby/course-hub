@@ -9,6 +9,8 @@ import {
   useGetEnrolledCourses,
 } from "@repo/api-client";
 import { useT } from "@repo/i18n/client";
+import { useErrorHandlingQuery } from "@repo/shared";
+import { toast } from "@repo/ui-web/components/sonner";
 import { Button } from "@repo/ui-web/components/button";
 import { Card, CardContent } from "@repo/ui-web/components/card";
 import { Skeleton } from "@repo/ui-web/components/skeleton";
@@ -31,10 +33,36 @@ function ProfileStat({ value, label }: { value: number | undefined; label: strin
 export default function ProfilePage() {
   const router = useRouter();
   const { t } = useT();
-  const { data: user, isPending } = useGetUserSelf();
-  const { data: courses } = useGetCourses({ limit: 1 });
-  const { data: enrolledCourses } = useGetEnrolledCourses({ limit: 1 });
-  const { data: stats } = useGetEnrollmentsStats();
+  const { data: user, isPending, error: userError } = useGetUserSelf();
+  const { data: courses, error: coursesError } = useGetCourses({ limit: 1 });
+  const { data: enrolledCourses, error: enrolledCoursesError } = useGetEnrolledCourses({
+    limit: 1,
+  });
+  const { data: stats, error: statsError } = useGetEnrollmentsStats();
+
+  const showToastError = ({ title, description }: { title: string; description: string }) =>
+    toast.error(title, { description });
+
+  useErrorHandlingQuery({
+    t: t as (key: string) => string,
+    error: userError,
+    showToastError,
+  });
+  useErrorHandlingQuery({
+    t: t as (key: string) => string,
+    error: coursesError,
+    showToastError,
+  });
+  useErrorHandlingQuery({
+    t: t as (key: string) => string,
+    error: enrolledCoursesError,
+    showToastError,
+  });
+  useErrorHandlingQuery({
+    t: t as (key: string) => string,
+    error: statsError,
+    showToastError,
+  });
 
   if (isPending || !user) {
     return (

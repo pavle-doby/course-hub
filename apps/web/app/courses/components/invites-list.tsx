@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useGetCourseInvitations } from "@repo/api-client";
 import { useT } from "@repo/i18n/client";
+import { useErrorHandlingQuery } from "@repo/shared";
+import { toast } from "@repo/ui-web/components/sonner";
 import { Input } from "@repo/ui-web/components/input";
 import { useDebounce } from "@/hooks/use-debounce";
 import { ChPagination } from "@/components/ch-pagination";
@@ -30,10 +32,15 @@ export function InvitesList({ publicId, onCopy, onRevoke }: InvitesListProps) {
     setPage(0);
   }
 
-  const { data, isPending } = useGetCourseInvitations(
+  const { data, isPending, error } = useGetCourseInvitations(
     { publicId },
     { query: debouncedQuery || undefined, page, limit: PAGE_LIMIT }
   );
+  useErrorHandlingQuery({
+    t: t as (key: string) => string,
+    error,
+    showToastError: ({ title, description }) => toast.error(title, { description }),
+  });
 
   const totalPages = data ? Math.ceil(data.pagination.total / data.pagination.limit) : 0;
 
