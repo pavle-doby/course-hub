@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { ImageIcon, Trash2, Upload, Video } from "lucide-react";
 import {
   getGetVideoByParentQueryKey,
+  useCompleteVideoUpload,
   useDeleteVideo,
   useGetVideoByParent,
   useInitializeVideoUpload,
@@ -25,7 +26,7 @@ import { Spinner } from "@repo/ui-web/components/spinner";
 import { cn } from "@repo/ui-web/lib/utils";
 import { ChAlertDialog } from "@/components/ch-alert-dialog";
 import { uploadToCloudflare } from "@/utils/upload-to-cloudflare";
-import { VIDEO_REFETCH_INTERVAL } from "@/utils/consts";
+import { getVideoRefetchInterval } from "@/utils/get-video-refetch-interval";
 
 type MediaParent = { type: ContentItemType; id?: string };
 
@@ -50,13 +51,13 @@ export function MediaInput({ className, parent }: { className?: string; parent: 
       query: {
         enabled: !!parent.id,
         refetchInterval: (query) => {
-          const status = query.state.data?.status;
-          return status === "uploading" || status === "processing" ? VIDEO_REFETCH_INTERVAL : false;
+          return getVideoRefetchInterval(query.state.data?.status);
         },
       },
     }
   );
   const { mutateAsync: initializeUpload, isPending: isInitializing } = useInitializeVideoUpload();
+  const { mutateAsync: completeUpload } = useCompleteVideoUpload();
   const { mutateAsync: deleteVideo, isPending: isDeleting } = useDeleteVideo();
   const attachmentState =
     isUploading || video?.status === "uploading"
@@ -65,7 +66,9 @@ export function MediaInput({ className, parent }: { className?: string; parent: 
         ? "error"
         : "processing";
   const progress =
-    attachmentState === "uploading" ? uploadProgress : (video?.processingProgress ?? null);
+    attachmentState === "uploading"
+      ? uploadProgress
+      : (Math.round(video?.processingProgress ?? 0) ?? null);
 
   async function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
@@ -87,8 +90,8 @@ export function MediaInput({ className, parent }: { className?: string; parent: 
         },
       });
       await queryClient.invalidateQueries({ queryKey });
-      // TODO@pavle: When the upload is done on Cloudflare, the video status should be updated accordingly (to processing)
       await uploadToCloudflare(upload.uploadUrl, file, setUploadProgress);
+      await completeUpload({ pathParams: { id: upload.id } });
 
       await queryClient.invalidateQueries({ queryKey });
       toast.success(t("courses.editor.videoUploadSent"), {
@@ -146,13 +149,16 @@ export function MediaInput({ className, parent }: { className?: string; parent: 
             {(attachmentState === "uploading" || attachmentState === "processing") &&
               progress !== null && (
                 <div className="mt-2 space-y-1">
-                  <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
+                  <div className="h-4 w-full overflow-hidden rounded-full bg-muted">
                     <div
-                      className="h-full rounded-full bg-primary transition-[width] duration-300"
+                      className="flex h-full items-center justify-end rounded-full bg-primary transition-[width] duration-300"
                       style={{ width: `${progress}%` }}
-                    />
+                    >
+                      <span className="mx-0.5 text-xs font-bold text-primary-foreground">
+                        {progress}%
+                      </span>
+                    </div>
                   </div>
-                  <p className="text-xs text-muted-foreground">{progress}%</p>
                 </div>
               )}
           </AttachmentContent>

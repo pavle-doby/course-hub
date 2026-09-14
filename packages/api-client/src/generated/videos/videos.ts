@@ -21,6 +21,8 @@ import type {
 } from "@tanstack/react-query";
 
 import type {
+  CompleteVideoUploadDefault,
+  CompleteVideoUploadPathParameters,
   DeleteVideoDefault,
   DeleteVideoPathParameters,
   GetVideoByParent200,
@@ -255,6 +257,81 @@ export const useInitializeVideoUpload = <TError = InitializeVideoUploadDefault, 
   TContext
 > => {
   return useMutation(getInitializeVideoUploadMutationOptions(options), queryClient);
+};
+export const completeVideoUpload = (
+  { id }: CompleteVideoUploadPathParameters,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<void>(
+    { url: `/v1/videos/uploads/${id}/complete`, method: "POST", signal },
+    options
+  );
+};
+
+export const getCompleteVideoUploadMutationOptions = <
+  TError = CompleteVideoUploadDefault,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof completeVideoUpload>>,
+    TError,
+    CompleteVideoUploadMutationVariables,
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof completeVideoUpload>>,
+  TError,
+  CompleteVideoUploadMutationVariables,
+  TContext
+> => {
+  const mutationKey = ["completeVideoUpload"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof completeVideoUpload>>,
+    CompleteVideoUploadMutationVariables
+  > = (props) => {
+    const { pathParams } = props ?? {};
+
+    return completeVideoUpload(pathParams, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type CompleteVideoUploadMutationResult = NonNullable<
+  Awaited<ReturnType<typeof completeVideoUpload>>
+>;
+
+export type CompleteVideoUploadMutationError = CompleteVideoUploadDefault;
+export type CompleteVideoUploadMutationVariables = {
+  pathParams: CompleteVideoUploadPathParameters;
+};
+
+export const useCompleteVideoUpload = <TError = CompleteVideoUploadDefault, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof completeVideoUpload>>,
+      TError,
+      CompleteVideoUploadMutationVariables,
+      TContext
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof completeVideoUpload>>,
+  TError,
+  CompleteVideoUploadMutationVariables,
+  TContext
+> => {
+  return useMutation(getCompleteVideoUploadMutationOptions(options), queryClient);
 };
 export const deleteVideo = (
   { id }: DeleteVideoPathParameters,

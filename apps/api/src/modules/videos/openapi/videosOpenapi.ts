@@ -2,6 +2,7 @@ import { registry } from "api/openapi/registry";
 import {
   ApiErrorSchema,
   CloudflareStreamWebhookSchema,
+  CompleteVideoUploadParamsSchema,
   ParamsIdSchema,
   VideoParentParamsSchema,
   VideoUploadBodySchema,
@@ -35,6 +36,18 @@ registry.registerPath({
       description: "Direct upload initialized",
       content: { "application/json": { schema: VideoUploadResponseSchema } },
     },
+    default: { description: "Error", content: { "application/json": { schema: ApiErrorSchema } } },
+  },
+});
+
+registry.registerPath({
+  method: "post",
+  path: "/v1/videos/uploads/{id}/complete",
+  operationId: "completeVideoUpload",
+  tags: ["Videos"],
+  request: { params: CompleteVideoUploadParamsSchema },
+  responses: {
+    204: { description: "Video upload completed" },
     default: { description: "Error", content: { "application/json": { schema: ApiErrorSchema } } },
   },
 });

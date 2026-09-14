@@ -2070,6 +2070,34 @@ export type InitializeVideoUploadDefault = {
   details?: InitializeVideoUploadDefaultDetails;
 };
 
+export type CompleteVideoUploadPathParameters = {
+  id: string;
+};
+export type CompleteVideoUploadDefaultCode =
+  (typeof CompleteVideoUploadDefaultCode)[keyof typeof CompleteVideoUploadDefaultCode];
+
+export const CompleteVideoUploadDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type CompleteVideoUploadDefaultDetails = { [key: string]: unknown };
+
+export type CompleteVideoUploadDefault = {
+  status: number;
+  code: CompleteVideoUploadDefaultCode;
+  error?: unknown;
+  details?: CompleteVideoUploadDefaultDetails;
+};
+
 export type DeleteVideoPathParameters = {
   id: string;
 };

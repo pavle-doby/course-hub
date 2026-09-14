@@ -67,6 +67,10 @@ export const VideoUploadResponseSchema = z.object({
   uploadUrl: z.url(),
 });
 
+export const CompleteVideoUploadParamsSchema = z.object({
+  id: z.uuid(),
+});
+
 export const VideoPlaybackResponseSchema = z.object({
   token: z.string(),
   expiresAt: z.iso.datetime(),

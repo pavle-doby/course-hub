@@ -5,6 +5,7 @@ import {
   InternalServerError,
   NotFoundError,
   type CloudflareStreamVideoInfo,
+  type CompleteVideoUploadReq,
   type GetVideoByParentReq,
   type GetVideoByParentRes,
   type InitializeVideoUploadReq,
@@ -65,6 +66,13 @@ export const videosService = {
 
     const video = await videosRepository.create({ ...dto, streamUid: upload.uid });
     return { id: video.id, uploadUrl: upload.uploadURL };
+  },
+
+  completeUpload: async (dto: CompleteVideoUploadReq): Promise<void> => {
+    const video = await videosRepository.markProcessing(dto.id);
+    if (!video) {
+      throw new NotFoundError({ code: ErrorCodeVideo.NOT_FOUND });
+    }
   },
 
   deleteVideo: async (id: string): Promise<void> => {

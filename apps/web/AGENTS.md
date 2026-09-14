@@ -16,6 +16,11 @@ Never define reusable primitives inline in the web app — add them to `@repo/ui
 
 Colocate a component under its route's `components/` folder if it's only used by that route. Only promote it to `apps/web/components/` once a second route needs it.
 
+## Utilities
+
+- Place each utility function in its own file under `apps/web/utils/`.
+- Keep multiple constant values together in `apps/web/utils/consts.ts`.
+
 ```tsx
 // ✅ correct
 import { Button } from "@repo/ui-web/components/button";

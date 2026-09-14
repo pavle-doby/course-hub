@@ -6,7 +6,7 @@ import { useGetVideoByParent } from "@repo/api-client";
 import { Button } from "@repo/ui-web/components/button";
 import { useT } from "@repo/i18n/client";
 import type { Selection, TopicWithLessons } from "@/hooks/use-course-tree";
-import { VIDEO_REFETCH_INTERVAL } from "@/utils/consts";
+import { getVideoRefetchInterval } from "@/utils/get-video-refetch-interval";
 
 type LearnWorkingAreaProps = {
   selection: Selection;
@@ -58,8 +58,7 @@ export function LearnWorkingArea({
     query: {
       enabled: isEnrolled,
       refetchInterval: (query) => {
-        const status = query.state.data?.status;
-        return status === "uploading" || status === "processing" ? VIDEO_REFETCH_INTERVAL : false;
+        return getVideoRefetchInterval(query.state.data?.status);
       },
     },
   });

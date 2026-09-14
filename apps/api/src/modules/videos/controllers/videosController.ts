@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import {
   type CloudflareStreamVideoInfo,
+  type CompleteVideoUploadReq,
   type GetVideoByParentReq,
   type GetVideoByParentRes,
   type InitializeVideoUploadReq,
@@ -19,6 +20,12 @@ export const videosController = {
     const dto = res.locals.body as InitializeVideoUploadReq;
     const video: InitializeVideoUploadRes = await videosService.initializeUpload(dto);
     res.status(201).json(video);
+  },
+
+  completeUpload: async (_req: Request, res: Response): Promise<void> => {
+    const dto = res.locals.params as CompleteVideoUploadReq;
+    await videosService.completeUpload(dto);
+    res.status(204).send();
   },
 
   deleteVideo: async (_req: Request, res: Response): Promise<void> => {

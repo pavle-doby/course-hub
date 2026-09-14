@@ -1,5 +1,10 @@
 import { Router } from "express";
-import { ParamsIdSchema, VideoParentParamsSchema, VideoUploadBodySchema } from "@repo/contract";
+import {
+  CompleteVideoUploadParamsSchema,
+  ParamsIdSchema,
+  VideoParentParamsSchema,
+  VideoUploadBodySchema,
+} from "@repo/contract";
 import { CloudflareStreamWebhookSchema } from "@repo/contract";
 import { handleAuth } from "api/middleware/auth";
 import { validate } from "api/middleware/validate";
@@ -26,6 +31,16 @@ router.post(
   validate(VideoUploadBodySchema),
   async (req, res) => {
     await videosController.initializeUpload(req, res);
+  }
+);
+
+router.post(
+  //
+  "/uploads/:id/complete",
+  handleAuth,
+  validate(CompleteVideoUploadParamsSchema, "params"),
+  async (req, res) => {
+    await videosController.completeUpload(req, res);
   }
 );
 

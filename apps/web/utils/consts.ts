@@ -1,4 +1,5 @@
-/**
- * How often (ms) to poll a video while it's uploading or processing.
- * */
-export const VIDEO_REFETCH_INTERVAL = 30_000;
+/** `3 seconds` - Refetch interval for video status while it's uploading. */
+export const VIDEO_REFETCH_INTERVAL = 3000;
+
+/** `1.5 seconds` - Refetch interval for video status while it's processing. */
+export const VIDEO_PROCESSING_REFETCH_INTERVAL = 1500;

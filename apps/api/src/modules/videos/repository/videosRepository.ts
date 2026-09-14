@@ -35,6 +35,19 @@ export const videosRepository = {
     return video!;
   },
 
+  markProcessing: async (id: string) => {
+    const [video] = await db
+      .update(schema.videos)
+      .set({
+        status: "processing",
+        updatedAt: new Date(),
+      })
+      .where(eq(schema.videos.id, id))
+      .returning({ id: schema.videos.id });
+
+    return video;
+  },
+
   deleteById: async (id: string) => {
     const [video] = await db
       .delete(schema.videos)
