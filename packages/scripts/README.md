@@ -5,14 +5,12 @@ Standalone TypeScript scripts that run against the database via `tsx`. No build 
 ## Prerequisites
 
 1. Copy `.env.example` to `.env.local` and fill in `DATABASE_URL`.
-2. Ensure the target user already exists in the database (run the users seed first if needed).
+2. Ensure the target user already exists in the database.
 
 ## Available Scripts
 
 | Script                    | Description                                                           |
 | ------------------------- | --------------------------------------------------------------------- |
-| `db:seed:users`           | Insert mock users                                                     |
-| `db:clean:users`          | Delete all mock users                                                 |
 | `db:seed:course-content`  | Seed courses, topics, and lectures for a target user                  |
 | `db:clean:course-content` | Delete all courses (and their topics/lectures) owned by a target user |
 
@@ -21,9 +19,6 @@ Standalone TypeScript scripts that run against the database via `tsx`. No build 
 Run any script from the **monorepo root**:
 
 ```bash
-pnpm db:seed:users
-pnpm db:clean:users
-
 pnpm db:seed:course-content
 pnpm db:clean:course-content
 ```

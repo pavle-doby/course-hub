@@ -11,8 +11,8 @@
     "lint": {
       "dependsOn": ["^lint"]
     },
-    "check-types": {
-      "dependsOn": ["^check-types"]
+    "typecheck": {
+      "dependsOn": ["^typecheck"]
     },
     "dev": {
       "cache": false,
@@ -22,12 +22,6 @@
       "cache": false
     },
     "generate:openapi": {
-      "cache": false
-    },
-    "db:seed:users": {
-      "cache": false
-    },
-    "db:clean:users": {
       "cache": false
     }
   }

@@ -529,6 +529,7 @@ export function CourseEditor({ mode, publicId }: CourseEditorProps) {
             selection={selection}
             autoSave={autoSave}
             course={displayedCourse}
+            courseId={courseId}
             visibility={displayedCourse.visibility}
             publicId={workingAreaPublicId}
             activeTab={activeTab}

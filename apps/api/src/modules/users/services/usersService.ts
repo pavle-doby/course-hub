@@ -10,7 +10,7 @@ import {
   UpdateUserRes,
   User,
 } from "@repo/contract";
-import { NotFoundError, ConflictError } from "@repo/contract";
+import { NotFoundError, ConflictError, InternalServerError } from "@repo/contract";
 import { usersRepository } from "../repository/usersRepository";
 import { PaginationReqExtended } from "api/middleware/pagination";
 
@@ -35,6 +35,24 @@ export const usersService = {
 
     return user;
   },
+  getByEmail: async (email: string): Promise<User> => {
+    const userDb = await usersRepository.getByEmail(email);
+
+    if (!userDb) {
+      throw new NotFoundError({ code: ErrorCodeUser.NOT_FOUND });
+    }
+
+    return {
+      id: userDb.id,
+      email: userDb.email,
+      firstName: userDb.firstName,
+      lastName: userDb.lastName,
+      username: userDb.username,
+      avatarUrl: userDb.avatarUrl,
+      bio: userDb.bio,
+      role: userDb.role,
+    };
+  },
   getAllUsersWithProfiles: async (
     dto: GetAllUsersReq<PaginationReqExtended>
   ): Promise<GetAllUsersRes> => {
@@ -51,6 +69,11 @@ export const usersService = {
     }
 
     const [userRes] = await usersRepository.createUser(user);
+
+    if (!userRes) {
+      throw new InternalServerError();
+    }
+
     return userRes;
   },
   updateUser: async (id: string, user: UpdateUserReq): Promise<UpdateUserRes> => {

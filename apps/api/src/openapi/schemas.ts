@@ -11,6 +11,7 @@ import {
   CourseEnrollmentSchema as CourseEnrollmentSchemaBase,
   StudentSchema as StudentSchemaBase,
   CourseInvitationSchema as CourseInvitationSchemaBase,
+  VideoEditorSchema as VideoEditorSchemaBase,
 } from "@repo/contract";
 
 export const UserSchema = registry.register("User", UserSchemaBase);
@@ -93,6 +94,8 @@ export const CourseInvitationSchema = registry.register(
   "CourseInvitation",
   CourseInvitationSchemaBase
 );
+
+export const VideoEditorSchema = registry.register("VideoEditor", VideoEditorSchemaBase);
 
 export const PaginatedCourseInvitationsSchema = registry.register(
   "CourseInvitations",

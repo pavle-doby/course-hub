@@ -2,15 +2,18 @@
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { Lesson } from "@repo/api-client";
+import { useGetVideoByParent } from "@repo/api-client";
 import { Button } from "@repo/ui-web/components/button";
 import { useT } from "@repo/i18n/client";
 import type { Selection, TopicWithLessons } from "@/hooks/use-course-tree";
+import { VIDEO_REFETCH_INTERVAL } from "@/utils/consts";
 
 type LearnWorkingAreaProps = {
   selection: Selection;
-  course: { name: string; description?: string | null };
+  course: { id: string; name: string; description?: string | null };
   tree: TopicWithLessons[];
   flatLessons: Lesson[];
+  isEnrolled: boolean;
   hasPrevious: boolean;
   hasNext: boolean;
   onPrevious: () => void;
@@ -22,6 +25,7 @@ export function LearnWorkingArea({
   course,
   tree,
   flatLessons,
+  isEnrolled,
   hasPrevious,
   hasNext,
   onPrevious,
@@ -42,6 +46,23 @@ export function LearnWorkingArea({
     selection.type === "course"
       ? course.description
       : (selectedTopic?.description ?? selectedLesson?.description);
+
+  const parentByType = {
+    topic: selectedTopic && { parentType: "topic" as const, parentId: selectedTopic.id },
+    lesson: selectedLesson && { parentType: "lesson" as const, parentId: selectedLesson.id },
+    course: { parentType: "course" as const, parentId: course.id },
+  };
+  const parent = parentByType[selection.type] ?? parentByType.course;
+
+  const { data: video } = useGetVideoByParent(parent, {
+    query: {
+      enabled: isEnrolled,
+      refetchInterval: (query) => {
+        const status = query.state.data?.status;
+        return status === "uploading" || status === "processing" ? VIDEO_REFETCH_INTERVAL : false;
+      },
+    },
+  });
 
   return (
     <div className="flex flex-1 flex-col gap-6 p-4 md:p-6">
@@ -70,7 +91,21 @@ export function LearnWorkingArea({
 
       <div className="mx-auto w-full max-w-2xl">
         <h2 className="text-2xl font-semibold">{name}</h2>
-        <p className="mt-3 whitespace-pre-wrap text-muted-foreground">
+        {video?.status === "ready" ? (
+          <video
+            className="mt-4 aspect-video w-full rounded-lg bg-muted"
+            controls
+            src={video.playbackUrl}
+          />
+        ) : video ? (
+          <div className="mt-4 flex h-32 w-full items-center justify-center rounded-lg border border-dashed border-input p-4 text-center text-sm text-muted-foreground">
+            {video.status === "error"
+              ? t("learn.detail.videoUnavailable")
+              : t("learn.detail.videoProcessing")}
+          </div>
+        ) : null}
+
+        <p className="mt-4 whitespace-pre-wrap text-muted-foreground">
           {description || t("learn.detail.noDescription")}
         </p>
       </div>

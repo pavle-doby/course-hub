@@ -1,1 +1,0 @@
-ALTER TABLE "courses" ALTER COLUMN "visibility" SET DEFAULT 'private';

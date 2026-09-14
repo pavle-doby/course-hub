@@ -80,13 +80,16 @@ For feature-specific codes, define an `ErrorCodeXxx` enum in `packages/contract/
 
 ## Route middleware order
 
+Every route argument is placed on its own line (column layout), with a single `//` comment as the first argument. This keeps prettier from collapsing the definition into a single line.
+
 ```ts
 router.get(
+  //
   "/:id",
-  handleAuth, // 1. auth (if protected)
-  validateAdminRole(), // 2. role check (if needed)
-  validate(ParamsIdSchema, "params"), // 3. input validation
-  pagination(), // 4. pagination (list routes only)
+  handleAuth,
+  validateAdminRole(),
+  validate(ParamsIdSchema, "params"),
+  pagination(),
   async (_req, res) => {
     await controller.method(res);
   }

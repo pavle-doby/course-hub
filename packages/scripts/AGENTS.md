@@ -6,8 +6,7 @@ Scripts are standalone TypeScript files that run against the database outside th
 
 ```
 packages/scripts/
-├── dbSeedUsers.ts    # one file per script, at the package root
-├── dbCleanUsers.ts
+├── dbSeedCourseContent.ts  # one file per script, at the package root
 ├── .env.example      # lists DATABASE_URL (value empty)
 ├── package.json
 └── tsconfig.json

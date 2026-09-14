@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import { env } from "./env";
 import { green } from "./utils/consoleColors";
 import { handleError, handleErrorNotFound } from "./middleware/error";
+import { handleRawBody } from "./middleware/rawBody";
 import { logger, handleLogs } from "./logger";
 
 import apiRoutes from "./routes/apiRoutes";
@@ -21,6 +22,7 @@ app.use(
   })
 );
 
+app.use("/api/v1/videos/webhook", handleRawBody);
 app.use(express.json());
 app.use(cookieParser());
 app.use(handleLogs);

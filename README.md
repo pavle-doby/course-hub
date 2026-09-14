@@ -44,13 +44,38 @@ pnpm api          # API only
 pnpm ios          # Expo iOS
 ```
 
+## Cloudflare Stream webhook (video processing)
+
+Video status (uploading → processing → ready/error) is pushed to the API via a Cloudflare Stream webhook at `POST /api/v1/videos/webhook`. In local dev the API isn't publicly reachable, so expose it first:
+
+```bash
+cloudflared tunnel --url http://localhost:7007
+```
+
+Copy the `https://<random>.trycloudflare.com` URL from the output, then register it as the account-level webhook and retrieve the signing secret:
+
+```bash
+curl -X PUT --header 'Authorization: Bearer <API_TOKEN>' \
+  https://api.cloudflare.com/client/v4/accounts/<ACCOUNT_ID>/stream/webhook \
+  --data '{"notificationUrl":"https://<random>.trycloudflare.com/api/v1/videos/webhook"}'
+```
+
+Set these in `apps/api/.env.local` (see `.env.example`):
+
+- `CLOUDFLARE_ACCOUNT_ID` — the `<ACCOUNT_ID>` from the URL above
+- `CLOUDFLARE_STREAM_API_TOKEN` — the `<API_TOKEN>` from above
+- `CLOUDFLARE_STREAM_WEBHOOK_SECRET` — the `result.secret` returned by the PUT response
+- `CLOUDFLARE_STREAM_CUSTOMER_CODE` — your Cloudflare Stream customer code
+
+> The tunnel URL is regenerated on every `cloudflared tunnel` run, so re-run the PUT with the new URL whenever you restart the tunnel. Re-PUTting also returns a new secret — update `CLOUDFLARE_STREAM_WEBHOOK_SECRET` accordingly.
+
 ## Scripts
 
 ```bash
 # Build & quality
 pnpm build
 pnpm lint
-pnpm check-types
+pnpm typecheck
 pnpm format
 
 # API client (run after any route/schema change)
@@ -61,8 +86,6 @@ pnpm db:generate       # Generate Drizzle migration files
 pnpm db:push           # Push schema to DB (dev)
 pnpm db:migrate        # Run pending migrations
 pnpm db:studio         # Drizzle Studio UI
-pnpm db:seed:users     # Seed test users
-pnpm db:clean:users    # Clear users table
 ```
 
 ## Dev Guide

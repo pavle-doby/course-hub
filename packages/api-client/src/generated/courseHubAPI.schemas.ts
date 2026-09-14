@@ -365,6 +365,50 @@ export interface CourseInvitation {
   invitedUser?: CourseInvitationInvitedUser;
 }
 
+export type VideoEditorStatus = (typeof VideoEditorStatus)[keyof typeof VideoEditorStatus];
+
+export const VideoEditorStatus = {
+  uploading: "uploading",
+  processing: "processing",
+  ready: "ready",
+  error: "error",
+} as const;
+
+export type VideoEditorInfo =
+  string | number | boolean | null | { [key: string]: unknown } | unknown[];
+
+export interface VideoEditor {
+  id: string;
+  /** @nullable */
+  courseId: string | null;
+  /** @nullable */
+  topicId: string | null;
+  /** @nullable */
+  lessonId: string | null;
+  /** @maxLength 255 */
+  name: string;
+  streamUid: string;
+  status: VideoEditorStatus;
+  /**
+   * @minimum -2147483648
+   * @maximum 2147483647
+   * @nullable
+   */
+  durationSeconds: number | null;
+  /** @nullable */
+  thumbnailUrl: string | null;
+  /** @nullable */
+  errorMessage: string | null;
+  info: VideoEditorInfo;
+  playbackUrl: string;
+  /**
+   * @minimum 0
+   * @maximum 100
+   * @nullable
+   */
+  processingProgress?: number | null;
+}
+
 export type CourseInvitationsPagination = {
   total: number;
   page: number;
@@ -1938,4 +1982,143 @@ export type GetInvitationInfoDefault = {
   code: GetInvitationInfoDefaultCode;
   error?: unknown;
   details?: GetInvitationInfoDefaultDetails;
+};
+
+export type GetVideoByParentPathParameters = {
+  parentType: "course" | "topic" | "lesson";
+  parentId: string;
+};
+export type GetVideoByParent200 = VideoEditor & ({ [key: string]: unknown } | null);
+
+export type GetVideoByParentDefaultCode =
+  (typeof GetVideoByParentDefaultCode)[keyof typeof GetVideoByParentDefaultCode];
+
+export const GetVideoByParentDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type GetVideoByParentDefaultDetails = { [key: string]: unknown };
+
+export type GetVideoByParentDefault = {
+  status: number;
+  code: GetVideoByParentDefaultCode;
+  error?: unknown;
+  details?: GetVideoByParentDefaultDetails;
+};
+
+export type InitializeVideoUploadBodyParentType =
+  (typeof InitializeVideoUploadBodyParentType)[keyof typeof InitializeVideoUploadBodyParentType];
+
+export const InitializeVideoUploadBodyParentType = {
+  course: "course",
+  topic: "topic",
+  lesson: "lesson",
+} as const;
+
+export type InitializeVideoUploadBody = {
+  parentType: InitializeVideoUploadBodyParentType;
+  parentId: string;
+  /**
+   * @minLength 1
+   * @maxLength 255
+   */
+  fileName: string;
+  /** @pattern ^video\/ */
+  mimeType: string;
+  /** @exclusiveMinimum 0 */
+  size: number;
+  /** @exclusiveMinimum 0 */
+  maxDurationSeconds: number;
+};
+
+export type InitializeVideoUpload201 = {
+  id: string;
+  uploadUrl: string;
+};
+
+export type InitializeVideoUploadDefaultCode =
+  (typeof InitializeVideoUploadDefaultCode)[keyof typeof InitializeVideoUploadDefaultCode];
+
+export const InitializeVideoUploadDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type InitializeVideoUploadDefaultDetails = { [key: string]: unknown };
+
+export type InitializeVideoUploadDefault = {
+  status: number;
+  code: InitializeVideoUploadDefaultCode;
+  error?: unknown;
+  details?: InitializeVideoUploadDefaultDetails;
+};
+
+export type DeleteVideoPathParameters = {
+  id: string;
+};
+export type DeleteVideoDefaultCode =
+  (typeof DeleteVideoDefaultCode)[keyof typeof DeleteVideoDefaultCode];
+
+export const DeleteVideoDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type DeleteVideoDefaultDetails = { [key: string]: unknown };
+
+export type DeleteVideoDefault = {
+  status: number;
+  code: DeleteVideoDefaultCode;
+  error?: unknown;
+  details?: DeleteVideoDefaultDetails;
+};
+
+export type HandleVideoWebhookBodyStatus = {
+  state: string;
+  pctComplete?: string;
+  errorReasonCode?: string;
+  errorReasonText?: string;
+  errReasonCode?: string;
+  errReasonText?: string;
+  [key: string]: unknown;
+};
+
+export type HandleVideoWebhookBody = {
+  /**
+   * @minLength 32
+   * @maxLength 32
+   */
+  uid: string;
+  readyToStream: boolean;
+  status: HandleVideoWebhookBodyStatus;
+  /** @nullable */
+  thumbnail?: string | null;
+  /** @minimum 0 */
+  duration?: number;
+  [key: string]: unknown;
 };

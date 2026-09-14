@@ -12,6 +12,8 @@ export const learn = {
     next: "Next",
     contents: "Contents",
     noDescription: "No description provided.",
+    videoProcessing: "Video is processing. Please check back shortly.",
+    videoUnavailable: "This video is unavailable.",
     notFound: "Course not found",
     enroll: "Enroll",
     enrolling: "Enrolling...",

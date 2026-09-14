@@ -10,7 +10,7 @@
   "sideEffects": false,
   "scripts": {
     "build": "tsc",
-    "check-types": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
     "lint-staged": "lint-staged"
   },
   "devDependencies": {

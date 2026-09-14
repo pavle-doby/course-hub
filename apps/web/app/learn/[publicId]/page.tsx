@@ -113,7 +113,7 @@ export default function LearnCourseDetailPage() {
   const { mutateAsync: withdraw, isPending: isWithdrawing } = useWithdrawFromCourse();
 
   function handleBack() {
-    router.push("/learn");
+    router.back();
   }
 
   async function handleEnroll() {
@@ -201,6 +201,7 @@ export default function LearnCourseDetailPage() {
             course={course}
             tree={tree}
             flatLessons={flatLessons}
+            isEnrolled={isEnrolled}
             hasPrevious={isEnrolled && !!previousItem}
             hasNext={isEnrolled && !!nextItem}
             onPrevious={() => previousItem && setSelection(previousItem)}

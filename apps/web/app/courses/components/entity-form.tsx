@@ -5,11 +5,12 @@ import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { z } from "zod";
 import { useT } from "@repo/i18n/client";
+import type { ContentItemType } from "@repo/contract";
 import { useZodLocale } from "@repo/shared";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@repo/ui-web/components/field";
 import { Input } from "@repo/ui-web/components/input";
 import { Textarea } from "@repo/ui-web/components/textarea";
-import { MediaInputPlaceholder } from "./media-input-placeholder";
+import { MediaInput } from "./media-input";
 
 export type EntityFormValues = { name: string; description?: string | null };
 
@@ -23,10 +24,11 @@ type EntityFormProps = {
   autoSave: boolean;
   onSave: (data: EntityFormValues) => void | Promise<void>;
   onSavingChange?: (saving: boolean) => void;
+  mediaParent: { type: ContentItemType; id?: string };
 };
 
 export const EntityForm = forwardRef<EntityFormHandle, EntityFormProps>(function EntityForm(
-  { schema, name, description, namePlaceholder, autoSave, onSave, onSavingChange },
+  { schema, name, description, namePlaceholder, autoSave, onSave, onSavingChange, mediaParent },
   ref
 ) {
   const id = useId();
@@ -88,7 +90,7 @@ export const EntityForm = forwardRef<EntityFormHandle, EntityFormProps>(function
 
         <Field>
           <FieldLabel>{t("courses.editor.mediaLabel")}</FieldLabel>
-          <MediaInputPlaceholder />
+          <MediaInput parent={mediaParent} />
         </Field>
 
         <Field>

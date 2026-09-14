@@ -26,6 +26,7 @@ export const userPreferencesRelations = relations(userPreferences, ({ one }) => 
 
 export const coursesRelations = relations(courses, ({ one, many }) => ({
   creator: one(users, { fields: [courses.creatorId], references: [users.id] }),
+  video: one(videos),
   topics: many(topics),
   enrollments: many(courseEnrollments),
   invitations: many(courseInvitations),
@@ -51,16 +52,19 @@ export const courseInvitationsRelations = relations(courseInvitations, ({ one })
 
 export const topicsRelations = relations(topics, ({ one, many }) => ({
   course: one(courses, { fields: [topics.courseId], references: [courses.id] }),
+  video: one(videos),
   lessons: many(lessons),
 }));
 
 export const lessonsRelations = relations(lessons, ({ one, many }) => ({
   topic: one(topics, { fields: [lessons.topicId], references: [topics.id] }),
-  video: one(videos, { fields: [lessons.id], references: [videos.lessonId] }),
+  video: one(videos),
   progress: many(lessonProgress),
 }));
 
 export const videosRelations = relations(videos, ({ one }) => ({
+  course: one(courses, { fields: [videos.courseId], references: [courses.id] }),
+  topic: one(topics, { fields: [videos.topicId], references: [topics.id] }),
   lesson: one(lessons, { fields: [videos.lessonId], references: [lessons.id] }),
 }));
 

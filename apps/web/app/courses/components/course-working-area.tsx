@@ -41,6 +41,7 @@ type CourseWorkingAreaProps = {
   autoSave: boolean;
   course: { name: string; description?: string | null; status?: CourseStatus };
   visibility?: CourseVisibility;
+  courseId?: string;
   publicId?: string;
   activeTab?: "edit" | "invite";
   tree: TopicWithLessons[];
@@ -66,6 +67,7 @@ export function CourseWorkingArea({
   autoSave,
   course,
   visibility,
+  courseId,
   publicId,
   activeTab = "edit",
   tree,
@@ -207,6 +209,7 @@ export function CourseWorkingArea({
                     autoSave={autoSave}
                     onSave={onSaveCourse}
                     onSavingChange={onSavingChange}
+                    mediaParent={{ type: "course", id: courseId }}
                   />
                 )}
               </>
@@ -222,6 +225,7 @@ export function CourseWorkingArea({
                 autoSave={autoSave}
                 onSave={(data) => onSaveTopic(selectedTopic.id, data)}
                 onSavingChange={onSavingChange}
+                mediaParent={{ type: "topic", id: selectedTopic.id }}
               />
             )}
 
@@ -235,6 +239,7 @@ export function CourseWorkingArea({
                 autoSave={autoSave}
                 onSave={(data) => onSaveLesson(selectedLesson.id, data)}
                 onSavingChange={onSavingChange}
+                mediaParent={{ type: "lesson", id: selectedLesson.id }}
               />
             )}
           </CardContent>

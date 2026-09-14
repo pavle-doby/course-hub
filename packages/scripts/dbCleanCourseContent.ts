@@ -2,7 +2,7 @@ import { client, db, schema } from "@repo/db";
 import { eq, inArray } from "drizzle-orm";
 
 // --- Configure target user ---
-const TARGET_USER_EMAIL = "iampavle.test+3@gmail.com";
+const TARGET_USER_EMAIL = "iampavle.test+1@gmail.com";
 
 async function cleanCourseContent() {
   try {
@@ -44,9 +44,9 @@ async function cleanCourseContent() {
       topicIds.length > 0
         ? (
             await db
-              .select({ id: schema.lectures.id })
-              .from(schema.lectures)
-              .where(inArray(schema.lectures.topicId, topicIds))
+              .select({ id: schema.lessons.id })
+              .from(schema.lessons)
+              .where(inArray(schema.lessons.topicId, topicIds))
           ).length
         : 0;
 

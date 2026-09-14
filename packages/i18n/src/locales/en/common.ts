@@ -87,6 +87,14 @@ export const common = {
         message: "An account with this information already exists.",
       },
     },
+    video: {
+      NOT_FOUND: { title: "Video Not Found", message: "The requested video could not be found." },
+      NOT_READY: { title: "Video Processing", message: "This video is not ready to play yet." },
+      UPLOAD_FAILED: {
+        title: "Video Upload Unavailable",
+        message: "A video is already uploading or the upload could not be initialized.",
+      },
+    },
     invitation: {
       COURSE_NOT_FOUND: {
         title: "Course Not Found",

@@ -18,6 +18,7 @@
     "@repo/db": "workspace:*",
     "@repo/db-schema": "workspace:*",
     "@supabase/supabase-js": "^2.112.4",
+    "cloudflare": "^7.1.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",

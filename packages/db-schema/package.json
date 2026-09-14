@@ -5,7 +5,7 @@
   "sideEffects": false,
   "scripts": {
     "build": "tsc",
-    "check-types": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
     "lint-staged": "lint-staged"
   },
   "devDependencies": {
@@ -20,6 +20,7 @@
     }
   },
   "dependencies": {
+    "cloudflare": "^7.1.0",
     "drizzle-orm": "^0.45.2"
   },
   "lint-staged": {

@@ -13,3 +13,9 @@ export const courseInvitationStatusEnum = pgEnum("course_invitation_status", [
   "revoked",
   "expired",
 ]);
+export const videoStatusEnum = pgEnum("video_status", [
+  "uploading",
+  "processing",
+  "ready",
+  "error",
+]);

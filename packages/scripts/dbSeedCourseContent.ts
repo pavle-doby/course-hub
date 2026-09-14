@@ -2,7 +2,7 @@ import { client, db, schema } from "@repo/db";
 import { eq } from "drizzle-orm";
 
 // --- Configure target user ---
-const TARGET_USER_EMAIL = "iampavle.test+3@gmail.com";
+const TARGET_USER_EMAIL = "iampavle.test+1@gmail.com";
 
 const mockCourses: Array<
   Omit<typeof schema.courses.$inferInsert, "creatorId"> & {

@@ -5,57 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1787691118974,
-      "tag": "0000_init_db",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1787909655903,
-      "tag": "0001_courses_replace_slug_with_public_id",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1788035726487,
-      "tag": "0002_rename_lectures_to_lessons",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1788604829779,
-      "tag": "0003_add_course_enrollments_withdrawn_at",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1788605904326,
-      "tag": "0004_drop_course_enrollments_unique",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1788606287412,
-      "tag": "0005_restore_course_enrollments_unique",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "7",
-      "when": 1788816880261,
-      "tag": "0006_add_private_courses_and_invitations",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "7",
-      "when": 1789051203546,
-      "tag": "0007_course_visibility_default_private",
+      "when": 1789328176740,
+      "tag": "0000_init",
       "breakpoints": true
     }
   ]

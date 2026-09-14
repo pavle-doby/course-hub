@@ -8,3 +8,4 @@ export * from "./lessons";
 export * from "./topics";
 export * from "./enrollments";
 export * from "./invitations";
+export * from "./videos";

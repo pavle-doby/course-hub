@@ -84,6 +84,14 @@ export const common = {
         message: "Nalog sa ovim podacima već postoji.",
       },
     },
+    video: {
+      NOT_FOUND: { title: "Video nije pronađen", message: "Traženi video nije pronađen." },
+      NOT_READY: { title: "Video se obrađuje", message: "Video još nije spreman za reprodukciju." },
+      UPLOAD_FAILED: {
+        title: "Otpremanje videa nije dostupno",
+        message: "Video se već otprema ili otpremanje nije moglo biti pokrenuto.",
+      },
+    },
     invitation: {
       COURSE_NOT_FOUND: {
         title: "Kurs nije pronađen",

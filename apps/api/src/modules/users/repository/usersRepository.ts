@@ -13,6 +13,15 @@ export const usersRepository = {
 
     return user;
   },
+  getByEmail: async (email: string) => {
+    const [user] = await db
+      .select()
+      .from(schema.users)
+      .where(eq(schema.users.email, email))
+      .limit(1);
+
+    return user;
+  },
   getAllUsersWithProfiles: async ({
     offset,
     limit,

@@ -12,6 +12,8 @@ export const learn = {
     next: "Sledeća",
     contents: "Sadržaj",
     noDescription: "Opis nije naveden.",
+    videoProcessing: "Video se obrađuje. Pokušajte ponovo za nekoliko trenutaka.",
+    videoUnavailable: "Ovaj video nije dostupan.",
     notFound: "Kurs nije pronađen",
     enroll: "Upiši se",
     enrolling: "Upisivanje...",

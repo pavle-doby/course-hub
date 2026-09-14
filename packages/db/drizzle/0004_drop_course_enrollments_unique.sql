@@ -1,1 +1,0 @@
-ALTER TABLE "course_enrollments" DROP CONSTRAINT "course_enrollments_user_id_course_id_unique";

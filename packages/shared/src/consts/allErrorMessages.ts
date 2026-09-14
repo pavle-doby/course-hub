@@ -6,6 +6,7 @@ import { courseErrorMessages } from "./courseErrorMessages";
 import { enrollmentErrorMessages } from "./enrollmentErrorMessages";
 import { lessonErrorMessages } from "./lessonErrorMessages";
 import { topicErrorMessages } from "./topicErrorMessages";
+import { videoErrorMessages } from "./videoErrorMessages";
 
 export const allErrorMessages = {
   ...sharedErrorMessages,
@@ -16,4 +17,5 @@ export const allErrorMessages = {
   ...enrollmentErrorMessages,
   ...lessonErrorMessages,
   ...topicErrorMessages,
+  ...videoErrorMessages,
 };
