@@ -50,6 +50,7 @@ import {
   useSidebar,
 } from "@repo/ui-web/components/sidebar";
 import { Button } from "@repo/ui-web/components/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui-web/components/tooltip";
 import { useT } from "@repo/i18n/client";
 import type { Selection, TopicWithLessons } from "@/hooks/use-course-tree";
 
@@ -270,6 +271,7 @@ export function CourseTreeNav({
                   className="group-data-[collapsible=icon]:justify-center"
                   isActive={selection.type === "course"}
                   onClick={() => selectAndClose(onSelectCourse)}
+                  tooltip={courseName}
                 >
                   <Folder />
                   <span className="group-data-[collapsible=icon]:hidden">{courseName}</span>
@@ -318,6 +320,7 @@ export function CourseTreeNav({
                                 className="pl-7"
                                 isActive={selection.type === "topic" && selection.id === topic.id}
                                 onClick={() => selectAndClose(() => onSelectTopic(topic.id))}
+                                tooltip={topic.name}
                               >
                                 {reorderMode && <GripHorizontal className="size-3.5" />}
                                 <Files />
@@ -343,23 +346,36 @@ export function CourseTreeNav({
                                         id={lesson.id}
                                         disabled={!reorderMode}
                                       >
-                                        <SidebarMenuSubButton
-                                          textWrap="compact"
-                                          className="group-data-[collapsible=icon]:flex! group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
-                                          isActive={
-                                            selection.type === "lesson" &&
-                                            selection.id === lesson.id
-                                          }
-                                          onClick={() =>
-                                            selectAndClose(() => onSelectLesson(lesson.id))
-                                          }
-                                        >
-                                          {reorderMode && <GripHorizontal className="size-3.5" />}
-                                          <File />
-                                          <span className="group-data-[collapsible=icon]:hidden">
+                                        <Tooltip>
+                                          <TooltipTrigger asChild>
+                                            <SidebarMenuSubButton
+                                              textWrap="compact"
+                                              className="group-data-[collapsible=icon]:flex! group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
+                                              isActive={
+                                                selection.type === "lesson" &&
+                                                selection.id === lesson.id
+                                              }
+                                              onClick={() =>
+                                                selectAndClose(() => onSelectLesson(lesson.id))
+                                              }
+                                            >
+                                              {reorderMode && (
+                                                <GripHorizontal className="size-3.5" />
+                                              )}
+                                              <File />
+                                              <span className="group-data-[collapsible=icon]:hidden">
+                                                {lesson.name}
+                                              </span>
+                                            </SidebarMenuSubButton>
+                                          </TooltipTrigger>
+                                          <TooltipContent
+                                            side="right"
+                                            align="center"
+                                            hidden={state !== "collapsed" || isMobile}
+                                          >
                                             {lesson.name}
-                                          </span>
-                                        </SidebarMenuSubButton>
+                                          </TooltipContent>
+                                        </Tooltip>
                                       </SortableLesson>
                                     ))}
                                   </SortableContext>

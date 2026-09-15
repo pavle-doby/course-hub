@@ -8,6 +8,7 @@ export * from "./course-invitations";
 export * from "./topics";
 export * from "./lessons";
 export * from "./videos";
+export * from "./documents";
 export * from "./course-progress";
 export * from "./lesson-progress";
 export * from "./relations";

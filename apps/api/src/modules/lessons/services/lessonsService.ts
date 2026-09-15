@@ -12,6 +12,7 @@ import {
 import { NotFoundError } from "@repo/contract";
 import { usersRepository } from "api/modules/users/repository/usersRepository";
 import { lessonsRepository } from "../repository/lessonsRepository";
+import { documentsService } from "api/modules/documents/services/documentsService";
 import { PaginationReqExtended } from "api/middleware/pagination";
 
 export const lessonsService = {
@@ -41,6 +42,7 @@ export const lessonsService = {
   deleteLesson: async (id: string): Promise<DeleteLessonRes> => {
     const existing = await lessonsRepository.getLessonById(id);
     if (!existing) throw new NotFoundError({ code: ErrorCodeLesson.NOT_FOUND });
+    await documentsService.deleteForLesson(id);
     return await lessonsRepository.deleteLesson(id);
   },
 };

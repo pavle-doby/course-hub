@@ -92,6 +92,33 @@ export const common = {
         message: "Video se već otprema ili otpremanje nije moglo biti pokrenuto.",
       },
     },
+    document: {
+      NOT_FOUND: { title: "Dokument nije pronađen", message: "Traženi dokument nije pronađen." },
+      INVALID_PARENT: {
+        title: "Sadržaj nije pronađen",
+        message: "Izabrana stavka kursa više ne postoji.",
+      },
+      UNSUPPORTED_TYPE: {
+        title: "Nepodržana datoteka",
+        message: "Dozvoljeni su samo JPEG, PNG, WebP i PDF fajlovi.",
+      },
+      FILE_TOO_LARGE: {
+        title: "Datoteka je prevelika",
+        message: "Ova datoteka prelazi dozvoljenu veličinu.",
+      },
+      LIMIT_EXCEEDED: {
+        title: "Dostignut limit priloga",
+        message: "Ova stavka kursa već ima maksimalan broj dokumenata.",
+      },
+      UPLOAD_NOT_READY: {
+        title: "Otpremanje nije spremno",
+        message: "Datoteka još nije otpremljena. Pokušajte ponovo.",
+      },
+      UPLOAD_FAILED: {
+        title: "Otpremanje nije uspelo",
+        message: "Otpremnjena datoteka nije mogla biti proverena.",
+      },
+    },
     invitation: {
       COURSE_NOT_FOUND: {
         title: "Kurs nije pronađen",

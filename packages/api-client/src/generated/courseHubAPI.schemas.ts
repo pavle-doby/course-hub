@@ -409,6 +409,23 @@ export interface VideoEditor {
   processingProgress?: number | null;
 }
 
+export interface PublicDocument {
+  id: string;
+  /** @nullable */
+  courseId: string | null;
+  /** @nullable */
+  topicId: string | null;
+  /** @nullable */
+  lessonId: string | null;
+  originalFileName: string;
+  contentType: string;
+  /** @minimum 0 */
+  sizeBytes: number;
+  /** @minimum 0 */
+  position: number;
+  publicUrl: string;
+}
+
 export type CourseInvitationsPagination = {
   total: number;
   page: number;
@@ -2149,4 +2166,222 @@ export type HandleVideoWebhookBody = {
   /** @minimum 0 */
   duration?: number;
   [key: string]: unknown;
+};
+
+export type HandleVideoWebhookDefaultCode =
+  (typeof HandleVideoWebhookDefaultCode)[keyof typeof HandleVideoWebhookDefaultCode];
+
+export const HandleVideoWebhookDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type HandleVideoWebhookDefaultDetails = { [key: string]: unknown };
+
+export type HandleVideoWebhookDefault = {
+  status: number;
+  code: HandleVideoWebhookDefaultCode;
+  error?: unknown;
+  details?: HandleVideoWebhookDefaultDetails;
+};
+
+export type InitializeDocumentUploadBodyParentType =
+  (typeof InitializeDocumentUploadBodyParentType)[keyof typeof InitializeDocumentUploadBodyParentType];
+
+export const InitializeDocumentUploadBodyParentType = {
+  course: "course",
+  topic: "topic",
+  lesson: "lesson",
+} as const;
+
+export type InitializeDocumentUploadBodyMimeType =
+  (typeof InitializeDocumentUploadBodyMimeType)[keyof typeof InitializeDocumentUploadBodyMimeType];
+
+export const InitializeDocumentUploadBodyMimeType = {
+  "image/jpeg": "image/jpeg",
+  "image/png": "image/png",
+  "image/webp": "image/webp",
+  "application/pdf": "application/pdf",
+} as const;
+
+export type InitializeDocumentUploadBody = {
+  parentType: InitializeDocumentUploadBodyParentType;
+  parentId: string;
+  /**
+   * @minLength 1
+   * @maxLength 255
+   * @pattern ^[^/\\\u0000-\u001f]+$
+   */
+  fileName: string;
+  mimeType: InitializeDocumentUploadBodyMimeType;
+  /**
+   * @maximum 26214400
+   * @exclusiveMinimum 0
+   */
+  size: number;
+};
+
+export type InitializeDocumentUpload201RequiredHeaders = {
+  "Content-Type": string;
+};
+
+export type InitializeDocumentUpload201 = {
+  id: string;
+  uploadUrl: string;
+  requiredHeaders: InitializeDocumentUpload201RequiredHeaders;
+};
+
+export type InitializeDocumentUploadDefaultCode =
+  (typeof InitializeDocumentUploadDefaultCode)[keyof typeof InitializeDocumentUploadDefaultCode];
+
+export const InitializeDocumentUploadDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type InitializeDocumentUploadDefaultDetails = { [key: string]: unknown };
+
+export type InitializeDocumentUploadDefault = {
+  status: number;
+  code: InitializeDocumentUploadDefaultCode;
+  error?: unknown;
+  details?: InitializeDocumentUploadDefaultDetails;
+};
+
+export type CompleteDocumentUploadPathParameters = {
+  id: string;
+};
+export type CompleteDocumentUploadDefaultCode =
+  (typeof CompleteDocumentUploadDefaultCode)[keyof typeof CompleteDocumentUploadDefaultCode];
+
+export const CompleteDocumentUploadDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type CompleteDocumentUploadDefaultDetails = { [key: string]: unknown };
+
+export type CompleteDocumentUploadDefault = {
+  status: number;
+  code: CompleteDocumentUploadDefaultCode;
+  error?: unknown;
+  details?: CompleteDocumentUploadDefaultDetails;
+};
+
+export type ReorderDocumentsPathParameters = {
+  parentType: "course" | "topic" | "lesson";
+  parentId: string;
+};
+export type ReorderDocumentsBody = {
+  /**
+   * @minItems 1
+   * @maxItems 20
+   */
+  documentIds: string[];
+};
+
+export type ReorderDocumentsDefaultCode =
+  (typeof ReorderDocumentsDefaultCode)[keyof typeof ReorderDocumentsDefaultCode];
+
+export const ReorderDocumentsDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type ReorderDocumentsDefaultDetails = { [key: string]: unknown };
+
+export type ReorderDocumentsDefault = {
+  status: number;
+  code: ReorderDocumentsDefaultCode;
+  error?: unknown;
+  details?: ReorderDocumentsDefaultDetails;
+};
+
+export type DeleteDocumentPathParameters = {
+  id: string;
+};
+export type DeleteDocumentDefaultCode =
+  (typeof DeleteDocumentDefaultCode)[keyof typeof DeleteDocumentDefaultCode];
+
+export const DeleteDocumentDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type DeleteDocumentDefaultDetails = { [key: string]: unknown };
+
+export type DeleteDocumentDefault = {
+  status: number;
+  code: DeleteDocumentDefaultCode;
+  error?: unknown;
+  details?: DeleteDocumentDefaultDetails;
+};
+
+export type GetPublicDocumentsByParentPathParameters = {
+  parentType: "course" | "topic" | "lesson";
+  parentId: string;
+};
+export type GetPublicDocumentsByParentDefaultCode =
+  (typeof GetPublicDocumentsByParentDefaultCode)[keyof typeof GetPublicDocumentsByParentDefaultCode];
+
+export const GetPublicDocumentsByParentDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type GetPublicDocumentsByParentDefaultDetails = { [key: string]: unknown };
+
+export type GetPublicDocumentsByParentDefault = {
+  status: number;
+  code: GetPublicDocumentsByParentDefaultCode;
+  error?: unknown;
+  details?: GetPublicDocumentsByParentDefaultDetails;
 };

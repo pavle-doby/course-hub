@@ -29,6 +29,7 @@ import type {
   GetVideoByParentDefault,
   GetVideoByParentPathParameters,
   HandleVideoWebhookBody,
+  HandleVideoWebhookDefault,
   InitializeVideoUpload201,
   InitializeVideoUploadBody,
   InitializeVideoUploadDefault,
@@ -408,7 +409,7 @@ export const handleVideoWebhook = (
 ) => {
   return customInstance<void>(
     {
-      url: `/v1/videos/webhook`,
+      url: `/v1/public/videos/webhook`,
       method: "POST",
       headers: { "Content-Type": "application/json" },
       data: handleVideoWebhookBody,
@@ -419,7 +420,7 @@ export const handleVideoWebhook = (
 };
 
 export const getHandleVideoWebhookMutationOptions = <
-  TError = unknown,
+  TError = HandleVideoWebhookDefault,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
@@ -458,10 +459,10 @@ export type HandleVideoWebhookMutationResult = NonNullable<
   Awaited<ReturnType<typeof handleVideoWebhook>>
 >;
 export type HandleVideoWebhookMutationBody = HandleVideoWebhookBody;
-export type HandleVideoWebhookMutationError = unknown;
+export type HandleVideoWebhookMutationError = HandleVideoWebhookDefault;
 export type HandleVideoWebhookMutationVariables = { data: HandleVideoWebhookBody };
 
-export const useHandleVideoWebhook = <TError = unknown, TContext = unknown>(
+export const useHandleVideoWebhook = <TError = HandleVideoWebhookDefault, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
       Awaited<ReturnType<typeof handleVideoWebhook>>,

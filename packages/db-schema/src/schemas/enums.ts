@@ -19,3 +19,4 @@ export const videoStatusEnum = pgEnum("video_status", [
   "ready",
   "error",
 ]);
+export const documentStatusEnum = pgEnum("document_status", ["pending", "ready", "failed"]);

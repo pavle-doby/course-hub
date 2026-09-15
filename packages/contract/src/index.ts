@@ -9,3 +9,4 @@ export * from "./topics";
 export * from "./enrollments";
 export * from "./invitations";
 export * from "./videos";
+export * from "./documents";

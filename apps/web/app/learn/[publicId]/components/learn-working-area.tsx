@@ -1,8 +1,16 @@
 "use client";
 
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, FileText, ImageIcon } from "lucide-react";
 import type { Lesson } from "@repo/api-client";
-import { useGetVideoByParent } from "@repo/api-client";
+import { useGetPublicDocumentsByParent, useGetVideoByParent } from "@repo/api-client";
+import {
+  Attachment,
+  AttachmentContent,
+  AttachmentDescription,
+  AttachmentMedia,
+  AttachmentTitle,
+  AttachmentTrigger,
+} from "@repo/ui-web/components/attachment";
 import { Button } from "@repo/ui-web/components/button";
 import { useT } from "@repo/i18n/client";
 import type { Selection, TopicWithLessons } from "@/hooks/use-course-tree";
@@ -62,6 +70,7 @@ export function LearnWorkingArea({
       },
     },
   });
+  const { data: documents = [] } = useGetPublicDocumentsByParent(parent);
 
   return (
     <div className="flex flex-1 flex-col gap-6 p-4 md:p-6">
@@ -103,6 +112,28 @@ export function LearnWorkingArea({
               : t("learn.detail.videoProcessing")}
           </div>
         ) : null}
+
+        {documents.length > 0 && (
+          <section className="mt-4">
+            <h3 className="mb-2 font-medium">{t("learn.detail.documents")}</h3>
+            <div className="space-y-2">
+              {documents.map((document) => (
+                <Attachment key={document.id} className="w-full">
+                  <AttachmentMedia>
+                    {document.contentType.startsWith("image/") ? <ImageIcon /> : <FileText />}
+                  </AttachmentMedia>
+                  <AttachmentContent>
+                    <AttachmentTitle>{document.originalFileName}</AttachmentTitle>
+                    <AttachmentDescription>{document.contentType}</AttachmentDescription>
+                  </AttachmentContent>
+                  <AttachmentTrigger asChild>
+                    <a href={document.publicUrl} target="_blank" rel="noreferrer" />
+                  </AttachmentTrigger>
+                </Attachment>
+              ))}
+            </div>
+          </section>
+        )}
 
         <p className="mt-4 whitespace-pre-wrap text-muted-foreground">
           {description || t("learn.detail.noDescription")}

@@ -95,6 +95,33 @@ export const common = {
         message: "A video is already uploading or the upload could not be initialized.",
       },
     },
+    document: {
+      NOT_FOUND: {
+        title: "Document Not Found",
+        message: "The requested document could not be found.",
+      },
+      INVALID_PARENT: {
+        title: "Content Not Found",
+        message: "The selected course item no longer exists.",
+      },
+      UNSUPPORTED_TYPE: {
+        title: "Unsupported File",
+        message: "Only JPEG, PNG, WebP, and PDF files are allowed.",
+      },
+      FILE_TOO_LARGE: { title: "File Too Large", message: "This file exceeds the allowed size." },
+      LIMIT_EXCEEDED: {
+        title: "Attachment Limit Reached",
+        message: "This course item already has the maximum number of documents.",
+      },
+      UPLOAD_NOT_READY: {
+        title: "Upload Not Ready",
+        message: "The file has not finished uploading. Please try again.",
+      },
+      UPLOAD_FAILED: {
+        title: "Upload Failed",
+        message: "The uploaded file could not be verified.",
+      },
+    },
     invitation: {
       COURSE_NOT_FOUND: {
         title: "Course Not Found",

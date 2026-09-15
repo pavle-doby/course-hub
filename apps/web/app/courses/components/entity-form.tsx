@@ -11,6 +11,7 @@ import { Field, FieldError, FieldGroup, FieldLabel } from "@repo/ui-web/componen
 import { Input } from "@repo/ui-web/components/input";
 import { Textarea } from "@repo/ui-web/components/textarea";
 import { MediaInput } from "./media-input";
+import { DocumentInput } from "./document-input";
 
 export type EntityFormValues = { name: string; description?: string | null };
 
@@ -91,6 +92,11 @@ export const EntityForm = forwardRef<EntityFormHandle, EntityFormProps>(function
         <Field>
           <FieldLabel>{t("courses.editor.mediaLabel")}</FieldLabel>
           <MediaInput parent={mediaParent} />
+        </Field>
+
+        <Field>
+          <FieldLabel>{t("courses.editor.documentsLabel")}</FieldLabel>
+          <DocumentInput parent={mediaParent} />
         </Field>
 
         <Field>

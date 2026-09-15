@@ -5,10 +5,12 @@ import cookieParser from "cookie-parser";
 import { env } from "./env";
 import { green } from "./utils/consoleColors";
 import { handleError, handleErrorNotFound } from "./middleware/error";
+import { handleAuth } from "./middleware/auth";
 import { handleRawBody } from "./middleware/rawBody";
 import { logger, handleLogs } from "./logger";
 
 import apiRoutes from "./routes/apiRoutes";
+import apiPublicRoutes from "./routes/apiPublicRoutes";
 
 const app = express();
 
@@ -22,12 +24,13 @@ app.use(
   })
 );
 
-app.use("/api/v1/videos/webhook", handleRawBody);
+app.use("/api/v1/public/videos/webhook", handleRawBody);
 app.use(express.json());
 app.use(cookieParser());
 app.use(handleLogs);
 
-app.use("/api", apiRoutes);
+app.use("/api", apiPublicRoutes);
+app.use("/api", handleAuth, apiRoutes);
 
 // Error handling middlewares (should be last!!!)
 app.use(handleErrorNotFound);

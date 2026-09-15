@@ -11,6 +11,7 @@ import type {
   videos,
   courseProgress,
   lessonProgress,
+  documents,
 } from "./schemas";
 
 export type UserEntity = InferSelectModel<typeof users>;
@@ -24,3 +25,4 @@ export type LessonEntity = InferSelectModel<typeof lessons>;
 export type VideoEntity = InferSelectModel<typeof videos>;
 export type CourseProgressEntity = InferSelectModel<typeof courseProgress>;
 export type LessonProgressEntity = InferSelectModel<typeof lessonProgress>;
+export type DocumentEntity = InferSelectModel<typeof documents>;

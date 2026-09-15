@@ -10,6 +10,7 @@ import { videos } from "./videos";
 import { courseProgress } from "./course-progress";
 import { lessonProgress } from "./lesson-progress";
 import { fileUploads } from "./file-uploads";
+import { documents } from "./documents";
 
 export const usersRelations = relations(users, ({ one, many }) => ({
   preferences: one(userPreferences, { fields: [users.id], references: [userPreferences.userId] }),
@@ -18,6 +19,7 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   courseProgress: many(courseProgress),
   lectureProgress: many(lessonProgress),
   fileUploads: many(fileUploads),
+  documents: many(documents),
 }));
 
 export const userPreferencesRelations = relations(userPreferences, ({ one }) => ({
@@ -31,6 +33,7 @@ export const coursesRelations = relations(courses, ({ one, many }) => ({
   enrollments: many(courseEnrollments),
   invitations: many(courseInvitations),
   progress: many(courseProgress),
+  documents: many(documents),
 }));
 
 export const courseEnrollmentsRelations = relations(courseEnrollments, ({ one }) => ({
@@ -54,18 +57,27 @@ export const topicsRelations = relations(topics, ({ one, many }) => ({
   course: one(courses, { fields: [topics.courseId], references: [courses.id] }),
   video: one(videos),
   lessons: many(lessons),
+  documents: many(documents),
 }));
 
 export const lessonsRelations = relations(lessons, ({ one, many }) => ({
   topic: one(topics, { fields: [lessons.topicId], references: [topics.id] }),
   video: one(videos),
   progress: many(lessonProgress),
+  documents: many(documents),
 }));
 
 export const videosRelations = relations(videos, ({ one }) => ({
   course: one(courses, { fields: [videos.courseId], references: [courses.id] }),
   topic: one(topics, { fields: [videos.topicId], references: [topics.id] }),
   lesson: one(lessons, { fields: [videos.lessonId], references: [lessons.id] }),
+}));
+
+export const documentsRelations = relations(documents, ({ one }) => ({
+  uploadedByUser: one(users, { fields: [documents.uploadedByUserId], references: [users.id] }),
+  course: one(courses, { fields: [documents.courseId], references: [courses.id] }),
+  topic: one(topics, { fields: [documents.topicId], references: [topics.id] }),
+  lesson: one(lessons, { fields: [documents.lessonId], references: [lessons.id] }),
 }));
 
 export const courseProgressRelations = relations(courseProgress, ({ one }) => ({

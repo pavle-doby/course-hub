@@ -17,6 +17,7 @@ import { NotFoundError } from "@repo/contract";
 import { usersRepository } from "api/modules/users/repository/usersRepository";
 import { topicsRepository } from "api/modules/topics/repository/topicsRepository";
 import { lessonsRepository } from "api/modules/lessons/repository/lessonsRepository";
+import { documentsService } from "api/modules/documents/services/documentsService";
 import { coursesRepository } from "../repository/coursesRepository";
 import { PaginationReqExtended } from "api/middleware/pagination";
 import { GetAllCoursesReq } from "@repo/contract";
@@ -81,6 +82,7 @@ export const coursesService = {
   deleteCourse: async (id: string): Promise<DeleteCourseRes> => {
     const existing = await coursesRepository.getCourseById(id);
     if (!existing) throw new NotFoundError({ code: ErrorCodeCourse.NOT_FOUND });
+    await documentsService.deleteForCourse(id);
     return await coursesRepository.deleteCourse(id);
   },
 };

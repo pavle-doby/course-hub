@@ -13,6 +13,9 @@ import "../modules/enrollments/openapi/enrollmentsOpenapi";
 import "../modules/invitations/openapi/invitationsOpenapi";
 import "../modules/invitations/openapi/invitationsPublicOpenapi";
 import "../modules/videos/openapi/videosOpenapi";
+import "../modules/videos/openapi/videosPublicOpenapi";
+import "../modules/documents/openapi/documentsOpenapi";
+import "../modules/documents/openapi/documentsPublicOpenapi";
 
 export function generateOpenAPIDocument(): OpenAPIObject {
   const generator = new OpenApiGeneratorV31(registry.definitions);

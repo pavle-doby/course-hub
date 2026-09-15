@@ -57,7 +57,7 @@ Copy the `https://<random>.trycloudflare.com` URL from the output, then register
 ```bash
 curl -X PUT --header 'Authorization: Bearer <API_TOKEN>' \
   https://api.cloudflare.com/client/v4/accounts/<ACCOUNT_ID>/stream/webhook \
-  --data '{"notificationUrl":"https://<random>.trycloudflare.com/api/v1/videos/webhook"}'
+  --data '{"notificationUrl":"https://<random>.trycloudflare.com/api/v1/public/videos/webhook"}'
 ```
 
 Set these in `apps/api/.env.local` (see `.env.example`):

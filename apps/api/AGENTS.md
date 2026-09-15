@@ -102,6 +102,15 @@ router.get(
 - On success: `res.locals.user` contains the Supabase user object
 - Web uses HTTP-only cookies; native uses `Authorization: Bearer <token>`
 
+## Public and private routes
+
+Split public and private routes for every feature that exposes both, following courses:
+
+- Public routes live in `<feature>/routes/<feature>PublicRoutes.ts`, have no `handleAuth`, and mount at `/v1/public/<feature>`.
+- Private routes live in `<feature>/routes/<feature>Routes.ts`, apply `handleAuth` to every protected endpoint, and mount at `/v1/<feature>`.
+- Aggregate `/v1/public/*` mounts in `src/routes/apiPublicRoutes.ts`; keep all other mounts in `src/routes/apiRoutes.ts`.
+- Register public paths in a separate `<feature>PublicOpenapi.ts` file and import both OpenAPI files from `src/openapi/spec.ts`.
+
 ## Pagination
 
 Apply the `pagination()` middleware on list endpoints. It reads `page` (0-based) and `limit` (1–100) from query params and writes to `res.locals.pagination` (`{ page, limit, offset }`).

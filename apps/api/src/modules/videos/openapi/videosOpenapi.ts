@@ -1,7 +1,6 @@
 import { registry } from "api/openapi/registry";
 import {
   ApiErrorSchema,
-  CloudflareStreamWebhookSchema,
   CompleteVideoUploadParamsSchema,
   ParamsIdSchema,
   VideoParentParamsSchema,
@@ -61,24 +60,5 @@ registry.registerPath({
   responses: {
     204: { description: "Video deleted" },
     default: { description: "Error", content: { "application/json": { schema: ApiErrorSchema } } },
-  },
-});
-
-registry.registerPath({
-  method: "post",
-  path: "/v1/videos/webhook",
-  operationId: "handleVideoWebhook",
-  tags: ["Videos"],
-  security: [],
-  request: {
-    body: {
-      content: { "application/json": { schema: CloudflareStreamWebhookSchema } },
-      required: true,
-    },
-  },
-  responses: {
-    200: {
-      description: "Webhook received",
-    },
   },
 });

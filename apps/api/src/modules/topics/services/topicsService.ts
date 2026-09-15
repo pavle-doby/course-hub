@@ -12,6 +12,7 @@ import {
 import { NotFoundError } from "@repo/contract";
 import { usersRepository } from "api/modules/users/repository/usersRepository";
 import { topicsRepository } from "../repository/topicsRepository";
+import { documentsService } from "api/modules/documents/services/documentsService";
 import { PaginationReqExtended } from "api/middleware/pagination";
 
 export const topicsService = {
@@ -41,6 +42,7 @@ export const topicsService = {
   deleteTopic: async (id: string): Promise<DeleteTopicRes> => {
     const existing = await topicsRepository.getTopicById(id);
     if (!existing) throw new NotFoundError({ code: ErrorCodeTopic.NOT_FOUND });
+    await documentsService.deleteForTopic(id);
     return await topicsRepository.deleteTopic(id);
   },
 };

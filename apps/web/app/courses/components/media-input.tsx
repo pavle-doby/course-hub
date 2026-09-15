@@ -1,12 +1,17 @@
 "use client";
 
 import { useRef, useState } from "react";
+import Image from "next/image";
 import { ImageIcon, Trash2, Upload, Video } from "lucide-react";
 import {
+  getGetPublicDocumentsByParentQueryKey,
   getGetVideoByParentQueryKey,
+  useCompleteDocumentUpload,
   useCompleteVideoUpload,
   useDeleteVideo,
+  useGetPublicDocumentsByParent,
   useGetVideoByParent,
+  useInitializeDocumentUpload,
   useInitializeVideoUpload,
   useQueryClient,
 } from "@repo/api-client";
@@ -26,6 +31,7 @@ import { Spinner } from "@repo/ui-web/components/spinner";
 import { cn } from "@repo/ui-web/lib/utils";
 import { ChAlertDialog } from "@/components/ch-alert-dialog";
 import { uploadToCloudflare } from "@/utils/upload-to-cloudflare";
+import { uploadToR2 } from "@/utils/upload-to-r2";
 import { getVideoRefetchInterval } from "@/utils/get-video-refetch-interval";
 
 type MediaParent = { type: ContentItemType; id?: string };
@@ -33,7 +39,9 @@ type MediaParent = { type: ContentItemType; id?: string };
 export function MediaInput({ className, parent }: { className?: string; parent: MediaParent }) {
   const { t } = useT();
   const inputRef = useRef<HTMLInputElement>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [isImageUploading, setIsImageUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState<number | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const queryClient = useQueryClient();
@@ -41,6 +49,8 @@ export function MediaInput({ className, parent }: { className?: string; parent: 
     parentType: parent.type,
     parentId: parent.id ?? "",
   });
+  const documentParams = { parentType: parent.type, parentId: parent.id ?? "" };
+  const documentQueryKey = getGetPublicDocumentsByParentQueryKey(documentParams);
   const { handleErrorAction } = useErrorHandlingAction({
     t: t as (key: string) => string,
     showToastError: ({ title, description }) => toast.error(title, { description }),
@@ -56,8 +66,14 @@ export function MediaInput({ className, parent }: { className?: string; parent: 
       },
     }
   );
+  const { data: documents = [] } = useGetPublicDocumentsByParent(documentParams, {
+    query: { enabled: !!parent.id },
+  });
   const { mutateAsync: initializeUpload, isPending: isInitializing } = useInitializeVideoUpload();
   const { mutateAsync: completeUpload } = useCompleteVideoUpload();
+  const { mutateAsync: initializeImageUpload, isPending: isInitializingImage } =
+    useInitializeDocumentUpload();
+  const { mutateAsync: completeImageUpload } = useCompleteDocumentUpload();
   const { mutateAsync: deleteVideo, isPending: isDeleting } = useDeleteVideo();
   const attachmentState =
     isUploading || video?.status === "uploading"
@@ -69,6 +85,8 @@ export function MediaInput({ className, parent }: { className?: string; parent: 
     attachmentState === "uploading"
       ? uploadProgress
       : (Math.round(video?.processingProgress ?? 0) ?? null);
+  const imageDocuments = documents.filter((document) => document.contentType.startsWith("image/"));
+  const imageDocument = imageDocuments[0];
 
   async function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
@@ -120,6 +138,35 @@ export function MediaInput({ className, parent }: { className?: string; parent: 
     }
   }
 
+  async function handleImageChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file || !parent.id) {
+      return;
+    }
+
+    try {
+      setIsImageUploading(true);
+      const upload = await initializeImageUpload({
+        data: {
+          parentType: parent.type,
+          parentId: parent.id,
+          fileName: file.name,
+          mimeType: file.type as "image/jpeg" | "image/png" | "image/webp",
+          size: file.size,
+        },
+      });
+      await uploadToR2(upload.uploadUrl, file, upload.requiredHeaders["Content-Type"], () => {});
+      await completeImageUpload({ pathParams: { id: upload.id } });
+      await queryClient.invalidateQueries({ queryKey: documentQueryKey });
+      toast.success(t("courses.editor.documentUploadComplete"));
+    } catch (error) {
+      handleErrorAction(error as Error);
+    } finally {
+      setIsImageUploading(false);
+    }
+  }
+
   return (
     <div className={cn("space-y-3", className)}>
       {video?.status === "ready" ? (
@@ -163,6 +210,22 @@ export function MediaInput({ className, parent }: { className?: string; parent: 
               )}
           </AttachmentContent>
         </Attachment>
+      ) : imageDocument ? (
+        <a
+          className="relative block aspect-video overflow-hidden rounded-lg border bg-muted"
+          href={imageDocument.publicUrl}
+          target="_blank"
+          rel="noreferrer"
+        >
+          <Image
+            fill
+            unoptimized
+            sizes="100vw"
+            className="object-cover"
+            src={imageDocument.publicUrl}
+            alt={imageDocument.originalFileName}
+          />
+        </a>
       ) : (
         <div className="flex h-32 w-full items-center justify-center gap-2 rounded-lg border border-dashed border-input text-sm text-muted-foreground">
           <Video className="size-4" />
@@ -171,7 +234,20 @@ export function MediaInput({ className, parent }: { className?: string; parent: 
       )}
 
       <div className="grid grid-cols-2 gap-2">
-        <Button className="w-full" type="button" variant="outline" disabled>
+        <input
+          ref={imageInputRef}
+          className="sr-only"
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          onChange={(event) => void handleImageChange(event)}
+        />
+        <Button
+          className="w-full"
+          type="button"
+          variant="outline"
+          disabled={!parent.id || isInitializingImage || isImageUploading}
+          onClick={() => imageInputRef.current?.click()}
+        >
           <ImageIcon />
           {t("courses.editor.uploadImage")}
         </Button>
