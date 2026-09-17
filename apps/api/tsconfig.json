@@ -19,7 +19,7 @@
       "@repo/contract/*": ["../../packages/contract/src/*"]
     }
   },
-  "include": ["src/**/*", "src/types/env.d.ts"],
+  "include": ["api/**/*", "src/**/*", "src/types/env.d.ts"],
   "exclude": ["node_modules", "dist"],
   "references": [
     {
