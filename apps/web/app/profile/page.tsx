@@ -67,7 +67,7 @@ export default function ProfilePage() {
   if (isPending || !user) {
     return (
       <div className="flex flex-col gap-6">
-        <PageHeader className="mb-6 hidden md:flex" title={`Hello, ${t("profile.title")}`} />
+        <PageHeader className="mb-6 hidden md:flex" title={t("profile.title")} />
         <div className="flex justify-center px-4 pt-4 md:px-6 md:pt-0">
           <Card className="w-full max-w-2xl">
             <CardContent className="flex gap-6">
@@ -115,7 +115,7 @@ export default function ProfilePage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <PageHeader className="mb-6 hidden md:flex" title={`Hello, ${t("profile.title")}`} />
+      <PageHeader className="mb-6 hidden md:flex" title={t("profile.title")} />
       <div className="flex flex-col gap-6 px-4 pt-4 pb-4 md:px-6 md:pt-0 md:pb-6">
         <div className="flex justify-center">
           <Card className="w-full max-w-2xl">
