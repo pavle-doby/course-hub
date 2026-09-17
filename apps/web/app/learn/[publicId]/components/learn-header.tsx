@@ -32,11 +32,14 @@ export function LearnHeader({
   const [withdrawDialogOpen, setWithdrawDialogOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 flex h-14 items-center gap-1 border-b bg-background px-4">
-      <Button variant="ghost" size="icon" onClick={onBack} aria-label={t("learn.detail.back")}>
-        <ChevronLeft className="size-5" />
-      </Button>
-      <span className="flex-1 text-lg font-bold">{title}</span>
+    <header className="sticky top-0 z-40 flex h-14 items-center justify-between gap-1 border-b bg-background px-4">
+      <span className="flex items-center gap-1">
+        <Button variant="ghost" size="icon" onClick={onBack} aria-label={t("learn.detail.back")}>
+          <ChevronLeft className="size-5" />
+        </Button>
+        <span className="max-w-40 min-w-0 flex-1 truncate text-lg font-bold">{title}</span>
+      </span>
+
       {isLoadingEnrollment ? (
         <Skeleton className="h-9 w-24" />
       ) : isEnrolled ? (

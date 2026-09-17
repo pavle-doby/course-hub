@@ -4,20 +4,14 @@ import { supabase } from "api/utils/supabase";
 import { ErrorCode } from "@repo/contract";
 
 function extractToken(req: Request): string | undefined {
-  // Get token from HTTP-only cookie (for web)
-  const tokenCookie = req.cookies.access_token;
-
-  // Get token from Authorization header (for mobile)
   const tokenHeaderFull = req.headers.authorization;
-  const tokenHeader = tokenHeaderFull?.startsWith("Bearer ") ? tokenHeaderFull.slice(7) : undefined;
-
-  return tokenCookie ?? tokenHeader;
+  return tokenHeaderFull?.startsWith("Bearer ") ? tokenHeaderFull.slice(7) : undefined;
 }
 
 /**
  * Checks if Supabase `token` is valid and user is authenticated
  * If valid, Supabase user info is stored in `res.locals.user`
- * Token is extracted from HTTP-only cookies
+ * Token is extracted from the Authorization header.
  */
 export async function handleAuth(req: Request, res: Response, next: NextFunction) {
   try {

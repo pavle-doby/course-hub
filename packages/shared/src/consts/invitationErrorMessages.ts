@@ -1,9 +1,6 @@
 import { ErrorCodeInvitation } from "@repo/contract";
 
-export const invitationErrorMessages: Record<
-  ErrorCodeInvitation,
-  { title: string; message: string }
-> = {
+export const invitationErrorMessages = {
   [ErrorCodeInvitation.COURSE_NOT_FOUND]: {
     title: "errors.invitation.COURSE_NOT_FOUND.title",
     message: "errors.invitation.COURSE_NOT_FOUND.message",
@@ -32,4 +29,4 @@ export const invitationErrorMessages: Record<
     title: "errors.invitation.EMAIL_MISMATCH.title",
     message: "errors.invitation.EMAIL_MISMATCH.message",
   },
-};
+} as const satisfies Record<ErrorCodeInvitation, { title: string; message: string }>;

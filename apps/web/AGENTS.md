@@ -111,6 +111,26 @@ import { cn } from "@repo/ui-web/lib/utils";
 <div className="bg-white text-gray-900" />
 ```
 
+### Mobile bottom drawer actions — `gap-3`
+
+When a mobile bottom `Drawer` renders a list of actions (e.g. card action menus, nav link lists), the action items must be spaced with `gap-3` on the scrollable `<div>` that holds them. Never stack bare action buttons/links without vertical spacing.
+
+```tsx
+// ✅ correct — spaced action list
+<div className="flex flex-col gap-3 p-2 pb-8">
+  {actions.map((action) => (
+    <DrawerClose key={action.key} asChild>
+      <Button className="w-full justify-start gap-2" {...action.props} />
+    </DrawerClose>
+  ))}
+</div>
+
+// ❌ wrong — actions touching each other
+<div className="flex flex-col p-2 pb-8">...</div>
+```
+
+Dispatch rule: this is a **web-app convention** (how `Drawer` is used). The `@repo/ui-web` `Drawer` primitive itself stays spacing-agnostic.
+
 ## Icons
 
 Use `lucide-react` only. Size with Tailwind (`size-4`, `size-5`).

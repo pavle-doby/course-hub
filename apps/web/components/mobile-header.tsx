@@ -7,6 +7,7 @@ import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@repo/ui-web/comp
 import { Button } from "@repo/ui-web/components/button";
 import { useAuthSignOut } from "@repo/api-client";
 import { useT } from "@repo/i18n/client";
+import { clearAuthTokens } from "@/utils/token-storage";
 
 const TITLE_BY_PATH: Record<
   string,
@@ -30,7 +31,12 @@ export function MobileHeader() {
     Object.entries(TITLE_BY_PATH).find(([path]) => pathname.startsWith(path))?.[1] ?? "nav.courses";
 
   function handleSignOut() {
-    signOut(undefined, { onSuccess: () => router.push("/auth/login") });
+    signOut(undefined, {
+      onSuccess: () => {
+        clearAuthTokens();
+        router.push("/auth/login");
+      },
+    });
   }
 
   return (

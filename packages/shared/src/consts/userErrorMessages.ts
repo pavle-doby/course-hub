@@ -1,6 +1,6 @@
 import { ErrorCodeUser } from "@repo/contract";
 
-export const userErrorMessages: Record<ErrorCodeUser, { title: string; message: string }> = {
+export const userErrorMessages = {
   [ErrorCodeUser.NOT_FOUND]: {
     title: "errors.user.NOT_FOUND.title",
     message: "errors.user.NOT_FOUND.message",
@@ -9,4 +9,4 @@ export const userErrorMessages: Record<ErrorCodeUser, { title: string; message: 
     title: "errors.user.ALREADY_EXISTS.title",
     message: "errors.user.ALREADY_EXISTS.message",
   },
-};
+} as const satisfies Record<ErrorCodeUser, { title: string; message: string }>;

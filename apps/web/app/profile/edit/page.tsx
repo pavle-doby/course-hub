@@ -21,6 +21,7 @@ import { toast } from "@repo/ui-web/components/sonner";
 import { ProfileAvatar } from "@/app/profile/components/profile-avatar";
 import { ChAlertDialog } from "@/components/ch-alert-dialog";
 import { PageHeader } from "@/components/page-header";
+import { clearAuthTokens } from "@/utils/token-storage";
 
 // drizzle-zod's createUpdateSchema infers field types as `never` with the
 // currently installed drizzle-zod/zod versions, so the form values are typed
@@ -91,7 +92,10 @@ export default function ProfileEditPage() {
       {
         onSuccess: () =>
           signOut(undefined, {
-            onSuccess: () => router.push("/auth/login"),
+            onSuccess: () => {
+              clearAuthTokens();
+              router.push("/auth/login");
+            },
             onError: (err: unknown) => handleErrorAction(err),
           }),
         onError: (err: unknown) => handleErrorAction(err),

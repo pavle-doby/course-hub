@@ -10,7 +10,7 @@ registry.registerPath({
   path: "/v1/users/self",
   operationId: "getUserSelf",
   tags: ["Users"],
-  security: [{ cookieAuth: [] }],
+  security: [{ bearerAuth: [] }],
   responses: {
     200: {
       description: "Current authenticated user",
@@ -29,7 +29,7 @@ registry.registerPath({
   path: "/v1/users",
   operationId: "getUsers",
   tags: ["Users"],
-  security: [{ cookieAuth: [] }],
+  security: [{ bearerAuth: [] }],
   request: {
     query: PaginationParams
       //
@@ -54,7 +54,7 @@ registry.registerPath({
   path: "/v1/users/{id}",
   operationId: "getUser",
   tags: ["Users"],
-  security: [{ cookieAuth: [] }],
+  security: [{ bearerAuth: [] }],
   request: {
     params: ParamsIdSchema,
   },
@@ -76,7 +76,7 @@ registry.registerPath({
   path: "/v1/users",
   operationId: "createUser",
   tags: ["Users"],
-  security: [{ cookieAuth: [] }],
+  security: [{ bearerAuth: [] }],
   request: {
     body: {
       content: { "application/json": { schema: UserPostQuerySchema } },
@@ -101,7 +101,7 @@ registry.registerPath({
   path: "/v1/users/{id}",
   operationId: "updateUser",
   tags: ["Users"],
-  security: [{ cookieAuth: [] }],
+  security: [{ bearerAuth: [] }],
   request: {
     params: ParamsIdSchema,
     body: {
@@ -127,7 +127,7 @@ registry.registerPath({
   path: "/v1/users/{id}",
   operationId: "deleteUser",
   tags: ["Users"],
-  security: [{ cookieAuth: [] }],
+  security: [{ bearerAuth: [] }],
   request: {
     params: ParamsIdSchema,
   },

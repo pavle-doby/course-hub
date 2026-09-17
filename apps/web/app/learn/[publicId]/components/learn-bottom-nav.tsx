@@ -18,7 +18,7 @@ export function LearnBottomNav({ hasPrevious, hasNext, onPrevious, onNext }: Lea
   const { toggleSidebar } = useSidebar();
 
   return (
-    <div className="sticky bottom-0 z-40 flex items-center justify-between gap-2 border-t bg-background px-4 py-1 md:hidden">
+    <div className="sticky bottom-0 z-40 flex items-center justify-between gap-2 border-t bg-background px-4 pt-1 pb-4 md:hidden">
       <Button
         variant="ghost"
         size="sm"

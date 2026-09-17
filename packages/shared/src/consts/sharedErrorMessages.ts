@@ -1,6 +1,6 @@
 import { ErrorCode } from "@repo/contract";
 
-export const sharedErrorMessages: Record<ErrorCode, { title: string; message: string }> = {
+export const sharedErrorMessages = {
   [ErrorCode.FORBIDDEN]: {
     title: "errors.shared.FORBIDDEN.title",
     message: "errors.shared.FORBIDDEN.message",
@@ -41,4 +41,4 @@ export const sharedErrorMessages: Record<ErrorCode, { title: string; message: st
     title: "errors.shared.INVALID_PAGINATION_PARAMS.title",
     message: "errors.shared.INVALID_PAGINATION_PARAMS.message",
   },
-};
+} as const satisfies Record<ErrorCode, { title: string; message: string }>;

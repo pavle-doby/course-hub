@@ -42,6 +42,7 @@ router.post(
 router.post(
   //
   "/refresh",
+  validate(AuthNativeRefreshQuerySchema),
   async (req: Request, res: Response) => {
     await authController.refreshToken(req, res);
   }

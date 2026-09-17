@@ -17,7 +17,7 @@ registry.registerPath({
   path: "/v1/invitations/courses/{publicId}",
   operationId: "createEmailInvitation",
   tags: ["Invitations"],
-  security: [{ cookieAuth: [] }],
+  security: [{ bearerAuth: [] }],
   request: {
     params: ParamsPublicIdSchema,
     body: {
@@ -43,7 +43,7 @@ registry.registerPath({
   path: "/v1/invitations/courses/{publicId}/link",
   operationId: "createInviteLink",
   tags: ["Invitations"],
-  security: [{ cookieAuth: [] }],
+  security: [{ bearerAuth: [] }],
   request: {
     params: ParamsPublicIdSchema,
   },
@@ -65,7 +65,7 @@ registry.registerPath({
   path: "/v1/invitations/courses/{publicId}",
   operationId: "getCourseInvitations",
   tags: ["Invitations"],
-  security: [{ cookieAuth: [] }],
+  security: [{ bearerAuth: [] }],
   request: {
     params: ParamsPublicIdSchema,
     query: PaginationParams.extend(SearchSchema.shape),
@@ -88,7 +88,7 @@ registry.registerPath({
   path: "/v1/invitations/{id}",
   operationId: "revokeInvitation",
   tags: ["Invitations"],
-  security: [{ cookieAuth: [] }],
+  security: [{ bearerAuth: [] }],
   request: {
     params: ParamsIdSchema,
   },
@@ -110,7 +110,7 @@ registry.registerPath({
   path: "/v1/invitations/{token}/accept",
   operationId: "acceptInvitation",
   tags: ["Invitations"],
-  security: [{ cookieAuth: [] }],
+  security: [{ bearerAuth: [] }],
   request: {
     params: ParamsTokenSchema,
   },

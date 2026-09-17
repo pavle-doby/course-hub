@@ -158,7 +158,7 @@ export default function CoursesPage() {
         </div>
 
         {/* Mobile/tablet: fixed primary button above the bottom nav */}
-        <div className="fixed inset-x-0 bottom-16 px-4 pb-2 md:hidden">
+        <div className="fixed inset-x-0 bottom-20 px-4 pb-2 md:hidden">
           <Button className="w-full" onClick={() => router.push("/courses/add")}>
             {t("courses.addCourse")}
           </Button>

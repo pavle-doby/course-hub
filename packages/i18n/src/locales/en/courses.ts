@@ -9,6 +9,7 @@ export const courses = {
     next: "Next",
   },
   card: {
+    actions: "Course actions",
     edit: "Edit",
     preview: "Preview",
     delete: "Delete",

@@ -7,6 +7,7 @@ export const lessons = {
     next: "Next",
   },
   card: {
+    actions: "Lesson actions",
     delete: "Delete",
   },
 };

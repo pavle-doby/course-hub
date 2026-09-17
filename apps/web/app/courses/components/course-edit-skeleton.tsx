@@ -115,10 +115,10 @@ export function CourseEditSkeleton() {
               <Skeleton className="h-8 flex-1" />
               <Skeleton className="h-8 flex-1" />
             </div>
-            <div className="flex items-center justify-between gap-2 border-t px-4 py-1">
-              <Skeleton className="h-8 w-30" />
-              <Skeleton className="size-8 rounded-md" />
-              <Skeleton className="h-8 w-30" />
+            <div className="flex items-center justify-between gap-2 border-t px-4 pt-1 pb-4">
+              <Skeleton className="h-7 w-30" />
+              <Skeleton className="size-7 rounded-md" />
+              <Skeleton className="h-7 w-30" />
             </div>
           </div>
         </div>

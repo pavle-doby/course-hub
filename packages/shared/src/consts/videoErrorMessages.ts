@@ -1,6 +1,6 @@
 import { ErrorCodeVideo } from "@repo/contract";
 
-export const videoErrorMessages: Record<ErrorCodeVideo, { title: string; message: string }> = {
+export const videoErrorMessages = {
   [ErrorCodeVideo.NOT_FOUND]: {
     title: "errors.video.NOT_FOUND.title",
     message: "errors.video.NOT_FOUND.message",
@@ -13,4 +13,4 @@ export const videoErrorMessages: Record<ErrorCodeVideo, { title: string; message
     title: "errors.video.UPLOAD_FAILED.title",
     message: "errors.video.UPLOAD_FAILED.message",
   },
-};
+} as const satisfies Record<ErrorCodeVideo, { title: string; message: string }>;

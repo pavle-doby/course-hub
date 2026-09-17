@@ -1,9 +1,6 @@
 import { ErrorCodeEnrollment } from "@repo/contract";
 
-export const enrollmentErrorMessages: Record<
-  ErrorCodeEnrollment,
-  { title: string; message: string }
-> = {
+export const enrollmentErrorMessages = {
   [ErrorCodeEnrollment.ALREADY_ENROLLED]: {
     title: "errors.enrollment.ALREADY_ENROLLED.title",
     message: "errors.enrollment.ALREADY_ENROLLED.message",
@@ -20,4 +17,4 @@ export const enrollmentErrorMessages: Record<
     title: "errors.enrollment.NOT_ENROLLED.title",
     message: "errors.enrollment.NOT_ENROLLED.message",
   },
-};
+} as const satisfies Record<ErrorCodeEnrollment, { title: string; message: string }>;

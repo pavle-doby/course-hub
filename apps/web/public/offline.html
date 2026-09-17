@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#090909" />
+    <title>Course Hub is offline</title>
+    <script>
+      try {
+        const theme = localStorage.getItem("theme");
+        const isDark =
+          theme === "dark" ||
+          (theme !== "light" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.classList.add(isDark ? "dark" : "light");
+      } catch {}
+    </script>
+    <style>
+      :root {
+        background: #fafafa;
+        color: #090909;
+        color-scheme: light dark;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      body {
+        align-items: center;
+        background: #fafafa;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: center;
+        margin: 0;
+        min-height: 100vh;
+        padding: 1.5rem;
+      }
+      main {
+        max-width: 24rem;
+        width: 100%;
+      }
+      .card {
+        background: #ffffff;
+        border-radius: 0.75rem;
+        box-shadow: 0 0 0 1px #0909091a;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        overflow: hidden;
+        padding: 1rem 0;
+      }
+      .card-header,
+      .card-content {
+        padding: 0 1rem;
+      }
+      h1 {
+        font-size: 1.5rem;
+        letter-spacing: -0.025em;
+        line-height: 1.25;
+        margin: 0;
+      }
+      p {
+        color: #737373;
+        line-height: 1.5;
+        margin: 0.75rem 0 0;
+      }
+      :root.dark,
+      :root.dark body {
+        background: #090909;
+        color: #fafafa;
+      }
+      :root.dark .card {
+        background: #090909;
+        box-shadow: 0 0 0 1px #fafafa1a;
+      }
+      :root.dark p {
+        color: #a3a3a3;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not(.light),
+        :root:not(.light) body {
+          background: #090909;
+          color: #fafafa;
+        }
+        :root:not(.light) .card {
+          background: #090909;
+          box-shadow: 0 0 0 1px #fafafa1a;
+        }
+        :root:not(.light) p {
+          color: #a3a3a3;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="card">
+        <header class="card-header">
+          <h1>You are offline</h1>
+        </header>
+        <div class="card-content">
+          <p>Reconnect to continue using Course Hub.</p>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

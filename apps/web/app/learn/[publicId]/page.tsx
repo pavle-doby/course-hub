@@ -19,6 +19,7 @@ import { toast } from "@repo/ui-web/components/sonner";
 import { useErrorHandlingQuery } from "@repo/shared";
 import { useAdjacentSelection, useCourseTree, type Selection } from "@/hooks/use-course-tree";
 import { LearnBottomNav } from "./components/learn-bottom-nav";
+import { LearnCourseDetailSkeleton } from "./components/learn-course-detail-skeleton";
 import { LearnHeader } from "./components/learn-header";
 import { LearnTreeNav } from "./components/learn-tree-nav";
 import { LearnWorkingArea } from "./components/learn-working-area";
@@ -155,11 +156,7 @@ export default function LearnCourseDetailPage() {
   }
 
   if (isCoursePending) {
-    return (
-      <div className="flex min-h-svh flex-1 items-center justify-center">
-        {t("courses.loading")}
-      </div>
-    );
+    return <LearnCourseDetailSkeleton />;
   }
 
   if (!course || course.status !== "published") {

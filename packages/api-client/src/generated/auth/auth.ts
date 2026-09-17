@@ -21,11 +21,12 @@ import type {
   AuthNativeRefreshTokenDefault,
   AuthNativeSignUpBody,
   AuthNativeSignUpDefault,
+  AuthRefreshTokenBody,
+  AuthRefreshTokenDefault,
   AuthSignUpBody,
   AuthSignUpDefault,
   NativeAuthTokens,
   NativeAuthWithTokens,
-  User,
 } from "../courseHubAPI.schemas";
 
 import { customInstance } from "../../lib/apiClient";
@@ -41,7 +42,7 @@ export const authSignUp = (
   options?: SecondParameter<typeof customInstance>,
   signal?: AbortSignal
 ) => {
-  return customInstance<User>(
+  return customInstance<NativeAuthWithTokens>(
     {
       url: `/v1/auth/signup`,
       method: "POST",
@@ -118,7 +119,7 @@ export const authLogin = (
   options?: SecondParameter<typeof customInstance>,
   signal?: AbortSignal
 ) => {
-  return customInstance<User>(
+  return customInstance<NativeAuthWithTokens>(
     {
       url: `/v1/auth/login`,
       method: "POST",
@@ -227,6 +228,85 @@ export const useAuthSignOut = <TError = unknown, TContext = unknown>(
   queryClient?: QueryClient
 ): UseMutationResult<Awaited<ReturnType<typeof authSignOut>>, TError, void, TContext> => {
   return useMutation(getAuthSignOutMutationOptions(options), queryClient);
+};
+export const authRefreshToken = (
+  authRefreshTokenBody: AuthRefreshTokenBody,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<NativeAuthTokens>(
+    {
+      url: `/v1/auth/refresh`,
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      data: authRefreshTokenBody,
+      signal,
+    },
+    options
+  );
+};
+
+export const getAuthRefreshTokenMutationOptions = <
+  TError = AuthRefreshTokenDefault,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof authRefreshToken>>,
+    TError,
+    AuthRefreshTokenMutationVariables,
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof authRefreshToken>>,
+  TError,
+  AuthRefreshTokenMutationVariables,
+  TContext
+> => {
+  const mutationKey = ["authRefreshToken"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof authRefreshToken>>,
+    AuthRefreshTokenMutationVariables
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return authRefreshToken(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AuthRefreshTokenMutationResult = NonNullable<
+  Awaited<ReturnType<typeof authRefreshToken>>
+>;
+export type AuthRefreshTokenMutationBody = AuthRefreshTokenBody;
+export type AuthRefreshTokenMutationError = AuthRefreshTokenDefault;
+export type AuthRefreshTokenMutationVariables = { data: AuthRefreshTokenBody };
+
+export const useAuthRefreshToken = <TError = AuthRefreshTokenDefault, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof authRefreshToken>>,
+      TError,
+      AuthRefreshTokenMutationVariables,
+      TContext
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof authRefreshToken>>,
+  TError,
+  AuthRefreshTokenMutationVariables,
+  TContext
+> => {
+  return useMutation(getAuthRefreshTokenMutationOptions(options), queryClient);
 };
 export const authNativeSignUp = (
   authNativeSignUpBody: AuthNativeSignUpBody,

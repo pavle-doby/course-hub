@@ -1,7 +1,6 @@
 "use client";
 
 import { Lesson } from "@repo/api-client";
-import { useT } from "@repo/i18n/client";
 import {
   Card,
   CardHeader,
@@ -10,15 +9,11 @@ import {
   CardContent,
   CardFooter,
 } from "@repo/ui-web/components/card";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from "@repo/ui-web/components/dropdown-menu";
-import { Button } from "@repo/ui-web/components/button";
-import { File, EllipsisVertical, Trash2 } from "lucide-react";
+import { useIsMobile } from "@repo/ui-web/hooks/use-mobile";
+import { File } from "lucide-react";
 import { Badge } from "@repo/ui-web/components/badge";
+import { LessonCardDropdownActions } from "./lesson-card-dropdown-actions";
+import { LessonCardDrawerActions } from "./lesson-card-drawer-actions";
 
 type LessonCardProps = {
   lesson: Lesson;
@@ -26,7 +21,11 @@ type LessonCardProps = {
 };
 
 export function LessonCard({ lesson, onDelete }: LessonCardProps) {
-  const { t } = useT();
+  const isMobile = useIsMobile();
+
+  const actionMenuProps = {
+    onDelete: () => onDelete(lesson.id),
+  };
 
   return (
     <Card>
@@ -36,19 +35,11 @@ export function LessonCard({ lesson, onDelete }: LessonCardProps) {
           <CardTitle>{lesson.name}</CardTitle>
         </div>
         <CardAction>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="size-7">
-                <EllipsisVertical className="size-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem variant="destructive" onClick={() => onDelete(lesson.id)}>
-                <Trash2 className="size-4" />
-                {t("lessons.card.delete")}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {isMobile ? (
+            <LessonCardDrawerActions {...actionMenuProps} />
+          ) : (
+            <LessonCardDropdownActions {...actionMenuProps} />
+          )}
         </CardAction>
       </CardHeader>
 

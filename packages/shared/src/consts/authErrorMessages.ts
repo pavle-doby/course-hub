@@ -1,6 +1,6 @@
 import { ErrorCodeAuth } from "@repo/contract";
 
-export const authErrorMessages: Record<ErrorCodeAuth, { title: string; message: string }> = {
+export const authErrorMessages = {
   [ErrorCodeAuth.INVALID_CREDENTIALS]: {
     title: "errors.auth.INVALID_CREDENTIALS.title",
     message: "errors.auth.INVALID_CREDENTIALS.message",
@@ -33,4 +33,4 @@ export const authErrorMessages: Record<ErrorCodeAuth, { title: string; message: 
     title: "errors.auth.RATE_LIMIT_EXCEEDED.title",
     message: "errors.auth.RATE_LIMIT_EXCEEDED.message",
   },
-};
+} as const satisfies Record<ErrorCodeAuth, { title: string; message: string }>;

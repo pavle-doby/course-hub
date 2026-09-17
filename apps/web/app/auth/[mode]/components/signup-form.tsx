@@ -18,6 +18,7 @@ import { Input } from "@repo/ui-web/components/input";
 import { Alert, AlertTitle } from "@repo/ui-web/components/alert";
 import { Button } from "@repo/ui-web/components/button";
 import { cn } from "@repo/ui-web/lib/utils";
+import { saveAuthTokens } from "@/utils/token-storage";
 
 const createSignupFormSchema = (t: TFunction) =>
   AuthSignUpQuerySchema.extend({
@@ -68,7 +69,8 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
     signupMutate(
       { data: { firstName, lastName, email, password } },
       {
-        onSuccess: async () => {
+        onSuccess: async ({ accessToken, refreshToken }) => {
+          saveAuthTokens(accessToken, refreshToken);
           if (inviteToken) {
             try {
               const result = await acceptInvitation({ pathParams: { token: inviteToken } });

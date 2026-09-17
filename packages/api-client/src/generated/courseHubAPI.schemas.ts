@@ -508,6 +508,36 @@ export type AuthLoginDefault = {
   details?: AuthLoginDefaultDetails;
 };
 
+export type AuthRefreshTokenBody = {
+  /** @minLength 1 */
+  refreshToken: string;
+};
+
+export type AuthRefreshTokenDefaultCode =
+  (typeof AuthRefreshTokenDefaultCode)[keyof typeof AuthRefreshTokenDefaultCode];
+
+export const AuthRefreshTokenDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type AuthRefreshTokenDefaultDetails = { [key: string]: unknown };
+
+export type AuthRefreshTokenDefault = {
+  status: number;
+  code: AuthRefreshTokenDefaultCode;
+  error?: unknown;
+  details?: AuthRefreshTokenDefaultDetails;
+};
+
 export type AuthNativeSignUpBody = {
   /**
    * @minLength 1

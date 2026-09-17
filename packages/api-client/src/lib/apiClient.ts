@@ -2,17 +2,16 @@ import Axios, { type AxiosRequestConfig } from "axios";
 import { env } from "../env";
 
 export const apiClient = Axios.create({
-  baseURL: env.API_URL ?? "http://localhost:7007/api",
-  withCredentials: true,
+  baseURL: env.API_URL,
 });
 
-// Optional token providers — set by platform-specific code (e.g. native)
+// Token providers are configured by each platform at app startup.
 let getTokenFn: (() => Promise<string | null>) | null = null;
 let refreshFn: (() => Promise<{ accessToken: string; refreshToken: string } | null>) | null = null;
 
 /**
  * Configure how the API client retrieves and refreshes tokens.
- * Call this at app startup on native before any requests are made.
+ * Call this at app startup before any requests are made.
  */
 export const configureTokenProviders = (opts: {
   getToken: () => Promise<string | null>;
@@ -25,7 +24,7 @@ export const configureTokenProviders = (opts: {
   refreshFn = opts.onRefresh;
 };
 
-// Attach Authorization header when a token provider is configured (native)
+// Attach Authorization header when a token provider is configured.
 apiClient.interceptors.request.use(async (config) => {
   if (getTokenFn) {
     const token = await getTokenFn();
@@ -42,14 +41,13 @@ apiClient.interceptors.response.use(null, async (error) => {
     error.config._retry = true;
     try {
       if (refreshFn) {
-        // Native: refresh via body, save new tokens, retry with new Authorization header
         const tokens = await refreshFn();
-        if (tokens) {
-          error.config.headers.Authorization = `Bearer ${tokens.accessToken}`;
+        if (!tokens) {
+          return Promise.reject(error);
         }
+        error.config.headers.Authorization = `Bearer ${tokens.accessToken}`;
       } else {
-        // Web: refresh via cookie
-        await apiClient.post("/v1/auth/refresh");
+        return Promise.reject(error);
       }
       return apiClient(error.config);
     } catch {
@@ -61,7 +59,7 @@ apiClient.interceptors.response.use(null, async (error) => {
 
 /**
  * Custom Orval mutator — wraps every generated request with the configured
- * Axios instance so credentials (cookies) are sent automatically.
+ * Axios instance so configured token providers are applied automatically.
  * Orval v8 passes AbortSignal via config.signal; Axios 1.x handles it natively.
  */
 export const customInstance = <T>(

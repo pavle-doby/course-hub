@@ -14,7 +14,7 @@ registry.registerPath({
   path: "/v1/lessons",
   operationId: "getLessons",
   tags: ["Lessons"],
-  security: [{ cookieAuth: [] }],
+  security: [{ bearerAuth: [] }],
   request: {
     query: PaginationParams.extend(SearchSchema.shape).extend(LessonGetAllQuerySchema.shape),
   },
@@ -36,7 +36,7 @@ registry.registerPath({
   path: "/v1/lessons/{id}",
   operationId: "getLesson",
   tags: ["Lessons"],
-  security: [{ cookieAuth: [] }],
+  security: [{ bearerAuth: [] }],
   request: {
     params: ParamsIdSchema,
   },
@@ -58,7 +58,7 @@ registry.registerPath({
   path: "/v1/lessons",
   operationId: "createLesson",
   tags: ["Lessons"],
-  security: [{ cookieAuth: [] }],
+  security: [{ bearerAuth: [] }],
   request: {
     body: {
       content: { "application/json": { schema: LessonPostQuerySchema } },
@@ -83,7 +83,7 @@ registry.registerPath({
   path: "/v1/lessons/{id}",
   operationId: "updateLesson",
   tags: ["Lessons"],
-  security: [{ cookieAuth: [] }],
+  security: [{ bearerAuth: [] }],
   request: {
     params: ParamsIdSchema,
     body: {
@@ -109,7 +109,7 @@ registry.registerPath({
   path: "/v1/lessons/{id}",
   operationId: "deleteLesson",
   tags: ["Lessons"],
-  security: [{ cookieAuth: [] }],
+  security: [{ bearerAuth: [] }],
   request: {
     params: ParamsIdSchema,
   },

@@ -17,6 +17,7 @@ import { Alert, AlertTitle } from "@repo/ui-web/components/alert";
 import { Button } from "@repo/ui-web/components/button";
 import { Separator } from "@repo/ui-web/components/separator";
 import { cn } from "@repo/ui-web/lib/utils";
+import { saveAuthTokens } from "@/utils/token-storage";
 
 export function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
   const id = useId();
@@ -51,7 +52,8 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
     loginMutate(
       { data },
       {
-        onSuccess: async () => {
+        onSuccess: async ({ accessToken, refreshToken }) => {
+          saveAuthTokens(accessToken, refreshToken);
           if (inviteToken) {
             try {
               const result = await acceptInvitation({ pathParams: { token: inviteToken } });

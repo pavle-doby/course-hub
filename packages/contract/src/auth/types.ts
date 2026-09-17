@@ -7,17 +7,17 @@ import {
 } from "./schemas";
 
 export type AuthSignUpUserReq = z.infer<typeof AuthSignUpQuerySchema>;
-export type AuthSignUpUserRes = User;
+export type AuthSignUpUserRes = { user: User } & AuthTokens;
 
 export type AuthLogInUserReq = z.infer<typeof AuthLoginQuerySchema>;
-export type AuthLogInUserRes = User;
+export type AuthLogInUserRes = { user: User } & AuthTokens;
 
 export type AuthTokens = {
   accessToken: string;
   refreshToken: string;
 };
 
-export type AuthNativeSignUpUserRes = { user: User } & AuthTokens;
-export type AuthNativeLogInUserRes = { user: User } & AuthTokens;
+export type AuthNativeSignUpUserRes = AuthSignUpUserRes;
+export type AuthNativeLogInUserRes = AuthLogInUserRes;
 export type AuthNativeRefreshTokenReq = z.infer<typeof AuthNativeRefreshQuerySchema>;
 export type AuthNativeRefreshTokenRes = AuthTokens;

@@ -10,7 +10,7 @@ registry.registerPath({
   path: "/v1/topics",
   operationId: "getTopics",
   tags: ["Topics"],
-  security: [{ cookieAuth: [] }],
+  security: [{ bearerAuth: [] }],
   request: {
     query: PaginationParams.extend(SearchSchema.shape).extend(TopicGetAllQuerySchema.shape),
   },
@@ -32,7 +32,7 @@ registry.registerPath({
   path: "/v1/topics/{id}",
   operationId: "getTopic",
   tags: ["Topics"],
-  security: [{ cookieAuth: [] }],
+  security: [{ bearerAuth: [] }],
   request: {
     params: ParamsIdSchema,
   },
@@ -54,7 +54,7 @@ registry.registerPath({
   path: "/v1/topics",
   operationId: "createTopic",
   tags: ["Topics"],
-  security: [{ cookieAuth: [] }],
+  security: [{ bearerAuth: [] }],
   request: {
     body: {
       content: { "application/json": { schema: TopicPostQuerySchema } },
@@ -79,7 +79,7 @@ registry.registerPath({
   path: "/v1/topics/{id}",
   operationId: "updateTopic",
   tags: ["Topics"],
-  security: [{ cookieAuth: [] }],
+  security: [{ bearerAuth: [] }],
   request: {
     params: ParamsIdSchema,
     body: {
@@ -105,7 +105,7 @@ registry.registerPath({
   path: "/v1/topics/{id}",
   operationId: "deleteTopic",
   tags: ["Topics"],
-  security: [{ cookieAuth: [] }],
+  security: [{ bearerAuth: [] }],
   request: {
     params: ParamsIdSchema,
   },

@@ -57,7 +57,7 @@ Never re-export anything from `src/generated/` directly in consuming apps — al
 
 ## Env vars
 
-`src/env.ts` reads `process.env.API_URL`. Declare any new env var there and add it to `.env.example`.
+`src/env.ts` reads `process.env.NEXT_PUBLIC_API_URL` (web) falling back to `process.env.EXPO_PUBLIC_API_URL` (native). Only these public-prefixed names are inlined into client bundles — a bare `API_URL` is `undefined` in the browser. Declare any new env var there and add it to the app's `.env.example`.
 
 ## Provider setup
 

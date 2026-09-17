@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-import cookieParser from "cookie-parser";
 
 import { env } from "./env";
 import { green } from "./utils/consoleColors";
@@ -17,16 +16,13 @@ const app = express();
 app.use(
   cors({
     origin: (env.CORS_ENABLED_URL || "").split(","),
-    credentials: true, // Allow cookies to be sent
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
-    exposedHeaders: ["Set-Cookie"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
 app.use("/api/v1/public/videos/webhook", handleRawBody);
 app.use(express.json());
-app.use(cookieParser());
 app.use(handleLogs);
 
 app.use("/api", apiPublicRoutes);

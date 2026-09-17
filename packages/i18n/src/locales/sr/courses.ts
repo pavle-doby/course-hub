@@ -9,6 +9,7 @@ export const courses = {
     next: "Sledeća",
   },
   card: {
+    actions: "Akcije kursa",
     edit: "Izmeni",
     preview: "Pregled",
     delete: "Obriši",
@@ -32,7 +33,7 @@ export const courses = {
     back: "Nazad",
     retry: "Pokušaj ponovo",
     contents: "Sadržaj kursa",
-    actions: "Radnje kursa",
+    actions: "Akcije kursa",
     collapseNavigation: "Skupi sadržaj kursa",
     collapseActions: "Skupi radnje kursa",
     autoSave: "Automatsko čuvanje",

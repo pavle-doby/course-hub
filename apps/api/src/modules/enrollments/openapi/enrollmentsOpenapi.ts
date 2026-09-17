@@ -21,7 +21,7 @@ registry.registerPath({
   path: "/v1/enrollments",
   operationId: "enrollInCourse",
   tags: ["Enrollments"],
-  security: [{ cookieAuth: [] }],
+  security: [{ bearerAuth: [] }],
   request: {
     body: {
       content: { "application/json": { schema: EnrollCourseBodySchema } },
@@ -46,7 +46,7 @@ registry.registerPath({
   path: "/v1/enrollments/courses/{publicId}",
   operationId: "getEnrollmentStatus",
   tags: ["Enrollments"],
-  security: [{ cookieAuth: [] }],
+  security: [{ bearerAuth: [] }],
   request: {
     params: ParamsPublicIdSchema,
   },
@@ -68,7 +68,7 @@ registry.registerPath({
   path: "/v1/enrollments/courses/{publicId}",
   operationId: "withdrawFromCourse",
   tags: ["Enrollments"],
-  security: [{ cookieAuth: [] }],
+  security: [{ bearerAuth: [] }],
   request: {
     params: ParamsPublicIdSchema,
   },
@@ -90,7 +90,7 @@ registry.registerPath({
   path: "/v1/enrollments/courses/{publicId}/topics",
   operationId: "getEnrolledCourseTopics",
   tags: ["Enrollments"],
-  security: [{ cookieAuth: [] }],
+  security: [{ bearerAuth: [] }],
   request: {
     params: ParamsPublicIdSchema,
   },
@@ -112,7 +112,7 @@ registry.registerPath({
   path: "/v1/enrollments/courses/{publicId}/lessons",
   operationId: "getEnrolledCourseLessons",
   tags: ["Enrollments"],
-  security: [{ cookieAuth: [] }],
+  security: [{ bearerAuth: [] }],
   request: {
     params: ParamsPublicIdSchema,
   },
@@ -134,7 +134,7 @@ registry.registerPath({
   path: "/v1/enrollments/courses",
   operationId: "getEnrolledCourses",
   tags: ["Enrollments"],
-  security: [{ cookieAuth: [] }],
+  security: [{ bearerAuth: [] }],
   request: {
     query: PaginationParams.extend(SearchSchema.shape),
   },
@@ -156,7 +156,7 @@ registry.registerPath({
   path: "/v1/enrollments/students",
   operationId: "getStudents",
   tags: ["Enrollments"],
-  security: [{ cookieAuth: [] }],
+  security: [{ bearerAuth: [] }],
   request: {
     query: PaginationParams.extend(SearchSchema.shape),
   },
@@ -178,7 +178,7 @@ registry.registerPath({
   path: "/v1/enrollments/stats",
   operationId: "getEnrollmentsStats",
   tags: ["Enrollments"],
-  security: [{ cookieAuth: [] }],
+  security: [{ bearerAuth: [] }],
   responses: {
     200: {
       description: "Student/enrollment counts for courses created by the current user",

@@ -2,15 +2,17 @@ import type { Request, Response } from "express";
 import { authService } from "../services/authService";
 import {
   AuthLogInUserReq,
+  AuthNativeLogInUserRes,
   AuthNativeRefreshTokenReq,
+  AuthNativeRefreshTokenRes,
+  AuthNativeSignUpUserRes,
   AuthSignUpUserReq,
-  User,
 } from "@repo/contract";
 
 export const authController = {
   signUp: async (_req: Request, res: Response) => {
     const body: AuthSignUpUserReq = res.locals.body;
-    const resDto: User = await authService.signUp({ dto: body, res });
+    const resDto: AuthNativeSignUpUserRes = await authService.signUp({ dto: body });
     return res.status(201).json(resDto);
   },
 
@@ -19,18 +21,19 @@ export const authController = {
       email: res.locals.body.email,
       password: res.locals.body.password,
     } as AuthLogInUserReq;
-    const resDto: User = await authService.logIn({ dto: reqDto, res });
+    const resDto: AuthNativeLogInUserRes = await authService.logIn({ dto: reqDto });
     return res.status(200).json(resDto);
   },
 
   signOut: async (req: Request, res: Response) => {
-    await authService.signOut({ req, res });
+    await authService.signOut({ req });
     return res.status(200).json();
   },
 
-  refreshToken: async (req: Request, res: Response) => {
-    await authService.refreshToken({ req, res });
-    return res.status(200).json();
+  refreshToken: async (_req: Request, res: Response) => {
+    const body: AuthNativeRefreshTokenReq = res.locals.body;
+    const resDto: AuthNativeRefreshTokenRes = await authService.refreshToken({ dto: body });
+    return res.status(200).json(resDto);
   },
 
   signUpNative: async (_req: Request, res: Response) => {

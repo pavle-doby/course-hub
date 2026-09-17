@@ -10,31 +10,16 @@ import {
   CardContent,
   CardFooter,
 } from "@repo/ui-web/components/card";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-} from "@repo/ui-web/components/dropdown-menu";
-import { Button } from "@repo/ui-web/components/button";
 import { Badge } from "@repo/ui-web/components/badge";
-import {
-  Folder,
-  EllipsisVertical,
-  Pencil,
-  Eye,
-  Trash2,
-  Upload,
-  Undo2,
-  Archive,
-  UserPlus,
-} from "lucide-react";
+import { Folder } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useT } from "@repo/i18n/client";
 import { useErrorHandlingAction } from "@repo/shared";
 import { toast } from "@repo/ui-web/components/sonner";
+import { useIsMobile } from "@repo/ui-web/hooks/use-mobile";
 import { ChAlertDialog } from "@/components/ch-alert-dialog";
+import { CourseCardDropdownActions } from "./course-card-dropdown-actions";
+import { CourseCardDrawerActions } from "./course-card-drawer-actions";
 
 type CourseCardProps = {
   course: Course;
@@ -52,6 +37,7 @@ export function CourseCard({ course, onDelete }: CourseCardProps) {
   const { t } = useT();
   const queryClient = useQueryClient();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const isMobile = useIsMobile();
   const { handleErrorAction } = useErrorHandlingAction({
     t: t as (key: string) => string,
     showToastError: ({ title, description }) => toast.error(title, { description }),
@@ -60,8 +46,6 @@ export function CourseCard({ course, onDelete }: CourseCardProps) {
   const { mutateAsync: updateCourse } = useUpdateCourse();
 
   const isPublished = course.status === "published";
-  const isArchived = course.status === "archived";
-  const isPrivate = course.visibility === "private";
 
   async function handleTogglePublish() {
     try {
@@ -88,6 +72,16 @@ export function CourseCard({ course, onDelete }: CourseCardProps) {
     }
   }
 
+  const actionMenuProps = {
+    course,
+    onEdit: () => router.push(`/courses/${course.publicId}/edit`),
+    onInvite: () => router.push(`/courses/${course.publicId}/edit?tab=invite`),
+    onPreview: () => router.push(`/learn/${course.publicId}`),
+    onTogglePublish: handleTogglePublish,
+    onArchive: handleArchive,
+    onDelete: () => setDeleteDialogOpen(true),
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -96,59 +90,11 @@ export function CourseCard({ course, onDelete }: CourseCardProps) {
           <CardTitle>{course.name}</CardTitle>
         </div>
         <CardAction>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="size-7">
-                <EllipsisVertical className="size-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => router.push(`/courses/${course.publicId}/edit`)}>
-                <Pencil className="size-4" />
-                {t("courses.card.edit")}
-              </DropdownMenuItem>
-
-              {isPrivate && (
-                <DropdownMenuItem
-                  onClick={() => router.push(`/courses/${course.publicId}/edit?tab=invite`)}
-                >
-                  <UserPlus className="size-4" />
-                  {t("courses.card.invite")}
-                </DropdownMenuItem>
-              )}
-
-              <DropdownMenuItem onClick={() => router.push(`/courses/${course.publicId}`)}>
-                <Eye className="size-4" />
-                {t("courses.card.preview")}
-              </DropdownMenuItem>
-
-              {!isPublished && (
-                <DropdownMenuItem onClick={handleTogglePublish}>
-                  <Upload className="size-4" />
-                  {t("courses.card.publish")}
-                </DropdownMenuItem>
-              )}
-
-              <DropdownMenuSeparator />
-
-              {isPublished && (
-                <DropdownMenuItem variant="destructive" onClick={handleTogglePublish}>
-                  {<Undo2 className="size-4" />}
-                  {t("courses.card.unpublish")}
-                </DropdownMenuItem>
-              )}
-              {!isArchived && (
-                <DropdownMenuItem variant="destructive" onClick={handleArchive}>
-                  <Archive className="size-4" />
-                  {t("courses.card.archive")}
-                </DropdownMenuItem>
-              )}
-              <DropdownMenuItem variant="destructive" onClick={() => setDeleteDialogOpen(true)}>
-                <Trash2 className="size-4" />
-                {t("courses.card.delete")}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {isMobile ? (
+            <CourseCardDrawerActions {...actionMenuProps} />
+          ) : (
+            <CourseCardDropdownActions {...actionMenuProps} />
+          )}
         </CardAction>
       </CardHeader>
 

@@ -36,6 +36,7 @@ import {
 
 import { useAuthSignOut } from "@repo/api-client";
 import { useT } from "@repo/i18n/client";
+import { clearAuthTokens } from "@/utils/token-storage";
 
 type NavKey =
   | "nav.create"
@@ -94,7 +95,12 @@ export function SideNavMenu() {
   const { mutate: signOut } = useAuthSignOut();
 
   function handleSignOut() {
-    signOut(undefined, { onSuccess: () => router.push("/auth/login") });
+    signOut(undefined, {
+      onSuccess: () => {
+        clearAuthTokens();
+        router.push("/auth/login");
+      },
+    });
   }
 
   return (

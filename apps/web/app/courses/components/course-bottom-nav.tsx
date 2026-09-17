@@ -40,7 +40,7 @@ export function CourseBottomNav({
           {isSaving ? t("courses.editor.saving") : t("courses.editor.save")}
         </Button>
       </div>
-      <div className="flex items-center justify-between gap-2 border-t px-4 py-1">
+      <div className="flex items-center justify-between gap-2 border-t px-4 pt-1 pb-4">
         <Button
           variant="ghost"
           size="sm"
@@ -51,7 +51,7 @@ export function CourseBottomNav({
           <ChevronLeft className="size-4" />
           {t("courses.editor.previous")}
         </Button>
-        <div className="flex items-center">
+        <div className="flex items-center gap-2">
           <Button
             variant="ghost"
             size="icon"

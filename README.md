@@ -44,13 +44,40 @@ pnpm api          # API only
 pnpm ios          # Expo iOS
 ```
 
+## Tunnels
+
+Expose local apps to the internet with `cloudflared` (PWA, webhooks, mobile testing). Run each in its own terminal:
+
+```bash
+cloudflared tunnel --url http://localhost:7007   # API
+```
+
+```bash
+cloudflared tunnel --url http://localhost:3000   # Web (PWA testing)
+```
+
+The URL is public and HTTPS; it changes on every restart. Notes:
+
+- **PWA testing**: a PWA needs HTTPS + a stable origin to install. Point the browser at the web tunnel URL; service workers/push work over it.
+- **API**: for webhooks (e.g. Cloudflare Stream), register the API tunnel URL and update the webhook whenever it changes (see below).
+
+### Current tunnels
+
+#### API
+
+```bash
+https://satin-educational-pearl-del.trycloudflare.com
+```
+
+#### Web
+
+```bash
+https://appear-den-elvis-solar.trycloudflare.com
+```
+
 ## Cloudflare Stream webhook (video processing)
 
 Video status (uploading → processing → ready/error) is pushed to the API via a Cloudflare Stream webhook at `POST /api/v1/videos/webhook`. In local dev the API isn't publicly reachable, so expose it first:
-
-```bash
-cloudflared tunnel --url http://localhost:7007
-```
 
 Copy the `https://<random>.trycloudflare.com` URL from the output, then register it as the account-level webhook and retrieve the signing secret:
 

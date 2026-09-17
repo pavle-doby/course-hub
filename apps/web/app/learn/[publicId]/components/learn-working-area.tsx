@@ -123,7 +123,9 @@ export function LearnWorkingArea({
                     {document.contentType.startsWith("image/") ? <ImageIcon /> : <FileText />}
                   </AttachmentMedia>
                   <AttachmentContent>
-                    <AttachmentTitle>{document.originalFileName}</AttachmentTitle>
+                    <AttachmentTitle className="break-all whitespace-normal">
+                      {document.originalFileName}
+                    </AttachmentTitle>
                     <AttachmentDescription>{document.contentType}</AttachmentDescription>
                   </AttachmentContent>
                   <AttachmentTrigger asChild>

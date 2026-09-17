@@ -14,7 +14,7 @@ registry.registerPath({
   path: "/v1/courses",
   operationId: "getCourses",
   tags: ["Courses"],
-  security: [{ cookieAuth: [] }],
+  security: [{ bearerAuth: [] }],
   request: {
     query: PaginationParams.extend(SearchSchema.shape).extend(CourseGetAllQuerySchema.shape),
   },
@@ -36,7 +36,7 @@ registry.registerPath({
   path: "/v1/courses/{publicId}",
   operationId: "getCourseByPublicId",
   tags: ["Courses"],
-  security: [{ cookieAuth: [] }],
+  security: [{ bearerAuth: [] }],
   request: {
     params: ParamsPublicIdSchema,
   },
@@ -58,7 +58,7 @@ registry.registerPath({
   path: "/v1/courses",
   operationId: "createCourse",
   tags: ["Courses"],
-  security: [{ cookieAuth: [] }],
+  security: [{ bearerAuth: [] }],
   request: {
     body: {
       content: { "application/json": { schema: CoursePostQuerySchema } },
@@ -83,7 +83,7 @@ registry.registerPath({
   path: "/v1/courses/{id}",
   operationId: "updateCourse",
   tags: ["Courses"],
-  security: [{ cookieAuth: [] }],
+  security: [{ bearerAuth: [] }],
   request: {
     params: ParamsIdSchema,
     body: {
@@ -109,7 +109,7 @@ registry.registerPath({
   path: "/v1/courses/{id}",
   operationId: "deleteCourse",
   tags: ["Courses"],
-  security: [{ cookieAuth: [] }],
+  security: [{ bearerAuth: [] }],
   request: {
     params: ParamsIdSchema,
   },

@@ -1,9 +1,5 @@
 import { registry } from "api/openapi/registry";
-import {
-  NativeAuthTokensSchema,
-  NativeAuthWithTokensSchema,
-  UserSchema,
-} from "api/openapi/schemas";
+import { NativeAuthTokensSchema, NativeAuthWithTokensSchema } from "api/openapi/schemas";
 import {
   ApiErrorSchema,
   AuthLoginQuerySchema,
@@ -23,9 +19,9 @@ registry.registerPath({
     },
   },
   responses: {
-    200: {
+    201: {
       description: "User signed up successfully",
-      content: { "application/json": { schema: UserSchema } },
+      content: { "application/json": { schema: NativeAuthWithTokensSchema } },
     },
     default: {
       description: "Error",
@@ -48,7 +44,7 @@ registry.registerPath({
   responses: {
     200: {
       description: "Logged in successfully",
-      content: { "application/json": { schema: UserSchema } },
+      content: { "application/json": { schema: NativeAuthWithTokensSchema } },
     },
     default: {
       description: "Error",
@@ -64,6 +60,29 @@ registry.registerPath({
   tags: ["Auth"],
   responses: {
     200: { description: "Signed out successfully" },
+  },
+});
+
+registry.registerPath({
+  method: "post",
+  path: "/v1/auth/refresh",
+  operationId: "authRefreshToken",
+  tags: ["Auth"],
+  request: {
+    body: {
+      content: { "application/json": { schema: AuthNativeRefreshQuerySchema } },
+      required: true,
+    },
+  },
+  responses: {
+    200: {
+      description: "Tokens refreshed successfully",
+      content: { "application/json": { schema: NativeAuthTokensSchema } },
+    },
+    default: {
+      description: "Error",
+      content: { "application/json": { schema: ApiErrorSchema } },
+    },
   },
 });
 

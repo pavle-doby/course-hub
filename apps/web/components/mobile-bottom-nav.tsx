@@ -40,7 +40,7 @@ export function MobileBottomNav() {
   const isLearnActive = pathname.startsWith("/learn");
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 border-t bg-background md:hidden">
+    <nav className="fixed inset-x-0 bottom-0 z-40 border-t bg-background pb-4 md:hidden">
       <div className="flex h-16 items-center justify-around">
         <Drawer>
           <DrawerTrigger
@@ -53,7 +53,7 @@ export function MobileBottomNav() {
             <Apple className="size-5" />
           </DrawerTrigger>
           <DrawerContent className="p-0">
-            <div className="flex flex-col p-2 pb-8">
+            <div className="flex flex-col gap-3 p-2 pb-8">
               {LEARN_LINKS.map(({ href, icon: Icon, labelKey }) => (
                 <DrawerClose key={href} asChild>
                   <Link
@@ -80,7 +80,7 @@ export function MobileBottomNav() {
             <CirclePlus className="size-5" />
           </DrawerTrigger>
           <DrawerContent className="p-0">
-            <div className="flex flex-col p-2 pb-8">
+            <div className="flex flex-col gap-3 p-2 pb-8">
               {CREATE_LINKS.map(({ href, icon: Icon, labelKey }) => (
                 <DrawerClose key={href} asChild>
                   <Link

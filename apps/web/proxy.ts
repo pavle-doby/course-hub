@@ -5,27 +5,11 @@ import type { NextRequest } from "next/server";
 const i18nProxy = createProxy(i18nConfig);
 
 export function proxy(request: NextRequest): NextResponse {
-  const token = request.cookies.get("access_token");
-  const isAuthRoute = request.nextUrl.pathname.includes("/auth");
-  const isHomeRoute = request.nextUrl.pathname === "/";
-  const isInviteRoute = request.nextUrl.pathname.startsWith("/invite");
-  const isPublicRoute = isAuthRoute || isHomeRoute || isInviteRoute;
-
-  if (!token && !isPublicRoute) {
-    return NextResponse.redirect(new URL("/auth/login", request.url));
-  }
-  if (token && isAuthRoute) {
-    return NextResponse.redirect(new URL("/learn", request.url));
-  }
-  if (token && isHomeRoute) {
-    return NextResponse.redirect(new URL("/learn", request.url));
-  }
-
   return i18nProxy(request);
 }
 
 export const config = {
   matcher: [
-    "/((?!api|_next/static|_next/image|assets|favicon.ico|tamagui.css|sw.js|site.webmanifest).*)",
+    "/((?!api|_next/static|_next/image|assets|favicon.ico|tamagui.css|sw.js|site.webmanifest|manifest.webmanifest|offline.html|icons).*)",
   ],
 };
