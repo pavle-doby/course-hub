@@ -34,7 +34,6 @@ export default async function AuthPage({ params }: { params: Promise<{ mode: str
                 <Skeleton className="h-10 w-full" />
                 <Skeleton className="h-10 w-full" />
                 <Skeleton className="h-10 w-full" />
-                <Skeleton className="h-10 w-full" />
               </CardContent>
             </Card>
           }
