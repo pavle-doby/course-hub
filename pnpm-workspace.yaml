@@ -5,3 +5,5 @@ allowBuilds:
   esbuild: true
   msw: true
   sharp: true
+patchedDependencies:
+  drizzle-zod@0.8.3: patches/drizzle-zod@0.8.3.patch

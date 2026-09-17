@@ -30,6 +30,7 @@ const courseColumns = {
   description: schema.courses.description,
   publicId: schema.courses.publicId,
   status: schema.courses.status,
+  visibility: schema.courses.visibility,
   publishedAt: schema.courses.publishedAt,
 };
 

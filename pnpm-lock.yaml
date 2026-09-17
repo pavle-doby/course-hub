@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  drizzle-zod@0.8.3: e6495bb00d94024e291c0a796dbbb5aca5f411b087517ebf86443e9b77644690
+
 importers:
 
   .:
@@ -385,9 +388,12 @@ importers:
       '@repo/db-schema':
         specifier: workspace:*
         version: link:../db-schema
+      drizzle-orm:
+        specifier: ^0.45.2
+        version: 0.45.2(postgres@3.4.9)
       drizzle-zod:
         specifier: ^0.8.3
-        version: 0.8.3(drizzle-orm@0.45.2(postgres@3.4.9))(zod@4.4.3)
+        version: 0.8.3(patch_hash=e6495bb00d94024e291c0a796dbbb5aca5f411b087517ebf86443e9b77644690)(drizzle-orm@0.45.2(postgres@3.4.9))(zod@4.4.3)
       zod:
         specifier: ^4.4.3
         version: 4.4.3
@@ -13122,7 +13128,7 @@ snapshots:
     optionalDependencies:
       postgres: 3.4.9
 
-  drizzle-zod@0.8.3(drizzle-orm@0.45.2(postgres@3.4.9))(zod@4.4.3):
+  drizzle-zod@0.8.3(patch_hash=e6495bb00d94024e291c0a796dbbb5aca5f411b087517ebf86443e9b77644690)(drizzle-orm@0.45.2(postgres@3.4.9))(zod@4.4.3):
     dependencies:
       drizzle-orm: 0.45.2(postgres@3.4.9)
       zod: 4.4.3

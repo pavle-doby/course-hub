@@ -20,6 +20,7 @@
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^9.1.0",
     "@repo/db-schema": "workspace:*",
+    "drizzle-orm": "^0.45.2",
     "drizzle-zod": "^0.8.3",
     "zod": "^4.4.3"
   },
