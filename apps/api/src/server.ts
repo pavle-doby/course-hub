@@ -32,15 +32,13 @@ app.use("/api", handleAuth, apiRoutes);
 app.use(handleErrorNotFound);
 app.use(handleError);
 
-const PORT = Number(env.SERVER_PORT);
+const PORT = Number(env.PORT ?? env.SERVER_PORT);
 
-if (!env.VERCEL) {
-  app.listen(
-    //
-    PORT,
-    () => console.log(`[${green("Server")}] Running on: http://localhost:${PORT}`)
-  );
-}
+app.listen(
+  //
+  PORT,
+  () => console.log(`[${green("Server")}] Running on: http://localhost:${PORT}`)
+);
 
 process.on("uncaughtException", (error) => {
   logger.fatal(error, "uncaught exception detected");

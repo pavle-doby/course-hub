@@ -1,0 +1,5 @@
+[build]
+buildCommand = "pnpm turbo run build --filter=api"
+
+[deploy]
+startCommand = "pnpm --filter api start"

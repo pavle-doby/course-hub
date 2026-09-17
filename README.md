@@ -61,6 +61,17 @@ The URL is public and HTTPS; it changes on every restart. Notes:
 - **PWA testing**: a PWA needs HTTPS + a stable origin to install. Point the browser at the web tunnel URL; service workers/push work over it.
 - **API**: for webhooks (e.g. Cloudflare Stream), register the API tunnel URL and update the webhook whenever it changes (see below).
 
+## Deploy API to Railway
+
+The root [`railway.toml`](./railway.toml) builds the API and starts it with `pnpm --filter api start`. Configure these Railway variables from `apps/api/.env.example`:
+
+- `SUPABASE_URL`, `SUPABASE_API_KEY`, `DATABASE_URL`
+- `CORS_ENABLED_URL` — the comma-separated web origins allowed to call the API
+- `NODE_ENV=production`, `MIN_LOG_LEVEL=info`
+- Required Cloudflare variables when video uploads are enabled
+
+Railway supplies `PORT`; do not set `SERVER_PORT` in Railway. Set the web deployment's `NEXT_PUBLIC_API_URL` to `https://<railway-domain>/api`, then redeploy the web app. Update the Cloudflare Stream webhook URL to `https://<railway-domain>/api/v1/public/videos/webhook`.
+
 ### Current tunnels
 
 #### API

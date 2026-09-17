@@ -9,6 +9,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsx watch --clear-screen=false src/server.ts",
+    "start": "tsx src/server.ts",
     "generate:openapi": "tsx src/openapi/generate.ts",
     "lint-staged": "lint-staged"
   },
