@@ -128,46 +128,6 @@ importers:
         specifier: 5.8.3
         version: 5.8.3
 
-  apps/docs:
-    dependencies:
-      '@repo/ui-web':
-        specifier: workspace:*
-        version: link:../../packages/ui-web
-      next:
-        specifier: 16.3.2
-        version: 16.3.2(@babel/core@8.0.1)(@types/node@26.3.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
-      react:
-        specifier: ^19.2.8
-        version: 19.2.8
-      react-dom:
-        specifier: ^19.2.8
-        version: 19.2.8(react@19.2.8)
-    devDependencies:
-      '@repo/eslint-config':
-        specifier: workspace:*
-        version: link:../../packages/eslint-config
-      '@repo/typescript-config':
-        specifier: workspace:*
-        version: link:../../packages/typescript-config
-      '@types/node':
-        specifier: ^26.3.0
-        version: 26.3.0
-      '@types/react':
-        specifier: 19.2.18
-        version: 19.2.18
-      '@types/react-dom':
-        specifier: 19.2.5
-        version: 19.2.5(@types/react@19.2.18)
-      eslint:
-        specifier: ^10.9.1
-        version: 10.9.1(jiti@2.7.0)(supports-color@10.2.2)
-      lint-staged:
-        specifier: ^17.3.0
-        version: 17.3.0
-      typescript:
-        specifier: 5.8.3
-        version: 5.8.3
-
   apps/native:
     dependencies:
       '@hookform/resolvers':
