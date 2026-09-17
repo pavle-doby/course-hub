@@ -1,5 +1,5 @@
 ---
-description: Activates the full Blazing agent stack. Use when you want CodeGraph + Context7 + Caveman + Ponytail all active at once for maximum efficiency.
+description: Activates the Blazing agent stack. Use when you want CodeGraph and Ponytail active at once.
 agent: build
 ---
 

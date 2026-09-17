@@ -21,6 +21,8 @@
 - **Prefer barrel imports and exports** — import from the nearest `index.ts` barrel, not from deep file paths. Every folder with public exports must have an `index.ts` that re-exports them. Never reach past a barrel (e.g. `import { x } from "@repo/shared/utils"` not `import { x } from "@repo/shared/utils/zod/getZodLocale"`).
 - **Always use `{}` braces on `if` statements**, even single-line bodies — never `if (x) return;`.
 - **Agents must never run database commands** — do not run `pnpm db:*`, `drizzle-kit`, `psql`, Supabase SQL, migration, push, reset, seed, or destructive database commands. Agents may update schema source and migration files only when explicitly requested; the user runs all database commands.
+- **New OpenCode configuration must use `opencode.jsonc`**, not `opencode.json`.
+- **When working in `apps/web/`**, use the shadcn MCP for additional component or design-system context when needed.
 
 ## Common Commands
 
@@ -49,6 +51,7 @@ Throw `BadRequestError`, `UnauthorizedError`, `NotFoundError`, etc. from `@repo/
 Additional `AGENTS.md` files apply to their directory and all descendants. Consult the closest applicable file when working in `apps/` or `packages/`.
 
 <!-- CODEGRAPH_START -->
+
 ## CodeGraph
 
 In repositories indexed by CodeGraph (a `.codegraph/` directory exists at the repo root), reach for it BEFORE grep/find or reading files when you need to understand or locate code:
