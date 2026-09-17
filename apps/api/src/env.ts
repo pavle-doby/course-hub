@@ -8,6 +8,7 @@ export const env = process.env as {
   SUPABASE_API_KEY: string;
   DATABASE_URL: string;
   CORS_ENABLED_URL: string;
+  VERCEL?: string;
   NODE_ENV: "development" | "production" | "test";
   MIN_LOG_LEVEL: string;
   CLOUDFLARE_ACCOUNT_ID: string;

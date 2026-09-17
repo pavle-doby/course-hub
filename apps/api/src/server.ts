@@ -11,7 +11,7 @@ import { logger, handleLogs } from "./logger";
 import apiRoutes from "./routes/apiRoutes";
 import apiPublicRoutes from "./routes/apiPublicRoutes";
 
-const app = express();
+const app: express.Express = express();
 
 app.use(
   cors({
@@ -34,8 +34,16 @@ app.use(handleError);
 
 const PORT = Number(env.SERVER_PORT);
 
-app.listen(PORT, () => console.log(`[${green("Server")}] Running on: http://localhost:${PORT}`));
+if (!env.VERCEL) {
+  app.listen(
+    //
+    PORT,
+    () => console.log(`[${green("Server")}] Running on: http://localhost:${PORT}`)
+  );
+}
 
 process.on("uncaughtException", (error) => {
   logger.fatal(error, "uncaught exception detected");
 });
+
+export default app;
