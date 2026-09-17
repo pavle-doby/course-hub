@@ -1,5 +1,21 @@
 [build]
-buildCommand = "cd ../.. && pnpm --filter web build"
+builder = "RAILPACK"
+buildCommand = "pnpm turbo build --filter=web..."
+
+watchPatterns = [
+  "/apps/web/**",
+  "/packages/ui-web/**",
+  "/packages/contract/**",
+  "/packages/api-client/**",
+  "/packages/i18n/**",
+  "/pnpm-lock.yaml",
+  "/pnpm-workspace.yaml",
+  "/turbo.json"
+]
 
 [deploy]
-startCommand = "cd ../.. && pnpm --filter web start"
+startCommand = "pnpm --filter=web start"
+healthcheckPath = "/"
+healthcheckTimeout = 300
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10

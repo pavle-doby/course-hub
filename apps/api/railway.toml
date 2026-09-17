@@ -1,5 +1,19 @@
 [build]
-buildCommand = "pnpm turbo run build --filter=api"
+builder = "RAILPACK"
+buildCommand = "pnpm turbo build --filter=api..."
+
+watchPatterns = [
+  "/apps/api/**",
+  "/packages/contract/**",
+  "/packages/db/**",
+  "/pnpm-lock.yaml",
+  "/pnpm-workspace.yaml",
+  "/turbo.json"
+]
 
 [deploy]
-startCommand = "pnpm --filter api start"
+startCommand = "pnpm --filter=api start"
+healthcheckPath = "/v1/health"
+healthcheckTimeout = 300
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
