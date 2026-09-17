@@ -2,7 +2,6 @@ import type { InferSelectModel } from "drizzle-orm";
 import type {
   users,
   userPreferences,
-  fileUploads,
   courses,
   courseEnrollments,
   courseInvitations,
@@ -16,7 +15,6 @@ import type {
 
 export type UserEntity = InferSelectModel<typeof users>;
 export type UserPreferencesEntity = InferSelectModel<typeof userPreferences>;
-export type FileUploadEntity = InferSelectModel<typeof fileUploads>;
 export type CourseEntity = InferSelectModel<typeof courses>;
 export type CourseEnrollmentEntity = InferSelectModel<typeof courseEnrollments>;
 export type CourseInvitationEntity = InferSelectModel<typeof courseInvitations>;

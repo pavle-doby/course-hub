@@ -9,7 +9,6 @@ import { lessons } from "./lessons";
 import { videos } from "./videos";
 import { courseProgress } from "./course-progress";
 import { lessonProgress } from "./lesson-progress";
-import { fileUploads } from "./file-uploads";
 import { documents } from "./documents";
 
 export const usersRelations = relations(users, ({ one, many }) => ({
@@ -18,7 +17,6 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   enrollments: many(courseEnrollments),
   courseProgress: many(courseProgress),
   lectureProgress: many(lessonProgress),
-  fileUploads: many(fileUploads),
   documents: many(documents),
 }));
 
@@ -93,8 +91,4 @@ export const courseProgressRelations = relations(courseProgress, ({ one }) => ({
 export const lessonProgressRelations = relations(lessonProgress, ({ one }) => ({
   user: one(users, { fields: [lessonProgress.userId], references: [users.id] }),
   lesson: one(lessons, { fields: [lessonProgress.lessonId], references: [lessons.id] }),
-}));
-
-export const fileUploadsRelations = relations(fileUploads, ({ one }) => ({
-  user: one(users, { fields: [fileUploads.userId], references: [users.id] }),
 }));
