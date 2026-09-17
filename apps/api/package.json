@@ -6,6 +6,9 @@
   "main": "server.js",
   "description": "API Server for the application",
   "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "build": "tsc",
     "dev": "tsx watch --clear-screen=false src/server.ts",
