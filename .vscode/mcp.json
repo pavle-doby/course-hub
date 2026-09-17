@@ -7,8 +7,12 @@
     "codegraph": {
       "type": "stdio",
       "command": "codegraph",
-      "args": ["serve", "--mcp"],
-      "env": {}
+      "args": [
+        "serve",
+        "--mcp",
+        "--path",
+        "/Users/doby23/Desktop/Doby/Projects/course-hub"
+      ]
     },
     "context7": {
       "type": "http",
