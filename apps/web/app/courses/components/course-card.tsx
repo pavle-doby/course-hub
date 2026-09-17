@@ -100,8 +100,13 @@ export function CourseCard({ course, onDelete }: CourseCardProps) {
 
       <CardContent className="line-clamp-3 flex-1">{course.description}</CardContent>
 
-      <CardFooter>
+      <CardFooter className="gap-2">
         <Badge variant={statusVariant[course.status]}>{t(`courses.status.${course.status}`)}</Badge>
+        <Badge variant={course.visibility === "public" ? "outline" : "default"}>
+          {course.visibility === "public"
+            ? t("courses.editor.visibilityPublic")
+            : t("courses.editor.visibilityPrivate")}
+        </Badge>
       </CardFooter>
 
       <ChAlertDialog

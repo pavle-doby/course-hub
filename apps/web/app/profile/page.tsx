@@ -70,27 +70,27 @@ export default function ProfilePage() {
         <PageHeader className="mb-6 hidden md:flex" title={t("profile.title")} />
         <div className="flex justify-center px-4 pt-4 md:px-6 md:pt-0">
           <Card className="w-full max-w-2xl">
-            <CardContent className="flex gap-6">
-              <Skeleton className="size-22 shrink-0 rounded-full" />
-              <div className="flex flex-1 flex-col gap-4">
+            <CardContent className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-4 md:gap-x-6">
+              <Skeleton className="size-16 shrink-0 rounded-full md:row-span-4 md:size-22" />
+              <div className="contents">
                 <div className="flex flex-col gap-2">
                   <Skeleton className="h-6 w-32" />
                   <Skeleton className="h-4 w-24" />
                 </div>
 
-                <div className="flex flex-row gap-4">
+                <div className="col-span-2 grid grid-cols-2 gap-3 md:col-span-1 md:col-start-2 md:flex md:gap-4">
                   <ProfileStat value={undefined} label={t("profile.courses")} />
                   <ProfileStat value={undefined} label={t("profile.students")} />
                   <ProfileStat value={undefined} label={t("profile.enrollments")} />
                   <ProfileStat value={undefined} label={t("profile.enrolled")} />
                 </div>
 
-                <div className="flex flex-col gap-1">
+                <div className="col-span-2 flex flex-col gap-1 md:col-span-1 md:col-start-2">
                   <Skeleton className="h-4 w-full max-w-sm" />
                   <Skeleton className="h-4 w-2/3 max-w-sm" />
                 </div>
 
-                <div className="flex flex-row gap-4">
+                <div className="col-span-2 flex flex-row gap-4 md:col-span-1 md:col-start-2">
                   <Skeleton className="h-8 w-full" />
                   <Skeleton className="h-8 w-full" />
                 </div>
@@ -119,28 +119,40 @@ export default function ProfilePage() {
       <div className="flex flex-col gap-6 px-4 pt-4 pb-4 md:px-6 md:pt-0 md:pb-6">
         <div className="flex justify-center">
           <Card className="w-full max-w-2xl">
-            <CardContent className="flex gap-6">
-              <ProfileAvatar avatarUrl={user.avatarUrl} username={user.username} />
+            <CardContent className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-4 md:gap-x-6">
+              <ProfileAvatar
+                className="!size-16 md:row-span-4 md:!size-22"
+                avatarUrl={user.avatarUrl}
+                username={user.username}
+              />
 
-              <div className="flex flex-1 flex-col gap-4">
-                <div>
-                  <h2 className="text-xl font-bold">@{user.username}</h2>
-                  <p className="text-sm text-muted-foreground">{fullName}</p>
+              <div className="contents">
+                <div className="flex min-w-0 flex-col gap-2">
+                  <div>
+                    <h2 className="text-base font-bold break-all md:break-normal">
+                      @{user.username}
+                    </h2>
+                    <p className="text-sm text-muted-foreground">{fullName}</p>
+                  </div>
+
+                  <div className="col-span-2 grid grid-cols-2 gap-3 text-sm md:col-span-1 md:col-start-2 md:flex md:gap-4">
+                    <ProfileStat value={courses?.pagination.total} label={t("profile.courses")} />
+                    <ProfileStat value={stats?.studentsCount} label={t("profile.students")} />
+                    <ProfileStat value={stats?.enrollmentsCount} label={t("profile.enrollments")} />
+                    <ProfileStat
+                      value={enrolledCourses?.pagination.total}
+                      label={t("profile.enrolled")}
+                    />
+                  </div>
                 </div>
 
-                <div className="flex flex-row gap-4 text-sm">
-                  <ProfileStat value={courses?.pagination.total} label={t("profile.courses")} />
-                  <ProfileStat value={stats?.studentsCount} label={t("profile.students")} />
-                  <ProfileStat value={stats?.enrollmentsCount} label={t("profile.enrollments")} />
-                  <ProfileStat
-                    value={enrolledCourses?.pagination.total}
-                    label={t("profile.enrolled")}
-                  />
-                </div>
+                {user.bio && (
+                  <p className="col-span-2 text-sm text-foreground md:col-span-1 md:col-start-2">
+                    {user.bio}
+                  </p>
+                )}
 
-                {user.bio && <p className="text-sm text-foreground">{user.bio}</p>}
-
-                <div className="flex flex-row gap-4">
+                <div className="col-span-2 flex flex-row gap-4 md:col-span-1 md:col-start-2">
                   <Button
                     variant="outline"
                     className="flex-1"

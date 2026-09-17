@@ -63,14 +63,7 @@ The URL is public and HTTPS; it changes on every restart. Notes:
 
 ## Deploy API to Railway
 
-The root [`railway.toml`](./railway.toml) builds the API and starts it with `pnpm --filter api start`. Configure these Railway variables from `apps/api/.env.example`:
-
-- `SUPABASE_URL`, `SUPABASE_API_KEY`, `DATABASE_URL`
-- `CORS_ENABLED_URL` — the comma-separated web origins allowed to call the API
-- `NODE_ENV=production`, `MIN_LOG_LEVEL=info`
-- Required Cloudflare variables when video uploads are enabled
-
-Railway supplies `PORT`; do not set `SERVER_PORT` in Railway. Set the web deployment's `NEXT_PUBLIC_API_URL` to `https://<railway-domain>/api`, then redeploy the web app. Update the Cloudflare Stream webhook URL to `https://<railway-domain>/api/v1/public/videos/webhook`.
+See [README.deploy.md](./README.deploy.md) for the manual Railway settings, environment variables, API URL, CORS, and webhook flow for both services.
 
 ### Current tunnels
 
