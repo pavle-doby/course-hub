@@ -2,7 +2,9 @@
 
 import * as React from "react";
 import { Drawer as DrawerPrimitive } from "vaul";
+import { XIcon } from "lucide-react";
 
+import { Button } from "@repo/ui-web/components/button";
 import { cn } from "@repo/ui-web/lib/utils";
 
 function Drawer({ ...props }: React.ComponentProps<typeof DrawerPrimitive.Root>) {
@@ -53,7 +55,6 @@ function DrawerContent({
         )}
         {...props}
       >
-        <DrawerPrimitive.Handle className="mx-auto mt-4 hidden h-1 w-[100px] shrink-0 rounded-full bg-muted group-data-[vaul-drawer-direction=bottom]/drawer-content:block" />
         {children}
       </DrawerPrimitive.Content>
     </DrawerPortal>
@@ -64,12 +65,17 @@ function DrawerHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="drawer-header"
-      className={cn(
-        "flex flex-col gap-0.5 p-4 group-data-[vaul-drawer-direction=bottom]/drawer-content:text-center group-data-[vaul-drawer-direction=top]/drawer-content:text-center md:gap-0.5 md:text-left",
-        className
-      )}
+      className={cn("flex items-center justify-between gap-4 p-4", className)}
       {...props}
-    />
+    >
+      {props.children}
+      <DrawerClose asChild>
+        <Button variant="ghost" size="icon-sm">
+          <XIcon />
+          <span className="sr-only">Close</span>
+        </Button>
+      </DrawerClose>
+    </div>
   );
 }
 

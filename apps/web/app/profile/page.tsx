@@ -74,8 +74,13 @@ export default function ProfilePage() {
               <Skeleton className="size-16 shrink-0 rounded-full md:row-span-4 md:size-22" />
               <div className="contents">
                 <div className="flex flex-col gap-2">
-                  <Skeleton className="h-6 w-32" />
-                  <Skeleton className="h-4 w-24" />
+                  <div>
+                    <Skeleton className="h-6 w-18" />
+                    <div className="mt-2 flex gap-2">
+                      <Skeleton className="h-4 w-12" />
+                      <Skeleton className="h-4 w-18" />
+                    </div>
+                  </div>
                 </div>
 
                 <div className="col-span-2 grid grid-cols-2 gap-3 md:col-span-1 md:col-start-2 md:flex md:gap-4">
@@ -127,23 +132,29 @@ export default function ProfilePage() {
               />
 
               <div className="contents">
-                <div className="flex min-w-0 flex-col gap-2">
+                <div className="min-w-0">
                   <div>
                     <h2 className="text-base font-bold break-all md:break-normal">
                       @{user.username}
                     </h2>
-                    <p className="text-sm text-muted-foreground">{fullName}</p>
+                    <p className="text-sm text-muted-foreground">
+                      <span>{fullName}</span>
+                      <span className="hidden md:inline" aria-hidden="true">
+                        {" · "}
+                      </span>
+                      <span className="block break-all md:inline">{user.email}</span>
+                    </p>
                   </div>
+                </div>
 
-                  <div className="col-span-2 grid grid-cols-2 gap-3 text-sm md:col-span-1 md:col-start-2 md:flex md:gap-4">
-                    <ProfileStat value={courses?.pagination.total} label={t("profile.courses")} />
-                    <ProfileStat value={stats?.studentsCount} label={t("profile.students")} />
-                    <ProfileStat value={stats?.enrollmentsCount} label={t("profile.enrollments")} />
-                    <ProfileStat
-                      value={enrolledCourses?.pagination.total}
-                      label={t("profile.enrolled")}
-                    />
-                  </div>
+                <div className="col-span-2 grid grid-cols-2 gap-3 text-sm md:col-span-1 md:col-start-2 md:flex md:gap-4">
+                  <ProfileStat value={courses?.pagination.total} label={t("profile.courses")} />
+                  <ProfileStat value={stats?.studentsCount} label={t("profile.students")} />
+                  <ProfileStat value={stats?.enrollmentsCount} label={t("profile.enrollments")} />
+                  <ProfileStat
+                    value={enrolledCourses?.pagination.total}
+                    label={t("profile.enrolled")}
+                  />
                 </div>
 
                 {user.bio && (
