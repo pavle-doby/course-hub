@@ -5,6 +5,7 @@ import Image from "next/image";
 import { type Course, useGetPublicDocumentsByParent, useGetVideoByParent } from "@repo/api-client";
 import { Card, CardContent } from "@repo/ui-web/components/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui-web/components/avatar";
+import { Spinner } from "@repo/ui-web/components/spinner";
 import { BookOpen } from "lucide-react";
 import { cn } from "@repo/ui-web/lib/utils";
 
@@ -36,8 +37,9 @@ function creatorInitials(creator: Course["creator"]) {
 
 export function LearnCourseCard({ course }: LearnCourseCardProps) {
   const parent = { parentType: "course" as const, parentId: course.id };
-  const { data: video } = useGetVideoByParent(parent);
-  const { data: documents = [] } = useGetPublicDocumentsByParent(parent);
+  const { data: video, isLoading: isVideoLoading } = useGetVideoByParent(parent);
+  const { data: documents = [], isLoading: areDocumentsLoading } =
+    useGetPublicDocumentsByParent(parent);
   const thumbnailUrl = video
     ? video.thumbnailUrl
     : documents.find((document) => document.contentType.startsWith("image/"))?.publicUrl;
@@ -61,7 +63,11 @@ export function LearnCourseCard({ course }: LearnCourseCardProps) {
               gradientFor(course.id)
             )}
           >
-            <BookOpen className="size-10 text-white/90" />
+            {isVideoLoading || areDocumentsLoading ? (
+              <Spinner className="size-10 text-white/90" />
+            ) : (
+              <BookOpen className="size-10 text-white/90" />
+            )}
           </div>
         )}
 
