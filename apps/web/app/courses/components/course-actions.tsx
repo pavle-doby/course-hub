@@ -311,7 +311,7 @@ export function CourseActions({
                 </Badge>
               </div>
             </DrawerHeader>
-            <div className="flex max-h-[calc(80vh-7rem)] flex-col gap-5 overflow-y-auto p-4 pb-8">
+            <div className="flex max-h-[calc(80vh-7rem)] flex-col gap-5 overflow-y-auto p-4 pb-16">
               {onVisibilityChange && (
                 <section className="flex flex-col gap-3">
                   <h2 className="text-sm font-medium">{t("courses.editor.visibility")}</h2>

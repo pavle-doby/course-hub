@@ -32,7 +32,7 @@ export function LessonCardDrawerActions({ onDelete }: LessonCardDrawerActionsPro
         <DrawerHeader className="border-b text-left">
           <DrawerTitle>{t("lessons.card.actions")}</DrawerTitle>
         </DrawerHeader>
-        <div className="flex flex-col gap-3 p-2 pb-8">
+        <div className="flex flex-col gap-3 p-2 pb-16">
           <DrawerClose asChild>
             <Button variant="destructive" className="w-full justify-start gap-2" onClick={onDelete}>
               <Trash2 className="size-4" />

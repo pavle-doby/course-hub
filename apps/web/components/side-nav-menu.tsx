@@ -20,7 +20,6 @@ import { usePathname, useRouter } from "next/navigation";
 import type { LucideIcon } from "lucide-react";
 import {
   Apple,
-  Bell,
   ChevronRight,
   CirclePlus,
   Compass,
@@ -46,7 +45,6 @@ type NavKey =
   | "nav.learnExplore"
   | "nav.learnEnrolled"
   | "nav.students"
-  | "nav.notifications"
   | "nav.profile"
   | "nav.settings"
   | "nav.feedback"
@@ -78,7 +76,6 @@ const NAV_ITEMS: NavItem[] = [
     ],
   },
   { label: "nav.students", icon: Users, href: "/students" },
-  { label: "nav.notifications", icon: Bell, href: "/notifications" },
   { label: "nav.profile", icon: User, href: "/profile" },
 ];
 

@@ -2,25 +2,21 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  Apple,
-  Users,
-  Bell,
-  User,
-  Folder,
-  File,
-  CirclePlus,
-  Compass,
-  GraduationCap,
-} from "lucide-react";
+import { Apple, Users, User, Folder, File, CirclePlus, Compass, GraduationCap } from "lucide-react";
 import { Button } from "@repo/ui-web/components/button";
-import { Drawer, DrawerContent, DrawerTrigger, DrawerClose } from "@repo/ui-web/components/drawer";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@repo/ui-web/components/drawer";
 import { useT } from "@repo/i18n/client";
 import { ChBottomNav } from "@/components/ch-bottom-nav";
 
 const NAV_LINKS = [
   { href: "/students", icon: Users, labelKey: "nav.students" as const },
-  { href: "/notifications", icon: Bell, labelKey: "nav.notifications" as const },
   { href: "/profile", icon: User, labelKey: "nav.profile" as const },
 ];
 
@@ -55,7 +51,10 @@ export function MobileBottomNav() {
             </Button>
           </DrawerTrigger>
           <DrawerContent className="p-0">
-            <div className="flex flex-col gap-3 p-2 pb-8">
+            <DrawerHeader className="border-b text-left">
+              <DrawerTitle>{t("nav.learn")}</DrawerTitle>
+            </DrawerHeader>
+            <div className="flex flex-col gap-3 p-2 pb-16">
               {LEARN_LINKS.map(({ href, icon: Icon, labelKey }) => (
                 <DrawerClose key={href} asChild>
                   <Link href={href}>
@@ -82,7 +81,10 @@ export function MobileBottomNav() {
             </Button>
           </DrawerTrigger>
           <DrawerContent className="p-0">
-            <div className="flex flex-col gap-3 p-2 pb-8">
+            <DrawerHeader className="border-b text-left">
+              <DrawerTitle>{t("nav.create")}</DrawerTitle>
+            </DrawerHeader>
+            <div className="flex flex-col gap-3 p-2 pb-16">
               {CREATE_LINKS.map(({ href, icon: Icon, labelKey }) => (
                 <DrawerClose key={href} asChild>
                   <Link href={href}>

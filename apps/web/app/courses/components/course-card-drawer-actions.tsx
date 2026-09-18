@@ -61,7 +61,7 @@ export function CourseCardDrawerActions({
         <DrawerHeader className="border-b text-left">
           <DrawerTitle>{t("courses.card.actions")}</DrawerTitle>
         </DrawerHeader>
-        <div className="flex max-h-[calc(80vh-3.5rem)] flex-col gap-3 overflow-y-auto p-2 pb-8">
+        <div className="flex max-h-[calc(80vh-3.5rem)] flex-col gap-3 overflow-y-auto p-2 pb-16">
           <DrawerClose asChild>
             <Button variant="outline" className="w-full justify-start gap-2" onClick={onEdit}>
               <Pencil className="size-4" />
