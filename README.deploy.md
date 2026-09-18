@@ -35,10 +35,10 @@ https://<api-domain>/api
 
 Create a second service from the same repository, also with the repository root as its root directory. Set these values in **Settings -> Build**:
 
-| Setting        | Value                     |
-| -------------- | ------------------------- |
-| `buildCommand` | `pnpm --filter web build` |
-| `startCommand` | `pnpm --filter web start` |
+| Setting        | Value                              |
+| -------------- | ---------------------------------- |
+| `buildCommand` | `pnpm turbo build --filter=web...` |
+| `startCommand` | `pnpm --filter web start`          |
 
 Set **Watch Patterns** to:
 
