@@ -233,7 +233,7 @@ export function MediaInput({ className, parent }: { className?: string; parent: 
         </div>
       )}
 
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
         <input
           ref={imageInputRef}
           className="sr-only"

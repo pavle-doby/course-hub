@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Pagination,
   PaginationContent,
@@ -72,7 +74,22 @@ export function ChPagination({
   nextLabel = "Next",
   className,
 }: ChPaginationProps) {
-  if (totalPages <= 1) return null;
+  if (totalPages <= 1) {
+    return null;
+  }
+
+  const changePage = (nextPage: number) => {
+    if (
+      !Number.isInteger(nextPage) ||
+      nextPage < 0 ||
+      nextPage >= totalPages ||
+      nextPage === page
+    ) {
+      return;
+    }
+    window.scrollTo({ top: 0 });
+    onPageChange(nextPage);
+  };
 
   return (
     <Pagination className={className}>
@@ -85,7 +102,7 @@ export function ChPagination({
             className={page === 0 ? "pointer-events-none opacity-50" : undefined}
             onClick={(e) => {
               e.preventDefault();
-              onPageChange(Math.max(0, page - 1));
+              changePage(Math.max(0, page - 1));
             }}
           />
         </PaginationItem>
@@ -101,7 +118,7 @@ export function ChPagination({
                 isActive={entry === page + 1}
                 onClick={(e) => {
                   e.preventDefault();
-                  onPageChange(entry - 1);
+                  changePage(entry - 1);
                 }}
               >
                 {entry}
@@ -117,7 +134,7 @@ export function ChPagination({
             className={page >= totalPages - 1 ? "pointer-events-none opacity-50" : undefined}
             onClick={(e) => {
               e.preventDefault();
-              onPageChange(Math.min(totalPages - 1, page + 1));
+              changePage(Math.min(totalPages - 1, page + 1));
             }}
           />
         </PaginationItem>

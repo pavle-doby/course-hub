@@ -161,6 +161,10 @@ import { ChevronDown } from "lucide-react";
 <ChevronDown className="size-4" />;
 ```
 
+## Images
+
+Use `Image` from `next/image` instead of raw `<img>` elements.
+
 ## Adding a new page
 
 1. Create `apps/web/app/<route>/page.tsx` (server component by default).

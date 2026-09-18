@@ -212,7 +212,7 @@ export function DocumentInput({ className, parent }: { className?: string; paren
         multiple
         onChange={(event) => void handleFileChange(event)}
       />
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
         <Button
           className="w-full"
           type="button"
