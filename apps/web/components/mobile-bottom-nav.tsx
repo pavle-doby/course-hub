@@ -13,9 +13,10 @@ import {
   Compass,
   GraduationCap,
 } from "lucide-react";
+import { Button } from "@repo/ui-web/components/button";
 import { Drawer, DrawerContent, DrawerTrigger, DrawerClose } from "@repo/ui-web/components/drawer";
-import { cn } from "@repo/ui-web/lib/utils";
 import { useT } from "@repo/i18n/client";
+import { ChBottomNav } from "@/components/ch-bottom-nav";
 
 const NAV_LINKS = [
   { href: "/students", icon: Users, labelKey: "nav.students" as const },
@@ -40,28 +41,28 @@ export function MobileBottomNav() {
   const isLearnActive = pathname.startsWith("/learn");
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 border-t bg-background pb-4 md:hidden">
-      <div className="flex h-16 items-center justify-around">
+    <ChBottomNav>
+      <div className="flex items-center justify-around">
         <Drawer>
-          <DrawerTrigger
-            aria-label={t("nav.learn")}
-            className={cn(
-              "flex flex-col items-center gap-0.5 px-3 text-xs",
-              isLearnActive ? "text-primary" : "text-muted-foreground"
-            )}
-          >
-            <Apple className="size-5" />
+          <DrawerTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon-lg"
+              aria-label={t("nav.learn")}
+              className={isLearnActive ? "text-primary" : "text-muted-foreground"}
+            >
+              <Apple className="size-5" />
+            </Button>
           </DrawerTrigger>
           <DrawerContent className="p-0">
             <div className="flex flex-col gap-3 p-2 pb-8">
               {LEARN_LINKS.map(({ href, icon: Icon, labelKey }) => (
                 <DrawerClose key={href} asChild>
-                  <Link
-                    href={href}
-                    className="flex items-center gap-2 rounded-md px-4 py-3 text-sm font-medium hover:bg-accent"
-                  >
-                    <Icon className="size-4" />
-                    {t(labelKey)}
+                  <Link href={href}>
+                    <Button variant="outline" className="w-full justify-start gap-2">
+                      <Icon className="size-4" />
+                      {t(labelKey)}
+                    </Button>
                   </Link>
                 </DrawerClose>
               ))}
@@ -70,25 +71,25 @@ export function MobileBottomNav() {
         </Drawer>
 
         <Drawer>
-          <DrawerTrigger
-            aria-label={t("nav.create")}
-            className={cn(
-              "flex flex-col items-center gap-0.5 px-3 text-xs",
-              isCreateActive ? "text-primary" : "text-muted-foreground"
-            )}
-          >
-            <CirclePlus className="size-5" />
+          <DrawerTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon-lg"
+              aria-label={t("nav.create")}
+              className={isCreateActive ? "text-primary" : "text-muted-foreground"}
+            >
+              <CirclePlus className="size-5" />
+            </Button>
           </DrawerTrigger>
           <DrawerContent className="p-0">
             <div className="flex flex-col gap-3 p-2 pb-8">
               {CREATE_LINKS.map(({ href, icon: Icon, labelKey }) => (
                 <DrawerClose key={href} asChild>
-                  <Link
-                    href={href}
-                    className="flex items-center gap-2 rounded-md px-4 py-3 text-sm font-medium hover:bg-accent"
-                  >
-                    <Icon className="size-4" />
-                    {t(labelKey)}
+                  <Link href={href}>
+                    <Button variant="outline" className="w-full justify-start gap-2">
+                      <Icon className="size-4" />
+                      {t(labelKey)}
+                    </Button>
                   </Link>
                 </DrawerClose>
               ))}
@@ -97,19 +98,17 @@ export function MobileBottomNav() {
         </Drawer>
 
         {NAV_LINKS.map(({ href, icon: Icon, labelKey }) => (
-          <Link
-            key={href}
-            href={href}
-            aria-label={t(labelKey)}
-            className={cn(
-              "flex flex-col items-center gap-0.5 px-3 text-xs",
-              pathname === href ? "text-primary" : "text-muted-foreground"
-            )}
-          >
-            <Icon className="size-5" />
+          <Link key={href} href={href} aria-label={t(labelKey)}>
+            <Button
+              variant="ghost"
+              size="icon-lg"
+              className={pathname === href ? "text-primary" : "text-muted-foreground"}
+            >
+              <Icon className="size-5" />
+            </Button>
           </Link>
         ))}
       </div>
-    </nav>
+    </ChBottomNav>
   );
 }

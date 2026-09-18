@@ -88,6 +88,8 @@ Never import i18n server utilities in client components or vice versa.
 
 Use Tailwind utility classes and `cn()` from `@repo/ui-web/lib/utils` to conditionally merge them. Design tokens come from `@repo/ui-theme` via CSS variables — never hardcode colours or spacing.
 
+## Mobile Components
+
 ### Responsive breakpoint — mobile vs desktop split is `md`, not `lg`
 
 The mobile/desktop cutoff is the **tablet** breakpoint (`md`, 768px), not `lg`. Below `md` shows the mobile view (bottom nav, `Sheet`/`Drawer` offcanvas, stacked layout); `md` and above shows the desktop/tablet view (sidebar, grid layouts). Use `sm:`/`md:` prefixes for responsive layout — do not introduce new `lg:` breakpoints for mobile-vs-desktop switches (`lg:` is still fine as a component size variant, e.g. `size="lg"`, unrelated to breakpoints). `useIsMobile()` (`@repo/ui-web/hooks/use-mobile`) already matches this at `MOBILE_BREAKPOINT = 768`.
@@ -130,6 +132,20 @@ When a mobile bottom `Drawer` renders a list of actions (e.g. card action menus,
 ```
 
 Dispatch rule: this is a **web-app convention** (how `Drawer` is used). The `@repo/ui-web` `Drawer` primitive itself stays spacing-agnostic.
+
+### Bottom navigation height — `h-20`
+
+Every mobile bottom navigation component must use `ChBottomNav` from `@/components/ch-bottom-nav` as its outer container. `ChBottomNav` owns the shared `h-20` height, mobile visibility, border, background, and default fixed positioning. Pass only route-specific layout or positioning classes through `className`.
+
+Use `Button` from `@repo/ui-web/components/button` for actions. Use `Link` only when the control navigates to a route.
+
+```tsx
+// ✅ correct
+<ChBottomNav className="sticky inset-x-auto flex items-center justify-between px-4" />
+
+// ❌ wrong — duplicates the shared mobile footer shell
+<nav className="fixed inset-x-0 bottom-0 h-20 md:hidden" />
+```
 
 ## Icons
 

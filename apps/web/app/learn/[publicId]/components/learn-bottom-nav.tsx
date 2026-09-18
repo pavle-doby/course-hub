@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight, ListTree } from "lucide-react";
 import { Button } from "@repo/ui-web/components/button";
 import { useSidebar } from "@repo/ui-web/components/sidebar";
 import { useT } from "@repo/i18n/client";
+import { ChBottomNav } from "@/components/ch-bottom-nav";
 
 type LearnBottomNavProps = {
   hasPrevious: boolean;
@@ -18,29 +19,31 @@ export function LearnBottomNav({ hasPrevious, hasNext, onPrevious, onNext }: Lea
   const { toggleSidebar } = useSidebar();
 
   return (
-    <div className="sticky bottom-0 z-40 flex items-center justify-between gap-2 border-t bg-background px-4 pt-1 pb-4 md:hidden">
-      <Button
-        variant="ghost"
-        size="sm"
-        className="min-w-30"
-        disabled={!hasPrevious}
-        onClick={onPrevious}
-      >
-        <ChevronLeft className="size-4" />
-        {t("learn.detail.previous")}
-      </Button>
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={toggleSidebar}
-        aria-label={t("learn.detail.contents")}
-      >
-        <ListTree className="size-5" />
-      </Button>
-      <Button variant="ghost" size="sm" className="min-w-30" disabled={!hasNext} onClick={onNext}>
-        {t("learn.detail.next")}
-        <ChevronRight className="size-4" />
-      </Button>
-    </div>
+    <ChBottomNav className="sticky">
+      <div className="flex flex-1 items-center justify-between">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="min-w-30"
+          disabled={!hasPrevious}
+          onClick={onPrevious}
+        >
+          <ChevronLeft className="size-4" />
+          {t("learn.detail.previous")}
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon-lg"
+          onClick={toggleSidebar}
+          aria-label={t("learn.detail.contents")}
+        >
+          <ListTree className="size-5" />
+        </Button>
+        <Button variant="ghost" size="sm" className="min-w-30" disabled={!hasNext} onClick={onNext}>
+          {t("learn.detail.next")}
+          <ChevronRight className="size-4" />
+        </Button>
+      </div>
+    </ChBottomNav>
   );
 }
