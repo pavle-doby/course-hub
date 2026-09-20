@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { apiClient, configureTokenProviders } from "@repo/api-client";
 import {
   clearAuthTokens,
@@ -14,7 +16,6 @@ configureTokenProviders({
     const refreshToken = getRefreshToken();
 
     if (!refreshToken) {
-      redirectToLogin();
       return null;
     }
 
@@ -26,20 +27,40 @@ configureTokenProviders({
       saveAuthTokens(data.accessToken, data.refreshToken);
       return data;
     } catch {
-      redirectToLogin();
       return null;
     }
   },
+  onUnauthorized: redirectToLogin,
 });
+
+function isPublicRoute(pathname: string): boolean {
+  return (
+    pathname === "/" ||
+    pathname.startsWith("/auth/") ||
+    pathname.startsWith("/invite/") ||
+    (/^\/learn\/[^/]+$/.test(pathname) &&
+      pathname !== "/learn/explore" &&
+      pathname !== "/learn/enrolled")
+  );
+}
 
 function redirectToLogin(): void {
   clearAuthTokens();
 
-  if (!window.location.pathname.startsWith("/auth")) {
+  if (!isPublicRoute(window.location.pathname)) {
     window.location.assign("/auth/login");
   }
 }
 
 export function AuthTokenProvider({ children }: React.PropsWithChildren) {
+  const pathname = usePathname();
+  const publicRoute = isPublicRoute(pathname);
+
+  useEffect(() => {
+    if (!publicRoute && !getAccessToken()) {
+      redirectToLogin();
+    }
+  }, [publicRoute]);
+
   return children;
 }

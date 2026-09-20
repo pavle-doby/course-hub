@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import Image from "next/image";
 import {
   DndContext,
   PointerSensor,
@@ -16,7 +17,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Check, FileText, GripVertical, ImageIcon, Shuffle, Trash2, Upload } from "lucide-react";
+import { Check, FileText, GripVertical, Shuffle, Trash2, Upload } from "lucide-react";
 import {
   getGetPublicDocumentsByParentQueryKey,
   useCompleteDocumentUpload,
@@ -244,12 +245,12 @@ export function DocumentInput({ className, parent }: { className?: string; paren
         <div className="rounded-lg border bg-muted/40 p-3 text-sm">
           <div className="flex justify-between gap-3">
             <span className="truncate">{uploadingFile}</span>
-            <span>{uploadProgress ?? 0}%</span>
+            <span>{Math.min(uploadProgress ?? 0, 99)}%</span>
           </div>
           <div className="mt-2 h-2 overflow-hidden rounded-full bg-muted">
             <div
               className="h-full bg-primary transition-[width]"
-              style={{ width: `${uploadProgress ?? 0}%` }}
+              style={{ width: `${Math.min(uploadProgress ?? 0, 99)}%` }}
             />
           </div>
         </div>
@@ -284,7 +285,18 @@ export function DocumentInput({ className, parent }: { className?: string; paren
                   return (
                     <SortableDocument key={document.id} id={document.id} disabled={!isReordering}>
                       <Attachment className="w-full">
-                        <AttachmentMedia>{isImage ? <ImageIcon /> : <FileText />}</AttachmentMedia>
+                        <AttachmentMedia variant={isImage ? "image" : undefined}>
+                          {isImage ? (
+                            <Image
+                              src={document.publicUrl}
+                              alt={document.originalFileName}
+                              fill
+                              unoptimized
+                            />
+                          ) : (
+                            <FileText />
+                          )}
+                        </AttachmentMedia>
                         <AttachmentContent>
                           <AttachmentTitle>
                             <a href={document.publicUrl} target="_blank" rel="noreferrer">

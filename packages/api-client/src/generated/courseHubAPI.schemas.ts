@@ -2173,6 +2173,37 @@ export type DeleteVideoDefault = {
   details?: DeleteVideoDefaultDetails;
 };
 
+export type GetPublicVideoByParentPathParameters = {
+  parentType: "course";
+  parentId: string;
+};
+export type GetPublicVideoByParent200 = VideoEditor & ({ [key: string]: unknown } | null);
+
+export type GetPublicVideoByParentDefaultCode =
+  (typeof GetPublicVideoByParentDefaultCode)[keyof typeof GetPublicVideoByParentDefaultCode];
+
+export const GetPublicVideoByParentDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type GetPublicVideoByParentDefaultDetails = { [key: string]: unknown };
+
+export type GetPublicVideoByParentDefault = {
+  status: number;
+  code: GetPublicVideoByParentDefaultCode;
+  error?: unknown;
+  details?: GetPublicVideoByParentDefaultDetails;
+};
+
 export type HandleVideoWebhookBodyStatus = {
   state: string;
   pctComplete?: string;

@@ -69,6 +69,8 @@ export const courses = {
     reorderDone: "Done",
     reorderSavedToast: "Order saved",
     courseLabel: "Course",
+    publishedVisibilityAlert:
+      "All course information (title, video, documents and description) is visible to learners when the course is published, even if the course is private. Info in topics and lessons is private until the user is enrolled.",
     topicLabel: "Topic",
     lessonLabel: "Lesson",
     nameLabel: "Name",

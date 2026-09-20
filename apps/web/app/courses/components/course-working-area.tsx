@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronLeft, ChevronRight, Copy, Plus, Trash2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Copy, Info, Plus, Trash2 } from "lucide-react";
 import { CoursePutQuerySchema, LessonPutQuerySchema, TopicPutQuerySchema } from "@repo/contract";
 import type { CourseStatus, CourseVisibility, Lesson } from "@repo/api-client";
+import { Alert, AlertTitle } from "@repo/ui-web/components/alert";
 import { Button } from "@repo/ui-web/components/button";
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@repo/ui-web/components/card";
 import { useT } from "@repo/i18n/client";
@@ -198,6 +199,12 @@ export function CourseWorkingArea({
               publicId && <InviteForm publicId={publicId} />
             ) : (
               <>
+                {isCourseSelected && course.status === "published" && (
+                  <Alert className="mb-4" variant="destructive">
+                    <Info />
+                    <AlertTitle>{t("courses.editor.publishedVisibilityAlert")}</AlertTitle>
+                  </Alert>
+                )}
                 {selection.type === "course" && (
                   <EntityForm
                     key={selectionKey}

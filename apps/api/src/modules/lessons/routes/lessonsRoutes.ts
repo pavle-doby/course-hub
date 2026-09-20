@@ -14,6 +14,7 @@ const router: Router = Router();
 
 // GET /lessons → get all lessons for current user's courses
 router.get(
+  //
   "/",
   pagination(),
   validate(SearchSchema, "query"),
@@ -24,17 +25,28 @@ router.get(
 );
 
 // GET /lessons/:id → get lesson by id
-router.get("/:id", validate(ParamsIdSchema, "params"), async (req: Request, res: Response) => {
-  await lessonsController.getLesson(req, res);
-});
+router.get(
+  //
+  "/:id",
+  validate(ParamsIdSchema, "params"),
+  async (req: Request, res: Response) => {
+    await lessonsController.getLesson(req, res);
+  }
+);
 
 // POST /lessons → create lesson
-router.post("/", validate(LessonPostQuerySchema), async (req: Request, res: Response) => {
-  await lessonsController.createLesson(req, res);
-});
+router.post(
+  //
+  "/",
+  validate(LessonPostQuerySchema),
+  async (req: Request, res: Response) => {
+    await lessonsController.createLesson(req, res);
+  }
+);
 
 // PUT /lessons/:id → update lesson
 router.put(
+  //
   "/:id",
   validate(ParamsIdSchema, "params"),
   validate(LessonPutQuerySchema),
@@ -44,8 +56,13 @@ router.put(
 );
 
 // DELETE /lessons/:id → delete lesson
-router.delete("/:id", validate(ParamsIdSchema, "params"), async (req: Request, res: Response) => {
-  await lessonsController.deleteLesson(req, res);
-});
+router.delete(
+  //
+  "/:id",
+  validate(ParamsIdSchema, "params"),
+  async (req: Request, res: Response) => {
+    await lessonsController.deleteLesson(req, res);
+  }
+);
 
 export default router;

@@ -11,8 +11,9 @@ import { documentsController } from "../controllers/documentsController";
 
 const router: Router = Router();
 
+// POST /documents/uploads → initialize an R2 upload for a document
 router.post(
-  // Upload credentials are only issued to course creators.
+  //
   "/uploads",
   validate(DocumentUploadBodySchema),
   async (req, res) => {
@@ -20,8 +21,9 @@ router.post(
   }
 );
 
+// POST /documents/uploads/:id/complete → complete an R2 upload and publish the document
 router.post(
-  // Completion validates the R2 object before publishing it.
+  //
   "/uploads/:id/complete",
   validate(DocumentUploadParamsSchema, "params"),
   async (req, res) => {
@@ -29,8 +31,9 @@ router.post(
   }
 );
 
+// PUT /documents/:parentType/:parentId/order → persist document order for one content item
 router.put(
-  // Persist document order for one content item.
+  //
   "/:parentType/:parentId/order",
   validate(DocumentParentParamsSchema, "params"),
   validate(DocumentReorderBodySchema),
@@ -39,8 +42,9 @@ router.put(
   }
 );
 
+// DELETE /documents/:id → delete a document from R2 and the database
 router.delete(
-  // Removing the database record happens only after R2 deletion succeeds.
+  //
   "/:id",
   validate(ParamsIdSchema, "params"),
   async (req, res) => {

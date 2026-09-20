@@ -8,14 +8,16 @@ import { Button } from "@repo/ui-web/components/button";
 import { Card, CardContent, CardHeader, CardDescription } from "@repo/ui-web/components/card";
 import { Skeleton } from "@repo/ui-web/components/skeleton";
 import { toast } from "@repo/ui-web/components/sonner";
+import { getAccessToken } from "@/utils/token-storage";
 
 export default function InviteAcceptPage() {
   const { token } = useParams<{ token: string }>();
   const router = useRouter();
   const { t } = useT();
 
-  const { data: user, isPending: isUserPending } = useGetUserSelf({
-    query: { retry: false },
+  const hasAccessToken = Boolean(getAccessToken());
+  const { data: user, isFetching: isUserPending } = useGetUserSelf({
+    query: { enabled: hasAccessToken, retry: false },
   });
   const {
     data: invitation,

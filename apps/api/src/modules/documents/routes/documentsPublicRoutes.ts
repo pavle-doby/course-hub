@@ -5,8 +5,9 @@ import { documentsController } from "../controllers/documentsController";
 
 const router: Router = Router();
 
+// GET /public/documents/:parentType/:parentId → public documents for a course, topic, or lesson, no auth required
 router.get(
-  // Public documents for one course, topic, or lesson.
+  //
   "/:parentType/:parentId",
   validate(DocumentParentParamsSchema, "params"),
   async (req, res) => {

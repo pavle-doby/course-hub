@@ -1,8 +1,14 @@
 "use client";
 
-import { ChevronLeft, ChevronRight, FileText, ImageIcon } from "lucide-react";
+import Image from "next/image";
+import { AlertCircle, ChevronLeft, ChevronRight, FileText, Loader2 } from "lucide-react";
 import type { Lesson } from "@repo/api-client";
-import { useGetPublicDocumentsByParent, useGetVideoByParent } from "@repo/api-client";
+import {
+  useGetPublicDocumentsByParent,
+  useGetPublicVideoByParent,
+  useGetVideoByParent,
+} from "@repo/api-client";
+import { Alert, AlertTitle } from "@repo/ui-web/components/alert";
 import {
   Attachment,
   AttachmentContent,
@@ -70,6 +76,22 @@ export function LearnWorkingArea({
       },
     },
   });
+  const { data: publicVideo } = useGetPublicVideoByParent(
+    { parentType: "course", parentId: course.id },
+    {
+      query: {
+        enabled: !isEnrolled,
+        refetchInterval: (query) => {
+          return getVideoRefetchInterval(query.state.data?.status);
+        },
+      },
+    }
+  );
+  const activeVideo = isEnrolled ? video : publicVideo;
+  const hasVideo = Boolean(activeVideo);
+  const isVideoReady = activeVideo?.status === "ready";
+  const isVideoError = activeVideo?.status === "error";
+  const isVideoProcessing = hasVideo && !isVideoReady && !isVideoError;
   const { data: documents = [] } = useGetPublicDocumentsByParent(parent);
 
   return (
@@ -99,19 +121,29 @@ export function LearnWorkingArea({
 
       <div className="mx-auto w-full max-w-2xl">
         <h2 className="text-2xl font-semibold">{name}</h2>
-        {video?.status === "ready" ? (
-          <video
-            className="mt-4 aspect-video w-full rounded-lg bg-muted"
-            controls
-            src={video.playbackUrl}
-          />
-        ) : video ? (
-          <div className="mt-4 flex h-32 w-full items-center justify-center rounded-lg border border-dashed border-input p-4 text-center text-sm text-muted-foreground">
-            {video.status === "error"
-              ? t("learn.detail.videoUnavailable")
-              : t("learn.detail.videoProcessing")}
-          </div>
-        ) : null}
+        {hasVideo && (
+          <>
+            {isVideoReady && (
+              <video
+                className="mt-4 aspect-video w-full rounded-lg bg-muted"
+                controls
+                src={activeVideo?.playbackUrl}
+              />
+            )}
+            {isVideoProcessing && (
+              <Alert className="mt-4">
+                <Loader2 className="size-4 animate-spin" />
+                <AlertTitle>{t("learn.detail.videoProcessing")}</AlertTitle>
+              </Alert>
+            )}
+            {isVideoError && (
+              <Alert className="mt-4" variant="destructive">
+                <AlertCircle />
+                <AlertTitle>{t("learn.detail.videoUnavailable")}</AlertTitle>
+              </Alert>
+            )}
+          </>
+        )}
 
         {documents.length > 0 && (
           <section className="mt-4">
@@ -119,8 +151,19 @@ export function LearnWorkingArea({
             <div className="space-y-2">
               {documents.map((document) => (
                 <Attachment key={document.id} className="w-full">
-                  <AttachmentMedia>
-                    {document.contentType.startsWith("image/") ? <ImageIcon /> : <FileText />}
+                  <AttachmentMedia
+                    variant={document.contentType.startsWith("image/") ? "image" : undefined}
+                  >
+                    {document.contentType.startsWith("image/") ? (
+                      <Image
+                        src={document.publicUrl}
+                        alt={document.originalFileName}
+                        fill
+                        unoptimized
+                      />
+                    ) : (
+                      <FileText />
+                    )}
                   </AttachmentMedia>
                   <AttachmentContent>
                     <AttachmentTitle className="break-all whitespace-normal">

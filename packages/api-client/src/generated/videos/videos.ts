@@ -25,6 +25,9 @@ import type {
   CompleteVideoUploadPathParameters,
   DeleteVideoDefault,
   DeleteVideoPathParameters,
+  GetPublicVideoByParent200,
+  GetPublicVideoByParentDefault,
+  GetPublicVideoByParentPathParameters,
   GetVideoByParent200,
   GetVideoByParentDefault,
   GetVideoByParentPathParameters,
@@ -402,6 +405,141 @@ export const useDeleteVideo = <TError = DeleteVideoDefault, TContext = unknown>(
 > => {
   return useMutation(getDeleteVideoMutationOptions(options), queryClient);
 };
+export const getPublicVideoByParent = (
+  { parentType, parentId }: GetPublicVideoByParentPathParameters,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<GetPublicVideoByParent200>(
+    { url: `/v1/public/videos/${parentType}/${parentId}`, method: "GET", signal },
+    options
+  );
+};
+
+export const getGetPublicVideoByParentQueryKey = ({
+  parentType,
+  parentId,
+}: GetPublicVideoByParentPathParameters) => {
+  return [`/v1/public/videos/${parentType}/${parentId}`] as const;
+};
+
+export const getGetPublicVideoByParentQueryOptions = <
+  TData = Awaited<ReturnType<typeof getPublicVideoByParent>>,
+  TError = GetPublicVideoByParentDefault,
+>(
+  { parentType, parentId }: GetPublicVideoByParentPathParameters,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getPublicVideoByParent>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetPublicVideoByParentQueryKey({ parentType, parentId });
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getPublicVideoByParent>>> = ({ signal }) =>
+    getPublicVideoByParent({ parentType, parentId }, requestOptions, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled:
+      parentType !== null &&
+      parentType !== undefined &&
+      parentId !== null &&
+      parentId !== undefined,
+    ...queryOptions,
+  } as UseQueryOptions<Awaited<ReturnType<typeof getPublicVideoByParent>>, TError, TData> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+};
+
+export type GetPublicVideoByParentQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getPublicVideoByParent>>
+>;
+export type GetPublicVideoByParentQueryError = GetPublicVideoByParentDefault;
+
+export function useGetPublicVideoByParent<
+  TData = Awaited<ReturnType<typeof getPublicVideoByParent>>,
+  TError = GetPublicVideoByParentDefault,
+>(
+  pathParams: GetPublicVideoByParentPathParameters,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getPublicVideoByParent>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getPublicVideoByParent>>,
+          TError,
+          Awaited<ReturnType<typeof getPublicVideoByParent>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useGetPublicVideoByParent<
+  TData = Awaited<ReturnType<typeof getPublicVideoByParent>>,
+  TError = GetPublicVideoByParentDefault,
+>(
+  pathParams: GetPublicVideoByParentPathParameters,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getPublicVideoByParent>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getPublicVideoByParent>>,
+          TError,
+          Awaited<ReturnType<typeof getPublicVideoByParent>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useGetPublicVideoByParent<
+  TData = Awaited<ReturnType<typeof getPublicVideoByParent>>,
+  TError = GetPublicVideoByParentDefault,
+>(
+  pathParams: GetPublicVideoByParentPathParameters,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getPublicVideoByParent>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+export function useGetPublicVideoByParent<
+  TData = Awaited<ReturnType<typeof getPublicVideoByParent>>,
+  TError = GetPublicVideoByParentDefault,
+>(
+  { parentType, parentId }: GetPublicVideoByParentPathParameters,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getPublicVideoByParent>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetPublicVideoByParentQueryOptions({ parentType, parentId }, options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
 export const handleVideoWebhook = (
   handleVideoWebhookBody: HandleVideoWebhookBody,
   options?: SecondParameter<typeof customInstance>,

@@ -1,7 +1,7 @@
 import { createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 import { videos } from "@repo/db-schema";
-import { CONTENT_ITEM_TYPES } from "../shared";
+import { ContentItemType, CONTENT_ITEM_TYPES } from "../shared";
 
 export const CloudflareStreamWebhookSchema = z
   .object({
@@ -59,6 +59,11 @@ export const VideoPlaybackParamsSchema = z.object({
 
 export const VideoParentParamsSchema = z.object({
   parentType: z.enum(CONTENT_ITEM_TYPES),
+  parentId: z.uuid(),
+});
+
+export const VideoCourseParentParamsSchema = z.object({
+  parentType: z.literal(ContentItemType.COURSE),
   parentId: z.uuid(),
 });
 

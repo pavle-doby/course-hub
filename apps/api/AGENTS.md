@@ -78,9 +78,17 @@ throw new NotFoundError({ code: ErrorCodeUser.NOT_FOUND });
 
 For feature-specific codes, define an `ErrorCodeXxx` enum in `packages/contract/src/<feature>/errors.ts` (follow `ErrorCodeAuth` / `ErrorCodeUser` as examples).
 
-## Route middleware order
+## Route definitions
 
-Every route argument is placed on its own line (column layout), with a single `//` comment as the first argument. This keeps prettier from collapsing the definition into a single line.
+Every route gets two comment markers:
+
+1. **Above the route**: a one-line description in the form `// <PREFIX> <path> → <small description>`, where `<PREFIX>` is the HTTP method plus the mounted base path (e.g. `/courses`, `/public/courses`). For public routes, note that no auth is required.
+
+```ts
+// GET /public/courses/:publicId → get published course by public id, no auth required
+```
+
+2. **As the first argument**: a single `//` comment on its own line. Every route argument is then placed on its own line (column layout). This keeps prettier from collapsing the definition into a single line and keeps all params aligned.
 
 ```ts
 router.get(

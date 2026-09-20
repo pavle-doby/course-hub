@@ -7,6 +7,7 @@ const router: Router = Router();
 
 // GET /public/invitations/:token → look up an invitation by token, no auth required
 router.get(
+  //
   "/:token",
   validate(ParamsTokenSchema, "params"),
   async (req: Request, res: Response) => {

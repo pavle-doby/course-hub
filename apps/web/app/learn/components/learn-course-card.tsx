@@ -2,7 +2,11 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { type Course, useGetPublicDocumentsByParent, useGetVideoByParent } from "@repo/api-client";
+import {
+  type Course,
+  useGetPublicDocumentsByParent,
+  useGetPublicVideoByParent,
+} from "@repo/api-client";
 import { Card, CardContent } from "@repo/ui-web/components/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui-web/components/avatar";
 import { Spinner } from "@repo/ui-web/components/spinner";
@@ -37,7 +41,7 @@ function creatorInitials(creator: Course["creator"]) {
 
 export function LearnCourseCard({ course }: LearnCourseCardProps) {
   const parent = { parentType: "course" as const, parentId: course.id };
-  const { data: video, isLoading: isVideoLoading } = useGetVideoByParent(parent);
+  const { data: video, isLoading: isVideoLoading } = useGetPublicVideoByParent(parent);
   const { data: documents = [], isLoading: areDocumentsLoading } =
     useGetPublicDocumentsByParent(parent);
   const thumbnailUrl = video

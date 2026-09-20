@@ -14,6 +14,7 @@ const router: Router = Router();
 
 // POST /invitations/courses/:publicId → invite a specific email to a private course
 router.post(
+  //
   "/courses/:publicId",
   validate(ParamsPublicIdSchema, "params"),
   validate(CreateEmailInvitationBodySchema),
@@ -24,6 +25,7 @@ router.post(
 
 // POST /invitations/courses/:publicId/link → generate a one-time enrollment link
 router.post(
+  //
   "/courses/:publicId/link",
   validate(ParamsPublicIdSchema, "params"),
   async (req: Request, res: Response) => {
@@ -33,6 +35,7 @@ router.post(
 
 // GET /invitations/courses/:publicId → list invitations for a course (creator only)
 router.get(
+  //
   "/courses/:publicId",
   validate(ParamsPublicIdSchema, "params"),
   pagination(),
@@ -43,12 +46,18 @@ router.get(
 );
 
 // DELETE /invitations/:id → revoke a pending invitation (creator only)
-router.delete("/:id", validate(ParamsIdSchema, "params"), async (req: Request, res: Response) => {
-  await invitationsController.revokeInvitation(req, res);
-});
+router.delete(
+  //
+  "/:id",
+  validate(ParamsIdSchema, "params"),
+  async (req: Request, res: Response) => {
+    await invitationsController.revokeInvitation(req, res);
+  }
+);
 
 // POST /invitations/:token/accept → accept an invitation and enroll the current user
 router.post(
+  //
   "/:token/accept",
   validate(ParamsTokenSchema, "params"),
   async (req: Request, res: Response) => {

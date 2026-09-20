@@ -15,6 +15,7 @@ const router: Router = Router();
 
 // GET /courses → get all courses (own courses only unless showAllCreators=true)
 router.get(
+  //
   "/",
   pagination(),
   validate(SearchSchema, "query"),
@@ -26,6 +27,7 @@ router.get(
 
 // GET /courses/:publicId → get course by publicId
 router.get(
+  //
   "/:publicId",
   validate(ParamsPublicIdSchema, "params"),
   async (req: Request, res: Response) => {
@@ -34,12 +36,18 @@ router.get(
 );
 
 // POST /courses → create course
-router.post("/", validate(CoursePostQuerySchema), async (req: Request, res: Response) => {
-  await coursesController.createCourse(req, res);
-});
+router.post(
+  //
+  "/",
+  validate(CoursePostQuerySchema),
+  async (req: Request, res: Response) => {
+    await coursesController.createCourse(req, res);
+  }
+);
 
 // PUT /courses/:id → update course
 router.put(
+  //
   "/:id",
   validate(ParamsIdSchema, "params"),
   validate(CoursePutQuerySchema),
@@ -49,8 +57,13 @@ router.put(
 );
 
 // DELETE /courses/:id → delete course
-router.delete("/:id", validate(ParamsIdSchema, "params"), async (req: Request, res: Response) => {
-  await coursesController.deleteCourse(req, res);
-});
+router.delete(
+  //
+  "/:id",
+  validate(ParamsIdSchema, "params"),
+  async (req: Request, res: Response) => {
+    await coursesController.deleteCourse(req, res);
+  }
+);
 
 export default router;

@@ -7,12 +7,18 @@ import { enrollmentsController } from "../controllers/enrollmentsController";
 const router: Router = Router();
 
 // POST /enrollments → enroll current user into a published course
-router.post("/", validate(EnrollCourseBodySchema), async (req: Request, res: Response) => {
-  await enrollmentsController.enrollInCourse(req, res);
-});
+router.post(
+  //
+  "/",
+  validate(EnrollCourseBodySchema),
+  async (req: Request, res: Response) => {
+    await enrollmentsController.enrollInCourse(req, res);
+  }
+);
 
 // GET /enrollments/courses → courses current user is enrolled in
 router.get(
+  //
   "/courses",
   pagination(),
   validate(SearchSchema, "query"),
@@ -23,6 +29,7 @@ router.get(
 
 // GET /enrollments/students → students enrolled in courses created by the current user
 router.get(
+  //
   "/students",
   pagination(),
   validate(SearchSchema, "query"),
@@ -32,12 +39,17 @@ router.get(
 );
 
 // GET /enrollments/stats → student/enrollment counts for courses created by the current user
-router.get("/stats", async (req: Request, res: Response) => {
-  await enrollmentsController.getStats(req, res);
-});
+router.get(
+  //
+  "/stats",
+  async (req: Request, res: Response) => {
+    await enrollmentsController.getStats(req, res);
+  }
+);
 
 // GET /enrollments/courses/:publicId → is current user enrolled in this course
 router.get(
+  //
   "/courses/:publicId",
   validate(ParamsPublicIdSchema, "params"),
   async (req: Request, res: Response) => {
@@ -47,6 +59,7 @@ router.get(
 
 // DELETE /enrollments/courses/:publicId → withdraw current user from an enrolled course
 router.delete(
+  //
   "/courses/:publicId",
   validate(ParamsPublicIdSchema, "params"),
   async (req: Request, res: Response) => {
@@ -56,6 +69,7 @@ router.delete(
 
 // GET /enrollments/courses/:publicId/topics → full topics, requires enrollment
 router.get(
+  //
   "/courses/:publicId/topics",
   validate(ParamsPublicIdSchema, "params"),
   async (req: Request, res: Response) => {
@@ -65,6 +79,7 @@ router.get(
 
 // GET /enrollments/courses/:publicId/lessons → full lessons, requires enrollment
 router.get(
+  //
   "/courses/:publicId/lessons",
   validate(ParamsPublicIdSchema, "params"),
   async (req: Request, res: Response) => {

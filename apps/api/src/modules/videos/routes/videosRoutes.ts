@@ -10,6 +10,7 @@ import { videosController } from "../controllers/videosController";
 
 const router: Router = Router();
 
+// GET /videos/:parentType/:parentId → videos for a content item
 router.get(
   //
   "/:parentType/:parentId",
@@ -19,6 +20,7 @@ router.get(
   }
 );
 
+// POST /videos/uploads → initialize an R2 upload for a video
 router.post(
   //
   "/uploads",
@@ -28,6 +30,7 @@ router.post(
   }
 );
 
+// POST /videos/uploads/:id/complete → complete a video upload and publish it
 router.post(
   //
   "/uploads/:id/complete",
@@ -37,6 +40,7 @@ router.post(
   }
 );
 
+// DELETE /videos/:id → delete a video from R2 and the database
 router.delete(
   //
   "/:id",

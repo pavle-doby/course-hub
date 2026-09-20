@@ -69,6 +69,8 @@ export const courses = {
     reorderDone: "Gotovo",
     reorderSavedToast: "Redosled sačuvan",
     courseLabel: "Kurs",
+    publishedVisibilityAlert:
+      "Sve informacije o kursu (naziv, video, dokumenta i opis) su vidljive polaznicima kada je kurs objavljen, čak i ako je kurs privatan. Informacije u temama i lekcijama su privatne dok se korisnik ne upiše.",
     topicLabel: "Tema",
     lessonLabel: "Lekcija",
     nameLabel: "Naziv",

@@ -1,5 +1,26 @@
 import { registry } from "api/openapi/registry";
-import { ApiErrorSchema, CloudflareStreamWebhookSchema } from "@repo/contract";
+import {
+  ApiErrorSchema,
+  CloudflareStreamWebhookSchema,
+  VideoCourseParentParamsSchema,
+} from "@repo/contract";
+import { VideoEditorSchema as VideoEditorOpenapiSchema } from "api/openapi/schemas";
+
+registry.registerPath({
+  method: "get",
+  path: "/v1/public/videos/{parentType}/{parentId}",
+  operationId: "getPublicVideoByParent",
+  tags: ["Videos"],
+  security: [],
+  request: { params: VideoCourseParentParamsSchema },
+  responses: {
+    200: {
+      description: "Public course-scoped video",
+      content: { "application/json": { schema: VideoEditorOpenapiSchema.nullable() } },
+    },
+    default: { description: "Error", content: { "application/json": { schema: ApiErrorSchema } } },
+  },
+});
 
 registry.registerPath({
   method: "post",

@@ -8,6 +8,7 @@ export const apiClient = Axios.create({
 // Token providers are configured by each platform at app startup.
 let getTokenFn: (() => Promise<string | null>) | null = null;
 let refreshFn: (() => Promise<{ accessToken: string; refreshToken: string } | null>) | null = null;
+let unauthorizedFn: (() => void) | null = null;
 
 /**
  * Configure how the API client retrieves and refreshes tokens.
@@ -19,9 +20,11 @@ export const configureTokenProviders = (opts: {
     accessToken: string;
     refreshToken: string;
   } | null>;
+  onUnauthorized: () => void;
 }) => {
   getTokenFn = opts.getToken;
   refreshFn = opts.onRefresh;
+  unauthorizedFn = opts.onUnauthorized;
 };
 
 // Attach Authorization header when a token provider is configured.
@@ -43,16 +46,22 @@ apiClient.interceptors.response.use(null, async (error) => {
       if (refreshFn) {
         const tokens = await refreshFn();
         if (!tokens) {
+          unauthorizedFn?.();
           return Promise.reject(error);
         }
         error.config.headers.Authorization = `Bearer ${tokens.accessToken}`;
       } else {
+        unauthorizedFn?.();
         return Promise.reject(error);
       }
       return apiClient(error.config);
     } catch {
+      unauthorizedFn?.();
       return Promise.reject(error);
     }
+  }
+  if (error.response?.status === 401 && !isRefreshEndpoint) {
+    unauthorizedFn?.();
   }
   return Promise.reject(error);
 });

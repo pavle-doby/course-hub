@@ -18,6 +18,7 @@ import { SidebarProvider } from "@repo/ui-web/components/sidebar";
 import { toast } from "@repo/ui-web/components/sonner";
 import { useErrorHandlingQuery } from "@repo/shared";
 import { useAdjacentSelection, useCourseTree, type Selection } from "@/hooks/use-course-tree";
+import { getAccessToken } from "@/utils/token-storage";
 import { LearnBottomNav } from "./components/learn-bottom-nav";
 import { LearnCourseDetailSkeleton } from "./components/learn-course-detail-skeleton";
 import { LearnHeader } from "./components/learn-header";
@@ -30,8 +31,9 @@ export default function LearnCourseDetailPage() {
   const { t } = useT();
   const [selection, setSelection] = useState<Selection>({ type: "course" });
 
-  const { data: currentUser, isPending: isUserPending } = useGetUserSelf({
-    query: { retry: false },
+  const hasAccessToken = Boolean(getAccessToken());
+  const { data: currentUser, isFetching: isUserPending } = useGetUserSelf({
+    query: { enabled: hasAccessToken, retry: false },
   });
   const isLoggedIn = !!currentUser;
 

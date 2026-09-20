@@ -9,12 +9,17 @@ import { validateAdminRole } from "api/middleware/validateRole";
 const router: Router = Router();
 
 // GET /users/self → fetch current user
-router.get("/self", async (_req: Request, res: Response) => {
-  await usersController.getSelf(res);
-});
+router.get(
+  //
+  "/self",
+  async (_req: Request, res: Response) => {
+    await usersController.getSelf(res);
+  }
+);
 
 // GET /users → get all users
 router.get(
+  //
   "/",
   validateAdminRole(),
   pagination(),
@@ -27,6 +32,7 @@ router.get(
 
 // GET /users/:id → get user by id
 router.get(
+  //
   "/:id",
   validateAdminRole(),
   validate(ParamsIdSchema, "params"),
@@ -37,6 +43,7 @@ router.get(
 
 // POST /users → create new user
 router.post(
+  //
   "/",
   validateAdminRole(),
   validate(UserPostQuerySchema),
@@ -47,6 +54,7 @@ router.post(
 
 // PUT /users/:id → update user by id
 router.put(
+  //
   "/:id",
   validate(ParamsIdSchema, "params"),
   validate(UserPutQuerySchema),
@@ -57,6 +65,7 @@ router.put(
 
 // DELETE /users/:id → delete user by id
 router.delete(
+  //
   "/:id",
   validateAdminRole(),
   validate(ParamsIdSchema, "params"),

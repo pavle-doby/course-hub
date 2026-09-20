@@ -8,6 +8,7 @@ const router: Router = Router();
 
 // GET /public/courses → get all published courses, no auth required
 router.get(
+  //
   "/",
   pagination(),
   validate(SearchSchema, "query"),
@@ -18,6 +19,7 @@ router.get(
 
 // GET /public/courses/:publicId → get published course by public id, no auth required
 router.get(
+  //
   "/:publicId",
   validate(ParamsPublicIdSchema, "params"),
   async (req: Request, res: Response) => {
@@ -27,6 +29,7 @@ router.get(
 
 // GET /public/courses/:publicId/topics → topics for a published course, no auth required
 router.get(
+  //
   "/:publicId/topics",
   validate(ParamsPublicIdSchema, "params"),
   async (req: Request, res: Response) => {
@@ -36,6 +39,7 @@ router.get(
 
 // GET /public/courses/:publicId/lessons → lessons for a published course, no auth required
 router.get(
+  //
   "/:publicId/lessons",
   validate(ParamsPublicIdSchema, "params"),
   async (req: Request, res: Response) => {

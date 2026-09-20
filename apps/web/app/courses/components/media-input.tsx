@@ -81,10 +81,9 @@ export function MediaInput({ className, parent }: { className?: string; parent: 
       : video?.status === "error"
         ? "error"
         : "processing";
-  const progress =
-    attachmentState === "uploading"
-      ? uploadProgress
-      : (Math.round(video?.processingProgress ?? 0) ?? null);
+  const rawProgress =
+    attachmentState === "uploading" ? uploadProgress : Math.round(video?.processingProgress ?? 0);
+  const progress = rawProgress === null ? null : Math.min(rawProgress, 99);
   const imageDocuments = documents.filter((document) => document.contentType.startsWith("image/"));
   const imageDocument = imageDocuments[0];
 
