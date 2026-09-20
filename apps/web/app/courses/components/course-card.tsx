@@ -93,13 +93,13 @@ export function CourseCard({ course, onDelete }: CourseCardProps) {
           width={640}
           height={178}
           unoptimized
-          className="h-[178px] w-full object-cover"
+          className="aspect-video w-full object-cover"
         />
       ) : (
         <div
-          className={`flex h-[178px] w-full items-center justify-center bg-gradient-to-br ${courseCardGradient(course.id)}`}
+          className={`flex aspect-video w-full items-center justify-center bg-gradient-to-br ${courseCardGradient(course.id)}`}
         >
-          <BookOpen className="size-10 text-white/90" />
+          <BookOpen className="size-10 text-white dark:text-black" />
         </div>
       )}
       <CardHeader>

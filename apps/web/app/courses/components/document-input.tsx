@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   DndContext,
   PointerSensor,
@@ -54,9 +54,20 @@ function SortableDocument({
     disabled,
   });
 
+  useEffect(() => {
+    if (!isDragging) {
+      return undefined;
+    }
+    document.body.style.cursor = "grabbing";
+    return () => {
+      document.body.style.cursor = "";
+    };
+  }, [isDragging]);
+
   return (
     <div
       ref={setNodeRef}
+      className={cn(!disabled && (isDragging ? "cursor-grabbing" : "cursor-grab"))}
       style={{ transform: CSS.Transform.toString(transform), transition }}
       data-dragging={isDragging || undefined}
       {...attributes}

@@ -24,7 +24,7 @@ import { getVideoRefetchInterval } from "@/utils/get-video-refetch-interval";
 
 type LearnWorkingAreaProps = {
   selection: Selection;
-  course: { id: string; name: string; description?: string | null };
+  course: { id: string; name: string; description?: string | null; thumbnailUrl?: string | null };
   tree: TopicWithLessons[];
   flatLessons: Lesson[];
   isEnrolled: boolean;
@@ -120,6 +120,16 @@ export function LearnWorkingArea({
       </div>
 
       <div className="mx-auto w-full max-w-2xl">
+        {selection.type === "course" && course.thumbnailUrl && (
+          <Image
+            src={course.thumbnailUrl}
+            alt=""
+            width={640}
+            height={178}
+            unoptimized
+            className="mb-4 aspect-video w-full rounded-lg object-cover"
+          />
+        )}
         <h2 className="text-2xl font-semibold">{name}</h2>
         {hasVideo && (
           <>

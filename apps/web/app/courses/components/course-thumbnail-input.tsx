@@ -117,7 +117,7 @@ export function CourseThumbnailInput({
           <Image src={displayedThumbnailUrl} alt="" fill unoptimized className="object-cover" />
         </div>
       ) : (
-        <div className="flex h-32 w-full items-center justify-center gap-2 rounded-lg border border-dashed border-input text-sm text-muted-foreground">
+        <div className="flex aspect-video w-full items-center justify-center gap-2 rounded-lg border border-dashed border-input text-sm text-muted-foreground">
           <ImageIcon className="size-4" />
           {t("courses.editor.thumbnailPlaceholder")}
         </div>
@@ -144,7 +144,7 @@ export function CourseThumbnailInput({
           <Button
             type="button"
             variant="outline"
-            className="w-full md:w-auto"
+            className="w-full md:flex-1"
             disabled={isDeleting}
             onClick={() => void handleDelete()}
           >

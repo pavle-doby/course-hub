@@ -138,7 +138,7 @@ export function MediaInput({ className, parent }: { className?: string; parent: 
           deleteDisabled={isDeleting}
         />
       ) : (
-        <div className="flex h-32 w-full items-center justify-center gap-2 rounded-lg border border-dashed border-input text-sm text-muted-foreground">
+        <div className="flex aspect-video w-full items-center justify-center gap-2 rounded-lg border border-dashed border-input text-sm text-muted-foreground">
           <Video className="size-4" />
           {t("courses.editor.mediaPlaceholder")}
         </div>
