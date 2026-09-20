@@ -1,4 +1,5 @@
 import { db, schema } from "@repo/db";
+import { VideoEntity } from "@repo/db-schema";
 import type {
   CloudflareStreamVideoInfo,
   GetVideoByParentReq,
@@ -7,7 +8,9 @@ import type {
 import { eq } from "drizzle-orm";
 
 export const videosRepository = {
-  getByParent: async (parent: GetVideoByParentReq) => {
+  getByParent: async (
+    parent: GetVideoByParentReq
+  ): Promise<Omit<VideoEntity, "createdAt" | "updatedAt"> | undefined> => {
     const parentColumns = {
       course: schema.videos.courseId,
       topic: schema.videos.topicId,
@@ -21,7 +24,9 @@ export const videosRepository = {
     });
   },
 
-  create: async (data: InitializeVideoUploadReq & { streamUid: string }) => {
+  create: async (
+    data: InitializeVideoUploadReq & { streamUid: string }
+  ): Promise<{ id: string }> => {
     const parent = {
       course: { courseId: data.parentId },
       topic: { topicId: data.parentId },
@@ -35,7 +40,7 @@ export const videosRepository = {
     return video!;
   },
 
-  markProcessing: async (id: string) => {
+  markProcessing: async (id: string): Promise<{ id: string } | undefined> => {
     const [video] = await db
       .update(schema.videos)
       .set({
@@ -48,7 +53,7 @@ export const videosRepository = {
     return video;
   },
 
-  deleteById: async (id: string) => {
+  deleteById: async (id: string): Promise<{ id: string; streamUid: string } | undefined> => {
     const [video] = await db
       .delete(schema.videos)
       .where(eq(schema.videos.id, id))
@@ -57,14 +62,17 @@ export const videosRepository = {
     return video;
   },
 
-  getById: async (id: string) => {
+  getById: async (id: string): Promise<{ id: string; streamUid: string } | undefined> => {
     return await db.query.videos.findFirst({
       where: eq(schema.videos.id, id),
       columns: { id: true, streamUid: true },
     });
   },
 
-  updateFromWebhook: async (streamUid: string, info: CloudflareStreamVideoInfo) => {
+  updateFromWebhook: async (
+    streamUid: string,
+    info: CloudflareStreamVideoInfo
+  ): Promise<{ id: string } | undefined> => {
     const state = info.status?.state;
     const status =
       info.readyToStream && state === "ready"

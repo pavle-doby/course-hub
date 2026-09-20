@@ -1,10 +1,18 @@
-import { CreateUserReq, UpdateUserReq, Search, FilterUser, GetAllUsersRes } from "@repo/contract";
+import {
+  CreateUserReq,
+  UpdateUserReq,
+  Search,
+  FilterUser,
+  GetAllUsersRes,
+  User,
+} from "@repo/contract";
 import { db, schema } from "@repo/db";
+import { UserEntity } from "@repo/db-schema";
 import { PaginationReqExtended } from "api/middleware/pagination";
 import { eq, desc, ilike, or, and, count } from "drizzle-orm";
 
 export const usersRepository = {
-  getUserByAuthUserId: async (authUserId: string) => {
+  getUserByAuthUserId: async (authUserId: string): Promise<UserEntity | undefined> => {
     const [user] = await db
       .select()
       .from(schema.users)
@@ -13,7 +21,7 @@ export const usersRepository = {
 
     return user;
   },
-  getByEmail: async (email: string) => {
+  getByEmail: async (email: string): Promise<UserEntity | undefined> => {
     const [user] = await db
       .select()
       .from(schema.users)
@@ -73,7 +81,7 @@ export const usersRepository = {
       },
     };
   },
-  getUserWithProfile: async (id: string) => {
+  getUserWithProfile: async (id: string): Promise<User | undefined> => {
     return await db.query.users.findFirst({
       where: eq(schema.users.id, id),
       columns: {
@@ -83,7 +91,7 @@ export const usersRepository = {
       },
     });
   },
-  createUser: async (data: CreateUserReq) => {
+  createUser: async (data: CreateUserReq): Promise<User[]> => {
     return await db.insert(schema.users).values(data).returning({
       id: schema.users.id,
       email: schema.users.email,
@@ -95,7 +103,7 @@ export const usersRepository = {
       role: schema.users.role,
     });
   },
-  updateUser: async (id: string, data: UpdateUserReq) => {
+  updateUser: async (id: string, data: UpdateUserReq): Promise<User[]> => {
     return await db.update(schema.users).set(data).where(eq(schema.users.id, id)).returning({
       id: schema.users.id,
       email: schema.users.email,
@@ -107,7 +115,7 @@ export const usersRepository = {
       role: schema.users.role,
     });
   },
-  deleteUser: async (id: string) => {
+  deleteUser: async (id: string): Promise<User[]> => {
     return await db.delete(schema.users).where(eq(schema.users.id, id)).returning({
       id: schema.users.id,
       email: schema.users.email,

@@ -4,6 +4,9 @@ import {
   CourseGetAllQuerySchema,
   CoursePostQuerySchema,
   CoursePutQuerySchema,
+  CourseThumbnailUploadBodySchema,
+  CourseThumbnailUploadCompleteBodySchema,
+  CourseThumbnailUploadResponseSchema,
 } from "@repo/contract";
 import { ParamsIdSchema, ParamsPublicIdSchema, SearchSchema, ApiErrorSchema } from "@repo/contract";
 import { PaginationParams } from "api/middleware/pagination";
@@ -27,6 +30,55 @@ registry.registerPath({
       description: "Error",
       content: { "application/json": { schema: ApiErrorSchema } },
     },
+  },
+});
+
+// POST /courses/thumbnails/uploads
+registry.registerPath({
+  method: "post",
+  path: "/v1/courses/thumbnails/uploads",
+  operationId: "initializeCourseThumbnailUpload",
+  tags: ["Courses"],
+  security: [{ bearerAuth: [] }],
+  request: {
+    body: { content: { "application/json": { schema: CourseThumbnailUploadBodySchema } } },
+  },
+  responses: {
+    201: {
+      description: "Direct thumbnail upload initialized",
+      content: { "application/json": { schema: CourseThumbnailUploadResponseSchema } },
+    },
+    default: { description: "Error", content: { "application/json": { schema: ApiErrorSchema } } },
+  },
+});
+
+// POST /courses/thumbnails/uploads/complete
+registry.registerPath({
+  method: "post",
+  path: "/v1/courses/thumbnails/uploads/complete",
+  operationId: "completeCourseThumbnailUpload",
+  tags: ["Courses"],
+  security: [{ bearerAuth: [] }],
+  request: {
+    body: { content: { "application/json": { schema: CourseThumbnailUploadCompleteBodySchema } } },
+  },
+  responses: {
+    204: { description: "Course thumbnail saved" },
+    default: { description: "Error", content: { "application/json": { schema: ApiErrorSchema } } },
+  },
+});
+
+// DELETE /courses/:id/thumbnail
+registry.registerPath({
+  method: "delete",
+  path: "/v1/courses/{id}/thumbnail",
+  operationId: "deleteCourseThumbnail",
+  tags: ["Courses"],
+  security: [{ bearerAuth: [] }],
+  request: { params: ParamsIdSchema },
+  responses: {
+    204: { description: "Course thumbnail removed" },
+    default: { description: "Error", content: { "application/json": { schema: ApiErrorSchema } } },
   },
 });
 

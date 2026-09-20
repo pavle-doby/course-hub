@@ -1,11 +1,18 @@
 import { db, schema } from "@repo/db";
+import { CourseEntity, UserEntity } from "@repo/db-schema";
 import { and, count, countDistinct, desc, eq, ilike, isNull, or } from "drizzle-orm";
 import {
   CourseEnrollment,
-  GetAllEnrolledCoursesRes,
   GetAllStudentsRes,
   GetEnrollmentsStatsRes,
+  PaginationRes,
 } from "@repo/contract";
+
+type CourseRow = Omit<CourseEntity, "createdAt" | "updatedAt">;
+
+type CourseCreator = Pick<UserEntity, "id" | "firstName" | "lastName" | "username" | "avatarUrl">;
+
+type EnrolledCourse = CourseRow & { creator: CourseCreator | undefined };
 
 type GetEnrolledCoursesParams = {
   userId: string;
@@ -28,6 +35,7 @@ const courseColumns = {
   creatorId: schema.courses.creatorId,
   name: schema.courses.name,
   description: schema.courses.description,
+  thumbnailObjectKey: schema.courses.thumbnailObjectKey,
   publicId: schema.courses.publicId,
   status: schema.courses.status,
   visibility: schema.courses.visibility,
@@ -111,7 +119,7 @@ export const enrollmentsRepository = {
     limit,
     page,
     query,
-  }: GetEnrolledCoursesParams): Promise<GetAllEnrolledCoursesRes> => {
+  }: GetEnrolledCoursesParams): Promise<PaginationRes<EnrolledCourse>> => {
     const searchCondition = query
       ? or(
           ilike(schema.courses.name, `%${query}%`),

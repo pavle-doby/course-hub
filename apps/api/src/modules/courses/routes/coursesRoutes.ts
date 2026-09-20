@@ -4,6 +4,8 @@ import { pagination } from "api/middleware/pagination";
 import { validate } from "api/middleware/validate";
 import {
   CourseGetAllQuerySchema,
+  CourseThumbnailUploadBodySchema,
+  CourseThumbnailUploadCompleteBodySchema,
   CoursePostQuerySchema,
   CoursePutQuerySchema,
   ParamsIdSchema,
@@ -42,6 +44,36 @@ router.post(
   validate(CoursePostQuerySchema),
   async (req: Request, res: Response) => {
     await coursesController.createCourse(req, res);
+  }
+);
+
+// POST /courses/thumbnails/uploads → initialize an R2 upload for a course thumbnail
+router.post(
+  //
+  "/thumbnails/uploads",
+  validate(CourseThumbnailUploadBodySchema),
+  async (req: Request, res: Response) => {
+    await coursesController.initializeThumbnailUpload(req, res);
+  }
+);
+
+// POST /courses/thumbnails/uploads/complete → verify and save a course thumbnail
+router.post(
+  //
+  "/thumbnails/uploads/complete",
+  validate(CourseThumbnailUploadCompleteBodySchema),
+  async (req: Request, res: Response) => {
+    await coursesController.completeThumbnailUpload(req, res);
+  }
+);
+
+// DELETE /courses/:id/thumbnail → remove a course thumbnail
+router.delete(
+  //
+  "/:id/thumbnail",
+  validate(ParamsIdSchema, "params"),
+  async (req: Request, res: Response) => {
+    await coursesController.deleteThumbnail(req, res);
   }
 );
 

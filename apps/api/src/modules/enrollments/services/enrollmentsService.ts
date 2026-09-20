@@ -17,6 +17,7 @@ import { usersRepository } from "api/modules/users/repository/usersRepository";
 import { coursesRepository } from "api/modules/courses/repository/coursesRepository";
 import { topicsRepository } from "api/modules/topics/repository/topicsRepository";
 import { lessonsRepository } from "api/modules/lessons/repository/lessonsRepository";
+import { r2Service } from "api/modules/documents/services/r2Service";
 import { PaginationReqExtended } from "api/middleware/pagination";
 import { enrollmentsRepository } from "../repository/enrollmentsRepository";
 
@@ -117,7 +118,14 @@ export const enrollmentsService = {
     const user = await usersRepository.getUserByAuthUserId(authUserId);
     if (!user) throw new NotFoundError({ code: ErrorCodeEnrollment.COURSE_NOT_FOUND });
 
-    return await enrollmentsRepository.getEnrolledCourses({ ...dto, userId: user.id });
+    const courses = await enrollmentsRepository.getEnrolledCourses({ ...dto, userId: user.id });
+    return {
+      ...courses,
+      data: courses.data.map(({ thumbnailObjectKey, ...course }) => ({
+        ...course,
+        thumbnailUrl: thumbnailObjectKey ? r2Service.publicUrl(thumbnailObjectKey) : null,
+      })),
+    };
   },
 
   getAllStudents: async (

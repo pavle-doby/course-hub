@@ -14,6 +14,7 @@ export const courses = pgTable("courses", {
     .unique()
     .$defaultFn(() => randomBytes(6).toString("hex")),
   description: text("description"),
+  thumbnailObjectKey: text("thumbnail_object_key"),
   status: courseStatusEnum("status").notNull().default("draft"),
   visibility: courseVisibilityEnum("visibility").notNull().default("private"),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),

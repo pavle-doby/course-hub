@@ -3,9 +3,10 @@ import { Skeleton } from "@repo/ui-web/components/skeleton";
 
 export function CourseCardSkeleton() {
   return (
-    <Card>
+    <Card className="gap-2 py-0">
+      <Skeleton className="h-[178px] w-full" />
       <CardHeader>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 pt-2">
           <Skeleton className="size-4 shrink-0" />
           <Skeleton className="h-4 w-40" />
         </div>

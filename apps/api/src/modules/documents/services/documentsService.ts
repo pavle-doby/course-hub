@@ -12,7 +12,6 @@ import {
   type InitializeDocumentUploadRes,
   type ReorderDocumentsReq,
 } from "@repo/contract";
-import { env } from "api/env";
 import { usersRepository } from "api/modules/users/repository/usersRepository";
 import { documentsRepository } from "../repository/documentsRepository";
 import { r2Service } from "./r2Service";
@@ -50,10 +49,6 @@ async function assertCreator(parent: GetDocumentsByParentReq, authUserId: string
   return user.id;
 }
 
-function publicUrl(objectKey: string): string {
-  return new URL(objectKey, `${env.CLOUDFLARE_R2_PUBLIC_URL.replace(/\/$/, "")}/`).toString();
-}
-
 export const documentsService = {
   getByParent: async (parent: GetDocumentsByParentReq): Promise<GetDocumentsByParentRes> => {
     const documents = await documentsRepository.listReadyByParent(parent);
@@ -66,7 +61,7 @@ export const documentsService = {
       contentType: document.contentType,
       sizeBytes: document.sizeBytes,
       position: document.position,
-      publicUrl: publicUrl(document.objectKey),
+      publicUrl: r2Service.publicUrl(document.objectKey),
     }));
   },
 

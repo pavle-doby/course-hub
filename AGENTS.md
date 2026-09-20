@@ -20,6 +20,7 @@
 - **Validated request data is in `res.locals`, not `req.body`** — the `validate()` middleware writes to `res.locals.body` / `.query` / `.params`.
 - **Prefer barrel imports and exports** — import from the nearest `index.ts` barrel, not from deep file paths. Every folder with public exports must have an `index.ts` that re-exports them. Never reach past a barrel (e.g. `import { x } from "@repo/shared/utils"` not `import { x } from "@repo/shared/utils/zod/getZodLocale"`).
 - **Always use `{}` braces on `if` statements**, even single-line bodies — never `if (x) return;`.
+- **Always add an explicit return type on repository functions** — never rely on TypeScript inference for return types in repository code.
 - **Agents must never run database commands** — do not run `pnpm db:*`, `drizzle-kit`, `psql`, Supabase SQL, migration, push, reset, seed, or destructive database commands. Agents may update schema source and migration files only when explicitly requested; the user runs all database commands.
 - **New OpenCode configuration must use `opencode.jsonc`**, not `opencode.json`.
 - **When working in `apps/web/`**, use the shadcn MCP for additional component or design-system context when needed.

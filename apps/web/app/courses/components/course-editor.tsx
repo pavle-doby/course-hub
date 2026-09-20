@@ -529,6 +529,7 @@ export function CourseEditor({ mode, publicId }: CourseEditorProps) {
             selection={selection}
             autoSave={autoSave}
             course={displayedCourse}
+            thumbnailUrl={fetchedCourse?.thumbnailUrl}
             courseId={courseId}
             visibility={displayedCourse.visibility}
             publicId={workingAreaPublicId}

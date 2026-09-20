@@ -1,5 +1,6 @@
 import { and, asc, eq, inArray, or } from "drizzle-orm";
 import { db, schema } from "@repo/db";
+import { DocumentEntity } from "@repo/db-schema";
 import type { GetDocumentsByParentReq } from "@repo/contract";
 
 const parentColumns = {
@@ -9,7 +10,9 @@ const parentColumns = {
 } as const;
 
 export const documentsRepository = {
-  getParentCreator: async (parent: GetDocumentsByParentReq) => {
+  getParentCreator: async (
+    parent: GetDocumentsByParentReq
+  ): Promise<{ creatorId: string } | undefined> => {
     if (parent.parentType === "course") {
       return await db.query.courses.findFirst({
         where: eq(schema.courses.id, parent.parentId),
@@ -35,7 +38,7 @@ export const documentsRepository = {
     return lesson;
   },
 
-  countByParent: async (parent: GetDocumentsByParentReq) => {
+  countByParent: async (parent: GetDocumentsByParentReq): Promise<number> => {
     const documents = await db.query.documents.findMany({
       where: eq(parentColumns[parent.parentType], parent.parentId),
       columns: { id: true },
@@ -51,7 +54,7 @@ export const documentsRepository = {
     contentType: string;
     sizeBytes: number;
     position: number;
-  }) => {
+  }): Promise<{ id: string }> => {
     const parent = {
       course: { courseId: data.parent.parentId },
       topic: { topicId: data.parent.parentId },
@@ -72,11 +75,11 @@ export const documentsRepository = {
     return document!;
   },
 
-  getById: async (id: string) => {
+  getById: async (id: string): Promise<DocumentEntity | undefined> => {
     return await db.query.documents.findFirst({ where: eq(schema.documents.id, id) });
   },
 
-  markReady: async (id: string) => {
+  markReady: async (id: string): Promise<{ id: string } | undefined> => {
     const [document] = await db
       .update(schema.documents)
       .set({ status: "ready", updatedAt: new Date() })
@@ -85,7 +88,7 @@ export const documentsRepository = {
     return document;
   },
 
-  listReadyByParent: async (parent: GetDocumentsByParentReq) => {
+  listReadyByParent: async (parent: GetDocumentsByParentReq): Promise<DocumentEntity[]> => {
     return await db.query.documents.findMany({
       where: and(
         eq(parentColumns[parent.parentType], parent.parentId),
@@ -95,7 +98,7 @@ export const documentsRepository = {
     });
   },
 
-  listObjectKeysForCourse: async (courseId: string) => {
+  listObjectKeysForCourse: async (courseId: string): Promise<{ objectKey: string }[]> => {
     return await db
       .select({ objectKey: schema.documents.objectKey })
       .from(schema.documents)
@@ -121,7 +124,7 @@ export const documentsRepository = {
       );
   },
 
-  listObjectKeysForTopic: async (topicId: string) => {
+  listObjectKeysForTopic: async (topicId: string): Promise<{ objectKey: string }[]> => {
     return await db
       .select({ objectKey: schema.documents.objectKey })
       .from(schema.documents)
@@ -139,14 +142,14 @@ export const documentsRepository = {
       );
   },
 
-  listObjectKeysForLesson: async (lessonId: string) => {
+  listObjectKeysForLesson: async (lessonId: string): Promise<{ objectKey: string }[]> => {
     return await db
       .select({ objectKey: schema.documents.objectKey })
       .from(schema.documents)
       .where(eq(schema.documents.lessonId, lessonId));
   },
 
-  deleteById: async (id: string) => {
+  deleteById: async (id: string): Promise<{ id: string } | undefined> => {
     const [document] = await db
       .delete(schema.documents)
       .where(eq(schema.documents.id, id))
@@ -154,7 +157,7 @@ export const documentsRepository = {
     return document;
   },
 
-  reorder: async (parent: GetDocumentsByParentReq, documentIds: string[]) => {
+  reorder: async (parent: GetDocumentsByParentReq, documentIds: string[]): Promise<void> => {
     await db.transaction(async (tx) => {
       const documents = await tx.query.documents.findMany({
         where: and(

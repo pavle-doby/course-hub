@@ -134,6 +134,8 @@ export interface Course {
   /** @nullable */
   publishedAt: string | null;
   creator?: CourseCreator;
+  /** @nullable */
+  thumbnailUrl: string | null;
 }
 
 export type CoursesPagination = {
@@ -976,6 +978,119 @@ export type CreateCourseDefault = {
   code: CreateCourseDefaultCode;
   error?: unknown;
   details?: CreateCourseDefaultDetails;
+};
+
+export type InitializeCourseThumbnailUploadBodyMimeType =
+  (typeof InitializeCourseThumbnailUploadBodyMimeType)[keyof typeof InitializeCourseThumbnailUploadBodyMimeType];
+
+export const InitializeCourseThumbnailUploadBodyMimeType = {
+  "image/jpeg": "image/jpeg",
+  "image/png": "image/png",
+  "image/webp": "image/webp",
+} as const;
+
+export type InitializeCourseThumbnailUploadBody = {
+  courseId: string;
+  mimeType: InitializeCourseThumbnailUploadBodyMimeType;
+  /**
+   * @maximum 10485760
+   * @exclusiveMinimum 0
+   */
+  size: number;
+};
+
+export type InitializeCourseThumbnailUpload201RequiredHeaders = {
+  "Content-Type": string;
+};
+
+export type InitializeCourseThumbnailUpload201 = {
+  objectKey: string;
+  uploadUrl: string;
+  requiredHeaders: InitializeCourseThumbnailUpload201RequiredHeaders;
+};
+
+export type InitializeCourseThumbnailUploadDefaultCode =
+  (typeof InitializeCourseThumbnailUploadDefaultCode)[keyof typeof InitializeCourseThumbnailUploadDefaultCode];
+
+export const InitializeCourseThumbnailUploadDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type InitializeCourseThumbnailUploadDefaultDetails = { [key: string]: unknown };
+
+export type InitializeCourseThumbnailUploadDefault = {
+  status: number;
+  code: InitializeCourseThumbnailUploadDefaultCode;
+  error?: unknown;
+  details?: InitializeCourseThumbnailUploadDefaultDetails;
+};
+
+export type CompleteCourseThumbnailUploadBody = {
+  courseId: string;
+  /** @minLength 1 */
+  objectKey: string;
+};
+
+export type CompleteCourseThumbnailUploadDefaultCode =
+  (typeof CompleteCourseThumbnailUploadDefaultCode)[keyof typeof CompleteCourseThumbnailUploadDefaultCode];
+
+export const CompleteCourseThumbnailUploadDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type CompleteCourseThumbnailUploadDefaultDetails = { [key: string]: unknown };
+
+export type CompleteCourseThumbnailUploadDefault = {
+  status: number;
+  code: CompleteCourseThumbnailUploadDefaultCode;
+  error?: unknown;
+  details?: CompleteCourseThumbnailUploadDefaultDetails;
+};
+
+export type DeleteCourseThumbnailPathParameters = {
+  id: string;
+};
+export type DeleteCourseThumbnailDefaultCode =
+  (typeof DeleteCourseThumbnailDefaultCode)[keyof typeof DeleteCourseThumbnailDefaultCode];
+
+export const DeleteCourseThumbnailDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type DeleteCourseThumbnailDefaultDetails = { [key: string]: unknown };
+
+export type DeleteCourseThumbnailDefault = {
+  status: number;
+  code: DeleteCourseThumbnailDefaultCode;
+  error?: unknown;
+  details?: DeleteCourseThumbnailDefaultDetails;
 };
 
 export type GetCourseByPublicIdPathParameters = {

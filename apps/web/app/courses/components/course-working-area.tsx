@@ -7,9 +7,11 @@ import type { CourseStatus, CourseVisibility, Lesson } from "@repo/api-client";
 import { Alert, AlertTitle } from "@repo/ui-web/components/alert";
 import { Button } from "@repo/ui-web/components/button";
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@repo/ui-web/components/card";
+import { Separator } from "@repo/ui-web/components/separator";
 import { useT } from "@repo/i18n/client";
 import { ChAlertDialog } from "@/components/ch-alert-dialog";
 import { EntityForm, type EntityFormHandle, type EntityFormValues } from "./entity-form";
+import { CourseThumbnailInput } from "./course-thumbnail-input";
 import { InviteForm } from "./invite-form";
 import {
   useAdjacentSelection,
@@ -41,6 +43,7 @@ type CourseWorkingAreaProps = {
   selection: Selection;
   autoSave: boolean;
   course: { name: string; description?: string | null; status?: CourseStatus };
+  thumbnailUrl?: string | null;
   visibility?: CourseVisibility;
   courseId?: string;
   publicId?: string;
@@ -67,6 +70,7 @@ export function CourseWorkingArea({
   selection,
   autoSave,
   course,
+  thumbnailUrl,
   visibility,
   courseId,
   publicId,
@@ -194,30 +198,38 @@ export function CourseWorkingArea({
               </CardAction>
             </CardHeader>
           )}
-          <CardContent>
+          <CardContent className={isCourseSelected && !isInviteActive ? "px-0" : undefined}>
             {selection.type === "course" && showInviteTab && activeTab === "invite" ? (
               publicId && <InviteForm publicId={publicId} />
             ) : (
               <>
                 {isCourseSelected && course.status === "published" && (
-                  <Alert className="mb-4" variant="destructive">
+                  <Alert className="mx-4 mb-4 w-auto" variant="destructive">
                     <Info />
                     <AlertTitle>{t("courses.editor.publishedVisibilityAlert")}</AlertTitle>
                   </Alert>
                 )}
                 {selection.type === "course" && (
-                  <EntityForm
-                    key={selectionKey}
-                    ref={formRef}
-                    schema={coursePickedSchema}
-                    name={course.name}
-                    description={course.description}
-                    namePlaceholder={t("courses.editor.untitledCourse")}
-                    autoSave={autoSave}
-                    onSave={onSaveCourse}
-                    onSavingChange={onSavingChange}
-                    mediaParent={{ type: "course", id: courseId }}
-                  />
+                  <div className="flex flex-col gap-5 px-4">
+                    <CourseThumbnailInput
+                      courseId={courseId}
+                      publicId={publicId}
+                      thumbnailUrl={thumbnailUrl}
+                    />
+                    <Separator />
+                    <EntityForm
+                      key={selectionKey}
+                      ref={formRef}
+                      schema={coursePickedSchema}
+                      name={course.name}
+                      description={course.description}
+                      namePlaceholder={t("courses.editor.untitledCourse")}
+                      autoSave={autoSave}
+                      onSave={onSaveCourse}
+                      onSavingChange={onSavingChange}
+                      mediaParent={{ type: "course", id: courseId }}
+                    />
+                  </div>
                 )}
               </>
             )}

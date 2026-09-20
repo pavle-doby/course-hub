@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, useState } from "react";
-import Image from "next/image";
 import {
   DndContext,
   PointerSensor,
@@ -17,7 +16,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Check, FileText, GripVertical, Shuffle, Trash2, Upload } from "lucide-react";
+import { Check, FileText, GripVertical, Shuffle, Upload } from "lucide-react";
 import {
   getGetPublicDocumentsByParentQueryKey,
   useCompleteDocumentUpload,
@@ -34,17 +33,9 @@ import { useErrorHandlingAction } from "@repo/shared";
 import { Button } from "@repo/ui-web/components/button";
 import { Skeleton } from "@repo/ui-web/components/skeleton";
 import { toast } from "@repo/ui-web/components/sonner";
-import {
-  Attachment,
-  AttachmentAction,
-  AttachmentActions,
-  AttachmentContent,
-  AttachmentDescription,
-  AttachmentMedia,
-  AttachmentTitle,
-} from "@repo/ui-web/components/attachment";
 import { cn } from "@repo/ui-web/lib/utils";
 import { ChAlertDialog } from "@/components/ch-alert-dialog";
+import { ChAttachment } from "@/components/ch-attachment";
 import { uploadToR2 } from "@/utils/upload-to-r2";
 
 type MediaParent = { type: ContentItemType; id?: string };
@@ -242,18 +233,12 @@ export function DocumentInput({ className, parent }: { className?: string; paren
       </div>
 
       {uploadingFile && (
-        <div className="rounded-lg border bg-muted/40 p-3 text-sm">
-          <div className="flex justify-between gap-3">
-            <span className="truncate">{uploadingFile}</span>
-            <span>{Math.min(uploadProgress ?? 0, 99)}%</span>
-          </div>
-          <div className="mt-2 h-2 overflow-hidden rounded-full bg-muted">
-            <div
-              className="h-full bg-primary transition-[width]"
-              style={{ width: `${Math.min(uploadProgress ?? 0, 99)}%` }}
-            />
-          </div>
-        </div>
+        <ChAttachment
+          name={uploadingFile}
+          state="uploading"
+          progress={uploadProgress}
+          icon={<FileText />}
+        />
       )}
 
       {displayedDocuments.length ? (
@@ -284,44 +269,23 @@ export function DocumentInput({ className, parent }: { className?: string; paren
                   const isImage = document.contentType.startsWith("image/");
                   return (
                     <SortableDocument key={document.id} id={document.id} disabled={!isReordering}>
-                      <Attachment className="w-full">
-                        <AttachmentMedia variant={isImage ? "image" : undefined}>
-                          {isImage ? (
-                            <Image
-                              src={document.publicUrl}
-                              alt={document.originalFileName}
-                              fill
-                              unoptimized
-                            />
-                          ) : (
-                            <FileText />
-                          )}
-                        </AttachmentMedia>
-                        <AttachmentContent>
-                          <AttachmentTitle>
-                            <a href={document.publicUrl} target="_blank" rel="noreferrer">
-                              {document.originalFileName}
-                            </a>
-                          </AttachmentTitle>
-                          <AttachmentDescription>
-                            {formatSize(document.sizeBytes)}
-                          </AttachmentDescription>
-                        </AttachmentContent>
-                        <AttachmentActions>
-                          {isReordering && (
+                      <ChAttachment
+                        name={document.originalFileName}
+                        description={formatSize(document.sizeBytes)}
+                        state="done"
+                        src={isImage ? document.publicUrl : undefined}
+                        alt={document.originalFileName}
+                        href={document.publicUrl}
+                        icon={<FileText />}
+                        onDelete={isReordering ? undefined : () => setDeleteId(document.id)}
+                        deleteLabel={t("courses.editor.documentDeleted")}
+                        deleteDisabled={isDeleting}
+                        extraActions={
+                          isReordering ? (
                             <GripVertical className="size-4 cursor-grab text-muted-foreground" />
-                          )}
-                          {!isReordering && (
-                            <AttachmentAction
-                              type="button"
-                              disabled={isDeleting}
-                              onClick={() => setDeleteId(document.id)}
-                            >
-                              <Trash2 />
-                            </AttachmentAction>
-                          )}
-                        </AttachmentActions>
-                      </Attachment>
+                          ) : undefined
+                        }
+                      />
                     </SortableDocument>
                   );
                 })}

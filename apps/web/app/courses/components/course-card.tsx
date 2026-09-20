@@ -11,13 +11,15 @@ import {
   CardFooter,
 } from "@repo/ui-web/components/card";
 import { Badge } from "@repo/ui-web/components/badge";
-import { Folder } from "lucide-react";
+import { BookOpen, Folder } from "lucide-react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useT } from "@repo/i18n/client";
 import { useErrorHandlingAction } from "@repo/shared";
 import { toast } from "@repo/ui-web/components/sonner";
 import { useIsMobile } from "@repo/ui-web/hooks/use-mobile";
 import { ChAlertDialog } from "@/components/ch-alert-dialog";
+import { courseCardGradient } from "@/utils/course-card-gradient";
 import { CourseCardDropdownActions } from "./course-card-dropdown-actions";
 import { CourseCardDrawerActions } from "./course-card-drawer-actions";
 
@@ -83,9 +85,25 @@ export function CourseCard({ course, onDelete }: CourseCardProps) {
   };
 
   return (
-    <Card>
+    <Card className="gap-0 py-0">
+      {course.thumbnailUrl ? (
+        <Image
+          src={course.thumbnailUrl}
+          alt=""
+          width={640}
+          height={178}
+          unoptimized
+          className="h-[178px] w-full object-cover"
+        />
+      ) : (
+        <div
+          className={`flex h-[178px] w-full items-center justify-center bg-gradient-to-br ${courseCardGradient(course.id)}`}
+        >
+          <BookOpen className="size-10 text-white/90" />
+        </div>
+      )}
       <CardHeader>
-        <div className="flex items-center gap-2 text-primary">
+        <div className="flex items-center gap-2 pt-2 text-primary">
           <Folder className="size-4 shrink-0" />
           <CardTitle>{course.name}</CardTitle>
         </div>

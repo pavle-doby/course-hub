@@ -1,4 +1,5 @@
 import {
+  CompleteCourseThumbnailUploadReq,
   CreateCourseReq,
   CreateCourseRes,
   DeleteCourseRes,
@@ -10,6 +11,8 @@ import {
   GetCourseRes,
   GetPublicLessonsRes,
   GetPublicTopicsRes,
+  InitializeCourseThumbnailUploadReq,
+  InitializeCourseThumbnailUploadRes,
   UpdateCourseReq,
   UpdateCourseRes,
 } from "@repo/contract";
@@ -82,5 +85,24 @@ export const coursesController = {
     const { id } = res.locals.params as { id: string };
     const resDto: DeleteCourseRes = await coursesService.deleteCourse(id);
     res.status(200).json(resDto);
+  },
+
+  initializeThumbnailUpload: async (_req: Request, res: Response): Promise<void> => {
+    const dto = res.locals.body as InitializeCourseThumbnailUploadReq;
+    const thumbnail: InitializeCourseThumbnailUploadRes =
+      await coursesService.initializeThumbnailUpload(dto, res.locals.user.id);
+    res.status(201).json(thumbnail);
+  },
+
+  completeThumbnailUpload: async (_req: Request, res: Response): Promise<void> => {
+    const dto = res.locals.body as CompleteCourseThumbnailUploadReq;
+    await coursesService.completeThumbnailUpload(dto, res.locals.user.id);
+    res.status(204).send();
+  },
+
+  deleteThumbnail: async (_req: Request, res: Response): Promise<void> => {
+    const { id } = res.locals.params as { id: string };
+    await coursesService.deleteThumbnail(id, res.locals.user.id);
+    res.status(204).send();
   },
 };

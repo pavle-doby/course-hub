@@ -1,7 +1,10 @@
 import {
+  BadRequestError,
+  CompleteCourseThumbnailUploadReq,
   CreateCourseReq,
   CreateCourseRes,
   DeleteCourseRes,
+  ErrorCode,
   ErrorCodeCourse,
   GetAllCoursesRes,
   GetAllPublicCoursesReq,
@@ -10,17 +13,40 @@ import {
   GetCourseRes,
   GetPublicLessonsRes,
   GetPublicTopicsRes,
+  InitializeCourseThumbnailUploadReq,
+  InitializeCourseThumbnailUploadRes,
   UpdateCourseReq,
   UpdateCourseRes,
 } from "@repo/contract";
-import { NotFoundError } from "@repo/contract";
+import { ForbiddenError, NotFoundError } from "@repo/contract";
 import { usersRepository } from "api/modules/users/repository/usersRepository";
 import { topicsRepository } from "api/modules/topics/repository/topicsRepository";
 import { lessonsRepository } from "api/modules/lessons/repository/lessonsRepository";
 import { documentsService } from "api/modules/documents/services/documentsService";
+import { r2Service } from "api/modules/documents/services/r2Service";
 import { coursesRepository } from "../repository/coursesRepository";
 import { PaginationReqExtended } from "api/middleware/pagination";
 import { GetAllCoursesReq } from "@repo/contract";
+
+function withThumbnailUrl<T extends { thumbnailObjectKey: string | null }>(course: T) {
+  const { thumbnailObjectKey, ...rest } = course;
+  return {
+    ...rest,
+    thumbnailUrl: thumbnailObjectKey ? r2Service.publicUrl(thumbnailObjectKey) : null,
+  };
+}
+
+async function getOwnedCourse(courseId: string, authUserId: string) {
+  const user = await usersRepository.getUserByAuthUserId(authUserId);
+  const course = await coursesRepository.getCourseById(courseId);
+  if (!course) {
+    throw new NotFoundError({ code: ErrorCodeCourse.NOT_FOUND });
+  }
+  if (!user || course.creatorId !== user.id) {
+    throw new ForbiddenError({ code: ErrorCode.FORBIDDEN });
+  }
+  return course;
+}
 
 export const coursesService = {
   getAllCourses: async (
@@ -29,21 +55,25 @@ export const coursesService = {
   ): Promise<GetAllCoursesRes> => {
     const user = await usersRepository.getUserByAuthUserId(authUserId);
     if (!user) throw new NotFoundError({ code: ErrorCodeCourse.NOT_FOUND });
-    return await coursesRepository.getAllCourses({ ...dto, creatorId: user.id });
+    const courses = await coursesRepository.getAllCourses({ ...dto, creatorId: user.id });
+    return { ...courses, data: courses.data.map(withThumbnailUrl) };
   },
 
   getCourse: async (id: string): Promise<GetCourseRes> => {
-    return await coursesRepository.getCourseById(id);
+    const course = await coursesRepository.getCourseById(id);
+    return course ? withThumbnailUrl(course) : undefined;
   },
 
   getCourseByPublicId: async (publicId: string): Promise<GetCourseByPublicIdRes> => {
-    return await coursesRepository.getCourseByPublicId(publicId);
+    const course = await coursesRepository.getCourseByPublicId(publicId);
+    return course ? withThumbnailUrl(course) : undefined;
   },
 
   getAllPublicCourses: async (
     dto: GetAllPublicCoursesReq<PaginationReqExtended>
   ): Promise<GetAllPublicCoursesRes> => {
-    return await coursesRepository.getAllPublishedCourses({ ...dto });
+    const courses = await coursesRepository.getAllPublishedCourses({ ...dto });
+    return { ...courses, data: courses.data.map(withThumbnailUrl) };
   },
 
   // Not-enrolled learners only see topic/lesson names, never description content
@@ -69,20 +99,73 @@ export const coursesService = {
     const user = await usersRepository.getUserByAuthUserId(authUserId);
     if (!user) throw new NotFoundError({ code: ErrorCodeCourse.NOT_FOUND });
 
-    return await coursesRepository.createCourse({ ...data, creatorId: user.id });
+    return withThumbnailUrl(await coursesRepository.createCourse({ ...data, creatorId: user.id }));
   },
 
   updateCourse: async (id: string, data: UpdateCourseReq): Promise<UpdateCourseRes> => {
     const existing = await coursesRepository.getCourseById(id);
     if (!existing) throw new NotFoundError({ code: ErrorCodeCourse.NOT_FOUND });
 
-    return await coursesRepository.updateCourse(id, data);
+    const course = await coursesRepository.updateCourse(id, data);
+    return course ? withThumbnailUrl(course) : undefined;
   },
 
   deleteCourse: async (id: string): Promise<DeleteCourseRes> => {
     const existing = await coursesRepository.getCourseById(id);
     if (!existing) throw new NotFoundError({ code: ErrorCodeCourse.NOT_FOUND });
     await documentsService.deleteForCourse(id);
-    return await coursesRepository.deleteCourse(id);
+    if (existing.thumbnailObjectKey) {
+      await r2Service.deleteObject(existing.thumbnailObjectKey);
+    }
+    const course = await coursesRepository.deleteCourse(id);
+    return course ? withThumbnailUrl(course) : undefined;
+  },
+
+  initializeThumbnailUpload: async (
+    dto: InitializeCourseThumbnailUploadReq,
+    authUserId: string
+  ): Promise<InitializeCourseThumbnailUploadRes> => {
+    await getOwnedCourse(dto.courseId, authUserId);
+    const objectKey = `course-hub/${authUserId}/course-content/thumbnail/${dto.courseId}/${crypto.randomUUID()}`;
+    const uploadUrl = await r2Service.createUploadUrl(objectKey, dto.mimeType);
+    return { objectKey, uploadUrl, requiredHeaders: { "Content-Type": dto.mimeType } };
+  },
+
+  completeThumbnailUpload: async (
+    dto: CompleteCourseThumbnailUploadReq,
+    authUserId: string
+  ): Promise<void> => {
+    const course = await getOwnedCourse(dto.courseId, authUserId);
+    const prefix = `course-hub/${authUserId}/course-content/thumbnail/${dto.courseId}/`;
+    if (!dto.objectKey.startsWith(prefix)) {
+      throw new ForbiddenError({ code: ErrorCode.FORBIDDEN });
+    }
+    try {
+      const object = await r2Service.headObject(dto.objectKey);
+      if (
+        !["image/jpeg", "image/png", "image/webp"].includes(object.ContentType ?? "") ||
+        !object.ContentLength ||
+        object.ContentLength > 10 * 1024 * 1024
+      ) {
+        throw new BadRequestError({ code: ErrorCode.VALIDATION_ERROR });
+      }
+    } catch (error) {
+      if (error instanceof BadRequestError) {
+        throw error;
+      }
+      throw new BadRequestError({ code: ErrorCode.VALIDATION_ERROR });
+    }
+    await coursesRepository.setThumbnailObjectKey(dto.courseId, dto.objectKey);
+    if (course.thumbnailObjectKey) {
+      await r2Service.deleteObject(course.thumbnailObjectKey);
+    }
+  },
+
+  deleteThumbnail: async (courseId: string, authUserId: string): Promise<void> => {
+    const course = await getOwnedCourse(courseId, authUserId);
+    if (course.thumbnailObjectKey) {
+      await r2Service.deleteObject(course.thumbnailObjectKey);
+    }
+    await coursesRepository.setThumbnailObjectKey(courseId, null);
   },
 };

@@ -21,12 +21,16 @@ import type {
 } from "@tanstack/react-query";
 
 import type {
+  CompleteCourseThumbnailUploadBody,
+  CompleteCourseThumbnailUploadDefault,
   Course,
   Courses,
   CreateCourseBody,
   CreateCourseDefault,
   DeleteCourseDefault,
   DeleteCoursePathParameters,
+  DeleteCourseThumbnailDefault,
+  DeleteCourseThumbnailPathParameters,
   GetCourseByPublicIdDefault,
   GetCourseByPublicIdPathParameters,
   GetCoursesDefault,
@@ -39,6 +43,9 @@ import type {
   GetPublicCourseTopicsPathParameters,
   GetPublicCoursesDefault,
   GetPublicCoursesParams,
+  InitializeCourseThumbnailUpload201,
+  InitializeCourseThumbnailUploadBody,
+  InitializeCourseThumbnailUploadDefault,
   PublicLesson,
   PublicTopic,
   UpdateCourseBody,
@@ -254,6 +261,251 @@ export const useCreateCourse = <TError = CreateCourseDefault, TContext = unknown
   TContext
 > => {
   return useMutation(getCreateCourseMutationOptions(options), queryClient);
+};
+export const initializeCourseThumbnailUpload = (
+  initializeCourseThumbnailUploadBody?: InitializeCourseThumbnailUploadBody,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<InitializeCourseThumbnailUpload201>(
+    {
+      url: `/v1/courses/thumbnails/uploads`,
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      data: initializeCourseThumbnailUploadBody,
+      signal,
+    },
+    options
+  );
+};
+
+export const getInitializeCourseThumbnailUploadMutationOptions = <
+  TError = InitializeCourseThumbnailUploadDefault,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof initializeCourseThumbnailUpload>>,
+    TError,
+    InitializeCourseThumbnailUploadMutationVariables,
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof initializeCourseThumbnailUpload>>,
+  TError,
+  InitializeCourseThumbnailUploadMutationVariables,
+  TContext
+> => {
+  const mutationKey = ["initializeCourseThumbnailUpload"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof initializeCourseThumbnailUpload>>,
+    InitializeCourseThumbnailUploadMutationVariables
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return initializeCourseThumbnailUpload(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type InitializeCourseThumbnailUploadMutationResult = NonNullable<
+  Awaited<ReturnType<typeof initializeCourseThumbnailUpload>>
+>;
+export type InitializeCourseThumbnailUploadMutationBody =
+  InitializeCourseThumbnailUploadBody | undefined;
+export type InitializeCourseThumbnailUploadMutationError = InitializeCourseThumbnailUploadDefault;
+export type InitializeCourseThumbnailUploadMutationVariables = {
+  data?: InitializeCourseThumbnailUploadBody;
+};
+
+export const useInitializeCourseThumbnailUpload = <
+  TError = InitializeCourseThumbnailUploadDefault,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof initializeCourseThumbnailUpload>>,
+      TError,
+      InitializeCourseThumbnailUploadMutationVariables,
+      TContext
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof initializeCourseThumbnailUpload>>,
+  TError,
+  InitializeCourseThumbnailUploadMutationVariables,
+  TContext
+> => {
+  return useMutation(getInitializeCourseThumbnailUploadMutationOptions(options), queryClient);
+};
+export const completeCourseThumbnailUpload = (
+  completeCourseThumbnailUploadBody?: CompleteCourseThumbnailUploadBody,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<void>(
+    {
+      url: `/v1/courses/thumbnails/uploads/complete`,
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      data: completeCourseThumbnailUploadBody,
+      signal,
+    },
+    options
+  );
+};
+
+export const getCompleteCourseThumbnailUploadMutationOptions = <
+  TError = CompleteCourseThumbnailUploadDefault,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof completeCourseThumbnailUpload>>,
+    TError,
+    CompleteCourseThumbnailUploadMutationVariables,
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof completeCourseThumbnailUpload>>,
+  TError,
+  CompleteCourseThumbnailUploadMutationVariables,
+  TContext
+> => {
+  const mutationKey = ["completeCourseThumbnailUpload"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof completeCourseThumbnailUpload>>,
+    CompleteCourseThumbnailUploadMutationVariables
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return completeCourseThumbnailUpload(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type CompleteCourseThumbnailUploadMutationResult = NonNullable<
+  Awaited<ReturnType<typeof completeCourseThumbnailUpload>>
+>;
+export type CompleteCourseThumbnailUploadMutationBody =
+  CompleteCourseThumbnailUploadBody | undefined;
+export type CompleteCourseThumbnailUploadMutationError = CompleteCourseThumbnailUploadDefault;
+export type CompleteCourseThumbnailUploadMutationVariables = {
+  data?: CompleteCourseThumbnailUploadBody;
+};
+
+export const useCompleteCourseThumbnailUpload = <
+  TError = CompleteCourseThumbnailUploadDefault,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof completeCourseThumbnailUpload>>,
+      TError,
+      CompleteCourseThumbnailUploadMutationVariables,
+      TContext
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof completeCourseThumbnailUpload>>,
+  TError,
+  CompleteCourseThumbnailUploadMutationVariables,
+  TContext
+> => {
+  return useMutation(getCompleteCourseThumbnailUploadMutationOptions(options), queryClient);
+};
+export const deleteCourseThumbnail = (
+  { id }: DeleteCourseThumbnailPathParameters,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<void>(
+    { url: `/v1/courses/${id}/thumbnail`, method: "DELETE", signal },
+    options
+  );
+};
+
+export const getDeleteCourseThumbnailMutationOptions = <
+  TError = DeleteCourseThumbnailDefault,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteCourseThumbnail>>,
+    TError,
+    DeleteCourseThumbnailMutationVariables,
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteCourseThumbnail>>,
+  TError,
+  DeleteCourseThumbnailMutationVariables,
+  TContext
+> => {
+  const mutationKey = ["deleteCourseThumbnail"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteCourseThumbnail>>,
+    DeleteCourseThumbnailMutationVariables
+  > = (props) => {
+    const { pathParams } = props ?? {};
+
+    return deleteCourseThumbnail(pathParams, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type DeleteCourseThumbnailMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteCourseThumbnail>>
+>;
+
+export type DeleteCourseThumbnailMutationError = DeleteCourseThumbnailDefault;
+export type DeleteCourseThumbnailMutationVariables = {
+  pathParams: DeleteCourseThumbnailPathParameters;
+};
+
+export const useDeleteCourseThumbnail = <TError = DeleteCourseThumbnailDefault, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof deleteCourseThumbnail>>,
+      TError,
+      DeleteCourseThumbnailMutationVariables,
+      TContext
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof deleteCourseThumbnail>>,
+  TError,
+  DeleteCourseThumbnailMutationVariables,
+  TContext
+> => {
+  return useMutation(getDeleteCourseThumbnailMutationOptions(options), queryClient);
 };
 export const getCourseByPublicId = (
   { publicId }: GetCourseByPublicIdPathParameters,

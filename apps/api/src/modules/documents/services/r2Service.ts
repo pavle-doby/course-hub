@@ -31,6 +31,10 @@ export const r2Service = {
     return uploadUrl;
   },
 
+  publicUrl: (objectKey: string) => {
+    return new URL(objectKey, `${env.CLOUDFLARE_R2_PUBLIC_URL.replace(/\/$/, "")}/`).toString();
+  },
+
   /** Reads object metadata after upload so the API can verify it before publishing. */
   headObject: async (objectKey: string) => {
     return await client.send(

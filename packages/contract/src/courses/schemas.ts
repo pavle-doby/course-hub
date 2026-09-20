@@ -17,12 +17,19 @@ export const CourseSchema = createSelectSchema(courses, {
   status: z.enum(courseStatusEnum.enumValues),
   visibility: z.enum(courseVisibilityEnum.enumValues),
 })
-  .omit({
-    createdAt: true,
-    updatedAt: true,
+  .pick({
+    id: true,
+    creatorId: true,
+    name: true,
+    publicId: true,
+    description: true,
+    status: true,
+    visibility: true,
+    publishedAt: true,
   })
   .extend({
     creator: CourseCreatorSchema.optional(),
+    thumbnailUrl: z.url().nullable(),
   });
 
 export const CourseGetAllQuerySchema = z.object({
@@ -40,12 +47,12 @@ export const CoursePostQuerySchema = createInsertSchema(courses, {
   status: z.enum(courseStatusEnum.enumValues).optional(),
   visibility: z.enum(courseVisibilityEnum.enumValues).optional(),
   publishedAt: isoDatetime().optional(),
-}).omit({
-  id: true,
-  creatorId: true,
-  publicId: true,
-  createdAt: true,
-  updatedAt: true,
+}).pick({
+  name: true,
+  description: true,
+  status: true,
+  visibility: true,
+  publishedAt: true,
 });
 
 export const CoursePutQuerySchema = createUpdateSchema(courses, {
@@ -53,11 +60,31 @@ export const CoursePutQuerySchema = createUpdateSchema(courses, {
   visibility: z.enum(courseVisibilityEnum.enumValues).optional(),
   publishedAt: isoDatetime(),
 })
-  .omit({
-    id: true,
-    creatorId: true,
-    publicId: true,
-    createdAt: true,
-    updatedAt: true,
+  .pick({
+    name: true,
+    description: true,
+    status: true,
+    visibility: true,
+    publishedAt: true,
   })
   .partial();
+
+export const CourseThumbnailUploadBodySchema = z.object({
+  courseId: z.uuid(),
+  mimeType: z.enum(["image/jpeg", "image/png", "image/webp"]),
+  size: z
+    .int()
+    .positive()
+    .max(10 * 1024 * 1024),
+});
+
+export const CourseThumbnailUploadCompleteBodySchema = z.object({
+  courseId: z.uuid(),
+  objectKey: z.string().min(1),
+});
+
+export const CourseThumbnailUploadResponseSchema = z.object({
+  objectKey: z.string(),
+  uploadUrl: z.url(),
+  requiredHeaders: z.object({ "Content-Type": z.string() }),
+});

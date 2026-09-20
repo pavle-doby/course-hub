@@ -1,16 +1,15 @@
 import { db, schema } from "@repo/db";
+import { CourseEntity, UserEntity } from "@repo/db-schema";
 import { eq, ilike, or, and, count, desc, notInArray, isNull } from "drizzle-orm";
-import {
-  Course,
-  CreateCourseReq,
-  GetAllCoursesRes,
-  GetAllPublicCoursesRes,
-  GetCourseRes,
-  Search,
-  UpdateCourseReq,
-} from "@repo/contract";
+import { CreateCourseReq, PaginationRes, Search, UpdateCourseReq } from "@repo/contract";
 import { CourseGetAllQuerySchema } from "@repo/contract";
 import { z } from "zod";
+
+type CourseRow = Omit<CourseEntity, "createdAt" | "updatedAt">;
+
+type CourseCreator = Pick<UserEntity, "id" | "firstName" | "lastName" | "username" | "avatarUrl">;
+
+type CourseWithCreator = CourseRow & { creator: CourseCreator };
 
 type GetAllPublishedCoursesParams = {
   offset?: number;
@@ -36,7 +35,7 @@ export const coursesRepository = {
     status,
     excludeEnrolled,
     showAllCreators,
-  }: GetAllCoursesParams): Promise<GetAllCoursesRes> => {
+  }: GetAllCoursesParams): Promise<PaginationRes<CourseWithCreator>> => {
     const searchCondition = query
       ? or(
           ilike(schema.courses.name, `%${query}%`),
@@ -96,14 +95,14 @@ export const coursesRepository = {
     };
   },
 
-  getCourseById: async (id: string): Promise<GetCourseRes> => {
+  getCourseById: async (id: string): Promise<CourseRow | undefined> => {
     return await db.query.courses.findFirst({
       where: eq(schema.courses.id, id),
       columns: { createdAt: false, updatedAt: false },
     });
   },
 
-  getCourseByPublicId: async (publicId: string): Promise<Course | undefined> => {
+  getCourseByPublicId: async (publicId: string): Promise<CourseRow | undefined> => {
     return await db.query.courses.findFirst({
       where: eq(schema.courses.publicId, publicId),
       columns: { createdAt: false, updatedAt: false },
@@ -115,7 +114,7 @@ export const coursesRepository = {
     limit,
     page,
     query,
-  }: GetAllPublishedCoursesParams): Promise<GetAllPublicCoursesRes> => {
+  }: GetAllPublishedCoursesParams): Promise<PaginationRes<CourseWithCreator>> => {
     const searchCondition = query
       ? or(
           ilike(schema.courses.name, `%${query}%`),
@@ -154,12 +153,13 @@ export const coursesRepository = {
     };
   },
 
-  createCourse: async (data: CreateCourseReq & { creatorId: string }): Promise<Course> => {
+  createCourse: async (data: CreateCourseReq & { creatorId: string }): Promise<CourseRow> => {
     const [course] = await db.insert(schema.courses).values(data).returning({
       id: schema.courses.id,
       creatorId: schema.courses.creatorId,
       name: schema.courses.name,
       description: schema.courses.description,
+      thumbnailObjectKey: schema.courses.thumbnailObjectKey,
       publicId: schema.courses.publicId,
       status: schema.courses.status,
       visibility: schema.courses.visibility,
@@ -168,7 +168,7 @@ export const coursesRepository = {
     return course!;
   },
 
-  updateCourse: async (id: string, data: UpdateCourseReq): Promise<Course | undefined> => {
+  updateCourse: async (id: string, data: UpdateCourseReq): Promise<CourseRow | undefined> => {
     const [course] = await db
       .update(schema.courses)
       .set(data)
@@ -178,6 +178,7 @@ export const coursesRepository = {
         creatorId: schema.courses.creatorId,
         name: schema.courses.name,
         description: schema.courses.description,
+        thumbnailObjectKey: schema.courses.thumbnailObjectKey,
         publicId: schema.courses.publicId,
         status: schema.courses.status,
         visibility: schema.courses.visibility,
@@ -186,12 +187,25 @@ export const coursesRepository = {
     return course;
   },
 
-  deleteCourse: async (id: string): Promise<Course | undefined> => {
+  setThumbnailObjectKey: async (
+    id: string,
+    thumbnailObjectKey: string | null
+  ): Promise<CourseEntity | undefined> => {
+    const [course] = await db
+      .update(schema.courses)
+      .set({ thumbnailObjectKey })
+      .where(eq(schema.courses.id, id))
+      .returning();
+    return course;
+  },
+
+  deleteCourse: async (id: string): Promise<CourseRow | undefined> => {
     const [course] = await db.delete(schema.courses).where(eq(schema.courses.id, id)).returning({
       id: schema.courses.id,
       creatorId: schema.courses.creatorId,
       name: schema.courses.name,
       description: schema.courses.description,
+      thumbnailObjectKey: schema.courses.thumbnailObjectKey,
       publicId: schema.courses.publicId,
       status: schema.courses.status,
       visibility: schema.courses.visibility,

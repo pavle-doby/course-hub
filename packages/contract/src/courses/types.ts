@@ -6,6 +6,9 @@ import {
   CoursePostQuerySchema,
   CoursePutQuerySchema,
   CourseSchema,
+  CourseThumbnailUploadBodySchema,
+  CourseThumbnailUploadCompleteBodySchema,
+  CourseThumbnailUploadResponseSchema,
 } from "./schemas";
 
 export type Course = z.infer<typeof CourseSchema>;
@@ -39,3 +42,11 @@ export type UpdateCourseRes = Course | undefined;
 
 // DELETE /courses/:id → delete course
 export type DeleteCourseRes = Course | undefined;
+
+export type InitializeCourseThumbnailUploadReq = z.infer<typeof CourseThumbnailUploadBodySchema>;
+export type CompleteCourseThumbnailUploadReq = z.infer<
+  typeof CourseThumbnailUploadCompleteBodySchema
+>;
+export type InitializeCourseThumbnailUploadRes = z.infer<
+  typeof CourseThumbnailUploadResponseSchema
+>;

@@ -146,6 +146,34 @@ function AttachmentAction({
   );
 }
 
+function AttachmentProgress({
+  value,
+  className,
+  ...props
+}: React.ComponentProps<"div"> & { value: number }) {
+  const clamped = Math.min(Math.max(value, 0), 100);
+
+  return (
+    <div
+      data-slot="attachment-progress"
+      role="progressbar"
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-valuenow={clamped}
+      className={cn("flex w-full items-center gap-2", className)}
+      {...props}
+    >
+      <div className="h-2 flex-1 overflow-hidden rounded-full bg-muted">
+        <div
+          className="h-full rounded-r-full bg-primary transition-[width] duration-300"
+          style={{ width: `${clamped}%` }}
+        />
+      </div>
+      <span className="shrink-0 text-xs font-semibold text-muted-foreground">{clamped}%</span>
+    </div>
+  );
+}
+
 function AttachmentTrigger({
   className,
   asChild = false,
@@ -189,4 +217,5 @@ export {
   AttachmentActions,
   AttachmentAction,
   AttachmentTrigger,
+  AttachmentProgress,
 };
