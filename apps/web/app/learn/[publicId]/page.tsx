@@ -11,6 +11,7 @@ import {
   useGetPublicCourseLessons,
   useGetPublicCourseTopics,
   useGetUserSelf,
+  useSubscribeNotifications,
   useWithdrawFromCourse,
 } from "@repo/api-client";
 import { useT } from "@repo/i18n/client";
@@ -19,6 +20,7 @@ import { toast } from "@repo/ui-web/components/sonner";
 import { useErrorHandlingQuery } from "@repo/shared";
 import { useAdjacentSelection, useCourseTree, type Selection } from "@/hooks/use-course-tree";
 import { getAccessToken } from "@/utils/token-storage";
+import { notificationsService } from "@/services/notifications-service";
 import { LearnBottomNav } from "./components/learn-bottom-nav";
 import { LearnCourseDetailSkeleton } from "./components/learn-course-detail-skeleton";
 import { LearnHeader } from "./components/learn-header";
@@ -114,6 +116,7 @@ export default function LearnCourseDetailPage() {
 
   const { mutateAsync: enroll, isPending: isEnrolling } = useEnrollInCourse();
   const { mutateAsync: withdraw, isPending: isWithdrawing } = useWithdrawFromCourse();
+  const { mutateAsync: subscribeNotifications } = useSubscribeNotifications();
 
   function handleBack() {
     router.back();
@@ -128,6 +131,13 @@ export default function LearnCourseDetailPage() {
     try {
       await enroll({ data: { publicId } });
       await refetchEnrollmentStatus();
+      if (course) {
+        await notificationsService.promptLearnerNotifications({
+          courseId: course.id,
+          prompt: t("notifications.learnerPrompt"),
+          subscribeNotifications,
+        });
+      }
     } catch (error) {
       handleErrorAction(error as Error);
     }

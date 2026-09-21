@@ -186,5 +186,15 @@ export const common = {
         message: "Tražena tema nije pronađena.",
       },
     },
+    notification: {
+      SUBSCRIPTION_NOT_FOUND: {
+        title: "Pretplata nije pronađena",
+        message: "Pretplata na obaveštenja nije pronađena.",
+      },
+    },
+  },
+  notifications: {
+    creatorPrompt: "Omoguciti obavestenja kada se polaznici upisu na ovaj kurs?",
+    learnerPrompt: "Omoguciti obavestenja kada ovaj kurs ili njegov autor imaju nov sadrzaj?",
   },
 };

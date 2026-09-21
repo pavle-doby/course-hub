@@ -20,3 +20,9 @@ export const videoStatusEnum = pgEnum("video_status", [
   "error",
 ]);
 export const documentStatusEnum = pgEnum("document_status", ["pending", "ready", "failed"]);
+export const notificationCategoryEnum = pgEnum("notification_category", [
+  "course_enrolled",
+  "private_course_attempt",
+  "course_updated",
+  "creator_new_course",
+]);

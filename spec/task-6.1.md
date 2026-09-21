@@ -1,4 +1,4 @@
-# Task 6: Push Notifications
+# Task 6.1: Push Notifications
 
 ## Decisions
 
@@ -11,12 +11,12 @@
 
 ## Supported Flows
 
-| Event | Recipients (preference) |
-|---|---|
-| Someone self-enrolls in a course | course creator — `course_enrolled` |
-| Someone tries to self-enroll in a private course without an invite | course creator — `private_course_attempt` |
-| An enrolled course is updated | enrolled users — `course_updated` |
-| A creator publishes a new course | users enrolled in any course by that creator (deduped per user) — `creator_new_course` |
+| Event                                                              | Recipients (preference)                                                                |
+| ------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
+| Someone self-enrolls in a course                                   | course creator — `course_enrolled`                                                     |
+| Someone tries to self-enroll in a private course without an invite | course creator — `private_course_attempt`                                              |
+| An enrolled course is updated                                      | enrolled users — `course_updated`                                                      |
+| A creator publishes a new course                                   | users enrolled in any course by that creator (deduped per user) — `creator_new_course` |
 
 Prompts:
 
@@ -97,15 +97,15 @@ Lookup flow per send: query `notification_preferences` for `(courseId, category)
 
 ## Delivery Order
 
-1. Generate VAPID keypair and add server + web environment values.
-2. Add schema tables, relations, contract types/errors, and generate the migration.
-3. Implement `pushService` (web-push init, send, dead-subscription cleanup) and the subscribe/unsubscribe routes.
-4. Wire the four push triggers into enrollments and courses services.
-5. Register OpenAPI and run `pnpm api-client:generate`.
-6. Add a `push`/`notificationclick` handler to `sw.js` and fix the broken static asset list.
-7. Add the VAPID public key to the api-client env and web env examples.
-8. Build the subscribe helper and the two opt-in prompts.
-9. Verify and run `pnpm build`, `pnpm lint`, and `pnpm typecheck`.
+1. [x] Generate VAPID keypair and add server + web environment values.
+2. [ ] Add schema tables, relations, contract types/errors, and generate the migration.
+3. [x] Implement `pushService` (web-push init, send, dead-subscription cleanup) and the subscribe/unsubscribe routes.
+4. [x] Wire the four push triggers into enrollments and courses services.
+5. [x] Register OpenAPI and run `pnpm api-client:generate`.
+6. [x] Add a `push`/`notificationclick` handler to `sw.js` and fix the broken static asset list.
+7. [x] Add the VAPID public key to the api-client env and web env examples.
+8. [x] Build the subscribe helper and the two opt-in prompts.
+9. [x] Verify and run `pnpm build`, `pnpm lint`, and `pnpm typecheck`.
 
 ## Verification
 

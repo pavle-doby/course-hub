@@ -20,4 +20,7 @@ export const env = process.env as {
   CLOUDFLARE_R2_BUCKET: string;
   CLOUDFLARE_R2_ENDPOINT: string;
   CLOUDFLARE_R2_PUBLIC_URL: string;
+  VAPID_PUBLIC_KEY: string;
+  VAPID_PRIVATE_KEY: string;
+  VAPID_SUBJECT: string;
 };

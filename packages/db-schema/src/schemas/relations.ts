@@ -10,6 +10,8 @@ import { videos } from "./videos";
 import { courseProgress } from "./course-progress";
 import { lessonProgress } from "./lesson-progress";
 import { documents } from "./documents";
+import { pushSubscriptions } from "./push-subscriptions";
+import { notificationPreferences } from "./notification-preferences";
 
 export const usersRelations = relations(users, ({ one, many }) => ({
   preferences: one(userPreferences, { fields: [users.id], references: [userPreferences.userId] }),
@@ -18,6 +20,8 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   courseProgress: many(courseProgress),
   lectureProgress: many(lessonProgress),
   documents: many(documents),
+  pushSubscriptions: many(pushSubscriptions),
+  notificationPreferences: many(notificationPreferences),
 }));
 
 export const userPreferencesRelations = relations(userPreferences, ({ one }) => ({
@@ -32,6 +36,16 @@ export const coursesRelations = relations(courses, ({ one, many }) => ({
   invitations: many(courseInvitations),
   progress: many(courseProgress),
   documents: many(documents),
+  notificationPreferences: many(notificationPreferences),
+}));
+
+export const pushSubscriptionsRelations = relations(pushSubscriptions, ({ one }) => ({
+  user: one(users, { fields: [pushSubscriptions.userId], references: [users.id] }),
+}));
+
+export const notificationPreferencesRelations = relations(notificationPreferences, ({ one }) => ({
+  user: one(users, { fields: [notificationPreferences.userId], references: [users.id] }),
+  course: one(courses, { fields: [notificationPreferences.courseId], references: [courses.id] }),
 }));
 
 export const courseEnrollmentsRelations = relations(courseEnrollments, ({ one }) => ({

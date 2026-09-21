@@ -23,6 +23,7 @@ import { usersRepository } from "api/modules/users/repository/usersRepository";
 import { topicsRepository } from "api/modules/topics/repository/topicsRepository";
 import { lessonsRepository } from "api/modules/lessons/repository/lessonsRepository";
 import { documentsService } from "api/modules/documents/services/documentsService";
+import { notificationsService } from "api/modules/notifications/services/notificationsService";
 import { r2Service } from "api/modules/documents/services/r2Service";
 import { coursesRepository } from "../repository/coursesRepository";
 import { PaginationReqExtended } from "api/middleware/pagination";
@@ -107,6 +108,11 @@ export const coursesService = {
     if (!existing) throw new NotFoundError({ code: ErrorCodeCourse.NOT_FOUND });
 
     const course = await coursesRepository.updateCourse(id, data);
+    if (course && existing.status !== "published" && course.status === "published") {
+      void notificationsService.notifyCreatorNewCourse(course).catch(() => undefined);
+    } else if (course && existing.status === "published") {
+      void notificationsService.notifyCourseUpdated(course).catch(() => undefined);
+    }
     return course ? withThumbnailUrl(course) : undefined;
   },
 

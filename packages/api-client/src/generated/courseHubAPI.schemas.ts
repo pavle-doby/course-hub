@@ -2459,3 +2459,101 @@ export type GetPublicDocumentsByParentDefault = {
   error?: unknown;
   details?: GetPublicDocumentsByParentDefaultDetails;
 };
+
+export type SubscribeNotificationsBodyCategory =
+  (typeof SubscribeNotificationsBodyCategory)[keyof typeof SubscribeNotificationsBodyCategory];
+
+export const SubscribeNotificationsBodyCategory = {
+  course_enrolled: "course_enrolled",
+  private_course_attempt: "private_course_attempt",
+  course_updated: "course_updated",
+  creator_new_course: "creator_new_course",
+} as const;
+
+export type SubscribeNotificationsBodySubscriptionKeys = {
+  /** @minLength 1 */
+  p256dh: string;
+  /** @minLength 1 */
+  auth: string;
+};
+
+export type SubscribeNotificationsBodySubscription = {
+  endpoint: string;
+  keys: SubscribeNotificationsBodySubscriptionKeys;
+};
+
+export type SubscribeNotificationsBody = {
+  courseId: string;
+  category: SubscribeNotificationsBodyCategory;
+  subscription: SubscribeNotificationsBodySubscription;
+};
+
+export type SubscribeNotificationsDefaultCode =
+  (typeof SubscribeNotificationsDefaultCode)[keyof typeof SubscribeNotificationsDefaultCode];
+
+export const SubscribeNotificationsDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type SubscribeNotificationsDefaultDetails = { [key: string]: unknown };
+
+export type SubscribeNotificationsDefault = {
+  status: number;
+  code: SubscribeNotificationsDefaultCode;
+  error?: unknown;
+  details?: SubscribeNotificationsDefaultDetails;
+};
+
+export type UnsubscribeNotificationsBodyCategory =
+  (typeof UnsubscribeNotificationsBodyCategory)[keyof typeof UnsubscribeNotificationsBodyCategory];
+
+export const UnsubscribeNotificationsBodyCategory = {
+  course_enrolled: "course_enrolled",
+  private_course_attempt: "private_course_attempt",
+  course_updated: "course_updated",
+  creator_new_course: "creator_new_course",
+} as const;
+
+export type UnsubscribeNotificationsBodySubscription = {
+  endpoint: string;
+};
+
+export type UnsubscribeNotificationsBody = {
+  courseId: string;
+  category: UnsubscribeNotificationsBodyCategory;
+  subscription: UnsubscribeNotificationsBodySubscription;
+};
+
+export type UnsubscribeNotificationsDefaultCode =
+  (typeof UnsubscribeNotificationsDefaultCode)[keyof typeof UnsubscribeNotificationsDefaultCode];
+
+export const UnsubscribeNotificationsDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type UnsubscribeNotificationsDefaultDetails = { [key: string]: unknown };
+
+export type UnsubscribeNotificationsDefault = {
+  status: number;
+  code: UnsubscribeNotificationsDefaultCode;
+  error?: unknown;
+  details?: UnsubscribeNotificationsDefaultDetails;
+};

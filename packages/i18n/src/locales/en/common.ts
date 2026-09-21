@@ -189,5 +189,15 @@ export const common = {
         message: "The requested topic could not be found.",
       },
     },
+    notification: {
+      SUBSCRIPTION_NOT_FOUND: {
+        title: "Subscription Not Found",
+        message: "The notification subscription could not be found.",
+      },
+    },
+  },
+  notifications: {
+    creatorPrompt: "Enable notifications when learners enroll in this course?",
+    learnerPrompt: "Enable notifications when this course or its creator has new content?",
   },
 };

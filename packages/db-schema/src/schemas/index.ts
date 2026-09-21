@@ -10,4 +10,6 @@ export * from "./videos";
 export * from "./documents";
 export * from "./course-progress";
 export * from "./lesson-progress";
+export * from "./push-subscriptions";
+export * from "./notification-preferences";
 export * from "./relations";

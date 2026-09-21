@@ -15,6 +15,7 @@ import {
   useUpdateCourse,
   useUpdateLesson,
   useUpdateTopic,
+  useSubscribeNotifications,
   getGetLessonsQueryKey,
   getGetTopicsQueryKey,
   getGetCoursesQueryKey,
@@ -27,6 +28,7 @@ import { useErrorHandlingAction } from "@repo/shared";
 import { toast } from "@repo/ui-web/components/sonner";
 import { SidebarProvider } from "@repo/ui-web/components/sidebar";
 import { isTypingTarget } from "@/utils/is-typing-target";
+import { notificationsService } from "@/services/notifications-service";
 import { CourseEditorHeader } from "./course-editor-header";
 import { CourseBottomNav } from "./course-bottom-nav";
 import { CourseActions } from "./course-actions";
@@ -186,6 +188,7 @@ export function CourseEditor({ mode, publicId }: CourseEditorProps) {
   const { mutateAsync: createLesson } = useCreateLesson();
   const { mutateAsync: updateLesson } = useUpdateLesson();
   const { mutateAsync: deleteLesson } = useDeleteLesson();
+  const { mutateAsync: subscribeNotifications } = useSubscribeNotifications();
 
   // real course id resolved above from the public id in edit mode — narrowed for the rest of this render
   if (mode === "edit" && isCourseError) {
@@ -259,13 +262,14 @@ export function CourseEditor({ mode, publicId }: CourseEditorProps) {
         });
       } else {
         const updated = await updateCourse({ pathParams: { id: courseId }, data });
-        if (updated)
+        if (updated) {
           setCourse({
             name: updated.name,
             description: updated.description,
             status: updated.status,
             visibility: updated.visibility,
           });
+        }
       }
     } catch (error) {
       handleErrorAction(error as Error);
@@ -436,6 +440,13 @@ export function CourseEditor({ mode, publicId }: CourseEditorProps) {
           status: updated.status,
           visibility: updated.visibility,
         });
+        if (nextStatus === "published") {
+          await notificationsService.promptCreatorNotifications({
+            courseId: updated.id,
+            prompt: t("notifications.creatorPrompt"),
+            subscribeNotifications,
+          });
+        }
       }
       toast.success(
         nextStatus === "published"

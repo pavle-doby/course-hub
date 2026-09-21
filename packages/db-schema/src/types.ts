@@ -11,6 +11,8 @@ import type {
   courseProgress,
   lessonProgress,
   documents,
+  pushSubscriptions,
+  notificationPreferences,
 } from "./schemas";
 
 export type UserEntity = InferSelectModel<typeof users>;
@@ -24,3 +26,5 @@ export type VideoEntity = InferSelectModel<typeof videos>;
 export type CourseProgressEntity = InferSelectModel<typeof courseProgress>;
 export type LessonProgressEntity = InferSelectModel<typeof lessonProgress>;
 export type DocumentEntity = InferSelectModel<typeof documents>;
+export type PushSubscriptionEntity = InferSelectModel<typeof pushSubscriptions>;
+export type NotificationPreferenceEntity = InferSelectModel<typeof notificationPreferences>;

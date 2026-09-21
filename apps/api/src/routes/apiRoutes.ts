@@ -8,6 +8,7 @@ import enrollmentsRoutes from "../modules/enrollments/routes/enrollmentsRoutes";
 import invitationsRoutes from "../modules/invitations/routes/invitationsRoutes";
 import videosRoutes from "../modules/videos/routes/videosRoutes";
 import documentsRoutes from "../modules/documents/routes/documentsRoutes";
+import notificationsRoutes from "../modules/notifications/routes/notificationsRoutes";
 
 const api: Router = Router();
 
@@ -57,6 +58,12 @@ api.use(
   //
   "/v1/invitations",
   invitationsRoutes
+);
+
+api.use(
+  //
+  "/v1/notifications",
+  notificationsRoutes
 );
 
 export default api;

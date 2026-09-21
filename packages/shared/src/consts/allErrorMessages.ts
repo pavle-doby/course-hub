@@ -8,6 +8,7 @@ import { lessonErrorMessages } from "./lessonErrorMessages";
 import { topicErrorMessages } from "./topicErrorMessages";
 import { videoErrorMessages } from "./videoErrorMessages";
 import { documentErrorMessages } from "./documentErrorMessages";
+import { notificationErrorMessages } from "./notificationErrorMessages";
 
 export const allErrorMessages = {
   ...sharedErrorMessages,
@@ -20,4 +21,5 @@ export const allErrorMessages = {
   ...topicErrorMessages,
   ...videoErrorMessages,
   ...documentErrorMessages,
+  ...notificationErrorMessages,
 };

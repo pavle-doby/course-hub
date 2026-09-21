@@ -10,3 +10,4 @@ export * from "./enrollments";
 export * from "./invitations";
 export * from "./videos";
 export * from "./documents";
+export * from "./notifications";

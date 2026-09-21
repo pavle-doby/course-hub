@@ -20,6 +20,7 @@ import { lessonsRepository } from "api/modules/lessons/repository/lessonsReposit
 import { r2Service } from "api/modules/documents/services/r2Service";
 import { PaginationReqExtended } from "api/middleware/pagination";
 import { enrollmentsRepository } from "../repository/enrollmentsRepository";
+import { notificationsService } from "api/modules/notifications/services/notificationsService";
 
 async function getPublishedCourseOrThrow(publicId: string) {
   const course = await coursesRepository.getCourseByPublicId(publicId);
@@ -37,6 +38,7 @@ export const enrollmentsService = {
 
     const course = await getPublishedCourseOrThrow(publicId);
     if (course.visibility === "private") {
+      void notificationsService.notifyPrivateCourseAttempt(course).catch(() => undefined);
       throw new ConflictError({ code: ErrorCodeEnrollment.COURSE_PRIVATE });
     }
 
@@ -44,9 +46,15 @@ export const enrollmentsService = {
     if (existing && !existing.withdrawnAt) {
       throw new ConflictError({ code: ErrorCodeEnrollment.ALREADY_ENROLLED });
     }
-    if (existing) return await enrollmentsRepository.reactivateEnrollment(existing.id);
+    if (existing) {
+      const enrollment = await enrollmentsRepository.reactivateEnrollment(existing.id);
+      void notificationsService.notifyCourseEnrolled(course).catch(() => undefined);
+      return enrollment;
+    }
 
-    return await enrollmentsRepository.createEnrollment(user.id, course.id);
+    const enrollment = await enrollmentsRepository.createEnrollment(user.id, course.id);
+    void notificationsService.notifyCourseEnrolled(course).catch(() => undefined);
+    return enrollment;
   },
 
   withdrawFromCourse: async (

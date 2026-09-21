@@ -27,7 +27,7 @@ const dto = req.body;
 
 ## Controller pattern
 
-Controllers only orchestrate: read `res.locals`, call service, send response. No business logic.
+Controllers only orchestrate: read `res.locals`, call service, send response. No business logic. Assign every `res.locals` value to a typed local variable before passing it to a service; never pass `res.locals.*` inline.
 
 ```ts
 export const usersController = {

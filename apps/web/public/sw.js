@@ -1,10 +1,9 @@
 const CACHE_NAME = "course-hub-static-v1";
 const STATIC_ASSET_PATHS = [
   "/offline.html",
-  "/manifest.webmanifest",
-  "/icons/icon-192.svg",
-  "/icons/icon-512.svg",
-  "/icons/icon-512-maskable.svg",
+  "/icons/icon-192x192.png",
+  "/icons/icon-512x512.png",
+  "/icons/icon-512x512-maskable.png",
 ];
 
 self.addEventListener("install", (event) => {
@@ -57,4 +56,27 @@ self.addEventListener("fetch", (event) => {
       })
     );
   }
+});
+
+self.addEventListener("push", (event) => {
+  const payload = event.data?.json() ?? {};
+  event.waitUntil(
+    self.registration.showNotification(payload.title ?? "Course Hub", {
+      body: payload.body ?? "",
+      icon: "/icons/icon-192x192.png",
+      badge: "/icons/icon-192x192-maskable.png",
+      data: { url: payload.url ?? "/" },
+    })
+  );
+});
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  const url = new URL(event.notification.data?.url ?? "/", self.location.origin).href;
+  event.waitUntil(
+    self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((clients) => {
+      const client = clients[0];
+      return client ? client.navigate(url).then(() => client.focus()) : self.clients.openWindow(url);
+    })
+  );
 });

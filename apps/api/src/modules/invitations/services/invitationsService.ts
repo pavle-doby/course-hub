@@ -137,6 +137,7 @@ export const invitationsService = {
     if (!course) throw new NotFoundError({ code: ErrorCodeInvitation.COURSE_NOT_FOUND });
 
     const existing = await enrollmentsRepository.getEnrollment(user.id, course.id);
+    // ponytail: invitation enrollments intentionally skip creator notifications; route through enrollmentsService if that changes.
     if (existing?.withdrawnAt) {
       await enrollmentsRepository.reactivateEnrollment(existing.id);
     } else if (!existing) {
