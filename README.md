@@ -1,24 +1,32 @@
 # Course Hub
 
-A full-stack monorepo for building web and mobile applications. Provides a ready-to-use foundation with a REST API, Next.js web app, Expo mobile app, shared UI components, type-safe database access, and auto-generated API clients.
+A course authoring and learning platform. Creators can build public or private courses, organize topics and lessons, attach videos and documents, invite learners, and manage enrollments. Learners can explore public courses and use an enrolled course reader.
 
 ## Tech stack
 
 | Layer        | Tech                                                        |
 | ------------ | ----------------------------------------------------------- |
 | Web          | Next.js 16 (App Router), React 19, Tailwind 4, shadcn/Radix |
-| Mobile       | Expo 55, React Native 0.83, NativeWind, Expo Router         |
-| API          | Express 5, Node ≥20, Pino, OpenAPI 3.0                      |
+| API          | Express 5, Node >=22, Pino, OpenAPI 3.1                     |
 | DB           | PostgreSQL (Supabase), Drizzle ORM, drizzle-kit             |
-| Auth         | Supabase Auth — cookie (web) / Bearer (native)              |
+| Auth         | Supabase Auth with access and refresh tokens                |
+| Media        | Cloudflare Stream (video) and R2 (documents/thumbnails)     |
 | Shared types | `@repo/contract` (Zod schemas, drizzle-zod derived)         |
-| API client   | Orval → React Query + Axios (auto-generated)                |
+| API client   | Orval -> React Query + Axios (auto-generated)               |
 | i18n         | i18next — Serbian (default), English                        |
-| Build        | Turborepo, pnpm 10 workspaces                               |
+| Build        | Turborepo, pnpm workspaces                                  |
 
 ## Project structure
 
 See [ARCHITECTURE.md](./ARCHITECTURE.md) for the full directory tree, data-flow diagram, and key architectural decisions.
+
+## Product areas
+
+- Course creation, publishing, visibility, thumbnails, topics, and lessons
+- Public course catalog and enrolled-course reader
+- Course enrollment, learner lists, and email or share-link invitations
+- Cloudflare Stream videos and Cloudflare R2 documents at course, topic, or lesson level
+- Profile, settings, and localized web UI
 
 ## How to run
 
@@ -41,12 +49,11 @@ codegraph init
 pnpm dev          # All apps in watch mode
 pnpm web          # Web only (port 3000)
 pnpm api          # API only
-pnpm ios          # Expo iOS
 ```
 
 ## Tunnels
 
-Expose local apps to the internet with `cloudflared` (PWA, webhooks, mobile testing). Run each in its own terminal:
+Expose local apps to the internet with `cloudflared`, for example for webhook testing. Run each in its own terminal:
 
 ```bash
 cloudflared tunnel --url http://localhost:7007   # API
@@ -56,28 +63,11 @@ cloudflared tunnel --url http://localhost:7007   # API
 cloudflared tunnel --url http://localhost:3000   # Web (PWA testing)
 ```
 
-The URL is public and HTTPS; it changes on every restart. Notes:
-
-- **PWA testing**: a PWA needs HTTPS + a stable origin to install. Point the browser at the web tunnel URL; service workers/push work over it.
-- **API**: for webhooks (e.g. Cloudflare Stream), register the API tunnel URL and update the webhook whenever it changes (see below).
+The URL is public and HTTPS, and changes on every restart. Register the API tunnel URL with Cloudflare Stream when testing webhooks locally.
 
 ## Deploy API to Railway
 
 See [README.deploy.md](./README.deploy.md) for the manual Railway settings, environment variables, API URL, CORS, and webhook flow for both services.
-
-### Current tunnels
-
-#### API
-
-```bash
-https://satin-educational-pearl-del.trycloudflare.com
-```
-
-#### Web
-
-```bash
-https://appear-den-elvis-solar.trycloudflare.com
-```
 
 ## Cloudflare Stream webhook (video processing)
 
@@ -97,6 +87,8 @@ Set these in `apps/api/.env.local` (see `.env.example`):
 - `CLOUDFLARE_STREAM_API_TOKEN` — the `<API_TOKEN>` from above
 - `CLOUDFLARE_STREAM_WEBHOOK_SECRET` — the `result.secret` returned by the PUT response
 - `CLOUDFLARE_STREAM_CUSTOMER_CODE` — your Cloudflare Stream customer code
+
+Course thumbnails and attached documents use R2. Configure the `CLOUDFLARE_R2_*` variables in [`apps/api/.env.example`](./apps/api/.env.example) to enable uploads.
 
 > The tunnel URL is regenerated on every `cloudflared tunnel` run, so re-run the PUT with the new URL whenever you restart the tunnel. Re-PUTting also returns a new secret — update `CLOUDFLARE_STREAM_WEBHOOK_SECRET` accordingly.
 

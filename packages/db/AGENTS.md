@@ -90,7 +90,7 @@ pnpm db:push       # applies schema directly to DB (dev only — no migration fi
 pnpm db:migrate    # runs pending migration files (CI / production)
 ```
 
-- Always run `pnpm db:generate` after changing `@repo/db-schema` — never hand-edit files in `drizzle/`.
+- After changing `@repo/db-schema`, ask the user to run `pnpm db:generate` — agents must never run database commands or hand-edit files in `drizzle/`.
 - Commit generated migration SQL files alongside the schema change in the same PR.
 - `db:push` is for local development iteration only; production uses `db:migrate`.
 

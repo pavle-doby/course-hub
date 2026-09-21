@@ -5,8 +5,7 @@
 ## Stack at a Glance
 
 - **Web**: Next.js 16 (App Router), React 19, Tailwind 4, shadcn/Radix — `apps/web/`
-- **Mobile**: Expo 55, React Native 0.83, NativeWind, Expo Router — `apps/native/`
-- **API**: Express 5, Node ≥20, OpenAPI 3.0 — `apps/api/`
+- **API**: Express 5, Node >=22, OpenAPI 3.1 — `apps/api/`
 - **DB**: PostgreSQL (Supabase), Drizzle ORM 0.44 — `packages/db-schema/` → `packages/db/`
 - **Shared types**: `@repo/contract` (Zod + drizzle-zod) — `packages/contract/`
 - **API client**: Orval-generated React Query + Axios — `packages/api-client/src/generated/` (**never edit manually**)
@@ -38,8 +37,8 @@ pnpm build && pnpm lint && pnpm typecheck
 
 ## Non-Obvious Conventions
 
-**Auth endpoints are platform-split; everything else is shared.**  
-`POST /auth/login` sets an HTTP-only cookie (web); `POST /auth/login/native` returns tokens in JSON (mobile). All non-auth endpoints serve both platforms from a single route.
+**The web PWA is the only client.**
+Use the standard `/v1/auth/*` token endpoints for every supported platform.
 
 **OpenAPI is registered in code, not YAML.**  
 Add `registry.registerPath()` calls in `apps/api/src/modules/<feature>/openapi/<feature>Openapi.ts`, then import it side-effect style in `apps/api/src/openapi/spec.ts`.

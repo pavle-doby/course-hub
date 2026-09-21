@@ -1,6 +1,6 @@
 # UI Native Package Conventions (`@repo/ui-native`)
 
-`@repo/ui-native` is the shared React Native component library built on NativeWind, `class-variance-authority`, and `@rn-primitives/slot`. All shared native UI components live here — never define reusable components inline in `apps/native`.
+`@repo/ui-native` is a retained React Native component library built on NativeWind, `class-variance-authority`, and `@rn-primitives/slot`. There is currently no native app; keep reusable native components here if a native consumer is restored.
 
 ## Folder structure
 

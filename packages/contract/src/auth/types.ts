@@ -1,10 +1,6 @@
 import { z } from "zod";
 import { User } from "../users";
-import {
-  AuthLoginQuerySchema,
-  AuthNativeRefreshQuerySchema,
-  AuthSignUpQuerySchema,
-} from "./schemas";
+import { AuthLoginQuerySchema, AuthRefreshQuerySchema, AuthSignUpQuerySchema } from "./schemas";
 
 export type AuthSignUpUserReq = z.infer<typeof AuthSignUpQuerySchema>;
 export type AuthSignUpUserRes = { user: User } & AuthTokens;
@@ -17,7 +13,5 @@ export type AuthTokens = {
   refreshToken: string;
 };
 
-export type AuthNativeSignUpUserRes = AuthSignUpUserRes;
-export type AuthNativeLogInUserRes = AuthLogInUserRes;
-export type AuthNativeRefreshTokenReq = z.infer<typeof AuthNativeRefreshQuerySchema>;
-export type AuthNativeRefreshTokenRes = AuthTokens;
+export type AuthRefreshTokenReq = z.infer<typeof AuthRefreshQuerySchema>;
+export type AuthRefreshTokenRes = AuthTokens;

@@ -34,15 +34,15 @@ export interface User {
   role: UserRole;
 }
 
-export type NativeAuthWithTokensUserRole =
-  (typeof NativeAuthWithTokensUserRole)[keyof typeof NativeAuthWithTokensUserRole];
+export type AuthWithTokensUserRole =
+  (typeof AuthWithTokensUserRole)[keyof typeof AuthWithTokensUserRole];
 
-export const NativeAuthWithTokensUserRole = {
+export const AuthWithTokensUserRole = {
   user: "user",
   admin: "admin",
 } as const;
 
-export type NativeAuthWithTokensUser = {
+export type AuthWithTokensUser = {
   id: string;
   /** @maxLength 255 */
   email: string;
@@ -62,16 +62,16 @@ export type NativeAuthWithTokensUser = {
   avatarUrl: string | null;
   /** @nullable */
   bio: string | null;
-  role: NativeAuthWithTokensUserRole;
+  role: AuthWithTokensUserRole;
 };
 
-export interface NativeAuthWithTokens {
-  user: NativeAuthWithTokensUser;
+export interface AuthWithTokens {
+  user: AuthWithTokensUser;
   accessToken: string;
   refreshToken: string;
 }
 
-export interface NativeAuthTokens {
+export interface AuthTokens {
   accessToken: string;
   refreshToken: string;
 }
@@ -538,108 +538,6 @@ export type AuthRefreshTokenDefault = {
   code: AuthRefreshTokenDefaultCode;
   error?: unknown;
   details?: AuthRefreshTokenDefaultDetails;
-};
-
-export type AuthNativeSignUpBody = {
-  /**
-   * @minLength 1
-   * @maxLength 100
-   */
-  firstName: string;
-  /**
-   * @minLength 1
-   * @maxLength 100
-   */
-  lastName: string;
-  email: string;
-  /** @minLength 6 */
-  password: string;
-};
-
-export type AuthNativeSignUpDefaultCode =
-  (typeof AuthNativeSignUpDefaultCode)[keyof typeof AuthNativeSignUpDefaultCode];
-
-export const AuthNativeSignUpDefaultCode = {
-  forbidden: "forbidden",
-  unauthorized: "unauthorized",
-  not_found: "not_found",
-  server_error: "server_error",
-  not_found_endpoint: "not_found_endpoint",
-  no_token: "no_token",
-  invalid_token: "invalid_token",
-  auth_check_failed: "auth_check_failed",
-  validation_error: "validation_error",
-  invalid_pagination_params: "invalid_pagination_params",
-} as const;
-
-export type AuthNativeSignUpDefaultDetails = { [key: string]: unknown };
-
-export type AuthNativeSignUpDefault = {
-  status: number;
-  code: AuthNativeSignUpDefaultCode;
-  error?: unknown;
-  details?: AuthNativeSignUpDefaultDetails;
-};
-
-export type AuthNativeLoginBody = {
-  email: string;
-  /** @minLength 6 */
-  password: string;
-};
-
-export type AuthNativeLoginDefaultCode =
-  (typeof AuthNativeLoginDefaultCode)[keyof typeof AuthNativeLoginDefaultCode];
-
-export const AuthNativeLoginDefaultCode = {
-  forbidden: "forbidden",
-  unauthorized: "unauthorized",
-  not_found: "not_found",
-  server_error: "server_error",
-  not_found_endpoint: "not_found_endpoint",
-  no_token: "no_token",
-  invalid_token: "invalid_token",
-  auth_check_failed: "auth_check_failed",
-  validation_error: "validation_error",
-  invalid_pagination_params: "invalid_pagination_params",
-} as const;
-
-export type AuthNativeLoginDefaultDetails = { [key: string]: unknown };
-
-export type AuthNativeLoginDefault = {
-  status: number;
-  code: AuthNativeLoginDefaultCode;
-  error?: unknown;
-  details?: AuthNativeLoginDefaultDetails;
-};
-
-export type AuthNativeRefreshTokenBody = {
-  /** @minLength 1 */
-  refreshToken: string;
-};
-
-export type AuthNativeRefreshTokenDefaultCode =
-  (typeof AuthNativeRefreshTokenDefaultCode)[keyof typeof AuthNativeRefreshTokenDefaultCode];
-
-export const AuthNativeRefreshTokenDefaultCode = {
-  forbidden: "forbidden",
-  unauthorized: "unauthorized",
-  not_found: "not_found",
-  server_error: "server_error",
-  not_found_endpoint: "not_found_endpoint",
-  no_token: "no_token",
-  invalid_token: "invalid_token",
-  auth_check_failed: "auth_check_failed",
-  validation_error: "validation_error",
-  invalid_pagination_params: "invalid_pagination_params",
-} as const;
-
-export type AuthNativeRefreshTokenDefaultDetails = { [key: string]: unknown };
-
-export type AuthNativeRefreshTokenDefault = {
-  status: number;
-  code: AuthNativeRefreshTokenDefaultCode;
-  error?: unknown;
-  details?: AuthNativeRefreshTokenDefaultDetails;
 };
 
 export type GetUserSelfDefaultCode =

@@ -1,6 +1,6 @@
 # API Client Package Conventions
 
-`@repo/api-client` exposes the auto-generated React Query hooks (from Orval) plus a hand-written Axios instance that handles auth for both web and native.
+`@repo/api-client` exposes the auto-generated React Query hooks (from Orval) plus a hand-written Axios instance that handles token authentication for the web PWA.
 
 ## Generated vs hand-written — never touch generated files
 
@@ -26,11 +26,9 @@ All generated hooks call `customInstance` (the Orval mutator), which delegates t
 import { apiClient } from "@repo/api-client";
 ```
 
-## Token flow — web vs native
+## Token providers
 
-Web uses HTTP-only cookies (`withCredentials: true`). No token management needed — cookies are attached automatically.
-
-Native must call `configureTokenProviders` at app startup **before** any API request is made:
+The web app configures token providers through `apps/web/providers/auth-token-provider.tsx`. Other token-authenticated clients must call `configureTokenProviders` at app startup before making API requests:
 
 ```ts
 import { configureTokenProviders } from "@repo/api-client";
@@ -40,10 +38,13 @@ configureTokenProviders({
   onRefresh: async () => {
     // call your refresh logic, return { accessToken, refreshToken } or null
   },
+  onUnauthorized: () => {
+    // clear local auth state and redirect to sign-in
+  },
 });
 ```
 
-The `request` interceptor attaches `Authorization: Bearer <token>` only when a token provider is configured. The `response` interceptor retries on 401 — for native it calls `onRefresh`, for web it hits `/v1/auth/refresh` (cookie-based).
+The request interceptor attaches `Authorization: Bearer <token>` when a token provider is configured. On a 401, the response interceptor calls `onRefresh` once and then invokes `onUnauthorized` if refreshing fails.
 
 ## Adding new exports
 
@@ -57,7 +58,7 @@ Never re-export anything from `src/generated/` directly in consuming apps — al
 
 ## Env vars
 
-`src/env.ts` reads `process.env.NEXT_PUBLIC_API_URL` (web) falling back to `process.env.EXPO_PUBLIC_API_URL` (native). Only these public-prefixed names are inlined into client bundles — a bare `API_URL` is `undefined` in the browser. Declare any new env var there and add it to the app's `.env.example`.
+`src/env.ts` reads `process.env.NEXT_PUBLIC_API_URL`. Only `NEXT_PUBLIC_*` variables are inlined into the browser bundle — a bare `API_URL` is `undefined` in the browser. Declare any new env var there and add it to the web app's `.env.example`.
 
 ## Provider setup
 

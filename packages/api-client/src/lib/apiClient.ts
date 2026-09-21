@@ -5,7 +5,7 @@ export const apiClient = Axios.create({
   baseURL: env.API_URL,
 });
 
-// Token providers are configured by each platform at app startup.
+// Token providers are configured by the app at startup.
 let getTokenFn: (() => Promise<string | null>) | null = null;
 let refreshFn: (() => Promise<{ accessToken: string; refreshToken: string } | null>) | null = null;
 let unauthorizedFn: (() => void) | null = null;

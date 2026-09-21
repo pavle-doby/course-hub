@@ -91,5 +91,5 @@ When adding a new table:
 2. Add `export * from './<feature>';` to `src/schemas/index.ts`.
 3. Add `export type <Feature>Entity = InferSelectModel<typeof <feature>>;` to `src/types.ts`.
 4. If new enums are needed, add them to `src/schemas/enums.ts` and ensure they are exported via `src/schemas/index.ts`.
-5. Run `pnpm db:generate && pnpm db:push` to create and apply the migration.
+5. Ask the user to run `pnpm db:generate` to create the migration, then apply it with their chosen database workflow.
 6. Update `@repo/contract` to derive Zod schemas from the new table.

@@ -47,7 +47,9 @@ Services own business logic and throw typed errors. They call repositories, neve
 export const usersService = {
   createUser: async (user: CreateUserReq): Promise<CreateUserRes> => {
     const existing = await usersRepository.getUserByEmail(user.email);
-    if (existing) throw new ConflictError({ code: ErrorCodeUser.ALREADY_EXISTS });
+    if (existing) {
+      throw new ConflictError({ code: ErrorCodeUser.ALREADY_EXISTS });
+    }
     const [result] = await usersRepository.createUser(user);
     return result;
   },
@@ -60,7 +62,7 @@ Repositories contain only Drizzle queries. Return raw DB rows; let the service s
 
 ```ts
 export const usersRepository = {
-  createUser: async (data: CreateUserReq) => {
+  createUser: async (data: CreateUserReq): Promise<UserEntity[]> => {
     return await db.insert(schema.users).values(data).returning({ ... });
   },
 };
@@ -108,7 +110,7 @@ router.get(
 
 - Protected routes: apply `handleAuth` from `apps/api/src/middleware/auth.ts`
 - On success: `res.locals.user` contains the Supabase user object
-- Web uses HTTP-only cookies; native uses `Authorization: Bearer <token>`
+- Token-authenticated clients use `Authorization: Bearer <token>`
 
 ## Public and private routes
 
@@ -157,7 +159,3 @@ registry.registerPath({
 ```
 
 Import the file as a side-effect in `apps/api/src/openapi/spec.ts`, then run `pnpm api-client:generate`.
-
-## Shared vs. native endpoints
-
-Web and native clients share **all** endpoints except auth. Auth is the only exception: it has `/native` variants (e.g. `POST /v1/auth/login/native`) because token delivery differs (cookie vs. JSON body). Do **not** create `/native` variants for non-auth features.

@@ -17,8 +17,8 @@ import {
 
 export const UserSchema = registry.register("User", UserSchemaBase);
 
-export const NativeAuthWithTokensSchema = registry.register(
-  "NativeAuthWithTokens",
+export const AuthWithTokensSchema = registry.register(
+  "AuthWithTokens",
   z.object({
     user: UserSchemaBase,
     accessToken: z.string(),
@@ -26,8 +26,8 @@ export const NativeAuthWithTokensSchema = registry.register(
   })
 );
 
-export const NativeAuthTokensSchema = registry.register(
-  "NativeAuthTokens",
+export const AuthTokensSchema = registry.register(
+  "AuthTokens",
   z.object({
     accessToken: z.string(),
     refreshToken: z.string(),

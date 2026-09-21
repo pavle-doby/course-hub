@@ -1,6 +1,6 @@
 # Contract Package Conventions
 
-`@repo/contract` is the single source of truth for all DTOs, validation schemas, and error types shared across `api`, `web`, and `native`. Every schema and type must live here — never define them inline in an app.
+`@repo/contract` is the single source of truth for all DTOs, validation schemas, and error types shared by the API and web app. Every schema and type must live here — never define them inline in an app.
 
 ## Feature folder structure
 
@@ -119,7 +119,7 @@ Do **not** put feature-specific logic in `shared/`.
 
 ## Date/datetime fields from the client — always use `isoDatetime`
 
-Any schema field that accepts a date/datetime value from the client (web/native) must use the
+Any schema field that accepts a date/datetime value from a client must use the
 `isoDatetime()` helper from `shared/schemas.ts`, not `z.date()` (drizzle-zod's default inference
 for `timestamp` columns) or `z.coerce.date()`. Clients send dates as JSON strings, and
 `z.date()` rejects a string with a `validation_error`/`invalid_type` issue.

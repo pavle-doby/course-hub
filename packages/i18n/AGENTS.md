@@ -2,15 +2,14 @@
 
 `@repo/i18n` is the single source of truth for all translations. It uses i18next with a single `common` namespace. Serbian (`sr`) is the **default** locale; English (`en`) is the fallback.
 
-## Entry points — use the right one per platform
+## Entry points — use the right one per consumer
 
-| Import path            | Platform                        | Provides                                                                |
-| ---------------------- | ------------------------------- | ----------------------------------------------------------------------- |
-| `@repo/i18n`           | Web (Next.js client)            | `useT`, `Trans`, `useChangeLanguage`, locales/defaultLocale             |
-| `@repo/i18n/client`    | Web — explicit client re-export | Same as above                                                           |
-| `@repo/i18n/server`    | Web — Next.js server components | `getT`, `initServerI18next`, `generateI18nStaticParams`, `createProxy`  |
-| `@repo/i18n/native`    | React Native (Expo)             | `useT`, `Trans`, i18n instance (auto-initialised with LanguageDetector) |
-| `@repo/i18n/constants` | Any                             | `LOCALES`, `DEFAULT_LOCALE`, `FALLBACK_LOCALE`, `DEFAULT_NS`            |
+| Import path            | Platform                        | Provides                                                               |
+| ---------------------- | ------------------------------- | ---------------------------------------------------------------------- |
+| `@repo/i18n`           | Web (Next.js client)            | `useT`, `Trans`, `useChangeLanguage`, locales/defaultLocale            |
+| `@repo/i18n/client`    | Web — explicit client re-export | Same as above                                                          |
+| `@repo/i18n/server`    | Web — Next.js server components | `getT`, `initServerI18next`, `generateI18nStaticParams`, `createProxy` |
+| `@repo/i18n/constants` | Any                             | `LOCALES`, `DEFAULT_LOCALE`, `FALLBACK_LOCALE`, `DEFAULT_NS`           |
 
 Never import from internal paths like `@repo/i18n/src/...`.
 
@@ -64,7 +63,7 @@ export type Locale = (typeof LOCALES)[number];
 ## Using translations in components
 
 ```tsx
-// Web or native client component
+// Client component
 import { useT } from "@repo/i18n";
 
 function LoginForm() {

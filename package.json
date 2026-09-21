@@ -5,7 +5,6 @@
   "scripts": {
     "api": "cd apps/api && pnpm dev",
     "web": "cd apps/web && pnpm dev",
-    "ios": "cd apps/native && pnpm ios:15",
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
@@ -18,7 +17,7 @@
     "db:add:course-content": "pnpm --filter @repo/scripts db:add:course-content",
     "db:seed:course-content": "pnpm --filter @repo/scripts db:seed:course-content",
     "db:clean:course-content": "pnpm --filter @repo/scripts db:clean:course-content",
-    "api-client:generate": "turbo run generate:openapi generate:api",
+    "api-client:generate": "pnpm --filter api generate:openapi && pnpm --filter @repo/api-client generate:api",
     "prepare": "husky"
   },
   "devDependencies": {

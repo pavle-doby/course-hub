@@ -15,18 +15,12 @@ import type {
 import type {
   AuthLoginBody,
   AuthLoginDefault,
-  AuthNativeLoginBody,
-  AuthNativeLoginDefault,
-  AuthNativeRefreshTokenBody,
-  AuthNativeRefreshTokenDefault,
-  AuthNativeSignUpBody,
-  AuthNativeSignUpDefault,
   AuthRefreshTokenBody,
   AuthRefreshTokenDefault,
   AuthSignUpBody,
   AuthSignUpDefault,
-  NativeAuthTokens,
-  NativeAuthWithTokens,
+  AuthTokens,
+  AuthWithTokens,
 } from "../courseHubAPI.schemas";
 
 import { customInstance } from "../../lib/apiClient";
@@ -42,7 +36,7 @@ export const authSignUp = (
   options?: SecondParameter<typeof customInstance>,
   signal?: AbortSignal
 ) => {
-  return customInstance<NativeAuthWithTokens>(
+  return customInstance<AuthWithTokens>(
     {
       url: `/v1/auth/signup`,
       method: "POST",
@@ -119,7 +113,7 @@ export const authLogin = (
   options?: SecondParameter<typeof customInstance>,
   signal?: AbortSignal
 ) => {
-  return customInstance<NativeAuthWithTokens>(
+  return customInstance<AuthWithTokens>(
     {
       url: `/v1/auth/login`,
       method: "POST",
@@ -234,7 +228,7 @@ export const authRefreshToken = (
   options?: SecondParameter<typeof customInstance>,
   signal?: AbortSignal
 ) => {
-  return customInstance<NativeAuthTokens>(
+  return customInstance<AuthTokens>(
     {
       url: `/v1/auth/refresh`,
       method: "POST",
@@ -307,297 +301,4 @@ export const useAuthRefreshToken = <TError = AuthRefreshTokenDefault, TContext =
   TContext
 > => {
   return useMutation(getAuthRefreshTokenMutationOptions(options), queryClient);
-};
-export const authNativeSignUp = (
-  authNativeSignUpBody: AuthNativeSignUpBody,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
-) => {
-  return customInstance<NativeAuthWithTokens>(
-    {
-      url: `/v1/auth/signup/native`,
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      data: authNativeSignUpBody,
-      signal,
-    },
-    options
-  );
-};
-
-export const getAuthNativeSignUpMutationOptions = <
-  TError = AuthNativeSignUpDefault,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof authNativeSignUp>>,
-    TError,
-    AuthNativeSignUpMutationVariables,
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof authNativeSignUp>>,
-  TError,
-  AuthNativeSignUpMutationVariables,
-  TContext
-> => {
-  const mutationKey = ["authNativeSignUp"];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof authNativeSignUp>>,
-    AuthNativeSignUpMutationVariables
-  > = (props) => {
-    const { data } = props ?? {};
-
-    return authNativeSignUp(data, requestOptions);
-  };
-
-  return { mutationFn, ...mutationOptions };
-};
-
-export type AuthNativeSignUpMutationResult = NonNullable<
-  Awaited<ReturnType<typeof authNativeSignUp>>
->;
-export type AuthNativeSignUpMutationBody = AuthNativeSignUpBody;
-export type AuthNativeSignUpMutationError = AuthNativeSignUpDefault;
-export type AuthNativeSignUpMutationVariables = { data: AuthNativeSignUpBody };
-
-export const useAuthNativeSignUp = <TError = AuthNativeSignUpDefault, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof authNativeSignUp>>,
-      TError,
-      AuthNativeSignUpMutationVariables,
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof authNativeSignUp>>,
-  TError,
-  AuthNativeSignUpMutationVariables,
-  TContext
-> => {
-  return useMutation(getAuthNativeSignUpMutationOptions(options), queryClient);
-};
-export const authNativeLogin = (
-  authNativeLoginBody: AuthNativeLoginBody,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
-) => {
-  return customInstance<NativeAuthWithTokens>(
-    {
-      url: `/v1/auth/login/native`,
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      data: authNativeLoginBody,
-      signal,
-    },
-    options
-  );
-};
-
-export const getAuthNativeLoginMutationOptions = <
-  TError = AuthNativeLoginDefault,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof authNativeLogin>>,
-    TError,
-    AuthNativeLoginMutationVariables,
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof authNativeLogin>>,
-  TError,
-  AuthNativeLoginMutationVariables,
-  TContext
-> => {
-  const mutationKey = ["authNativeLogin"];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof authNativeLogin>>,
-    AuthNativeLoginMutationVariables
-  > = (props) => {
-    const { data } = props ?? {};
-
-    return authNativeLogin(data, requestOptions);
-  };
-
-  return { mutationFn, ...mutationOptions };
-};
-
-export type AuthNativeLoginMutationResult = NonNullable<
-  Awaited<ReturnType<typeof authNativeLogin>>
->;
-export type AuthNativeLoginMutationBody = AuthNativeLoginBody;
-export type AuthNativeLoginMutationError = AuthNativeLoginDefault;
-export type AuthNativeLoginMutationVariables = { data: AuthNativeLoginBody };
-
-export const useAuthNativeLogin = <TError = AuthNativeLoginDefault, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof authNativeLogin>>,
-      TError,
-      AuthNativeLoginMutationVariables,
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof authNativeLogin>>,
-  TError,
-  AuthNativeLoginMutationVariables,
-  TContext
-> => {
-  return useMutation(getAuthNativeLoginMutationOptions(options), queryClient);
-};
-export const authNativeSignOut = (
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
-) => {
-  return customInstance<void>({ url: `/v1/auth/signout/native`, method: "POST", signal }, options);
-};
-
-export const getAuthNativeSignOutMutationOptions = <
-  TError = unknown,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof authNativeSignOut>>,
-    TError,
-    void,
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<Awaited<ReturnType<typeof authNativeSignOut>>, TError, void, TContext> => {
-  const mutationKey = ["authNativeSignOut"];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
-
-  const mutationFn: MutationFunction<Awaited<ReturnType<typeof authNativeSignOut>>, void> = () => {
-    return authNativeSignOut(requestOptions);
-  };
-
-  return { mutationFn, ...mutationOptions };
-};
-
-export type AuthNativeSignOutMutationResult = NonNullable<
-  Awaited<ReturnType<typeof authNativeSignOut>>
->;
-
-export type AuthNativeSignOutMutationError = unknown;
-
-export const useAuthNativeSignOut = <TError = unknown, TContext = unknown>(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof authNativeSignOut>>,
-      TError,
-      void,
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<Awaited<ReturnType<typeof authNativeSignOut>>, TError, void, TContext> => {
-  return useMutation(getAuthNativeSignOutMutationOptions(options), queryClient);
-};
-export const authNativeRefreshToken = (
-  authNativeRefreshTokenBody: AuthNativeRefreshTokenBody,
-  options?: SecondParameter<typeof customInstance>,
-  signal?: AbortSignal
-) => {
-  return customInstance<NativeAuthTokens>(
-    {
-      url: `/v1/auth/refresh/native`,
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      data: authNativeRefreshTokenBody,
-      signal,
-    },
-    options
-  );
-};
-
-export const getAuthNativeRefreshTokenMutationOptions = <
-  TError = AuthNativeRefreshTokenDefault,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof authNativeRefreshToken>>,
-    TError,
-    AuthNativeRefreshTokenMutationVariables,
-    TContext
-  >;
-  request?: SecondParameter<typeof customInstance>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof authNativeRefreshToken>>,
-  TError,
-  AuthNativeRefreshTokenMutationVariables,
-  TContext
-> => {
-  const mutationKey = ["authNativeRefreshToken"];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof authNativeRefreshToken>>,
-    AuthNativeRefreshTokenMutationVariables
-  > = (props) => {
-    const { data } = props ?? {};
-
-    return authNativeRefreshToken(data, requestOptions);
-  };
-
-  return { mutationFn, ...mutationOptions };
-};
-
-export type AuthNativeRefreshTokenMutationResult = NonNullable<
-  Awaited<ReturnType<typeof authNativeRefreshToken>>
->;
-export type AuthNativeRefreshTokenMutationBody = AuthNativeRefreshTokenBody;
-export type AuthNativeRefreshTokenMutationError = AuthNativeRefreshTokenDefault;
-export type AuthNativeRefreshTokenMutationVariables = { data: AuthNativeRefreshTokenBody };
-
-export const useAuthNativeRefreshToken = <
-  TError = AuthNativeRefreshTokenDefault,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof authNativeRefreshToken>>,
-      TError,
-      AuthNativeRefreshTokenMutationVariables,
-      TContext
-    >;
-    request?: SecondParameter<typeof customInstance>;
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof authNativeRefreshToken>>,
-  TError,
-  AuthNativeRefreshTokenMutationVariables,
-  TContext
-> => {
-  return useMutation(getAuthNativeRefreshTokenMutationOptions(options), queryClient);
 };

@@ -200,5 +200,5 @@ Never use relative paths (`../../`) to cross package boundaries.
 
 When running `npx shadcn add <component>` from `apps/web`:
 
-- **Primitive components** are installed into `packages/ui/src/components/` (configured via `aliases.ui`).
+- **Primitive components** are installed into `packages/ui-web/src/components/` (configured via `aliases.ui`).
 - **Composed/block components** (e.g., `login-form`) are installed into `apps/web/components/` (configured via `aliases.components`).
