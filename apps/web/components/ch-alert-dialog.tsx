@@ -13,7 +13,7 @@ import {
 type ChAlertDialogProps = ComponentProps<typeof AlertDialog> & {
   title: ReactNode;
   description?: ReactNode;
-  cancelLabel: ReactNode;
+  cancelLabel?: ReactNode;
   actionLabel: ReactNode;
   contentProps?: Omit<ComponentProps<typeof AlertDialogContent>, "children">;
   actionProps?: Omit<ComponentProps<typeof AlertDialogAction>, "children">;
@@ -38,7 +38,7 @@ export function ChAlertDialog({
           {description && <AlertDialogDescription>{description}</AlertDialogDescription>}
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>{cancelLabel}</AlertDialogCancel>
+          {cancelLabel && <AlertDialogCancel>{cancelLabel}</AlertDialogCancel>}
           <AlertDialogAction {...actionProps}>{actionLabel}</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

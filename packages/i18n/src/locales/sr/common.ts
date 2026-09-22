@@ -194,7 +194,14 @@ export const common = {
     },
   },
   notifications: {
+    title: "Omoguciti obavestenja?",
+    cancel: "Ne sada",
+    enable: "Omoguci",
     creatorPrompt: "Omoguciti obavestenja kada se polaznici upisu na ovaj kurs?",
     learnerPrompt: "Omoguciti obavestenja kada ovaj kurs ili njegov autor imaju nov sadrzaj?",
+    osReminderTitle: "Sve je spremno!",
+    osReminderDescription:
+      "Proverite da su obaveštenja omogućena na {{currentOS}} za {{currentBrowserName}}, kako bi se prikazivala kada ih dobijete.",
+    osReminderConfirm: "Razumem",
   },
 };

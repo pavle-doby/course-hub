@@ -21,6 +21,7 @@ import { useErrorHandlingQuery } from "@repo/shared";
 import { useAdjacentSelection, useCourseTree, type Selection } from "@/hooks/use-course-tree";
 import { getAccessToken } from "@/utils/token-storage";
 import { notificationsService } from "@/services/notifications-service";
+import { NotificationPrompt } from "@/components/notification-prompt";
 import { LearnBottomNav } from "./components/learn-bottom-nav";
 import { LearnCourseDetailSkeleton } from "./components/learn-course-detail-skeleton";
 import { LearnHeader } from "./components/learn-header";
@@ -32,6 +33,7 @@ export default function LearnCourseDetailPage() {
   const router = useRouter();
   const { t } = useT();
   const [selection, setSelection] = useState<Selection>({ type: "course" });
+  const [notificationCourseId, setNotificationCourseId] = useState<string>();
 
   const hasAccessToken = Boolean(getAccessToken());
   const { data: currentUser, isFetching: isUserPending } = useGetUserSelf({
@@ -132,11 +134,7 @@ export default function LearnCourseDetailPage() {
       await enroll({ data: { publicId } });
       await refetchEnrollmentStatus();
       if (course) {
-        await notificationsService.promptLearnerNotifications({
-          courseId: course.id,
-          prompt: t("notifications.learnerPrompt"),
-          subscribeNotifications,
-        });
+        setNotificationCourseId(course.id);
       }
     } catch (error) {
       handleErrorAction(error as Error);
@@ -167,6 +165,44 @@ export default function LearnCourseDetailPage() {
     setSelection({ type: "lesson", id: lessonId });
   }
 
+  function handleNotificationPromptOpenChange(open: boolean) {
+    if (!open) {
+      setNotificationCourseId(undefined);
+    }
+  }
+
+  function handleEnableNotifications() {
+    if (!notificationCourseId) {
+      return;
+    }
+
+    void notificationsService
+      .enableLearnerNotifications({ courseId: notificationCourseId, subscribeNotifications })
+      .catch((error: unknown) => {
+        console.error(error);
+        if (!(error instanceof Error)) {
+          return handleErrorAction(error);
+        }
+        toast.error(error.message);
+      });
+  }
+
+  function handleSelectCourse() {
+    setSelection({ type: "course" });
+  }
+
+  function handlePrevious() {
+    if (previousItem) {
+      setSelection(previousItem);
+    }
+  }
+
+  function handleNext() {
+    if (nextItem) {
+      setSelection(nextItem);
+    }
+  }
+
   if (isCoursePending) {
     return <LearnCourseDetailSkeleton />;
   }
@@ -181,6 +217,12 @@ export default function LearnCourseDetailPage() {
 
   return (
     <SidebarProvider>
+      <NotificationPrompt
+        open={!!notificationCourseId}
+        onOpenChange={handleNotificationPromptOpenChange}
+        onEnable={handleEnableNotifications}
+        description={t("notifications.learnerPrompt")}
+      />
       <div className="flex min-h-svh flex-1 flex-row">
         <LearnTreeNav
           courseName={course.name}
@@ -188,7 +230,7 @@ export default function LearnCourseDetailPage() {
           selection={selection}
           contentLocked={!isEnrolled}
           isLoadingTree={isLoadingTree}
-          onSelectCourse={() => setSelection({ type: "course" })}
+          onSelectCourse={handleSelectCourse}
           onSelectTopic={handleSelectTopic}
           onSelectLesson={handleSelectLesson}
         />
@@ -213,15 +255,15 @@ export default function LearnCourseDetailPage() {
             isEnrolled={isEnrolled}
             hasPrevious={isEnrolled && !!previousItem}
             hasNext={isEnrolled && !!nextItem}
-            onPrevious={() => previousItem && setSelection(previousItem)}
-            onNext={() => nextItem && setSelection(nextItem)}
+            onPrevious={handlePrevious}
+            onNext={handleNext}
           />
 
           <LearnBottomNav
             hasPrevious={isEnrolled && !!previousItem}
             hasNext={isEnrolled && !!nextItem}
-            onPrevious={() => previousItem && setSelection(previousItem)}
-            onNext={() => nextItem && setSelection(nextItem)}
+            onPrevious={handlePrevious}
+            onNext={handleNext}
           />
         </div>
       </div>

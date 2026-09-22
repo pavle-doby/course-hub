@@ -197,7 +197,14 @@ export const common = {
     },
   },
   notifications: {
+    title: "Enable notifications?",
+    cancel: "Not now",
+    enable: "Enable",
     creatorPrompt: "Enable notifications when learners enroll in this course?",
     learnerPrompt: "Enable notifications when this course or its creator has new content?",
+    osReminderTitle: "You're all set!",
+    osReminderDescription:
+      "Make sure notifications are enabled on {{currentOS}} for {{currentBrowserName}}, so they show up, when you get them.",
+    osReminderConfirm: "Got it",
   },
 };

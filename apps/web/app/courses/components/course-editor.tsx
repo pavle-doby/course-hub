@@ -29,6 +29,7 @@ import { toast } from "@repo/ui-web/components/sonner";
 import { SidebarProvider } from "@repo/ui-web/components/sidebar";
 import { isTypingTarget } from "@/utils/is-typing-target";
 import { notificationsService } from "@/services/notifications-service";
+import { NotificationPrompt } from "@/components/notification-prompt";
 import { CourseEditorHeader } from "./course-editor-header";
 import { CourseBottomNav } from "./course-bottom-nav";
 import { CourseActions } from "./course-actions";
@@ -72,6 +73,7 @@ export function CourseEditor({ mode, publicId }: CourseEditorProps) {
   const [focusMode, setFocusMode] = useState(false);
   const [leftOpen, setLeftOpen] = useState(true);
   const [rightOpen, setRightOpen] = useState(true);
+  const [notificationCourseId, setNotificationCourseId] = useState<string>();
   const [activeTab, setActiveTab] = useState<"edit" | "invite">(
     searchParams.get("tab") === "invite" ? "invite" : "edit"
   );
@@ -441,11 +443,9 @@ export function CourseEditor({ mode, publicId }: CourseEditorProps) {
           visibility: updated.visibility,
         });
         if (nextStatus === "published") {
-          await notificationsService.promptCreatorNotifications({
-            courseId: updated.id,
-            prompt: t("notifications.creatorPrompt"),
-            subscribeNotifications,
-          });
+          if (!notificationsService.isCreatorPromptDismissed(updated.id)) {
+            setNotificationCourseId(updated.id);
+          }
         }
       }
       toast.success(
@@ -456,6 +456,36 @@ export function CourseEditor({ mode, publicId }: CourseEditorProps) {
     } catch (error) {
       handleErrorAction(error as Error);
     }
+  }
+
+  function handleNotificationOpenChange(open: boolean) {
+    if (!open) {
+      setNotificationCourseId(undefined);
+    }
+  }
+
+  function handleNotificationDismiss() {
+    if (notificationCourseId) {
+      notificationsService.dismissCreatorPrompt(notificationCourseId);
+    }
+  }
+
+  function handleNotificationEnable() {
+    if (!notificationCourseId) {
+      return;
+    }
+    void notificationsService
+      .enableCreatorNotifications({
+        courseId: notificationCourseId,
+        subscribeNotifications,
+      })
+      .catch((error: unknown) => {
+        console.error(error);
+        if (!(error instanceof Error)) {
+          return handleErrorAction(error);
+        }
+        toast.error(error.message);
+      });
   }
 
   async function handleArchiveCourse() {
@@ -504,6 +534,13 @@ export function CourseEditor({ mode, publicId }: CourseEditorProps) {
 
   return (
     <SidebarProvider open={leftOpen} onOpenChange={setLeftOpen}>
+      <NotificationPrompt
+        open={!!notificationCourseId}
+        onOpenChange={handleNotificationOpenChange}
+        onDismiss={handleNotificationDismiss}
+        onEnable={handleNotificationEnable}
+        description={t("notifications.creatorPrompt")}
+      />
       <div className="flex min-h-svh flex-1 flex-row">
         <CourseTreeNav
           courseName={displayedCourse.name || t("courses.editor.untitledCourse")}

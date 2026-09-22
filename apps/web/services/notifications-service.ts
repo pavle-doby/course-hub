@@ -4,6 +4,8 @@ import type {
 } from "@repo/api-client";
 import { env } from "@repo/api-client/env";
 
+const CREATOR_DISMISSED_KEY = "notifications:creator";
+
 type PushSubscriptionData = {
   endpoint: string;
   keys: { p256dh: string; auth: string };
@@ -20,23 +22,26 @@ function urlBase64ToUint8Array(value: string): Uint8Array<ArrayBuffer> {
   return Uint8Array.from(atob(base64), (character) => character.charCodeAt(0));
 }
 
-async function ensurePushSubscription(): Promise<PushSubscriptionData | null> {
+async function ensurePushSubscription(): Promise<PushSubscriptionData> {
   if (!env.VAPID_PUBLIC_KEY || !("serviceWorker" in navigator) || !("PushManager" in window)) {
-    return null;
+    throw new Error("Push notifications are not supported in this browser");
   }
   if ((await Notification.requestPermission()) !== "granted") {
-    return null;
+    throw new Error("Notification permission was not granted");
   }
   const registration = await navigator.serviceWorker.register("/sw.js", { scope: "/" });
-  const subscription =
-    (await registration.pushManager.getSubscription()) ??
-    (await registration.pushManager.subscribe({
-      userVisibleOnly: true,
-      applicationServerKey: urlBase64ToUint8Array(env.VAPID_PUBLIC_KEY),
-    }));
+  await navigator.serviceWorker.ready;
+  const existingSubscription = await registration.pushManager.getSubscription();
+  if (existingSubscription) {
+    await existingSubscription.unsubscribe();
+  }
+  const subscription = await registration.pushManager.subscribe({
+    userVisibleOnly: true,
+    applicationServerKey: urlBase64ToUint8Array(env.VAPID_PUBLIC_KEY),
+  });
   const json = subscription.toJSON();
   if (!json.endpoint || !json.keys?.p256dh || !json.keys.auth) {
-    return null;
+    throw new Error("Could not read the push subscription");
   }
   return { endpoint: json.endpoint, keys: { p256dh: json.keys.p256dh, auth: json.keys.auth } };
 }
@@ -51,33 +56,21 @@ async function send({
   subscribeNotifications: SubscribeNotifications;
 }): Promise<void> {
   const subscription = await ensurePushSubscription();
-  if (!subscription) {
-    return;
-  }
+
   await Promise.all(
     categories.map((category) =>
       subscribeNotifications({ data: { courseId, category, subscription } })
     )
-  ).catch(() => undefined);
+  );
 }
 
-async function promptCreatorNotifications({
+async function enableCreatorNotifications({
   courseId,
-  prompt,
   subscribeNotifications,
 }: {
   courseId: string;
-  prompt: string;
   subscribeNotifications: SubscribeNotifications;
 }): Promise<void> {
-  const dismissed = `notifications:creator:${courseId}`;
-  if (localStorage.getItem(dismissed)) {
-    return;
-  }
-  if (!window.confirm(prompt)) {
-    localStorage.setItem(dismissed, "1");
-    return;
-  }
   await send({
     courseId,
     categories: ["course_enrolled", "private_course_attempt"],
@@ -85,18 +78,13 @@ async function promptCreatorNotifications({
   });
 }
 
-async function promptLearnerNotifications({
+async function enableLearnerNotifications({
   courseId,
-  prompt,
   subscribeNotifications,
 }: {
   courseId: string;
-  prompt: string;
   subscribeNotifications: SubscribeNotifications;
 }): Promise<void> {
-  if (!window.confirm(prompt)) {
-    return;
-  }
   await send({
     courseId,
     categories: ["course_updated", "creator_new_course"],
@@ -104,8 +92,18 @@ async function promptLearnerNotifications({
   });
 }
 
+function dismissCreatorPrompt(courseId: string): void {
+  localStorage.setItem(`${CREATOR_DISMISSED_KEY}:${courseId}`, "1");
+}
+
+function isCreatorPromptDismissed(courseId: string): boolean {
+  return localStorage.getItem(`${CREATOR_DISMISSED_KEY}:${courseId}`) !== null;
+}
+
 export const notificationsService = {
   send,
-  promptCreatorNotifications,
-  promptLearnerNotifications,
+  enableCreatorNotifications,
+  enableLearnerNotifications,
+  isCreatorPromptDismissed,
+  dismissCreatorPrompt,
 };

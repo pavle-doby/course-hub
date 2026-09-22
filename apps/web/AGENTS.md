@@ -30,6 +30,32 @@ import { LoginForm } from "@/components/login-form";
 function Button({ children }: { children: React.ReactNode }) { ... }
 ```
 
+## Handler functions keep templates clean
+
+Define event handlers as named `handleX` functions in the component body, then pass them by reference in the template. Never inline logic in JSX props — every handler used by a template must be a `handleX` function.
+
+```tsx
+// ✅ correct
+function handleOpenChange(open: boolean) {
+  if (!open) {
+    handleClose();
+  }
+}
+
+function handleClose() {
+  setOpen(false);
+}
+
+return <Dialog open={open} onOpenChange={handleOpenChange} />;
+
+// ❌ wrong — logic inline in the template
+return <Dialog open={open} onOpenChange={(open) => !open && setOpen(false)} />;
+```
+
+- Name them `handle` + the event/prop they serve (`handleOpenChange`, `handleDismiss`, `handleEnable`).
+- Keep each handler small and single-purpose; one handler may call another.
+- The template stays to props and names only — no closures, no `&&`, no `void` in JSX.
+
 ## Server vs Client components
 
 App Router defaults to **server components** — only add `"use client"` when the component needs browser APIs, event handlers, or React hooks.

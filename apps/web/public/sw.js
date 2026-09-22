@@ -1,4 +1,4 @@
-const CACHE_NAME = "course-hub-static-v1";
+const CACHE_NAME = "course-hub-static-v2";
 const STATIC_ASSET_PATHS = [
   "/offline.html",
   "/icons/icon-192x192.png",
@@ -34,7 +34,7 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  if (url.pathname.startsWith("/_next/static/") || url.pathname.startsWith("/icons/")) {
+  if (url.pathname.startsWith("/icons/")) {
     event.respondWith(
       caches.match(request).then((cachedResponse) => {
         if (cachedResponse) {
