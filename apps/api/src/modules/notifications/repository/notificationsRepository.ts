@@ -1,4 +1,4 @@
-import { and, eq, isNull } from "drizzle-orm";
+import { and, eq, isNull, sql } from "drizzle-orm";
 import { db, schema } from "@repo/db";
 import type { SubscribeNotificationsReq, UnsubscribeNotificationsReq } from "@repo/contract";
 
@@ -73,17 +73,22 @@ export const notificationsRepository = {
   getCourseRecipients: async (
     courseId: string,
     category: SubscribeNotificationsReq["category"]
-  ): Promise<{ endpoint: string; p256dh: string; auth: string }[]> => {
+  ): Promise<{ endpoint: string; p256dh: string; auth: string; language: string }[]> => {
     return await db
       .select({
         endpoint: schema.pushSubscriptions.endpoint,
         p256dh: schema.pushSubscriptions.p256dh,
         auth: schema.pushSubscriptions.auth,
+        language: sql<string>`coalesce(${schema.userPreferences.language}, 'sr')`,
       })
       .from(schema.notificationPreferences)
       .innerJoin(
         schema.pushSubscriptions,
         eq(schema.notificationPreferences.userId, schema.pushSubscriptions.userId)
+      )
+      .leftJoin(
+        schema.userPreferences,
+        eq(schema.notificationPreferences.userId, schema.userPreferences.userId)
       )
       .where(
         and(
@@ -95,12 +100,13 @@ export const notificationsRepository = {
 
   getCreatorRecipients: async (
     creatorId: string
-  ): Promise<{ endpoint: string; p256dh: string; auth: string }[]> => {
+  ): Promise<{ endpoint: string; p256dh: string; auth: string; language: string }[]> => {
     return await db
       .selectDistinct({
         endpoint: schema.pushSubscriptions.endpoint,
         p256dh: schema.pushSubscriptions.p256dh,
         auth: schema.pushSubscriptions.auth,
+        language: sql<string>`coalesce(${schema.userPreferences.language}, 'sr')`,
       })
       .from(schema.notificationPreferences)
       .innerJoin(
@@ -115,6 +121,10 @@ export const notificationsRepository = {
       .innerJoin(
         schema.pushSubscriptions,
         eq(schema.notificationPreferences.userId, schema.pushSubscriptions.userId)
+      )
+      .leftJoin(
+        schema.userPreferences,
+        eq(schema.notificationPreferences.userId, schema.userPreferences.userId)
       )
       .where(
         and(

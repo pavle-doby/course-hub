@@ -64,7 +64,10 @@ export const authService = {
       });
     }
 
-    const userDb = await authRepository.createUser(user);
+    const userDb = await authRepository.createUser(user, {
+      language: dto.language,
+      theme: dto.theme,
+    });
 
     if (!userDb) throw new InternalServerError({ code: ErrorCode.SERVER_ERROR });
 
@@ -81,6 +84,7 @@ export const authService = {
 
     return {
       user: userDto,
+      preferences: { language: dto.language, theme: dto.theme },
       accessToken: data.session?.access_token ?? "",
       refreshToken: data.session?.refresh_token ?? "",
     };
@@ -108,6 +112,12 @@ export const authService = {
       });
     }
 
+    const preferences = await authRepository.getUserPreferences(user.id);
+
+    if (!preferences) {
+      throw new InternalServerError({ code: ErrorCode.SERVER_ERROR });
+    }
+
     const userDto: User = {
       id: user.id,
       email: user.email,
@@ -121,6 +131,7 @@ export const authService = {
 
     return {
       user: userDto,
+      preferences,
       accessToken: data.session?.access_token ?? "",
       refreshToken: data.session?.refresh_token ?? "",
     };

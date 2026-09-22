@@ -2,7 +2,12 @@ import { Router, Request, Response } from "express";
 import { usersController } from "../controllers/usersController";
 import { pagination } from "api/middleware/pagination";
 import { validate } from "api/middleware/validate";
-import { UserGetAllQuerySchema, UserPostQuerySchema, UserPutQuerySchema } from "@repo/contract";
+import {
+  UserGetAllQuerySchema,
+  UserPostQuerySchema,
+  UserPreferencesPutQuerySchema,
+  UserPutQuerySchema,
+} from "@repo/contract";
 import { ParamsIdSchema, SearchSchema } from "@repo/contract";
 import { validateAdminRole } from "api/middleware/validateRole";
 
@@ -14,6 +19,25 @@ router.get(
   "/self",
   async (_req: Request, res: Response) => {
     await usersController.getSelf(res);
+  }
+);
+
+// GET /users/preferences → fetch current user's preferences
+router.get(
+  //
+  "/preferences",
+  async (_req: Request, res: Response) => {
+    await usersController.getUserPreferences(res);
+  }
+);
+
+// PUT /users/preferences → update current user's preferences
+router.put(
+  //
+  "/preferences",
+  validate(UserPreferencesPutQuerySchema),
+  async (req: Request, res: Response) => {
+    await usersController.updateUserPreferences(req, res);
   }
 );
 

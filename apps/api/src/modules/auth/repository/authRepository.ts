@@ -1,6 +1,6 @@
 import { db, schema } from "@repo/db";
-import { UserEntity } from "@repo/db-schema";
-import type { CreateUser } from "./types";
+import { UserEntity, UserPreferencesEntity } from "@repo/db-schema";
+import type { CreateUser, CreateUserPreferences } from "./types";
 import { eq } from "drizzle-orm";
 
 export const authRepository = {
@@ -11,8 +11,20 @@ export const authRepository = {
       .where(eq(schema.users.authUserId, authUserId));
     return user;
   },
-  createUser: async (body: CreateUser): Promise<UserEntity> => {
-    const [newUser] = await db.insert(schema.users).values(body).returning();
-    return newUser!;
+  getUserPreferences: async (
+    userId: string
+  ): Promise<Pick<UserPreferencesEntity, "language" | "theme"> | undefined> => {
+    const [preferences] = await db
+      .select({ language: schema.userPreferences.language, theme: schema.userPreferences.theme })
+      .from(schema.userPreferences)
+      .where(eq(schema.userPreferences.userId, userId));
+    return preferences;
+  },
+  createUser: async (user: CreateUser, preferences: CreateUserPreferences): Promise<UserEntity> => {
+    return await db.transaction(async (tx) => {
+      const [newUser] = await tx.insert(schema.users).values(user).returning();
+      await tx.insert(schema.userPreferences).values({ userId: newUser!.id, ...preferences });
+      return newUser!;
+    });
   },
 };

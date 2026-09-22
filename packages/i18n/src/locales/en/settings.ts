@@ -1,0 +1,17 @@
+export const settings = {
+  title: "Settings",
+  contentBehavior: "Content behavior",
+  contentBehaviorCreate: "Create",
+  contentBehaviorConsume: "Consume",
+  contentBehaviorBoth: "Create and consume",
+  theme: "Theme",
+  themeLight: "Light",
+  themeDark: "Dark",
+  themeSystem: "System",
+  language: "Language",
+  languageEnglish: "English",
+  languageSerbian: "Serbian",
+  cancel: "Cancel",
+  save: "Save",
+  updated: "Settings updated",
+};

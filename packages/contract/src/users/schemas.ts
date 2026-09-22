@@ -1,6 +1,6 @@
 import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-zod";
 import { z } from "zod";
-import { users } from "@repo/db-schema";
+import { userPreferences, users } from "@repo/db-schema";
 import { userRoleEnum } from "@repo/db-schema";
 
 export const UserSchema = createSelectSchema(users, {
@@ -36,3 +36,11 @@ export const UserPutQuerySchema = createUpdateSchema(users, {
     updatedAt: true,
   })
   .partial();
+
+export const UserPreferencesSchema = createSelectSchema(userPreferences).pick({
+  contentBehavior: true,
+  theme: true,
+  language: true,
+});
+
+export const UserPreferencesPutQuerySchema = UserPreferencesSchema;

@@ -27,7 +27,6 @@ import {
   Folder,
   GraduationCap,
   LogOut,
-  MessageCircle,
   Settings,
   User,
   Users,
@@ -47,7 +46,6 @@ type NavKey =
   | "nav.students"
   | "nav.profile"
   | "nav.settings"
-  | "nav.feedback"
   | "nav.logOut";
 
 type NavSubItem = { label: NavKey; href: string; icon?: LucideIcon };
@@ -81,7 +79,6 @@ const NAV_ITEMS: NavItem[] = [
 
 const FOOTER_ITEMS = (onSignOut: () => void): FooterItem[] => [
   { label: "nav.settings", icon: Settings, href: "/settings" },
-  { label: "nav.feedback", icon: MessageCircle, href: "/feedback" },
   { label: "nav.logOut", icon: LogOut, action: onSignOut },
 ];
 

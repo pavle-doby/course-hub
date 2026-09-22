@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Menu, Settings, MessageCircle, LogOut } from "lucide-react";
+import { Menu, Settings, LogOut } from "lucide-react";
 import { useRouter, usePathname } from "next/navigation";
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@repo/ui-web/components/sheet";
 import { Button } from "@repo/ui-web/components/button";
@@ -57,15 +57,6 @@ export function MobileHeader() {
               >
                 <Settings className="size-4" />
                 {t("nav.settings")}
-              </Link>
-            </SheetClose>
-            <SheetClose asChild>
-              <Link
-                href="/feedback"
-                className="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm hover:bg-accent"
-              >
-                <MessageCircle className="size-4" />
-                {t("nav.feedback")}
               </Link>
             </SheetClose>
           </nav>

@@ -8,6 +8,8 @@ import {
   GetUserRes,
   UpdateUserReq,
   UpdateUserRes,
+  UpdateUserPreferencesReq,
+  UpdateUserPreferencesRes,
 } from "@repo/contract";
 import { Request, Response } from "express";
 import { usersService } from "../services/usersService";
@@ -18,6 +20,20 @@ export const usersController = {
     const authUserId: string = res.locals.user.id;
     const user: User = await usersService.getByAuthUserId(authUserId);
     res.json(user);
+  },
+  getUserPreferences: async (res: Response): Promise<void> => {
+    const authUserId: string = res.locals.user.id;
+    const preferences: UpdateUserPreferencesRes = await usersService.getUserPreferences(authUserId);
+    res.json(preferences);
+  },
+  updateUserPreferences: async (_req: Request, res: Response): Promise<void> => {
+    const authUserId: string = res.locals.user.id;
+    const reqDto = res.locals.body as UpdateUserPreferencesReq;
+    const preferences: UpdateUserPreferencesRes = await usersService.updateUserPreferences(
+      authUserId,
+      reqDto
+    );
+    res.json(preferences);
   },
   getAllUsers: async (_req: Request, res: Response): Promise<void> => {
     const dto: GetAllUsersReq<PaginationReqExtended> = {

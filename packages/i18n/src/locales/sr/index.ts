@@ -9,6 +9,7 @@ import { lessons } from "./lessons";
 import { metadata } from "./metadata";
 import { nav } from "./nav";
 import { profile } from "./profile";
+import { settings } from "./settings";
 import { students } from "./students";
 import { user } from "./user";
 
@@ -23,6 +24,7 @@ const sr: TranslationResources = {
   lessons,
   nav,
   profile,
+  settings,
   students,
   user,
 };

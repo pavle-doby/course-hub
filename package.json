@@ -17,6 +17,7 @@
     "db:add:course-content": "pnpm --filter @repo/scripts db:add:course-content",
     "db:seed:course-content": "pnpm --filter @repo/scripts db:seed:course-content",
     "db:clean:course-content": "pnpm --filter @repo/scripts db:clean:course-content",
+    "db:update:user-preferences": "pnpm --filter @repo/scripts db:update:user-preferences",
     "api-client:generate": "pnpm --filter api generate:openapi && pnpm --filter @repo/api-client generate:api",
     "prepare": "husky"
   },

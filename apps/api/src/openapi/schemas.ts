@@ -2,6 +2,8 @@ import z from "zod";
 import { registry } from "./registry";
 import {
   PaginationSchema,
+  AuthPreferencesSchema,
+  UserPreferencesSchema as UserPreferencesSchemaBase,
   UserSchema as UserSchemaBase,
   CourseSchema as CourseSchemaBase,
   LessonSchema as LessonSchemaBase,
@@ -16,11 +18,16 @@ import {
 } from "@repo/contract";
 
 export const UserSchema = registry.register("User", UserSchemaBase);
+export const UserPreferencesSchema = registry.register(
+  "UserPreferences",
+  UserPreferencesSchemaBase
+);
 
 export const AuthWithTokensSchema = registry.register(
   "AuthWithTokens",
   z.object({
     user: UserSchemaBase,
+    preferences: AuthPreferencesSchema,
     accessToken: z.string(),
     refreshToken: z.string(),
   })

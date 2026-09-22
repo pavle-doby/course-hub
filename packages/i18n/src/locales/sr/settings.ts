@@ -1,0 +1,17 @@
+export const settings = {
+  title: "Podešavanja",
+  contentBehavior: "Način korišćenja sadržaja",
+  contentBehaviorCreate: "Kreiranje",
+  contentBehaviorConsume: "Korišćenje",
+  contentBehaviorBoth: "Kreiranje i korišćenje",
+  theme: "Tema",
+  themeLight: "Svetla",
+  themeDark: "Tamna",
+  themeSystem: "Sistemska",
+  language: "Jezik",
+  languageEnglish: "Engleski",
+  languageSerbian: "Srpski",
+  cancel: "Otkaži",
+  save: "Sačuvaj",
+  updated: "Podešavanja su sačuvana",
+};

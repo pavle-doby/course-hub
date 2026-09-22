@@ -69,6 +69,9 @@ importers:
       '@repo/db-schema':
         specifier: workspace:*
         version: link:../../packages/db-schema
+      '@repo/i18n':
+        specifier: workspace:*
+        version: link:../../packages/i18n
       '@supabase/supabase-js':
         specifier: ^2.112.4
         version: 2.112.4

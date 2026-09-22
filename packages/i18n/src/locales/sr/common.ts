@@ -203,5 +203,23 @@ export const common = {
     osReminderDescription:
       "Proverite da su obaveštenja omogućena na {{currentOS}} za {{currentBrowserName}}, kako bi se prikazivala kada ih dobijete.",
     osReminderConfirm: "Razumem",
+    push: {
+      courseEnrolled: {
+        title: "Novi upis na kurs",
+        body: "{{email}} se upisao/la na kurs {{courseName}}.",
+      },
+      privateCourseAttempt: {
+        title: "Pokusaj upisa na privatni kurs",
+        body: "{{email}} je pokusao/la da se upise na kurs {{courseName}}.",
+      },
+      courseUpdated: {
+        title: "Kurs je azuriran",
+        body: "Kurs {{courseName}} je azuriran.",
+      },
+      creatorNewCourse: {
+        title: "Novi kurs",
+        body: "Kurs {{courseName}} je sada dostupan.",
+      },
+    },
   },
 };

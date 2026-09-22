@@ -34,6 +34,30 @@ export interface User {
   role: UserRole;
 }
 
+export type UserPreferencesContentBehavior =
+  (typeof UserPreferencesContentBehavior)[keyof typeof UserPreferencesContentBehavior];
+
+export const UserPreferencesContentBehavior = {
+  create: "create",
+  consume: "consume",
+  both: "both",
+} as const;
+
+export type UserPreferencesTheme = (typeof UserPreferencesTheme)[keyof typeof UserPreferencesTheme];
+
+export const UserPreferencesTheme = {
+  light: "light",
+  dark: "dark",
+  system: "system",
+} as const;
+
+export interface UserPreferences {
+  contentBehavior: UserPreferencesContentBehavior;
+  theme: UserPreferencesTheme;
+  /** @maxLength 10 */
+  language: string;
+}
+
 export type AuthWithTokensUserRole =
   (typeof AuthWithTokensUserRole)[keyof typeof AuthWithTokensUserRole];
 
@@ -65,8 +89,24 @@ export type AuthWithTokensUser = {
   role: AuthWithTokensUserRole;
 };
 
+export type AuthWithTokensPreferencesTheme =
+  (typeof AuthWithTokensPreferencesTheme)[keyof typeof AuthWithTokensPreferencesTheme];
+
+export const AuthWithTokensPreferencesTheme = {
+  light: "light",
+  dark: "dark",
+  system: "system",
+} as const;
+
+export type AuthWithTokensPreferences = {
+  /** @maxLength 10 */
+  language: string;
+  theme: AuthWithTokensPreferencesTheme;
+};
+
 export interface AuthWithTokens {
   user: AuthWithTokensUser;
+  preferences: AuthWithTokensPreferences;
   accessToken: string;
   refreshToken: string;
 }
@@ -439,6 +479,21 @@ export interface CourseInvitations {
   pagination: CourseInvitationsPagination;
 }
 
+export type AuthSignUpBodyLanguage =
+  (typeof AuthSignUpBodyLanguage)[keyof typeof AuthSignUpBodyLanguage];
+
+export const AuthSignUpBodyLanguage = {
+  en: "en",
+  sr: "sr",
+} as const;
+
+export type AuthSignUpBodyTheme = (typeof AuthSignUpBodyTheme)[keyof typeof AuthSignUpBodyTheme];
+
+export const AuthSignUpBodyTheme = {
+  light: "light",
+  dark: "dark",
+} as const;
+
 export type AuthSignUpBody = {
   /**
    * @minLength 1
@@ -453,6 +508,8 @@ export type AuthSignUpBody = {
   email: string;
   /** @minLength 6 */
   password: string;
+  language: AuthSignUpBodyLanguage;
+  theme: AuthSignUpBodyTheme;
 };
 
 export type AuthSignUpDefaultCode =
@@ -563,6 +620,81 @@ export type GetUserSelfDefault = {
   code: GetUserSelfDefaultCode;
   error?: unknown;
   details?: GetUserSelfDefaultDetails;
+};
+
+export type GetUserPreferencesDefaultCode =
+  (typeof GetUserPreferencesDefaultCode)[keyof typeof GetUserPreferencesDefaultCode];
+
+export const GetUserPreferencesDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type GetUserPreferencesDefaultDetails = { [key: string]: unknown };
+
+export type GetUserPreferencesDefault = {
+  status: number;
+  code: GetUserPreferencesDefaultCode;
+  error?: unknown;
+  details?: GetUserPreferencesDefaultDetails;
+};
+
+export type UpdateUserPreferencesBodyContentBehavior =
+  (typeof UpdateUserPreferencesBodyContentBehavior)[keyof typeof UpdateUserPreferencesBodyContentBehavior];
+
+export const UpdateUserPreferencesBodyContentBehavior = {
+  create: "create",
+  consume: "consume",
+  both: "both",
+} as const;
+
+export type UpdateUserPreferencesBodyTheme =
+  (typeof UpdateUserPreferencesBodyTheme)[keyof typeof UpdateUserPreferencesBodyTheme];
+
+export const UpdateUserPreferencesBodyTheme = {
+  light: "light",
+  dark: "dark",
+  system: "system",
+} as const;
+
+export type UpdateUserPreferencesBody = {
+  contentBehavior: UpdateUserPreferencesBodyContentBehavior;
+  theme: UpdateUserPreferencesBodyTheme;
+  /** @maxLength 10 */
+  language: string;
+};
+
+export type UpdateUserPreferencesDefaultCode =
+  (typeof UpdateUserPreferencesDefaultCode)[keyof typeof UpdateUserPreferencesDefaultCode];
+
+export const UpdateUserPreferencesDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type UpdateUserPreferencesDefaultDetails = { [key: string]: unknown };
+
+export type UpdateUserPreferencesDefault = {
+  status: number;
+  code: UpdateUserPreferencesDefaultCode;
+  error?: unknown;
+  details?: UpdateUserPreferencesDefaultDetails;
 };
 
 export type GetUsersParams = {

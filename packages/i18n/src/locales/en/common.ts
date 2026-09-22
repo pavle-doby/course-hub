@@ -206,5 +206,23 @@ export const common = {
     osReminderDescription:
       "Make sure notifications are enabled on {{currentOS}} for {{currentBrowserName}}, so they show up, when you get them.",
     osReminderConfirm: "Got it",
+    push: {
+      courseEnrolled: {
+        title: "New course enrollment",
+        body: "{{email}} enrolled in {{courseName}}.",
+      },
+      privateCourseAttempt: {
+        title: "Private course enrollment attempt",
+        body: "{{email}} tried to enroll in {{courseName}}.",
+      },
+      courseUpdated: {
+        title: "Course updated",
+        body: "{{courseName}} has been updated.",
+      },
+      creatorNewCourse: {
+        title: "New course",
+        body: "{{courseName}} is now available.",
+      },
+    },
   },
 };

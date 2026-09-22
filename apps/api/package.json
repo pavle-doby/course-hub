@@ -23,6 +23,7 @@
     "@repo/contract": "workspace:*",
     "@repo/db": "workspace:*",
     "@repo/db-schema": "workspace:*",
+    "@repo/i18n": "workspace:*",
     "@supabase/supabase-js": "^2.112.4",
     "cloudflare": "^7.1.0",
     "cors": "^2.8.6",

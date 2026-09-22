@@ -8,6 +8,8 @@ import {
   GetUserRes,
   UpdateUserReq,
   UpdateUserRes,
+  UpdateUserPreferencesReq,
+  UpdateUserPreferencesRes,
   User,
 } from "@repo/contract";
 import { NotFoundError, ConflictError, InternalServerError } from "@repo/contract";
@@ -52,6 +54,29 @@ export const usersService = {
       bio: userDb.bio,
       role: userDb.role,
     };
+  },
+  getUserPreferences: async (authUserId: string): Promise<UpdateUserPreferencesRes> => {
+    const user = await usersRepository.getUserByAuthUserId(authUserId);
+    const preferences = user && (await usersRepository.getUserPreferences(user.id));
+
+    if (!preferences) {
+      throw new NotFoundError({ code: ErrorCodeUser.NOT_FOUND });
+    }
+
+    return preferences;
+  },
+  updateUserPreferences: async (
+    authUserId: string,
+    data: UpdateUserPreferencesReq
+  ): Promise<UpdateUserPreferencesRes> => {
+    const user = await usersRepository.getUserByAuthUserId(authUserId);
+    const preferences = user && (await usersRepository.updateUserPreferences(user.id, data));
+
+    if (!preferences) {
+      throw new NotFoundError({ code: ErrorCodeUser.NOT_FOUND });
+    }
+
+    return preferences;
   },
   getAllUsersWithProfiles: async (
     dto: GetAllUsersReq<PaginationReqExtended>

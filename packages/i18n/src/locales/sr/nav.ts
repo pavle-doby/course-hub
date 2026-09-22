@@ -9,6 +9,6 @@ export const nav = {
   notifications: "Obaveštenja",
   profile: "Profil",
   settings: "Podešavanja",
-  feedback: "Povratne informacije",
+  feedback: "Utisci",
   logOut: "Odjava",
 };

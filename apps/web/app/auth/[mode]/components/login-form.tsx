@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTheme } from "next-themes";
 import { AlertCircleIcon, Eye, EyeOff } from "lucide-react";
 import { useAcceptInvitation, useAuthLogin } from "@repo/api-client";
 import { AuthLoginQuerySchema, type AuthLogInUserReq } from "@repo/contract";
@@ -26,6 +27,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
   const inviteToken = searchParams.get("token");
 
   const { t, i18n } = useT();
+  const { setTheme } = useTheme();
   useZodLocale(i18n);
 
   const [showPassword, setShowPassword] = useState(false);
@@ -52,8 +54,10 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
     loginMutate(
       { data },
       {
-        onSuccess: async ({ accessToken, refreshToken }) => {
+        onSuccess: async ({ accessToken, refreshToken, preferences }) => {
           saveAuthTokens(accessToken, refreshToken);
+          await i18n.changeLanguage(preferences.language);
+          setTheme(preferences.theme);
           if (inviteToken) {
             try {
               const result = await acceptInvitation({ pathParams: { token: inviteToken } });

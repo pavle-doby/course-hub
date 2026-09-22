@@ -1,6 +1,11 @@
 import { registry } from "api/openapi/registry";
-import { UserSchema, PaginatedUsersSchema } from "api/openapi/schemas";
-import { UserGetAllQuerySchema, UserPostQuerySchema, UserPutQuerySchema } from "@repo/contract";
+import { UserSchema, UserPreferencesSchema, PaginatedUsersSchema } from "api/openapi/schemas";
+import {
+  UserGetAllQuerySchema,
+  UserPostQuerySchema,
+  UserPreferencesPutQuerySchema,
+  UserPutQuerySchema,
+} from "@repo/contract";
 import { ParamsIdSchema, SearchSchema, ApiErrorSchema } from "@repo/contract";
 import { PaginationParams } from "api/middleware/pagination";
 
@@ -15,6 +20,50 @@ registry.registerPath({
     200: {
       description: "Current authenticated user",
       content: { "application/json": { schema: UserSchema } },
+    },
+    default: {
+      description: "Error",
+      content: { "application/json": { schema: ApiErrorSchema } },
+    },
+  },
+});
+
+// GET /users/preferences
+registry.registerPath({
+  method: "get",
+  path: "/v1/users/preferences",
+  operationId: "getUserPreferences",
+  tags: ["Users"],
+  security: [{ bearerAuth: [] }],
+  responses: {
+    200: {
+      description: "Current authenticated user's preferences",
+      content: { "application/json": { schema: UserPreferencesSchema } },
+    },
+    default: {
+      description: "Error",
+      content: { "application/json": { schema: ApiErrorSchema } },
+    },
+  },
+});
+
+// PUT /users/preferences
+registry.registerPath({
+  method: "put",
+  path: "/v1/users/preferences",
+  operationId: "updateUserPreferences",
+  tags: ["Users"],
+  security: [{ bearerAuth: [] }],
+  request: {
+    body: {
+      content: { "application/json": { schema: UserPreferencesPutQuerySchema } },
+      required: true,
+    },
+  },
+  responses: {
+    200: {
+      description: "Preferences updated",
+      content: { "application/json": { schema: UserPreferencesSchema } },
     },
     default: {
       description: "Error",

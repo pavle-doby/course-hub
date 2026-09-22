@@ -38,7 +38,9 @@ export const enrollmentsService = {
 
     const course = await getPublishedCourseOrThrow(publicId);
     if (course.visibility === "private") {
-      void notificationsService.notifyPrivateCourseAttempt(course).catch(() => undefined);
+      void notificationsService
+        .notifyPrivateCourseAttempt(course, user.email)
+        .catch(() => undefined);
       throw new ConflictError({ code: ErrorCodeEnrollment.COURSE_PRIVATE });
     }
 
@@ -48,12 +50,12 @@ export const enrollmentsService = {
     }
     if (existing) {
       const enrollment = await enrollmentsRepository.reactivateEnrollment(existing.id);
-      void notificationsService.notifyCourseEnrolled(course).catch(() => undefined);
+      void notificationsService.notifyCourseEnrolled(course, user.email).catch(() => undefined);
       return enrollment;
     }
 
     const enrollment = await enrollmentsRepository.createEnrollment(user.id, course.id);
-    void notificationsService.notifyCourseEnrolled(course).catch(() => undefined);
+    void notificationsService.notifyCourseEnrolled(course, user.email).catch(() => undefined);
     return enrollment;
   },
 

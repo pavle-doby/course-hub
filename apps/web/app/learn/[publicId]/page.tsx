@@ -177,7 +177,10 @@ export default function LearnCourseDetailPage() {
     }
 
     void notificationsService
-      .enableLearnerNotifications({ courseId: notificationCourseId, subscribeNotifications })
+      .enableLearnerNotifications({
+        courseId: notificationCourseId,
+        subscribeNotifications,
+      })
       .catch((error: unknown) => {
         console.error(error);
         if (!(error instanceof Error)) {

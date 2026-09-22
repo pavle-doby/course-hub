@@ -1,10 +1,11 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTheme } from "next-themes";
 import { z } from "zod";
 import type { TFunction } from "@repo/i18n";
 import { AlertCircleIcon, Eye, EyeOff } from "lucide-react";
@@ -17,6 +18,7 @@ import { Field, FieldError, FieldGroup, FieldLabel } from "@repo/ui-web/componen
 import { Input } from "@repo/ui-web/components/input";
 import { Alert, AlertTitle } from "@repo/ui-web/components/alert";
 import { Button } from "@repo/ui-web/components/button";
+import { ButtonGroup } from "@repo/ui-web/components/button-group";
 import { cn } from "@repo/ui-web/lib/utils";
 import { saveAuthTokens } from "@/utils/token-storage";
 
@@ -38,6 +40,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
   const inviteEmail = searchParams.get("email");
 
   const { t, i18n } = useT();
+  const { setTheme } = useTheme();
   useZodLocale(i18n);
 
   const SignupFormSchema = createSignupFormSchema(t);
@@ -52,11 +55,20 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
     register,
     handleSubmit,
     setError,
+    setValue,
+    control,
     formState: { errors },
   } = useForm<SignupFormData>({
     resolver: zodResolver(SignupFormSchema),
-    defaultValues: inviteEmail ? { email: inviteEmail } : undefined,
+    defaultValues: { email: inviteEmail ?? "", language: "en", theme: "dark" },
   });
+
+  const [language, theme] = useWatch({ control, name: ["language", "theme"] });
+
+  useEffect(() => {
+    setValue("language", navigator.language.toLowerCase().startsWith("sr") ? "sr" : "en");
+    setValue("theme", window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  }, [setValue]);
 
   const { handleErrorForm } = useErrorHandlingForm<SignupFormData>({
     t,
@@ -64,10 +76,30 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
     setError,
   });
 
+  function handleEnglishLanguage() {
+    setValue("language", "en");
+    void i18n.changeLanguage("en");
+  }
+
+  function handleSerbianLanguage() {
+    setValue("language", "sr");
+    void i18n.changeLanguage("sr");
+  }
+
+  function handleDarkTheme() {
+    setValue("theme", "dark");
+    setTheme("dark");
+  }
+
+  function handleLightTheme() {
+    setValue("theme", "light");
+    setTheme("light");
+  }
+
   function onSubmit(formData: SignupFormData) {
-    const { firstName, lastName, email, password } = formData;
+    const { firstName, lastName, email, password, language, theme } = formData;
     signupMutate(
-      { data: { firstName, lastName, email, password } },
+      { data: { firstName, lastName, email, password, language, theme } },
       {
         onSuccess: async ({ accessToken, refreshToken }) => {
           saveAuthTokens(accessToken, refreshToken);
@@ -191,6 +223,48 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
                   </button>
                 </div>
                 <FieldError errors={[errors.confirmPassword]} />
+              </Field>
+              <Field>
+                <FieldLabel>{t("auth.signup.languageLabel")}</FieldLabel>
+                <ButtonGroup aria-label={t("auth.signup.languageLabel")}>
+                  <Button
+                    type="button"
+                    variant={language === "en" ? "default" : "outline"}
+                    aria-pressed={language === "en"}
+                    onClick={handleEnglishLanguage}
+                  >
+                    {t("auth.signup.languageEnglish")}
+                  </Button>
+                  <Button
+                    type="button"
+                    variant={language === "sr" ? "default" : "outline"}
+                    aria-pressed={language === "sr"}
+                    onClick={handleSerbianLanguage}
+                  >
+                    {t("auth.signup.languageSerbian")}
+                  </Button>
+                </ButtonGroup>
+              </Field>
+              <Field>
+                <FieldLabel>{t("auth.signup.themeLabel")}</FieldLabel>
+                <ButtonGroup aria-label={t("auth.signup.themeLabel")}>
+                  <Button
+                    type="button"
+                    variant={theme === "dark" ? "default" : "outline"}
+                    aria-pressed={theme === "dark"}
+                    onClick={handleDarkTheme}
+                  >
+                    {t("auth.signup.themeDark")}
+                  </Button>
+                  <Button
+                    type="button"
+                    variant={theme === "light" ? "default" : "outline"}
+                    aria-pressed={theme === "light"}
+                    onClick={handleLightTheme}
+                  >
+                    {t("auth.signup.themeLight")}
+                  </Button>
+                </ButtonGroup>
               </Field>
               {errors.root && (
                 <Alert variant="destructive" className="max-w-md">

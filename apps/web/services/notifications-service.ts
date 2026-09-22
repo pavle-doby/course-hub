@@ -59,7 +59,9 @@ async function send({
 
   await Promise.all(
     categories.map((category) =>
-      subscribeNotifications({ data: { courseId, category, subscription } })
+      subscribeNotifications({
+        data: { courseId, category, subscription },
+      })
     )
   );
 }

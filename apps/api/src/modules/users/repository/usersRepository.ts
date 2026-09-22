@@ -1,6 +1,8 @@
 import {
   CreateUserReq,
   UpdateUserReq,
+  UpdateUserPreferencesReq,
+  UserPreferences,
   Search,
   FilterUser,
   GetAllUsersRes,
@@ -29,6 +31,34 @@ export const usersRepository = {
       .limit(1);
 
     return user;
+  },
+  getUserPreferences: async (userId: string): Promise<UserPreferences | undefined> => {
+    const [preferences] = await db
+      .select({
+        contentBehavior: schema.userPreferences.contentBehavior,
+        theme: schema.userPreferences.theme,
+        language: schema.userPreferences.language,
+      })
+      .from(schema.userPreferences)
+      .where(eq(schema.userPreferences.userId, userId));
+
+    return preferences;
+  },
+  updateUserPreferences: async (
+    userId: string,
+    data: UpdateUserPreferencesReq
+  ): Promise<UserPreferences | undefined> => {
+    const [preferences] = await db
+      .update(schema.userPreferences)
+      .set(data)
+      .where(eq(schema.userPreferences.userId, userId))
+      .returning({
+        contentBehavior: schema.userPreferences.contentBehavior,
+        theme: schema.userPreferences.theme,
+        language: schema.userPreferences.language,
+      });
+
+    return preferences;
   },
   getAllUsersWithProfiles: async ({
     offset,

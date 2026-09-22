@@ -27,13 +27,17 @@ import type {
   DeleteUserPathParameters,
   GetUserDefault,
   GetUserPathParameters,
+  GetUserPreferencesDefault,
   GetUserSelfDefault,
   GetUsersDefault,
   GetUsersParams,
   UpdateUserBody,
   UpdateUserDefault,
   UpdateUserPathParameters,
+  UpdateUserPreferencesBody,
+  UpdateUserPreferencesDefault,
   User,
+  UserPreferences,
   Users,
 } from "../courseHubAPI.schemas";
 
@@ -161,6 +165,193 @@ export function useGetUserSelf<
   return withQueryKey(query, queryOptions.queryKey);
 }
 
+export const getUserPreferences = (
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<UserPreferences>(
+    { url: `/v1/users/preferences`, method: "GET", signal },
+    options
+  );
+};
+
+export const getGetUserPreferencesQueryKey = () => {
+  return [`/v1/users/preferences`] as const;
+};
+
+export const getGetUserPreferencesQueryOptions = <
+  TData = Awaited<ReturnType<typeof getUserPreferences>>,
+  TError = GetUserPreferencesDefault,
+>(options?: {
+  query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserPreferences>>, TError, TData>>;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetUserPreferencesQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getUserPreferences>>> = ({ signal }) =>
+    getUserPreferences(requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getUserPreferences>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetUserPreferencesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getUserPreferences>>
+>;
+export type GetUserPreferencesQueryError = GetUserPreferencesDefault;
+
+export function useGetUserPreferences<
+  TData = Awaited<ReturnType<typeof getUserPreferences>>,
+  TError = GetUserPreferencesDefault,
+>(
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserPreferences>>, TError, TData>> &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getUserPreferences>>,
+          TError,
+          Awaited<ReturnType<typeof getUserPreferences>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useGetUserPreferences<
+  TData = Awaited<ReturnType<typeof getUserPreferences>>,
+  TError = GetUserPreferencesDefault,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getUserPreferences>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getUserPreferences>>,
+          TError,
+          Awaited<ReturnType<typeof getUserPreferences>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useGetUserPreferences<
+  TData = Awaited<ReturnType<typeof getUserPreferences>>,
+  TError = GetUserPreferencesDefault,
+>(
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserPreferences>>, TError, TData>>;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+export function useGetUserPreferences<
+  TData = Awaited<ReturnType<typeof getUserPreferences>>,
+  TError = GetUserPreferencesDefault,
+>(
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserPreferences>>, TError, TData>>;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetUserPreferencesQueryOptions(options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+export const updateUserPreferences = (
+  updateUserPreferencesBody: UpdateUserPreferencesBody,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<UserPreferences>(
+    {
+      url: `/v1/users/preferences`,
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      data: updateUserPreferencesBody,
+      signal,
+    },
+    options
+  );
+};
+
+export const getUpdateUserPreferencesMutationOptions = <
+  TError = UpdateUserPreferencesDefault,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateUserPreferences>>,
+    TError,
+    UpdateUserPreferencesMutationVariables,
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updateUserPreferences>>,
+  TError,
+  UpdateUserPreferencesMutationVariables,
+  TContext
+> => {
+  const mutationKey = ["updateUserPreferences"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updateUserPreferences>>,
+    UpdateUserPreferencesMutationVariables
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return updateUserPreferences(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type UpdateUserPreferencesMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updateUserPreferences>>
+>;
+export type UpdateUserPreferencesMutationBody = UpdateUserPreferencesBody;
+export type UpdateUserPreferencesMutationError = UpdateUserPreferencesDefault;
+export type UpdateUserPreferencesMutationVariables = { data: UpdateUserPreferencesBody };
+
+export const useUpdateUserPreferences = <TError = UpdateUserPreferencesDefault, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof updateUserPreferences>>,
+      TError,
+      UpdateUserPreferencesMutationVariables,
+      TContext
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof updateUserPreferences>>,
+  TError,
+  UpdateUserPreferencesMutationVariables,
+  TContext
+> => {
+  return useMutation(getUpdateUserPreferencesMutationOptions(options), queryClient);
+};
 export const getUsers = (
   params?: GetUsersParams,
   options?: SecondParameter<typeof customInstance>,

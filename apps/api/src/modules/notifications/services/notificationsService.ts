@@ -1,6 +1,7 @@
 import webpush from "web-push";
 import type { CourseEntity } from "@repo/db-schema";
 import type { SubscribeNotificationsReq, UnsubscribeNotificationsReq } from "@repo/contract";
+import { resources } from "@repo/i18n/resources";
 import { env } from "api/env";
 import { usersRepository } from "api/modules/users/repository/usersRepository";
 import { notificationsRepository } from "../repository/notificationsRepository";
@@ -9,10 +10,27 @@ webpush.setVapidDetails(env.VAPID_SUBJECT, env.VAPID_PUBLIC_KEY, env.VAPID_PRIVA
 
 type PushPayload = { title: string; body: string; url: string };
 type NotificationCourse = Pick<CourseEntity, "id" | "creatorId" | "name" | "publicId">;
+type PushRecipient = { endpoint: string; p256dh: string; auth: string; language: string };
+type PushNotification = keyof (typeof resources)["sr"]["common"]["notifications"]["push"];
+
+function getPayload(
+  language: string,
+  notification: PushNotification,
+  course: NotificationCourse,
+  email?: string
+): PushPayload {
+  const message =
+    resources[language === "en" ? "en" : "sr"].common.notifications.push[notification];
+  return {
+    title: message.title,
+    body: message.body.replace("{{courseName}}", course.name).replace("{{email}}", email ?? ""),
+    url: `/learn/${course.publicId}`,
+  };
+}
 
 async function send(
-  recipients: { endpoint: string; p256dh: string; auth: string }[],
-  payload: PushPayload
+  recipients: PushRecipient[],
+  payload: (language: string) => PushPayload
 ): Promise<void> {
   const results = await Promise.allSettled(
     recipients.map((subscription) =>
@@ -21,7 +39,7 @@ async function send(
           endpoint: subscription.endpoint,
           keys: { p256dh: subscription.p256dh, auth: subscription.auth },
         },
-        JSON.stringify(payload)
+        JSON.stringify(payload(subscription.language))
       )
     )
   );
@@ -58,38 +76,30 @@ export const notificationsService = {
     }
   },
 
-  notifyCourseEnrolled: async (course: NotificationCourse): Promise<void> => {
-    await send(await notificationsRepository.getCourseRecipients(course.id, "course_enrolled"), {
-      title: "New course enrollment",
-      body: `Someone enrolled in ${course.name}.`,
-      url: `/learn/${course.publicId}`,
-    });
+  notifyCourseEnrolled: async (course: NotificationCourse, email: string): Promise<void> => {
+    await send(
+      await notificationsRepository.getCourseRecipients(course.id, "course_enrolled"),
+      (language) => getPayload(language, "courseEnrolled", course, email)
+    );
   },
 
-  notifyPrivateCourseAttempt: async (course: NotificationCourse): Promise<void> => {
+  notifyPrivateCourseAttempt: async (course: NotificationCourse, email: string): Promise<void> => {
     await send(
       await notificationsRepository.getCourseRecipients(course.id, "private_course_attempt"),
-      {
-        title: "Private course enrollment attempt",
-        body: `Someone tried to enroll in ${course.name}.`,
-        url: `/learn/${course.publicId}`,
-      }
+      (language) => getPayload(language, "privateCourseAttempt", course, email)
     );
   },
 
   notifyCourseUpdated: async (course: NotificationCourse): Promise<void> => {
-    await send(await notificationsRepository.getCourseRecipients(course.id, "course_updated"), {
-      title: "Course updated",
-      body: `${course.name} has been updated.`,
-      url: `/learn/${course.publicId}`,
-    });
+    await send(
+      await notificationsRepository.getCourseRecipients(course.id, "course_updated"),
+      (language) => getPayload(language, "courseUpdated", course)
+    );
   },
 
   notifyCreatorNewCourse: async (course: NotificationCourse): Promise<void> => {
-    await send(await notificationsRepository.getCreatorRecipients(course.creatorId), {
-      title: "New course",
-      body: `${course.name} is now available.`,
-      url: `/learn/${course.publicId}`,
-    });
+    await send(await notificationsRepository.getCreatorRecipients(course.creatorId), (language) =>
+      getPayload(language, "creatorNewCourse", course)
+    );
   },
 };
