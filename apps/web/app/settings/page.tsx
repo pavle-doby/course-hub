@@ -12,7 +12,7 @@ import {
   useUpdateUserPreferences,
 } from "@repo/api-client";
 import { UserPreferencesPutQuerySchema, type UpdateUserPreferencesReq } from "@repo/contract";
-import { useT } from "@repo/i18n/client";
+import { useChangeLanguage, useT } from "@repo/i18n/client";
 import { useErrorHandlingForm, useErrorHandlingQuery, useZodLocale } from "@repo/shared";
 import { Alert, AlertTitle } from "@repo/ui-web/components/alert";
 import { Button } from "@repo/ui-web/components/button";
@@ -29,6 +29,7 @@ const selectClassName =
 export default function SettingsPage() {
   const id = useId();
   const { t, i18n } = useT();
+  const changeLanguage = useChangeLanguage();
   const { setTheme } = useTheme();
   const queryClient = useQueryClient();
   useZodLocale(i18n);
@@ -68,9 +69,9 @@ export default function SettingsPage() {
 
   useEffect(() => {
     if (language) {
-      void i18n.changeLanguage(language);
+      void changeLanguage(language);
     }
-  }, [i18n, language]);
+  }, [changeLanguage, language]);
 
   function handleUpdatePreferences(data: UpdateUserPreferencesReq) {
     updatePreferences(

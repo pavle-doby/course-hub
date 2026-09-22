@@ -9,7 +9,7 @@ import { useTheme } from "next-themes";
 import { AlertCircleIcon, Eye, EyeOff } from "lucide-react";
 import { useAcceptInvitation, useAuthLogin } from "@repo/api-client";
 import { AuthLoginQuerySchema, type AuthLogInUserReq } from "@repo/contract";
-import { useT } from "@repo/i18n/client";
+import { useChangeLanguage, useT } from "@repo/i18n/client";
 import { useErrorHandlingForm, useZodLocale } from "@repo/shared";
 import { Card, CardContent } from "@repo/ui-web/components/card";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@repo/ui-web/components/field";
@@ -27,6 +27,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
   const inviteToken = searchParams.get("token");
 
   const { t, i18n } = useT();
+  const changeLanguage = useChangeLanguage();
   const { setTheme } = useTheme();
   useZodLocale(i18n);
 
@@ -56,7 +57,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
       {
         onSuccess: async ({ accessToken, refreshToken, preferences }) => {
           saveAuthTokens(accessToken, refreshToken);
-          await i18n.changeLanguage(preferences.language);
+          await changeLanguage(preferences.language);
           setTheme(preferences.theme);
           if (inviteToken) {
             try {

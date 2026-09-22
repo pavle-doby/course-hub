@@ -11,7 +11,7 @@ import type { TFunction } from "@repo/i18n";
 import { AlertCircleIcon, Eye, EyeOff } from "lucide-react";
 import { useAcceptInvitation, useAuthSignUp } from "@repo/api-client";
 import { AuthSignUpQuerySchema } from "@repo/contract";
-import { useT } from "@repo/i18n/client";
+import { useChangeLanguage, useT } from "@repo/i18n/client";
 import { useErrorHandlingForm, useZodLocale } from "@repo/shared";
 import { Card, CardContent } from "@repo/ui-web/components/card";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@repo/ui-web/components/field";
@@ -40,6 +40,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
   const inviteEmail = searchParams.get("email");
 
   const { t, i18n } = useT();
+  const changeLanguage = useChangeLanguage();
   const { setTheme } = useTheme();
   useZodLocale(i18n);
 
@@ -78,12 +79,12 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
 
   function handleEnglishLanguage() {
     setValue("language", "en");
-    void i18n.changeLanguage("en");
+    void changeLanguage("en");
   }
 
   function handleSerbianLanguage() {
     setValue("language", "sr");
-    void i18n.changeLanguage("sr");
+    void changeLanguage("sr");
   }
 
   function handleDarkTheme() {
