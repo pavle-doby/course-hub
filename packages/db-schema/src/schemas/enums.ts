@@ -26,3 +26,8 @@ export const notificationCategoryEnum = pgEnum("notification_category", [
   "course_updated",
   "creator_new_course",
 ]);
+export const lessonProgressStatusEnum = pgEnum("lesson_progress_status", [
+  "todo",
+  "in_progress",
+  "done",
+]);

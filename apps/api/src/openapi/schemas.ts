@@ -15,6 +15,8 @@ import {
   CourseInvitationSchema as CourseInvitationSchemaBase,
   VideoEditorSchema as VideoEditorSchemaBase,
   PublicDocumentSchema as PublicDocumentSchemaBase,
+  CourseProgressSchema as CourseProgressSchemaBase,
+  LessonProgressSchema as LessonProgressSchemaBase,
 } from "@repo/contract";
 
 export const UserSchema = registry.register("User", UserSchemaBase);
@@ -113,3 +115,6 @@ export const PaginatedCourseInvitationsSchema = registry.register(
     pagination: PaginationSchema,
   })
 );
+
+export const LessonProgressSchema = registry.register("LessonProgress", LessonProgressSchemaBase);
+export const CourseProgressSchema = registry.register("CourseProgress", CourseProgressSchemaBase);

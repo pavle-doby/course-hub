@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useEffectEvent, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import {
   useEnrollInCourse,
+  useGetCourseProgress,
   useGetEnrolledCourseLessons,
   useGetEnrolledCourseTopics,
   useGetEnrollmentStatus,
@@ -19,6 +20,7 @@ import { SidebarProvider } from "@repo/ui-web/components/sidebar";
 import { toast } from "@repo/ui-web/components/sonner";
 import { useErrorHandlingQuery } from "@repo/shared";
 import { useAdjacentSelection, useCourseTree, type Selection } from "@/hooks/use-course-tree";
+import { useSelectionSearchParam } from "@/hooks/use-selection-search-param";
 import { getAccessToken } from "@/utils/token-storage";
 import { notificationsService } from "@/services/notifications-service";
 import { NotificationPrompt } from "@/components/notification-prompt";
@@ -28,11 +30,14 @@ import { LearnHeader } from "./components/learn-header";
 import { LearnTreeNav } from "./components/learn-tree-nav";
 import { LearnWorkingArea } from "./components/learn-working-area";
 
+const COURSE_SELECTION: Selection = { type: "course" };
+
 export default function LearnCourseDetailPage() {
   const { publicId } = useParams<{ publicId: string }>();
   const router = useRouter();
   const { t } = useT();
-  const [selection, setSelection] = useState<Selection>({ type: "course" });
+  const [urlSelection, setUrlSelection] = useSelectionSearchParam();
+  const hasRestoredLessonRef = useRef(false);
   const [notificationCourseId, setNotificationCourseId] = useState<string>();
 
   const hasAccessToken = Boolean(getAccessToken());
@@ -112,9 +117,44 @@ export default function LearnCourseDetailPage() {
     : publicLessons?.map((lesson) => ({ ...lesson, description: null }));
   const isLoadingTree = isEnrolled && (isFullTopicsLoading || isFullLessonsLoading);
 
+  const { data: progress } = useGetCourseProgress({ publicId }, { query: { enabled: isEnrolled } });
+  const statusById = new Map([
+    ...(progress?.topics ?? []).map((topic) => [topic.topicId, topic.status] as const),
+    ...(progress?.lessons ?? []).map((lesson) => [lesson.lessonId, lesson.status] as const),
+  ]);
+
   const tree = useCourseTree(topics, lessons);
   const flatLessons = tree.flatMap((topic) => topic.lessons);
+  // A shared topic/lesson link only applies once enrolled and the item exists in the tree.
+  const isUrlSelectionInTree =
+    urlSelection.type === "course" ||
+    (urlSelection.type === "topic"
+      ? tree.some((topic) => topic.id === urlSelection.id)
+      : flatLessons.some((lesson) => lesson.id === urlSelection.id));
+  const selection = isEnrolled && isUrlSelectionInTree ? urlSelection : COURSE_SELECTION;
   const { previousItem, nextItem } = useAdjacentSelection(tree, selection);
+  const doneLessonCount = (progress?.lessons ?? []).filter(
+    (lesson) => lesson.status === "done"
+  ).length;
+  const progressPercent =
+    isEnrolled && progress && flatLessons.length > 0
+      ? Math.round((doneLessonCount / flatLessons.length) * 100)
+      : undefined;
+
+  // Opening the course without a topic/lesson in the URL resumes the last active lesson, once.
+  const restoreLastLesson = useEffectEvent(() => {
+    if (hasRestoredLessonRef.current || !progress) {
+      return;
+    }
+    hasRestoredLessonRef.current = true;
+    if (urlSelection.type === "course" && progress.lastLessonId) {
+      setUrlSelection({ type: "lesson", id: progress.lastLessonId });
+    }
+  });
+
+  useEffect(() => {
+    restoreLastLesson();
+  }, [progress]);
 
   const { mutateAsync: enroll, isPending: isEnrolling } = useEnrollInCourse();
   const { mutateAsync: withdraw, isPending: isWithdrawing } = useWithdrawFromCourse();
@@ -149,6 +189,11 @@ export default function LearnCourseDetailPage() {
     } catch (error) {
       handleErrorAction(error as Error);
     }
+  }
+
+  function setSelection(next: Selection) {
+    hasRestoredLessonRef.current = true;
+    setUrlSelection(next);
   }
 
   function handleSelectTopic(topicId: string) {
@@ -219,7 +264,7 @@ export default function LearnCourseDetailPage() {
   }
 
   return (
-    <SidebarProvider>
+    <SidebarProvider className="data-resizing:cursor-col-resize data-resizing:select-none [&[data-resizing]_[data-slot^=sidebar-]]:transition-none">
       <NotificationPrompt
         open={!!notificationCourseId}
         onOpenChange={handleNotificationPromptOpenChange}
@@ -233,6 +278,8 @@ export default function LearnCourseDetailPage() {
           selection={selection}
           contentLocked={!isEnrolled}
           isLoadingTree={isLoadingTree}
+          courseStatus={isEnrolled ? progress?.status : undefined}
+          statusById={isEnrolled ? statusById : new Map()}
           onSelectCourse={handleSelectCourse}
           onSelectTopic={handleSelectTopic}
           onSelectLesson={handleSelectLesson}
@@ -248,6 +295,7 @@ export default function LearnCourseDetailPage() {
             isWithdrawing={isWithdrawing}
             onWithdraw={handleWithdraw}
             isLoadingEnrollment={isLoadingEnrollment}
+            progressPercent={progressPercent}
           />
 
           <LearnWorkingArea
@@ -256,6 +304,7 @@ export default function LearnCourseDetailPage() {
             tree={tree}
             flatLessons={flatLessons}
             isEnrolled={isEnrolled}
+            progress={isEnrolled ? progress : undefined}
             hasPrevious={isEnrolled && !!previousItem}
             hasNext={isEnrolled && !!nextItem}
             onPrevious={handlePrevious}

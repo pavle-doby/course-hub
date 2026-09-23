@@ -195,6 +195,12 @@ export const common = {
         message: "The notification subscription could not be found.",
       },
     },
+    progress: {
+      LESSON_NOT_FOUND: {
+        title: "Lesson Not Found",
+        message: "The lesson you are tracking progress for could not be found.",
+      },
+    },
   },
   notifications: {
     title: "Enable notifications?",

@@ -17,6 +17,7 @@ import "../modules/videos/openapi/videosPublicOpenapi";
 import "../modules/documents/openapi/documentsOpenapi";
 import "../modules/documents/openapi/documentsPublicOpenapi";
 import "../modules/notifications/openapi/notificationsOpenapi";
+import "../modules/progress/openapi/progressOpenapi";
 
 export function generateOpenAPIDocument(): OpenAPIObject {
   const generator = new OpenApiGeneratorV31(registry.definitions);

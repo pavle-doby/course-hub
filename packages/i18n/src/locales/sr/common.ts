@@ -112,11 +112,11 @@ export const common = {
       },
       UPLOAD_NOT_READY: {
         title: "Otpremanje nije spremno",
-        message: "Datoteka još nije otpremljena. Pokušajte ponovo.",
+        message: "Datoteka još nije zakačena. Pokušajte ponovo.",
       },
       UPLOAD_FAILED: {
         title: "Otpremanje nije uspelo",
-        message: "Otpremnjena datoteka nije mogla biti proverena.",
+        message: "Zakačena datoteka nije mogla biti proverena.",
       },
     },
     invitation: {
@@ -190,6 +190,12 @@ export const common = {
       SUBSCRIPTION_NOT_FOUND: {
         title: "Pretplata nije pronađena",
         message: "Pretplata na obaveštenja nije pronađena.",
+      },
+    },
+    progress: {
+      LESSON_NOT_FOUND: {
+        title: "Lekcija nije pronađena",
+        message: "Lekcija za koju pratite napredak nije pronađena.",
       },
     },
   },

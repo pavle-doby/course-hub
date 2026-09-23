@@ -11,6 +11,7 @@ export const learn = {
     previous: "Previous",
     next: "Next",
     contents: "Contents",
+    resizeContents: "Resize contents",
     noDescription: "No description provided.",
     videoProcessing: "Video is processing. Please check back shortly.",
     videoUnavailable: "This video is unavailable.",
@@ -26,6 +27,13 @@ export const learn = {
       cancel: "Cancel",
       confirm: "Withdraw",
     },
+  },
+  progress: {
+    status: "Status",
+    courseProgress: "Course progress",
+    todo: "To do",
+    inProgress: "In progress",
+    done: "Done",
   },
   enrolled: {
     title: "Enrolled",

@@ -18,7 +18,7 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   courses: many(courses),
   enrollments: many(courseEnrollments),
   courseProgress: many(courseProgress),
-  lectureProgress: many(lessonProgress),
+  lessonProgress: many(lessonProgress),
   documents: many(documents),
   pushSubscriptions: many(pushSubscriptions),
   notificationPreferences: many(notificationPreferences),

@@ -20,8 +20,11 @@ import {
   SidebarMenuSubItem,
   useSidebar,
 } from "@repo/ui-web/components/sidebar";
+import type { LessonProgressStatus } from "@repo/api-client";
 import { useT } from "@repo/i18n/client";
 import type { Selection, TopicWithLessons } from "@/hooks/use-course-tree";
+import { LearnTreeResizeHandle } from "./learn-tree-resize-handle";
+import { ProgressStatusIcon } from "./progress-status-icon";
 
 type LearnTreeNavProps = {
   courseName: string;
@@ -29,6 +32,9 @@ type LearnTreeNavProps = {
   selection: Selection;
   contentLocked: boolean;
   isLoadingTree?: boolean;
+  courseStatus?: LessonProgressStatus;
+  /** Topic and lesson status by id; empty when not enrolled. */
+  statusById: Map<string, LessonProgressStatus>;
   onSelectCourse: () => void;
   onSelectTopic: (id: string) => void;
   onSelectLesson: (id: string) => void;
@@ -50,6 +56,8 @@ export function LearnTreeNav({
   selection,
   contentLocked,
   isLoadingTree = false,
+  courseStatus,
+  statusById,
   onSelectCourse,
   onSelectTopic,
   onSelectLesson,
@@ -79,6 +87,7 @@ export function LearnTreeNav({
               >
                 <Folder />
                 <span>{courseName}</span>
+                {courseStatus && <ProgressStatusIcon status={courseStatus} className="ml-auto" />}
               </SidebarMenuButton>
             </SidebarMenuItem>
 
@@ -107,6 +116,12 @@ export function LearnTreeNav({
                       >
                         <Files />
                         <span>{topic.name}</span>
+                        {statusById.has(topic.id) && (
+                          <ProgressStatusIcon
+                            status={statusById.get(topic.id)!}
+                            className="ml-auto"
+                          />
+                        )}
                       </SidebarMenuButton>
                       <CollapsibleTrigger asChild>
                         <SidebarMenuAction
@@ -127,7 +142,13 @@ export function LearnTreeNav({
                                 onClick={() => selectAndClose(() => onSelectLesson(lesson.id))}
                               >
                                 <File />
-                                {lesson.name}
+                                <span>{lesson.name}</span>
+                                {statusById.has(lesson.id) && (
+                                  <ProgressStatusIcon
+                                    status={statusById.get(lesson.id)!}
+                                    className="ml-auto"
+                                  />
+                                )}
                               </SidebarMenuSubButton>
                             </SidebarMenuSubItem>
                           ))}
@@ -139,6 +160,7 @@ export function LearnTreeNav({
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
+      <LearnTreeResizeHandle />
     </Sidebar>
   );
 }

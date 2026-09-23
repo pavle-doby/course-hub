@@ -9,6 +9,7 @@ import invitationsRoutes from "../modules/invitations/routes/invitationsRoutes";
 import videosRoutes from "../modules/videos/routes/videosRoutes";
 import documentsRoutes from "../modules/documents/routes/documentsRoutes";
 import notificationsRoutes from "../modules/notifications/routes/notificationsRoutes";
+import progressRoutes from "../modules/progress/routes/progressRoutes";
 
 const api: Router = Router();
 
@@ -64,6 +65,12 @@ api.use(
   //
   "/v1/notifications",
   notificationsRoutes
+);
+
+api.use(
+  //
+  "/v1/progress",
+  progressRoutes
 );
 
 export default api;

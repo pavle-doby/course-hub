@@ -479,6 +479,73 @@ export interface CourseInvitations {
   pagination: CourseInvitationsPagination;
 }
 
+export type LessonProgressStatus = (typeof LessonProgressStatus)[keyof typeof LessonProgressStatus];
+
+export const LessonProgressStatus = {
+  todo: "todo",
+  in_progress: "in_progress",
+  done: "done",
+} as const;
+
+export interface LessonProgress {
+  lessonId: string;
+  status: LessonProgressStatus;
+  /**
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  progressSeconds: number;
+}
+
+export type CourseProgressStatus = (typeof CourseProgressStatus)[keyof typeof CourseProgressStatus];
+
+export const CourseProgressStatus = {
+  todo: "todo",
+  in_progress: "in_progress",
+  done: "done",
+} as const;
+
+export type CourseProgressTopicsItemStatus =
+  (typeof CourseProgressTopicsItemStatus)[keyof typeof CourseProgressTopicsItemStatus];
+
+export const CourseProgressTopicsItemStatus = {
+  todo: "todo",
+  in_progress: "in_progress",
+  done: "done",
+} as const;
+
+export type CourseProgressTopicsItem = {
+  topicId: string;
+  status: CourseProgressTopicsItemStatus;
+};
+
+export type CourseProgressLessonsItemStatus =
+  (typeof CourseProgressLessonsItemStatus)[keyof typeof CourseProgressLessonsItemStatus];
+
+export const CourseProgressLessonsItemStatus = {
+  todo: "todo",
+  in_progress: "in_progress",
+  done: "done",
+} as const;
+
+export type CourseProgressLessonsItem = {
+  lessonId: string;
+  status: CourseProgressLessonsItemStatus;
+  /**
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  progressSeconds: number;
+};
+
+export interface CourseProgress {
+  status: CourseProgressStatus;
+  /** @nullable */
+  lastLessonId: string | null;
+  topics: CourseProgressTopicsItem[];
+  lessons: CourseProgressLessonsItem[];
+}
+
 export type AuthSignUpBodyLanguage =
   (typeof AuthSignUpBodyLanguage)[keyof typeof AuthSignUpBodyLanguage];
 
@@ -2688,4 +2755,75 @@ export type UnsubscribeNotificationsDefault = {
   code: UnsubscribeNotificationsDefaultCode;
   error?: unknown;
   details?: UnsubscribeNotificationsDefaultDetails;
+};
+
+export type GetCourseProgressPathParameters = {
+  publicId: string;
+};
+export type GetCourseProgressDefaultCode =
+  (typeof GetCourseProgressDefaultCode)[keyof typeof GetCourseProgressDefaultCode];
+
+export const GetCourseProgressDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type GetCourseProgressDefaultDetails = { [key: string]: unknown };
+
+export type GetCourseProgressDefault = {
+  status: number;
+  code: GetCourseProgressDefaultCode;
+  error?: unknown;
+  details?: GetCourseProgressDefaultDetails;
+};
+
+export type UpdateLessonProgressPathParameters = {
+  lessonId: string;
+};
+export type UpdateLessonProgressBodyStatus =
+  (typeof UpdateLessonProgressBodyStatus)[keyof typeof UpdateLessonProgressBodyStatus];
+
+export const UpdateLessonProgressBodyStatus = {
+  todo: "todo",
+  in_progress: "in_progress",
+  done: "done",
+} as const;
+
+export type UpdateLessonProgressBody = {
+  status?: UpdateLessonProgressBodyStatus;
+  /** @minimum 0 */
+  progressSeconds?: number;
+};
+
+export type UpdateLessonProgressDefaultCode =
+  (typeof UpdateLessonProgressDefaultCode)[keyof typeof UpdateLessonProgressDefaultCode];
+
+export const UpdateLessonProgressDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type UpdateLessonProgressDefaultDetails = { [key: string]: unknown };
+
+export type UpdateLessonProgressDefault = {
+  status: number;
+  code: UpdateLessonProgressDefaultCode;
+  error?: unknown;
+  details?: UpdateLessonProgressDefaultDetails;
 };

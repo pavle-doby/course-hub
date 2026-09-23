@@ -15,3 +15,4 @@ export * from "./generated/invitations/invitations";
 export * from "./generated/videos/videos";
 export * from "./generated/documents/documents";
 export * from "./generated/notifications/notifications";
+export * from "./generated/progress/progress";

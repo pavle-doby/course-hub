@@ -11,6 +11,7 @@ export const learn = {
     previous: "Prethodna",
     next: "Sledeća",
     contents: "Sadržaj",
+    resizeContents: "Promeni širinu sadržaja",
     noDescription: "Opis nije naveden.",
     videoProcessing: "Video se obrađuje. Pokušajte ponovo za nekoliko trenutaka.",
     videoUnavailable: "Ovaj video nije dostupan.",
@@ -26,6 +27,13 @@ export const learn = {
       cancel: "Otkaži",
       confirm: "Ispiši se",
     },
+  },
+  progress: {
+    status: "Status",
+    courseProgress: "Napredak kursa",
+    todo: "Uradi",
+    inProgress: "U toku",
+    done: "Završeno",
   },
   enrolled: {
     title: "Upisani",

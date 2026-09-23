@@ -1,14 +1,16 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import { AlertCircle, ChevronLeft, ChevronRight, FileText, Loader2 } from "lucide-react";
-import type { Lesson } from "@repo/api-client";
+import type { CourseProgress, Lesson, LessonProgressStatus } from "@repo/api-client";
 import {
   useGetPublicDocumentsByParent,
   useGetPublicVideoByParent,
   useGetVideoByParent,
 } from "@repo/api-client";
 import { Alert, AlertTitle } from "@repo/ui-web/components/alert";
+import { Badge } from "@repo/ui-web/components/badge";
 import {
   Attachment,
   AttachmentContent,
@@ -18,16 +20,28 @@ import {
   AttachmentTrigger,
 } from "@repo/ui-web/components/attachment";
 import { Button } from "@repo/ui-web/components/button";
+import { Skeleton } from "@repo/ui-web/components/skeleton";
 import { useT } from "@repo/i18n/client";
 import type { Selection, TopicWithLessons } from "@/hooks/use-course-tree";
+import { useLessonVideoProgress, useSaveLessonProgress } from "@/hooks/use-lesson-progress";
+import { PROGRESS_STATUS_LABEL_KEYS } from "@/utils/consts";
 import { getVideoRefetchInterval } from "@/utils/get-video-refetch-interval";
+import { LessonStatusSelect } from "./lesson-status-select";
+import { ProgressStatusIcon } from "./progress-status-icon";
 
 type LearnWorkingAreaProps = {
   selection: Selection;
-  course: { id: string; name: string; description?: string | null; thumbnailUrl?: string | null };
+  course: {
+    id: string;
+    publicId: string;
+    name: string;
+    description?: string | null;
+    thumbnailUrl?: string | null;
+  };
   tree: TopicWithLessons[];
   flatLessons: Lesson[];
   isEnrolled: boolean;
+  progress?: CourseProgress;
   hasPrevious: boolean;
   hasNext: boolean;
   onPrevious: () => void;
@@ -40,12 +54,15 @@ export function LearnWorkingArea({
   tree,
   flatLessons,
   isEnrolled,
+  progress,
   hasPrevious,
   hasNext,
   onPrevious,
   onNext,
 }: LearnWorkingAreaProps) {
   const { t } = useT();
+  const saveLessonProgress = useSaveLessonProgress(course.publicId);
+  const [isSavingStatus, setIsSavingStatus] = useState(false);
 
   const selectedTopic =
     selection.type === "topic" ? tree.find((topic) => topic.id === selection.id) : undefined;
@@ -94,6 +111,30 @@ export function LearnWorkingArea({
   const isVideoProcessing = hasVideo && !isVideoReady && !isVideoError;
   const { data: documents = [] } = useGetPublicDocumentsByParent(parent);
 
+  const lessonProgress = selectedLesson
+    ? (progress?.lessons.find((lesson) => lesson.lessonId === selectedLesson.id) ?? {
+        lessonId: selectedLesson.id,
+        status: "todo" as const,
+        progressSeconds: 0,
+      })
+    : undefined;
+  const readOnlyStatus =
+    selection.type === "course"
+      ? progress?.status
+      : progress?.topics.find((topic) => topic.topicId === selectedTopic?.id)?.status;
+  const videoProgressHandlers = useLessonVideoProgress({
+    lessonId: isEnrolled ? lessonProgress?.lessonId : undefined,
+    progress: lessonProgress,
+    onSave: saveLessonProgress,
+  });
+
+  function handleLessonStatusChange(status: LessonProgressStatus) {
+    if (lessonProgress) {
+      setIsSavingStatus(true);
+      saveLessonProgress(lessonProgress.lessonId, { status }, () => setIsSavingStatus(false));
+    }
+  }
+
   return (
     <div className="flex flex-1 flex-col gap-6 p-4 md:p-6">
       <div className="hidden items-center justify-center gap-2 md:flex">
@@ -130,14 +171,33 @@ export function LearnWorkingArea({
             className="mb-4 aspect-video w-full rounded-lg object-cover"
           />
         )}
-        <h2 className="text-2xl font-semibold">{name}</h2>
+        <div className="flex items-center justify-between gap-2">
+          <h2 className="text-2xl font-semibold">{name}</h2>
+          {isEnrolled && lessonProgress && isSavingStatus && (
+            <Skeleton className="h-8 w-32 shrink-0" />
+          )}
+          {isEnrolled && lessonProgress && !isSavingStatus && (
+            <LessonStatusSelect
+              status={lessonProgress.status}
+              onStatusChange={handleLessonStatusChange}
+            />
+          )}
+          {isEnrolled && readOnlyStatus && (
+            <Badge variant="outline" className="h-8 shrink-0 gap-2 px-3 text-sm">
+              <ProgressStatusIcon status={readOnlyStatus} className="size-4!" />
+              {t(PROGRESS_STATUS_LABEL_KEYS[readOnlyStatus])}
+            </Badge>
+          )}
+        </div>
         {hasVideo && (
           <>
             {isVideoReady && (
               <video
+                key={activeVideo?.id}
                 className="mt-4 aspect-video w-full rounded-lg bg-muted"
                 controls
                 src={activeVideo?.playbackUrl}
+                {...videoProgressHandlers}
               />
             )}
             {isVideoProcessing && (
