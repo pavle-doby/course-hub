@@ -204,6 +204,13 @@ export const common = {
         message: "Token nije pronađen.",
       },
     },
+    oauth: {
+      INVALID_CLIENT: {
+        title: "Nevažeći zahtev za povezivanje",
+        message:
+          "Aplikacija koja traži pristup nije ispravno registrovana. Pokušajte ponovo da se povežete.",
+      },
+    },
     progress: {
       LESSON_NOT_FOUND: {
         title: "Lekcija nije pronađena",

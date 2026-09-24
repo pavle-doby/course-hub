@@ -11,6 +11,7 @@ import { logger, handleLogs } from "./logger";
 import apiRoutes from "./routes/apiRoutes";
 import apiPublicRoutes from "./routes/apiPublicRoutes";
 import apixRoutes from "./routes/apixRoutes";
+import oauthWellKnownRoutes from "./modules/oauth/routes/oauthWellKnownRoutes";
 
 const app: express.Express = express();
 
@@ -28,6 +29,8 @@ app.use(handleLogs);
 
 // `/apix` → routes used by external systems, outside the Supabase JWT `handleAuth`
 app.use("/apix", apixRoutes);
+// OAuth discovery metadata must live at the host root
+app.use("/.well-known", oauthWellKnownRoutes);
 
 app.use("/api", apiPublicRoutes);
 app.use("/api", handleAuth, apiRoutes);

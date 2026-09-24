@@ -25,6 +25,9 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
   const router = useRouter();
   const searchParams = useSearchParams();
   const inviteToken = searchParams.get("token");
+  const next = searchParams.get("next");
+  // Only same-origin paths, never absolute URLs or `//host` / `/\\host`
+  const nextPath = next && /^\/(?![/\\])/.test(next) ? next : "/";
 
   const { t, i18n } = useT();
   const changeLanguage = useChangeLanguage();
@@ -68,7 +71,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
               // fall through to default redirect if the invitation could not be accepted
             }
           }
-          router.replace("/");
+          router.replace(nextPath);
         },
         onError: (error: unknown) => {
           handleErrorForm(error as Error);

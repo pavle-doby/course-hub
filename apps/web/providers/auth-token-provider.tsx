@@ -47,8 +47,10 @@ function isPublicRoute(pathname: string): boolean {
 function redirectToLogin(): void {
   clearAuthTokens();
 
-  if (!isPublicRoute(window.location.pathname)) {
-    window.location.assign("/auth/login");
+  const { pathname, search } = window.location;
+  if (!isPublicRoute(pathname)) {
+    // `next` brings the user back afterwards (e.g. to the OAuth consent page)
+    window.location.assign(`/auth/login?next=${encodeURIComponent(pathname + search)}`);
   }
 }
 

@@ -80,10 +80,18 @@ https://<api-domain>/api/v1/public/videos/webhook
 
 ## MCP URL
 
-The MCP server for coding agents is served by the API service under `/apix` (routes used by external systems) and needs no extra env vars:
+The MCP server for coding agents is served by the API service under `/apix` (routes used by external systems):
 
 ```text
 https://<api-domain>/apix/v1/mcp
 ```
 
-Agents authenticate with a personal access token created in Settings → AI access.
+Agents authenticate with a personal access token created in Settings → AI access, or log in through OAuth (claude.ai → Customize → Connectors → Add custom connector, paste the MCP URL). OAuth needs these API env vars:
+
+| Var              | Value                                                                                                                          |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `API_PUBLIC_URL` | Public API origin, no path (e.g. `https://<api-domain>`)                                                                       |
+| `WEB_APP_URL`    | Public web origin, hosts the consent page `/oauth/authorize`                                                                   |
+| `OAUTH_SECRET`   | Random secret (`openssl rand -base64 32`); rotating it invalidates registered clients (they must reconnect), not issued tokens |
+
+Production: `https://api-production-e54c.up.railway.app/apix/v1/mcp`.

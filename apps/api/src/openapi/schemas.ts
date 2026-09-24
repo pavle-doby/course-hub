@@ -20,6 +20,7 @@ import {
   LessonProgressSchema as LessonProgressSchemaBase,
   ApiTokenSchema as ApiTokenSchemaBase,
   CreateApiTokenResponseSchema as CreateApiTokenResponseSchemaBase,
+  OauthApproveResponseSchema as OauthApproveResponseSchemaBase,
 } from "@repo/contract";
 
 export const UserSchema = registry.register("User", UserSchemaBase);
@@ -136,4 +137,9 @@ export const ApiTokenSchema = registry.register("ApiToken", ApiTokenSchemaBase);
 export const CreateApiTokenResponseSchema = registry.register(
   "CreatedApiToken",
   CreateApiTokenResponseSchemaBase
+);
+
+export const OauthApproveResponseSchema = registry.register(
+  "OauthApproveResponse",
+  OauthApproveResponseSchemaBase
 );

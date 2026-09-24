@@ -6,13 +6,13 @@ AGENTS.md (imported above) and the scoped `AGENTS.md` files in `apps/` and `pack
 
 ## Where to look first
 
-| Question                                   | Source                                                                 |
-| ------------------------------------------ | ---------------------------------------------------------------------- |
-| Package map, data flow, key decisions      | [ARCHITECTURE.md](ARCHITECTURE.md)                                     |
-| What's done vs. stubbed/in progress        | [FEATURES.md](FEATURES.md) (keep it updated when a feature changes)    |
-| Specs for planned/ongoing work             | `spec/task-*` (e.g. `spec/task-6.2.md` = notification history)         |
-| Deployment (Railway, two services)         | [README.deploy.md](README.deploy.md)                                   |
-| Intentional shortcuts                      | `// ponytail:` comments mark deliberate simplifications; read before "fixing" |
+| Question                              | Source                                                                        |
+| ------------------------------------- | ----------------------------------------------------------------------------- |
+| Package map, data flow, key decisions | [ARCHITECTURE.md](ARCHITECTURE.md)                                            |
+| What's done vs. stubbed/in progress   | [FEATURES.md](FEATURES.md) (keep it updated when a feature changes)           |
+| Specs for planned/ongoing work        | `spec/task-*` (e.g. `spec/task-6.2.md` = notification history)                |
+| Deployment (Railway, two services)    | [README.deploy.md](README.deploy.md)                                          |
+| Intentional shortcuts                 | `// ponytail:` comments mark deliberate simplifications; read before "fixing" |
 
 ## Verifying changes
 
@@ -34,7 +34,7 @@ A full-stack feature touches the layers in this order (see FEATURES.md, "all lay
 ## API request pipeline (`apps/api/src/server.ts`)
 
 - Web-app routes are under `/api`. `apiPublicRoutes` mounts first with no auth; then `app.use("/api", handleAuth, apiRoutes)`, so **every private route already gets `handleAuth` at the mount**.
-- `/apix` holds routes used by external systems (not the web app), outside `handleAuth`: `server.ts` only does `app.use("/apix", apixRoutes)`, and each mount in `src/routes/apixRoutes.ts` applies its own auth. Today only `/v1/mcp` (MCP for coding agents, personal access tokens via `handleTokenAuth`).
+- `/apix` holds routes used by external systems (not the web app), outside `handleAuth`: `server.ts` only does `app.use("/apix", apixRoutes)`, and each mount in `src/routes/apixRoutes.ts` applies its own auth. Today `/v1/mcp` (MCP for coding agents, personal access tokens via `handleTokenAuth`) and `/oauth/*` (public OAuth endpoints for MCP clients; discovery metadata is mounted at the host root `/.well-known`).
 - `/api/v1/public/videos/webhook` receives the raw body (`handleRawBody`) before `express.json()` so Cloudflare Stream signatures can be checked (`validateWebhookSignature`). Keep new webhooks on the raw-body path.
 - Other middleware: `validate`, `validateRole` (admin), `pagination`, `error` (typed errors → JSON). Logging uses Pino (`src/logger`).
 - Inside the API, `api/*` is a path alias for `apps/api/src/*`.

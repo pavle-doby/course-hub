@@ -37,6 +37,18 @@ export const settings = {
       confirm: "Opozovi",
     },
     revokedToast: "Token je opozvan",
+    authorize: {
+      title: "Povezivanje: {{client}}",
+      description:
+        "{{client}} želi da čita vaše kurseve i kreira nacrte u vaše ime. Pristup možete opozvati bilo kada u Podešavanjima.",
+      redirect: "Bićete vraćeni na {{host}}.",
+      invalidTitle: "Nevažeći zahtev za povezivanje",
+      invalidDescription:
+        "U ovom linku nedostaju podaci. Pokrenite povezivanje ponovo iz aplikacije.",
+      unknownClient: "Aplikacija",
+      allow: "Dozvoli",
+      deny: "Odbij",
+    },
     createDialog: {
       title: "Kreiraj pristupni token",
       description: "Dajte tokenu ime kako biste ga kasnije prepoznali.",

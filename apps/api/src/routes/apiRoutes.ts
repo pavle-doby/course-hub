@@ -11,6 +11,7 @@ import documentsRoutes from "../modules/documents/routes/documentsRoutes";
 import notificationsRoutes from "../modules/notifications/routes/notificationsRoutes";
 import progressRoutes from "../modules/progress/routes/progressRoutes";
 import apiTokensRoutes from "../modules/api-tokens/routes/apiTokensRoutes";
+import oauthRoutes from "../modules/oauth/routes/oauthRoutes";
 
 const api: Router = Router();
 
@@ -78,6 +79,12 @@ api.use(
   //
   "/v1/api-tokens",
   apiTokensRoutes
+);
+
+api.use(
+  //
+  "/v1/oauth",
+  oauthRoutes
 );
 
 export default api;

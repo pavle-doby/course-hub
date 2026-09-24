@@ -23,4 +23,7 @@ export const env = process.env as {
   VAPID_PUBLIC_KEY: string;
   VAPID_PRIVATE_KEY: string;
   VAPID_SUBJECT: string;
+  API_PUBLIC_URL: string;
+  WEB_APP_URL: string;
+  OAUTH_SECRET: string;
 };

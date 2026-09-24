@@ -637,6 +637,10 @@ export interface CreatedApiToken {
   token: string;
 }
 
+export interface OauthApproveResponse {
+  redirectUrl: string;
+}
+
 export type AuthSignUpBodyLanguage =
   (typeof AuthSignUpBodyLanguage)[keyof typeof AuthSignUpBodyLanguage];
 
@@ -3003,4 +3007,42 @@ export type DeleteApiTokenDefault = {
   code: DeleteApiTokenDefaultCode;
   error?: unknown;
   details?: DeleteApiTokenDefaultDetails;
+};
+
+export type ApproveOauthBody = {
+  /** @minLength 1 */
+  clientId: string;
+  redirectUri: string;
+  /**
+   * @minLength 43
+   * @maxLength 128
+   */
+  codeChallenge: string;
+  state?: string;
+  approve: boolean;
+};
+
+export type ApproveOauthDefaultCode =
+  (typeof ApproveOauthDefaultCode)[keyof typeof ApproveOauthDefaultCode];
+
+export const ApproveOauthDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type ApproveOauthDefaultDetails = { [key: string]: unknown };
+
+export type ApproveOauthDefault = {
+  status: number;
+  code: ApproveOauthDefaultCode;
+  error?: unknown;
+  details?: ApproveOauthDefaultDetails;
 };

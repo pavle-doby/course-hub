@@ -27,7 +27,7 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for the full directory tree, data-flow 
 - Course enrollment, learner lists, and email or share-link invitations
 - Cloudflare Stream videos and Cloudflare R2 documents at course, topic, or lesson level
 - Profile, settings, and localized web UI
-- AI access: an MCP server for coding agents (personal access tokens from Settings)
+- AI access: an MCP server for AI agents, usable as a claude.ai connector (OAuth) or from Claude Code / Cursor with a personal access token
 
 ## How to run
 
@@ -65,6 +65,33 @@ cloudflared tunnel --url http://localhost:3000   # Web (PWA testing)
 ```
 
 The URL is public and HTTPS, and changes on every restart. Register the API tunnel URL with Cloudflare Stream when testing webhooks locally.
+
+## Claude connector (MCP)
+
+The API serves an MCP server at `/apix/v1/mcp` (production: `https://api-production-e54c.up.railway.app/apix/v1/mcp`). Clients log in with OAuth or with a personal access token.
+
+**claude.ai (web, desktop, mobile)**
+
+1. Open [claude.ai/customize/connectors](https://claude.ai/customize/connectors) → **Add custom connector**.
+2. Name it `Course Hub` and paste the MCP URL.
+3. Click **Connect**, log in to Course Hub if asked, and click **Allow** on the consent page.
+
+Each connection creates a token named after the client in Settings → AI access; revoke it there to disconnect.
+
+**Claude Code**
+
+```bash
+# OAuth: opens the browser to log in on first use (/mcp → course-hub → Authenticate)
+claude mcp add --transport http --scope user course-hub https://api-production-e54c.up.railway.app/apix/v1/mcp
+
+# Or a personal access token from Settings → AI access (the dialog shows this command pre-filled)
+claude mcp add --transport http --scope user course-hub https://api-production-e54c.up.railway.app/apix/v1/mcp \
+  --header "Authorization: Bearer ch_pat_..."
+```
+
+**Local testing**
+
+OAuth needs `API_PUBLIC_URL`, `WEB_APP_URL`, and `OAUTH_SECRET` in `apps/api/.env` (see `.env.example`). claude.ai calls the API from its servers, so expose the API with a [tunnel](#tunnels) and set `API_PUBLIC_URL` to the tunnel URL. The consent page opens in your own browser, so `WEB_APP_URL` can stay `http://localhost:3000`. Then add `<tunnel-url>/apix/v1/mcp` as the connector URL.
 
 ## Deploy API to Railway
 

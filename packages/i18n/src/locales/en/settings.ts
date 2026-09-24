@@ -37,6 +37,17 @@ export const settings = {
       confirm: "Revoke",
     },
     revokedToast: "Token revoked",
+    authorize: {
+      title: "Connect {{client}}",
+      description:
+        "{{client}} wants to read your courses and create drafts on your behalf. You can revoke access anytime in Settings.",
+      redirect: "You'll be sent back to {{host}}.",
+      invalidTitle: "Invalid connection request",
+      invalidDescription: "This link is missing information. Start connecting again from the app.",
+      unknownClient: "An app",
+      allow: "Allow",
+      deny: "Deny",
+    },
     createDialog: {
       title: "Create access token",
       description: "Give the token a name so you can recognize it later.",

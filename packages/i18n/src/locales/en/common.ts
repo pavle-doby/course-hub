@@ -207,6 +207,12 @@ export const common = {
         message: "The access token could not be found.",
       },
     },
+    oauth: {
+      INVALID_CLIENT: {
+        title: "Invalid Connection Request",
+        message: "The app asking for access is not registered correctly. Try connecting again.",
+      },
+    },
     progress: {
       LESSON_NOT_FOUND: {
         title: "Lesson Not Found",
