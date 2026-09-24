@@ -1,6 +1,6 @@
 import { db, schema } from "@repo/db";
 import { CourseEntity, UserEntity } from "@repo/db-schema";
-import { and, count, countDistinct, desc, eq, ilike, isNull, or } from "drizzle-orm";
+import { and, count, countDistinct, desc, eq, ilike, isNull, or, sql } from "drizzle-orm";
 import {
   CourseEnrollment,
   GetAllStudentsRes,
@@ -12,7 +12,11 @@ type CourseRow = Omit<CourseEntity, "createdAt" | "updatedAt">;
 
 type CourseCreator = Pick<UserEntity, "id" | "firstName" | "lastName" | "username" | "avatarUrl">;
 
-type EnrolledCourse = CourseRow & { creator: CourseCreator | undefined };
+type EnrolledCourse = CourseRow & {
+  creator: CourseCreator | undefined;
+  lessonsCount: number;
+  doneLessonsCount: number;
+};
 
 type GetEnrolledCoursesParams = {
   userId: string;
@@ -140,7 +144,23 @@ export const enrollmentsRepository = {
     const total = countResult[0]?.count ?? 0;
 
     const rows = await db
-      .select({ course: courseColumns, creator: creatorColumns })
+      .select({
+        course: courseColumns,
+        creator: creatorColumns,
+        lessonsCount: sql<number>`(
+          select count(*)::int from ${schema.lessons}
+          inner join ${schema.topics} on ${schema.lessons.topicId} = ${schema.topics.id}
+          where ${schema.topics.courseId} = ${schema.courses.id}
+        )`,
+        doneLessonsCount: sql<number>`(
+          select count(*)::int from ${schema.lessonProgress}
+          inner join ${schema.lessons} on ${schema.lessonProgress.lessonId} = ${schema.lessons.id}
+          inner join ${schema.topics} on ${schema.lessons.topicId} = ${schema.topics.id}
+          where ${schema.topics.courseId} = ${schema.courses.id}
+            and ${schema.lessonProgress.userId} = ${userId}
+            and ${schema.lessonProgress.status} = 'done'
+        )`,
+      })
       .from(schema.courseEnrollments)
       .innerJoin(schema.courses, eq(schema.courseEnrollments.courseId, schema.courses.id))
       .leftJoin(schema.users, eq(schema.courses.creatorId, schema.users.id))
@@ -150,7 +170,12 @@ export const enrollmentsRepository = {
       .limit(limit ?? total);
 
     return {
-      data: rows.map((row) => ({ ...row.course, creator: row.creator ?? undefined })),
+      data: rows.map((row) => ({
+        ...row.course,
+        creator: row.creator ?? undefined,
+        lessonsCount: row.lessonsCount,
+        doneLessonsCount: row.doneLessonsCount,
+      })),
       pagination: { total, page, limit: limit || total },
     };
   },

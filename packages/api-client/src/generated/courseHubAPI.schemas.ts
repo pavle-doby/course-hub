@@ -189,6 +189,74 @@ export interface Courses {
   pagination: CoursesPagination;
 }
 
+export type EnrolledCourseStatus = (typeof EnrolledCourseStatus)[keyof typeof EnrolledCourseStatus];
+
+export const EnrolledCourseStatus = {
+  draft: "draft",
+  published: "published",
+  archived: "archived",
+} as const;
+
+export type EnrolledCourseVisibility =
+  (typeof EnrolledCourseVisibility)[keyof typeof EnrolledCourseVisibility];
+
+export const EnrolledCourseVisibility = {
+  public: "public",
+  private: "private",
+} as const;
+
+export type EnrolledCourseCreator = {
+  id: string;
+  /**
+   * @maxLength 255
+   * @nullable
+   */
+  firstName: string | null;
+  /**
+   * @maxLength 255
+   * @nullable
+   */
+  lastName: string | null;
+  /** @maxLength 255 */
+  username: string;
+  /** @nullable */
+  avatarUrl: string | null;
+};
+
+export interface EnrolledCourse {
+  id: string;
+  creatorId: string;
+  /** @maxLength 255 */
+  name: string;
+  /** @maxLength 12 */
+  publicId: string;
+  /** @nullable */
+  description: string | null;
+  status: EnrolledCourseStatus;
+  visibility: EnrolledCourseVisibility;
+  /** @nullable */
+  publishedAt: string | null;
+  creator?: EnrolledCourseCreator;
+  /** @nullable */
+  thumbnailUrl: string | null;
+  /**
+   * @minimum 0
+   * @maximum 100
+   */
+  progressPercent: number;
+}
+
+export type EnrolledCoursesPagination = {
+  total: number;
+  page: number;
+  limit: number;
+};
+
+export interface EnrolledCourses {
+  data: EnrolledCourse[];
+  pagination: EnrolledCoursesPagination;
+}
+
 export interface Lesson {
   id: string;
   topicId: string;

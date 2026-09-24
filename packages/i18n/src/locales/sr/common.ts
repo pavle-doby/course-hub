@@ -203,7 +203,7 @@ export const common = {
     title: "Omoguciti obavestenja?",
     cancel: "Ne sada",
     enable: "Omoguci",
-    creatorPrompt: "Omoguciti obavestenja kada se polaznici upisu na ovaj kurs?",
+    creatorPrompt: "Omoguciti obavestenja kada se polaznici upisu na ovaj kurs ili ga zavrse?",
     learnerPrompt: "Omoguciti obavestenja kada ovaj kurs ili njegov autor imaju nov sadrzaj?",
     osReminderTitle: "Sve je spremno!",
     osReminderDescription:
@@ -213,6 +213,10 @@ export const common = {
       courseEnrolled: {
         title: "Novi upis na kurs",
         body: "{{email}} se upisao/la na kurs {{courseName}}.",
+      },
+      courseCompleted: {
+        title: "Kurs je završen! 🎉",
+        body: "{{email}} je završio/la kurs {{courseName}} ✅",
       },
       privateCourseAttempt: {
         title: "Pokusaj upisa na privatni kurs",

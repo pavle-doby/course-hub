@@ -21,10 +21,11 @@ import {
 } from "@repo/ui-web/components/attachment";
 import { Button } from "@repo/ui-web/components/button";
 import { Skeleton } from "@repo/ui-web/components/skeleton";
+import { cn } from "@repo/ui-web/lib/utils";
 import { useT } from "@repo/i18n/client";
 import type { Selection, TopicWithLessons } from "@/hooks/use-course-tree";
 import { useLessonVideoProgress, useSaveLessonProgress } from "@/hooks/use-lesson-progress";
-import { PROGRESS_STATUS_LABEL_KEYS } from "@/utils/consts";
+import { NEXT_LESSON_STATUS, PROGRESS_STATUS_LABEL_KEYS } from "@/utils/consts";
 import { getVideoRefetchInterval } from "@/utils/get-video-refetch-interval";
 import { LessonStatusSelect } from "./lesson-status-select";
 import { ProgressStatusIcon } from "./progress-status-icon";
@@ -128,6 +129,9 @@ export function LearnWorkingArea({
     onSave: saveLessonProgress,
   });
 
+  const nextStatus =
+    isEnrolled && lessonProgress ? NEXT_LESSON_STATUS[lessonProgress.status] : undefined;
+
   function handleLessonStatusChange(status: LessonProgressStatus) {
     if (lessonProgress) {
       setIsSavingStatus(true);
@@ -135,8 +139,14 @@ export function LearnWorkingArea({
     }
   }
 
+  function handleAdvanceStatus() {
+    if (nextStatus) {
+      handleLessonStatusChange(nextStatus.status);
+    }
+  }
+
   return (
-    <div className="flex flex-1 flex-col gap-6 p-4 md:p-6">
+    <div className={cn("flex flex-1 flex-col gap-6 p-4 md:p-6", nextStatus && "pb-16 md:pb-6")}>
       <div className="hidden items-center justify-center gap-2 md:flex">
         <Button
           className="min-w-30"
@@ -253,6 +263,25 @@ export function LearnWorkingArea({
         <p className="mt-4 whitespace-pre-wrap text-muted-foreground">
           {description || t("learn.detail.noDescription")}
         </p>
+
+        {nextStatus && (
+          <>
+            {/* Desktop: at the end of the lesson */}
+            <Button
+              className="mt-6 hidden w-full md:flex"
+              disabled={isSavingStatus}
+              onClick={handleAdvanceStatus}
+            >
+              {t(nextStatus.labelKey)}
+            </Button>
+            {/* Mobile/tablet: fixed primary button above the bottom nav */}
+            <div className="fixed inset-x-0 bottom-20 z-40 px-4 pb-2 md:hidden">
+              <Button className="w-full" disabled={isSavingStatus} onClick={handleAdvanceStatus}>
+                {t(nextStatus.labelKey)}
+              </Button>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

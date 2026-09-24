@@ -1,3 +1,5 @@
+import type { LessonProgressStatus } from "@repo/api-client";
+
 /** `3 seconds` - Refetch interval for video status while it's uploading. */
 export const VIDEO_REFETCH_INTERVAL = 3000;
 
@@ -13,3 +15,26 @@ export const PROGRESS_STATUS_LABEL_KEYS = {
   in_progress: "learn.progress.inProgress",
   done: "learn.progress.done",
 } as const;
+
+/** Next lesson status and its button label key; `done` has no next step. */
+export const NEXT_LESSON_STATUS = {
+  todo: { status: "in_progress", labelKey: "learn.progress.startLesson" },
+  in_progress: { status: "done", labelKey: "learn.progress.completeLesson" },
+  done: undefined,
+} as const satisfies Record<
+  LessonProgressStatus,
+  { status: LessonProgressStatus; labelKey: string } | undefined
+>;
+
+/** Elements whose clicks never trigger the finished-course confetti. */
+export const INTERACTIVE_SELECTOR =
+  "button, a, input, select, textarea, label, video, [role='button'], [role='menuitem'], [role='menuitemradio'], [role='option'], [contenteditable='true']";
+
+/** `1.7 seconds` - Interval between firework bursts while the course-completed dialog is open. */
+export const FIREWORK_INTERVAL = 1700;
+
+/** Horizontal origin ranges for the left and right firework bursts. */
+export const FIREWORK_SIDES = [
+  [0.1, 0.3],
+  [0.7, 0.9],
+] as const;

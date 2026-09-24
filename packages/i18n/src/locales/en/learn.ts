@@ -34,6 +34,14 @@ export const learn = {
     todo: "To do",
     inProgress: "In progress",
     done: "Done",
+    startLesson: "Start lesson",
+    completeLesson: "Mark as done",
+  },
+  completed: {
+    title: "Congratulations! 🎉",
+    description: "You've completed this course. Great job! 💪",
+    thankYou: "Thank you!",
+    newCourse: "New course 🚀",
   },
   enrolled: {
     title: "Enrolled",

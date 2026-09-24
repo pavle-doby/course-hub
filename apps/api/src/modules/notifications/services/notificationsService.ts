@@ -83,6 +83,15 @@ export const notificationsService = {
     );
   },
 
+  // ponytail: completions reuse the creator's `course_enrolled` opt-in (learner activity on the
+  // course) instead of a new category, which would need a DB enum migration.
+  notifyCourseCompleted: async (course: NotificationCourse, email: string): Promise<void> => {
+    await send(
+      await notificationsRepository.getCourseRecipients(course.id, "course_enrolled"),
+      (language) => getPayload(language, "courseCompleted", course, email)
+    );
+  },
+
   notifyPrivateCourseAttempt: async (course: NotificationCourse, email: string): Promise<void> => {
     await send(
       await notificationsRepository.getCourseRecipients(course.id, "private_course_attempt"),

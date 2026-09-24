@@ -206,7 +206,7 @@ export const common = {
     title: "Enable notifications?",
     cancel: "Not now",
     enable: "Enable",
-    creatorPrompt: "Enable notifications when learners enroll in this course?",
+    creatorPrompt: "Enable notifications when learners enroll in or complete this course?",
     learnerPrompt: "Enable notifications when this course or its creator has new content?",
     osReminderTitle: "You're all set!",
     osReminderDescription:
@@ -216,6 +216,10 @@ export const common = {
       courseEnrolled: {
         title: "New course enrollment",
         body: "{{email}} enrolled in {{courseName}}.",
+      },
+      courseCompleted: {
+        title: "Course completed! 🎉",
+        body: "{{email}} completed {{courseName}} ✅",
       },
       privateCourseAttempt: {
         title: "Private course enrollment attempt",

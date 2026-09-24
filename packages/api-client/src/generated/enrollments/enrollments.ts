@@ -22,9 +22,9 @@ import type {
 
 import type {
   CourseEnrollment,
-  Courses,
   EnrollInCourseBody,
   EnrollInCourseDefault,
+  EnrolledCourses,
   GetEnrolledCourseLessonsDefault,
   GetEnrolledCourseLessonsPathParameters,
   GetEnrolledCourseTopicsDefault,
@@ -610,7 +610,7 @@ export const getEnrolledCourses = (
   options?: SecondParameter<typeof customInstance>,
   signal?: AbortSignal
 ) => {
-  return customInstance<Courses>(
+  return customInstance<EnrolledCourses>(
     { url: `/v1/enrollments/courses`, method: "GET", params, signal },
     options
   );

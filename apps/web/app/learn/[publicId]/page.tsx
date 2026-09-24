@@ -2,6 +2,7 @@
 
 import { useEffect, useEffectEvent, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import confetti from "canvas-confetti";
 import {
   useEnrollInCourse,
   useGetCourseProgress,
@@ -18,12 +19,15 @@ import {
 import { useT } from "@repo/i18n/client";
 import { SidebarProvider } from "@repo/ui-web/components/sidebar";
 import { toast } from "@repo/ui-web/components/sonner";
+import { useIsMobile } from "@repo/ui-web/hooks/use-mobile";
 import { useErrorHandlingQuery } from "@repo/shared";
 import { useAdjacentSelection, useCourseTree, type Selection } from "@/hooks/use-course-tree";
 import { useSelectionSearchParam } from "@/hooks/use-selection-search-param";
+import { INTERACTIVE_SELECTOR } from "@/utils/consts";
 import { getAccessToken } from "@/utils/token-storage";
 import { notificationsService } from "@/services/notifications-service";
 import { NotificationPrompt } from "@/components/notification-prompt";
+import { CourseCompletedDialog } from "./components/course-completed-dialog";
 import { LearnBottomNav } from "./components/learn-bottom-nav";
 import { LearnCourseDetailSkeleton } from "./components/learn-course-detail-skeleton";
 import { LearnHeader } from "./components/learn-header";
@@ -39,6 +43,7 @@ export default function LearnCourseDetailPage() {
   const [urlSelection, setUrlSelection] = useSelectionSearchParam();
   const hasRestoredLessonRef = useRef(false);
   const [notificationCourseId, setNotificationCourseId] = useState<string>();
+  const [isCompletedDialogOpen, setIsCompletedDialogOpen] = useState(false);
 
   const hasAccessToken = Boolean(getAccessToken());
   const { data: currentUser, isFetching: isUserPending } = useGetUserSelf({
@@ -142,12 +147,13 @@ export default function LearnCourseDetailPage() {
       : undefined;
 
   // Opening the course without a topic/lesson in the URL resumes the last active lesson, once.
+  // A finished course has nothing to resume, so it stays on the course overview.
   const restoreLastLesson = useEffectEvent(() => {
     if (hasRestoredLessonRef.current || !progress) {
       return;
     }
     hasRestoredLessonRef.current = true;
-    if (urlSelection.type === "course" && progress.lastLessonId) {
+    if (urlSelection.type === "course" && progress.status !== "done" && progress.lastLessonId) {
       setUrlSelection({ type: "lesson", id: progress.lastLessonId });
     }
   });
@@ -155,6 +161,44 @@ export default function LearnCourseDetailPage() {
   useEffect(() => {
     restoreLastLesson();
   }, [progress]);
+
+  // Celebrate only when the course turns done during this visit, not when opening a finished one.
+  // On mobile the completion burst shoots up from the bottom center.
+  const isMobile = useIsMobile();
+  const previousCourseStatusRef = useRef(progress?.status);
+  useEffect(() => {
+    const previousStatus = previousCourseStatusRef.current;
+    previousCourseStatusRef.current = progress?.status;
+    if (previousStatus && previousStatus !== "done" && progress?.status === "done") {
+      void confetti({
+        particleCount: 300,
+        spread: 120,
+        startVelocity: isMobile ? 70 : 55,
+        origin: isMobile ? { x: 0.5, y: 1 } : { y: 0.6 },
+      });
+      setIsCompletedDialogOpen(true);
+    }
+  }, [progress?.status, isMobile]);
+
+  // A finished course keeps celebrating: clicks on non-interactive areas burst confetti there.
+  const isCourseDone = isEnrolled && progress?.status === "done";
+  useEffect(() => {
+    if (!isCourseDone) {
+      return;
+    }
+    function handleClick(event: MouseEvent) {
+      if ((event.target as Element).closest(INTERACTIVE_SELECTOR)) {
+        return;
+      }
+      void confetti({
+        particleCount: 70,
+        spread: 70,
+        origin: { x: event.clientX / window.innerWidth, y: event.clientY / window.innerHeight },
+      });
+    }
+    document.addEventListener("click", handleClick);
+    return () => document.removeEventListener("click", handleClick);
+  }, [isCourseDone]);
 
   const { mutateAsync: enroll, isPending: isEnrolling } = useEnrollInCourse();
   const { mutateAsync: withdraw, isPending: isWithdrawing } = useWithdrawFromCourse();
@@ -271,6 +315,7 @@ export default function LearnCourseDetailPage() {
         onEnable={handleEnableNotifications}
         description={t("notifications.learnerPrompt")}
       />
+      <CourseCompletedDialog open={isCompletedDialogOpen} onOpenChange={setIsCompletedDialogOpen} />
       <div className="flex min-h-svh flex-1 flex-row">
         <LearnTreeNav
           courseName={course.name}

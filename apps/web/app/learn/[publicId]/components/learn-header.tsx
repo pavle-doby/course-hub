@@ -8,19 +8,7 @@ import { Skeleton } from "@repo/ui-web/components/skeleton";
 import { cn } from "@repo/ui-web/lib/utils";
 import { useT } from "@repo/i18n/client";
 import { ChAlertDialog } from "@/components/ch-alert-dialog";
-
-function getProgressColor(percent: number) {
-  if (percent === 100) {
-    return "text-green-600 dark:text-green-400 [&_[data-slot=progress-indicator]]:bg-green-500";
-  }
-  if (percent >= 66) {
-    return "text-purple-600 dark:text-purple-400 [&_[data-slot=progress-indicator]]:bg-purple-500";
-  }
-  if (percent >= 33) {
-    return "text-blue-600 dark:text-blue-400 [&_[data-slot=progress-indicator]]:bg-blue-500";
-  }
-  return "text-muted-foreground";
-}
+import { getProgressColor } from "@/utils/get-progress-color";
 
 type LearnHeaderProps = {
   title: string;

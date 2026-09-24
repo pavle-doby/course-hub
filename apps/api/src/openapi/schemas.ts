@@ -11,6 +11,7 @@ import {
   TopicSchema as TopicSchemaBase,
   PublicTopicSchema as PublicTopicSchemaBase,
   CourseEnrollmentSchema as CourseEnrollmentSchemaBase,
+  EnrolledCourseSchema as EnrolledCourseSchemaBase,
   StudentSchema as StudentSchemaBase,
   CourseInvitationSchema as CourseInvitationSchemaBase,
   VideoEditorSchema as VideoEditorSchemaBase,
@@ -57,6 +58,16 @@ export const PaginatedCoursesSchema = registry.register(
   "Courses",
   z.object({
     data: z.array(CourseSchema),
+    pagination: PaginationSchema,
+  })
+);
+
+export const EnrolledCourseSchema = registry.register("EnrolledCourse", EnrolledCourseSchemaBase);
+
+export const PaginatedEnrolledCoursesSchema = registry.register(
+  "EnrolledCourses",
+  z.object({
+    data: z.array(EnrolledCourseSchema),
     pagination: PaginationSchema,
   })
 );

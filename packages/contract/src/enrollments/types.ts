@@ -1,12 +1,17 @@
 import { z } from "zod";
 import type { Topic } from "../topics";
 import type { Lesson } from "../lessons";
-import type { Course } from "../courses";
 import type { PaginationReq, PaginationRes, Search } from "../shared";
-import { CourseEnrollmentSchema, EnrollCourseBodySchema, StudentSchema } from "./schemas";
+import {
+  CourseEnrollmentSchema,
+  EnrolledCourseSchema,
+  EnrollCourseBodySchema,
+  StudentSchema,
+} from "./schemas";
 
 export type CourseEnrollment = z.infer<typeof CourseEnrollmentSchema>;
 export type Student = z.infer<typeof StudentSchema>;
+export type EnrolledCourse = z.infer<typeof EnrolledCourseSchema>;
 
 // POST /enrollments → enroll current user into a published course
 export type EnrollCourseReq = z.infer<typeof EnrollCourseBodySchema>;
@@ -26,7 +31,7 @@ export type GetEnrolledCourseLessonsRes = Lesson[];
 
 // GET /enrollments/courses → courses current user is enrolled in
 export type GetAllEnrolledCoursesReq<Pagination = PaginationReq> = Pagination & Partial<Search>;
-export type GetAllEnrolledCoursesRes = PaginationRes<Course>;
+export type GetAllEnrolledCoursesRes = PaginationRes<EnrolledCourse>;
 
 // GET /enrollments/students → students enrolled in courses created by the current user
 export type GetAllStudentsReq<Pagination = PaginationReq> = Pagination & Partial<Search>;

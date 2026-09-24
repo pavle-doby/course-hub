@@ -5,12 +5,17 @@ import Image from "next/image";
 import { type Course } from "@repo/api-client";
 import { Card, CardContent } from "@repo/ui-web/components/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui-web/components/avatar";
+import { Progress } from "@repo/ui-web/components/progress";
+import { useT } from "@repo/i18n/client";
 import { BookOpen } from "lucide-react";
 import { cn } from "@repo/ui-web/lib/utils";
 import { courseCardGradient } from "@/utils/course-card-gradient";
+import { getProgressColor } from "@/utils/get-progress-color";
 
 type LearnCourseCardProps = {
   course: Course;
+  /** Percent of lessons done; shown only for enrolled courses. */
+  progressPercent?: number;
 };
 
 function creatorInitials(creator: Course["creator"]) {
@@ -18,7 +23,9 @@ function creatorInitials(creator: Course["creator"]) {
   return initials || (creator?.username.charAt(0).toUpperCase() ?? "?");
 }
 
-export function LearnCourseCard({ course }: LearnCourseCardProps) {
+export function LearnCourseCard({ course, progressPercent }: LearnCourseCardProps) {
+  const { t } = useT();
+
   return (
     <Link href={`/learn/${course.publicId}`} className="flex h-full">
       <Card className="h-full w-full gap-0 py-0 transition-shadow hover:shadow-md">
@@ -52,6 +59,16 @@ export function LearnCourseCard({ course }: LearnCourseCardProps) {
             </Avatar>
             <h3 className="line-clamp-1 font-semibold">{course.name}</h3>
           </div>
+          {progressPercent !== undefined && (
+            <div className={cn("flex items-center gap-2", getProgressColor(progressPercent))}>
+              <Progress
+                value={progressPercent}
+                aria-label={t("learn.progress.courseProgress")}
+                className="h-2 flex-1"
+              />
+              <span className="text-sm font-bold tabular-nums">{progressPercent}%</span>
+            </div>
+          )}
           {course.description && (
             <p className="line-clamp-3 text-sm text-muted-foreground">{course.description}</p>
           )}

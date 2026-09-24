@@ -66,7 +66,11 @@ export default function LearnEnrolledPage() {
             <div className="flex flex-1 flex-col justify-between">
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
                 {courses.data.map((course) => (
-                  <LearnCourseCard key={course.id} course={course} />
+                  <LearnCourseCard
+                    key={course.id}
+                    course={course}
+                    progressPercent={course.progressPercent}
+                  />
                 ))}
               </div>
 

@@ -53,12 +53,13 @@ export const progressRepository = {
   },
 
   // Upserts the lesson row; on a status change also syncs course_enrollments.completedAt.
+  // `isCourseCompleted` is true only when this save newly completed the course.
   saveLessonProgress: async (
     userId: string,
     lessonId: string,
     courseId: string,
     data: UpdateLessonProgressReq
-  ): Promise<LessonProgress> => {
+  ): Promise<{ progress: LessonProgress; isCourseCompleted: boolean }> => {
     return await db.transaction(async (tx) => {
       const now = new Date();
       const statusFields = data.status && {
@@ -98,23 +99,25 @@ export const progressRepository = {
 
         const isCourseDone = totals!.lessons > 0 && Number(totals!.notDone) === 0;
 
-        await tx
+        // A done course only stamps enrollments not completed yet, so a returned row means
+        // this save is the one that completed it.
+        const updated = await tx
           .update(schema.courseEnrollments)
-          .set({
-            completedAt: isCourseDone
-              ? sql`coalesce(${schema.courseEnrollments.completedAt}, now())`
-              : null,
-          })
+          .set({ completedAt: isCourseDone ? now : null })
           .where(
             and(
               eq(schema.courseEnrollments.userId, userId),
               eq(schema.courseEnrollments.courseId, courseId),
-              isNull(schema.courseEnrollments.withdrawnAt)
+              isNull(schema.courseEnrollments.withdrawnAt),
+              isCourseDone ? isNull(schema.courseEnrollments.completedAt) : undefined
             )
-          );
+          )
+          .returning({ id: schema.courseEnrollments.id });
+
+        return { progress: progress!, isCourseCompleted: isCourseDone && updated.length > 0 };
       }
 
-      return progress!;
+      return { progress: progress!, isCourseCompleted: false };
     });
   },
 };

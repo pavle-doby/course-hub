@@ -131,10 +131,14 @@ export const enrollmentsService = {
     const courses = await enrollmentsRepository.getEnrolledCourses({ ...dto, userId: user.id });
     return {
       ...courses,
-      data: courses.data.map(({ thumbnailObjectKey, ...course }) => ({
-        ...course,
-        thumbnailUrl: thumbnailObjectKey ? r2Service.publicUrl(thumbnailObjectKey) : null,
-      })),
+      data: courses.data.map(
+        ({ thumbnailObjectKey, lessonsCount, doneLessonsCount, ...course }) => ({
+          ...course,
+          thumbnailUrl: thumbnailObjectKey ? r2Service.publicUrl(thumbnailObjectKey) : null,
+          progressPercent:
+            lessonsCount > 0 ? Math.round((doneLessonsCount / lessonsCount) * 100) : 0,
+        })
+      ),
     };
   },
 

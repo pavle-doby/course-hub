@@ -10,6 +10,7 @@ import {
 import { usersRepository } from "api/modules/users/repository/usersRepository";
 import { coursesRepository } from "api/modules/courses/repository/coursesRepository";
 import { enrollmentsRepository } from "api/modules/enrollments/repository/enrollmentsRepository";
+import { notificationsService } from "api/modules/notifications/services/notificationsService";
 import { progressRepository } from "../repository/progressRepository";
 
 // Topic and course status are derived from lesson statuses, never stored.
@@ -23,13 +24,23 @@ function deriveStatus(statuses: LessonProgressStatus[]): LessonProgressStatus {
   return "in_progress";
 }
 
-async function getEnrolledUserIdOrThrow(authUserId: string, courseId: string): Promise<string> {
+async function getEnrolledUserOrThrow(
+  authUserId: string,
+  courseId: string
+): Promise<{ id: string; email: string }> {
   const user = await usersRepository.getUserByAuthUserId(authUserId);
   const enrollment = user && (await enrollmentsRepository.getEnrollment(user.id, courseId));
   if (!user || !enrollment || enrollment.withdrawnAt) {
     throw new NotFoundError({ code: ErrorCodeEnrollment.NOT_ENROLLED });
   }
-  return user.id;
+  return user;
+}
+
+async function notifyCourseCompleted(courseId: string, email: string): Promise<void> {
+  const course = await coursesRepository.getCourseById(courseId);
+  if (course) {
+    await notificationsService.notifyCourseCompleted(course, email);
+  }
 }
 
 export const progressService = {
@@ -41,7 +52,7 @@ export const progressService = {
     if (!course) {
       throw new NotFoundError({ code: ErrorCodeEnrollment.COURSE_NOT_FOUND });
     }
-    const userId = await getEnrolledUserIdOrThrow(authUserId, course.id);
+    const { id: userId } = await getEnrolledUserOrThrow(authUserId, course.id);
 
     const rows = await progressRepository.getCourseLessonStatuses(userId, course.id);
     const statusesByTopic = new Map<string, LessonProgressStatus[]>();
@@ -80,8 +91,17 @@ export const progressService = {
     if (!courseId) {
       throw new NotFoundError({ code: ErrorCodeProgress.LESSON_NOT_FOUND });
     }
-    const userId = await getEnrolledUserIdOrThrow(authUserId, courseId);
+    const user = await getEnrolledUserOrThrow(authUserId, courseId);
 
-    return await progressRepository.saveLessonProgress(userId, lessonId, courseId, dto);
+    const { progress, isCourseCompleted } = await progressRepository.saveLessonProgress(
+      user.id,
+      lessonId,
+      courseId,
+      dto
+    );
+    if (isCourseCompleted) {
+      void notifyCourseCompleted(courseId, user.email).catch(() => undefined);
+    }
+    return progress;
   },
 };

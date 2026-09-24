@@ -34,6 +34,14 @@ export const learn = {
     todo: "Uradi",
     inProgress: "U toku",
     done: "Završeno",
+    startLesson: "Započni lekciju",
+    completeLesson: "Označi kao završeno",
+  },
+  completed: {
+    title: "Čestitamo! 🎉",
+    description: "Završili ste ovaj kurs. Odličan posao! 💪",
+    thankYou: "Hvala!",
+    newCourse: "Novi kurs 🚀",
   },
   enrolled: {
     title: "Upisani",

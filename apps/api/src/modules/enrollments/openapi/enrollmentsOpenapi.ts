@@ -4,7 +4,7 @@ import {
   TopicSchema,
   LessonSchema,
   CourseEnrollmentSchema,
-  PaginatedCoursesSchema,
+  PaginatedEnrolledCoursesSchema,
   PaginatedStudentsSchema,
 } from "api/openapi/schemas";
 import {
@@ -140,8 +140,8 @@ registry.registerPath({
   },
   responses: {
     200: {
-      description: "Paginated list of courses the current user is enrolled in",
-      content: { "application/json": { schema: PaginatedCoursesSchema } },
+      description: "Paginated list of courses the current user is enrolled in, with progress",
+      content: { "application/json": { schema: PaginatedEnrolledCoursesSchema } },
     },
     default: {
       description: "Error",
