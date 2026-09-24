@@ -28,6 +28,7 @@ import {
   GraduationCap,
   LogOut,
   Settings,
+  Sparkles,
   User,
   Users,
 } from "lucide-react";
@@ -45,6 +46,7 @@ type NavKey =
   | "nav.learnEnrolled"
   | "nav.students"
   | "nav.profile"
+  | "nav.aiConnect"
   | "nav.settings"
   | "nav.logOut";
 
@@ -78,6 +80,7 @@ const NAV_ITEMS: NavItem[] = [
 ];
 
 const FOOTER_ITEMS = (onSignOut: () => void): FooterItem[] => [
+  { label: "nav.aiConnect", icon: Sparkles, href: "/ai-connect" },
   { label: "nav.settings", icon: Settings, href: "/settings" },
   { label: "nav.logOut", icon: LogOut, action: onSignOut },
 ];

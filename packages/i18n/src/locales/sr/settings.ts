@@ -23,7 +23,7 @@ export const settings = {
       empty: "Još nema povezanih aplikacija.",
     },
     manual: {
-      title: "Pristupni tokeni",
+      title: "MCP - Tokeni",
       description:
         "Za agente bez podrške za konektore, kao što su Claude Code ili Cursor. Kreirajte token i nalepite ga u MCP konfiguraciju agenta.",
     },

@@ -8,6 +8,7 @@ export const nav = {
   students: "Studenti",
   notifications: "Obaveštenja",
   profile: "Profil",
+  aiConnect: "AI povezivanje",
   settings: "Podešavanja",
   feedback: "Utisci",
   logOut: "Odjava",

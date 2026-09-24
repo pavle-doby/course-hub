@@ -8,6 +8,7 @@ export const nav = {
   students: "Students",
   notifications: "Notifications",
   profile: "Profile",
+  aiConnect: "AI Connect",
   settings: "Settings",
   feedback: "Feedback",
   logOut: "Log Out",

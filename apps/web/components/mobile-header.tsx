@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Menu, Settings, LogOut } from "lucide-react";
+import { Menu, Settings, Sparkles, LogOut } from "lucide-react";
 import { useRouter, usePathname } from "next/navigation";
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@repo/ui-web/components/sheet";
 import { Button } from "@repo/ui-web/components/button";
@@ -11,7 +11,14 @@ import { clearAuthTokens } from "@/utils/token-storage";
 
 const TITLE_BY_PATH: Record<
   string,
-  "nav.courses" | "nav.lessons" | "nav.learn" | "nav.students" | "nav.notifications" | "nav.profile"
+  | "nav.courses"
+  | "nav.lessons"
+  | "nav.learn"
+  | "nav.students"
+  | "nav.notifications"
+  | "nav.profile"
+  | "nav.aiConnect"
+  | "nav.settings"
 > = {
   "/courses": "nav.courses",
   "/lessons": "nav.lessons",
@@ -19,6 +26,8 @@ const TITLE_BY_PATH: Record<
   "/students": "nav.students",
   "/notifications": "nav.notifications",
   "/profile": "nav.profile",
+  "/ai-connect": "nav.aiConnect",
+  "/settings": "nav.settings",
 };
 
 export function MobileHeader() {
@@ -50,6 +59,15 @@ export function MobileHeader() {
         </SheetTrigger>
         <SheetContent side="right" className="flex flex-col p-0 pt-12">
           <nav className="flex flex-col gap-1 px-4">
+            <SheetClose asChild>
+              <Link
+                href="/ai-connect"
+                className="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm hover:bg-accent"
+              >
+                <Sparkles className="size-4" />
+                {t("nav.aiConnect")}
+              </Link>
+            </SheetClose>
             <SheetClose asChild>
               <Link
                 href="/settings"

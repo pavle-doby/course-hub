@@ -23,7 +23,7 @@ export const settings = {
       empty: "No connected apps yet.",
     },
     manual: {
-      title: "Access tokens",
+      title: "MCP - Access tokens",
       description:
         "For agents without connector support, like Claude Code or Cursor. Create a token and paste it into the agent's MCP config.",
     },
