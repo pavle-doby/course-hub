@@ -19,6 +19,9 @@ export const settings = {
     title: "AI pristup",
     description:
       "Lični pristupni tokeni omogućavaju AI agentima, kao što su Claude Code ili Cursor, da čitaju vaše kurseve i kreiraju nacrte preko MCP-a.",
+    connectorUrl: "URL konektora",
+    connectorUrlHint:
+      "U <strong>Claude</strong>-u otvorite <strong>Settings</strong> → <connectorsLink>Connectors</connectorsLink> → <strong>Add</strong> → <strong>Add custom connector</strong> i nalepite ovaj URL. Ostali agenti ga mogu koristiti uz pristupni token ispod.",
     empty: "Još nema pristupnih tokena.",
     createToken: "Kreiraj token",
     lastUsed: "Poslednji put korišćen {{date}}",
@@ -26,6 +29,9 @@ export const settings = {
     created: "Kreiran {{date}}",
     details: "Detalji",
     detailsDialog: {
+      claudeConnections: "Svoju vezu možete videti ovde:",
+      oauthDescription:
+        "{{client}} je povezan preko prilagođenog konektora i sam upravlja ovim tokenom, pa nema šta da se podešava. Opozovite ga da biste prekinuli vezu sa {{client}}.",
       description:
         "Čuva se samo heš tokena, pa ne može ponovo da se prikaže. Nalepite token koji ste kopirali pri kreiranju da popunite komande ili kreirajte novi token.",
     },

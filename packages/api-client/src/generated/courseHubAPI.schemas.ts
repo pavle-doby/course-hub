@@ -614,16 +614,32 @@ export interface CourseProgress {
   lessons: CourseProgressLessonsItem[];
 }
 
+export type ApiTokenSource = (typeof ApiTokenSource)[keyof typeof ApiTokenSource];
+
+export const ApiTokenSource = {
+  manual: "manual",
+  oauth: "oauth",
+} as const;
+
 export interface ApiToken {
   id: string;
   /** @maxLength 100 */
   name: string;
   /** @maxLength 16 */
   tokenPrefix: string;
+  source: ApiTokenSource;
   /** @nullable */
   lastUsedAt: string | null;
   createdAt: string;
 }
+
+export type CreatedApiTokenSource =
+  (typeof CreatedApiTokenSource)[keyof typeof CreatedApiTokenSource];
+
+export const CreatedApiTokenSource = {
+  manual: "manual",
+  oauth: "oauth",
+} as const;
 
 export interface CreatedApiToken {
   id: string;
@@ -631,6 +647,7 @@ export interface CreatedApiToken {
   name: string;
   /** @maxLength 16 */
   tokenPrefix: string;
+  source: CreatedApiTokenSource;
   /** @nullable */
   lastUsedAt: string | null;
   createdAt: string;

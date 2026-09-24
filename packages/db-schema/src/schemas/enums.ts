@@ -26,6 +26,8 @@ export const notificationCategoryEnum = pgEnum("notification_category", [
   "course_updated",
   "creator_new_course",
 ]);
+// `manual` = created in Settings, `oauth` = issued to a connector (e.g. Claude)
+export const apiTokenSourceEnum = pgEnum("api_token_source", ["manual", "oauth"]);
 export const lessonProgressStatusEnum = pgEnum("lesson_progress_status", [
   "todo",
   "in_progress",

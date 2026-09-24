@@ -9,7 +9,7 @@ import {
   useQueryClient,
   type ApiToken,
 } from "@repo/api-client";
-import { useT } from "@repo/i18n/client";
+import { Trans, useT } from "@repo/i18n/client";
 import { useErrorHandlingAction, useErrorHandlingQuery } from "@repo/shared";
 import { Button } from "@repo/ui-web/components/button";
 import {
@@ -23,8 +23,10 @@ import {
 import { Skeleton } from "@repo/ui-web/components/skeleton";
 import { toast } from "@repo/ui-web/components/sonner";
 import { ChAlertDialog } from "@/components/ch-alert-dialog";
+import { CLAUDE_CONNECTORS_SETTINGS_URL, MCP_URL } from "@/utils/consts";
 import { ApiTokenDetailsDialog } from "./api-token-details-dialog";
 import { CreateApiTokenDialog } from "./create-api-token-dialog";
+import { Snippet } from "./mcp-config-snippets";
 
 export function AiAccessCard() {
   const { t } = useT();
@@ -88,6 +90,25 @@ export function AiAccessCard() {
         </CardAction>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
+        <div className="flex flex-col gap-2 border-b pb-4">
+          <Snippet label={t("settings.aiAccess.connectorUrl")} text={MCP_URL} />
+          <p className="text-xs text-muted-foreground">
+            <Trans
+              t={t}
+              i18nKey="settings.aiAccess.connectorUrlHint"
+              components={{
+                connectorsLink: (
+                  <a
+                    href={CLAUDE_CONNECTORS_SETTINGS_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-foreground underline underline-offset-4"
+                  />
+                ),
+              }}
+            />
+          </p>
+        </div>
         {isPending && <Skeleton className="h-14 w-full" />}
         {tokens?.length === 0 && (
           <p className="text-sm text-muted-foreground">{t("settings.aiAccess.empty")}</p>

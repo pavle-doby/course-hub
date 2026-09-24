@@ -45,5 +45,11 @@ export const FIREWORK_SIDES = [
  */
 export const MCP_URL = `${process.env.NEXT_PUBLIC_API_URL?.replace(/\/api$/, "/apix")}/v1/mcp`;
 
+/** Claude settings page where users add a custom connector. */
+export const CLAUDE_CONNECTORS_SETTINGS_URL = "https://claude.ai/customize/connectors";
+
+/** Where Claude users see and manage their custom connectors. */
+export const CLAUDE_CONNECTORS_URL = "https://claude.ai/customize/connectors/yours";
+
 /** Stands in for the token in MCP config snippets until the user pastes it (only its hash is stored). */
 export const MCP_TOKEN_PLACEHOLDER = "<YOUR_TOKEN>";

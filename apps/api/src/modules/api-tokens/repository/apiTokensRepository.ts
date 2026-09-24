@@ -6,6 +6,7 @@ const apiTokenColumns = {
   id: schema.apiTokens.id,
   name: schema.apiTokens.name,
   tokenPrefix: schema.apiTokens.tokenPrefix,
+  source: schema.apiTokens.source,
   lastUsedAt: schema.apiTokens.lastUsedAt,
   createdAt: schema.apiTokens.createdAt,
 };
@@ -45,6 +46,7 @@ export const apiTokensRepository = {
     name: string;
     tokenHash: string;
     tokenPrefix: string;
+    source?: ApiToken["source"];
   }): Promise<ApiToken> => {
     const [token] = await db.insert(schema.apiTokens).values(data).returning(apiTokenColumns);
     return token!;

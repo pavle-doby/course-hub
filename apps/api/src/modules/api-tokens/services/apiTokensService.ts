@@ -3,6 +3,7 @@ import {
   ErrorCodeApiToken,
   ErrorCodeUser,
   NotFoundError,
+  type ApiToken,
   type CreateApiTokenReq,
   type CreateApiTokenRes,
   type GetApiTokensRes,
@@ -32,13 +33,18 @@ export const apiTokensService = {
     return await apiTokensRepository.getActiveTokens(await getUserId(authUserId));
   },
 
-  createToken: async (authUserId: string, dto: CreateApiTokenReq): Promise<CreateApiTokenRes> => {
+  createToken: async (
+    authUserId: string,
+    dto: CreateApiTokenReq,
+    source: ApiToken["source"] = "manual"
+  ): Promise<CreateApiTokenRes> => {
     const token = `${TOKEN_PREFIX}${randomBytes(32).toString("base64url")}`;
     const created = await apiTokensRepository.createToken({
       userId: await getUserId(authUserId),
       name: dto.name,
       tokenHash: hashToken(token),
       tokenPrefix: token.slice(0, PREFIX_DISPLAY_LENGTH),
+      source,
     });
     return { ...created, token };
   },

@@ -216,9 +216,11 @@ export const oauthService = {
       throw new OauthError("invalid_grant", "Invalid or expired authorization code");
     }
     const client = verify<OauthClient>(grant.clientId, "client");
-    const created = await apiTokensService.createToken(grant.authUserId, {
-      name: client?.name ?? "MCP client",
-    });
+    const created = await apiTokensService.createToken(
+      grant.authUserId,
+      { name: client?.name ?? "MCP client" },
+      "oauth"
+    );
     return { access_token: created.token, token_type: "Bearer" };
   },
 };

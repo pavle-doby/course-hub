@@ -76,7 +76,7 @@ type SnippetProps = {
   children?: ReactNode;
 };
 
-function Snippet({ label, text, children }: SnippetProps) {
+export function Snippet({ label, text, children }: SnippetProps) {
   const { t } = useT();
 
   async function handleCopy() {

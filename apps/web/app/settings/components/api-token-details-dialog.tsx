@@ -13,7 +13,7 @@ import {
 } from "@repo/ui-web/components/dialog";
 import { Field, FieldLabel } from "@repo/ui-web/components/field";
 import { Input } from "@repo/ui-web/components/input";
-import { MCP_TOKEN_PLACEHOLDER } from "@/utils/consts";
+import { CLAUDE_CONNECTORS_URL, MCP_TOKEN_PLACEHOLDER } from "@/utils/consts";
 import { McpConfigSnippets } from "./mcp-config-snippets";
 
 type ApiTokenDetailsDialogProps = {
@@ -29,6 +29,7 @@ export function ApiTokenDetailsDialog({ token, onOpenChange }: ApiTokenDetailsDi
   // Only fills in the snippets locally; never sent anywhere
   const { register, reset, control } = useForm<TokenForm>({ defaultValues: { token: "" } });
   const enteredToken = useWatch({ control, name: "token" }).trim();
+  const isOauth = token?.source === "oauth";
 
   function handleOpenChange(open: boolean) {
     if (!open) {
@@ -42,21 +43,43 @@ export function ApiTokenDetailsDialog({ token, onOpenChange }: ApiTokenDetailsDi
       <DialogContent className="sm:max-w-xl">
         <DialogHeader>
           <DialogTitle>{token?.name}</DialogTitle>
-          <DialogDescription>{t("settings.aiAccess.detailsDialog.description")}</DialogDescription>
+          <DialogDescription>
+            {isOauth
+              ? t("settings.aiAccess.detailsDialog.oauthDescription", { client: token.name })
+              : t("settings.aiAccess.detailsDialog.description")}
+          </DialogDescription>
         </DialogHeader>
-        <Field>
-          <FieldLabel htmlFor={`${id}-token`}>
-            {t("settings.aiAccess.createDialog.token")}
-          </FieldLabel>
-          <Input
-            id={`${id}-token`}
-            autoComplete="off"
-            spellCheck={false}
-            placeholder={token && `${token.tokenPrefix}…`}
-            {...register("token")}
-          />
-        </Field>
-        <McpConfigSnippets token={enteredToken || MCP_TOKEN_PLACEHOLDER} showToken={false} />
+        {isOauth && (
+          <p className="text-sm text-muted-foreground">
+            {t("settings.aiAccess.detailsDialog.claudeConnections")}
+            <br />
+            <a
+              href={CLAUDE_CONNECTORS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="break-all text-foreground underline underline-offset-4"
+            >
+              {CLAUDE_CONNECTORS_URL}
+            </a>
+          </p>
+        )}
+        {!isOauth && (
+          <>
+            <Field>
+              <FieldLabel htmlFor={`${id}-token`}>
+                {t("settings.aiAccess.createDialog.token")}
+              </FieldLabel>
+              <Input
+                id={`${id}-token`}
+                autoComplete="off"
+                spellCheck={false}
+                placeholder={token && `${token.tokenPrefix}…`}
+                {...register("token")}
+              />
+            </Field>
+            <McpConfigSnippets token={enteredToken || MCP_TOKEN_PLACEHOLDER} showToken={false} />
+          </>
+        )}
       </DialogContent>
     </Dialog>
   );
