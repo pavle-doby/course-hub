@@ -3,4 +3,5 @@ export enum ErrorCodeEnrollment {
   COURSE_NOT_FOUND = "enrollment_course_not_found",
   COURSE_PRIVATE = "enrollment_course_private",
   NOT_ENROLLED = "enrollment_not_enrolled",
+  AI_ACCESS_DISABLED = "enrollment_ai_access_disabled",
 }

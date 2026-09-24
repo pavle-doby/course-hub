@@ -64,6 +64,13 @@
       "when": 1790266317507,
       "tag": "0008_course_reviews",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1790286320437,
+      "tag": "0009_course_ai_access",
+      "breakpoints": true
     }
   ]
 }

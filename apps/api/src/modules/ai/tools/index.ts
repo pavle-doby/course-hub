@@ -8,6 +8,10 @@ import {
 } from "api/modules/courses/ai/tools/coursesTools";
 import { addTopicTool, updateTopicTool } from "api/modules/topics/ai/tools/topicsTools";
 import { addLessonTool, updateLessonTool } from "api/modules/lessons/ai/tools/lessonsTools";
+import {
+  getEnrolledCourseTool,
+  listEnrolledCoursesTool,
+} from "api/modules/enrollments/ai/tools/enrollmentsTools";
 
 export type { CourseTool, CourseToolContext } from "./courseTool";
 
@@ -16,6 +20,8 @@ export const courseTools: CourseTool[] = [
   listMyCoursesTool,
   getCourseTool,
   searchPublicCoursesTool,
+  listEnrolledCoursesTool,
+  getEnrolledCourseTool,
   createCourseDraftTool,
   addTopicTool,
   addLessonTool,

@@ -50,6 +50,11 @@ export const courses = {
     visibilityPublic: "Javno",
     visibilityPrivate: "Privatno",
     visibilityChangedToast: "Vidljivost je ažurirana",
+    aiAccess: "AI pristup",
+    aiAccessLabel: "Dozvoli AI agente",
+    aiAccessDescription:
+      "Upisani polaznici mogu da preuzmu ovaj kurs u svog AI agenta (npr. Claude) radi učenja.",
+    aiAccessChangedToast: "AI pristup je ažuriran",
     visibilityPublicDialog: {
       title: "Učiniti kurs javnim?",
       description: "Svako ko ima vezu do kursa moći će da ga vidi.",

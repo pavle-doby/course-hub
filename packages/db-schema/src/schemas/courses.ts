@@ -1,5 +1,14 @@
 import { randomBytes } from "node:crypto";
-import { pgTable, uuid, varchar, text, timestamp, real, integer } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  uuid,
+  varchar,
+  text,
+  timestamp,
+  real,
+  integer,
+  boolean,
+} from "drizzle-orm/pg-core";
 import { courseStatusEnum, courseVisibilityEnum } from "./enums";
 import { users } from "./users";
 
@@ -17,6 +26,8 @@ export const courses = pgTable("courses", {
   thumbnailObjectKey: text("thumbnail_object_key"),
   status: courseStatusEnum("status").notNull().default("draft"),
   visibility: courseVisibilityEnum("visibility").notNull().default("private"),
+  // Creator opt-in: enrolled students may pull this course into their AI agent (MCP).
+  aiAccessEnabled: boolean("ai_access_enabled").notNull().default(false),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
   publishedAt: timestamp("published_at", { withTimezone: true }),

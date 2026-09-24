@@ -3,6 +3,7 @@
 import { useState, type ComponentProps } from "react";
 import {
   Archive,
+  Bot,
   Globe,
   Lock,
   PanelRightClose,
@@ -18,6 +19,7 @@ import { Badge } from "@repo/ui-web/components/badge";
 import { ButtonGroup } from "@repo/ui-web/components/button-group";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@repo/ui-web/components/drawer";
 import { Separator } from "@repo/ui-web/components/separator";
+import { Switch } from "@repo/ui-web/components/switch";
 import {
   Sidebar,
   SidebarContent,
@@ -36,6 +38,8 @@ type CourseActionsProps = {
   visibility?: CourseVisibility;
   onVisibilityChange?: (value: CourseVisibility) => void;
   onInviteClick?: () => void;
+  aiAccessEnabled?: boolean;
+  onAiAccessChange?: (value: boolean) => void;
   isPublished?: boolean;
   onPublishCourse?: () => void;
   onArchiveCourse?: () => void;
@@ -77,6 +81,8 @@ export function CourseActions({
   visibility,
   onVisibilityChange,
   onInviteClick,
+  aiAccessEnabled = false,
+  onAiAccessChange,
   isPublished = false,
   onPublishCourse,
   onArchiveCourse,
@@ -89,6 +95,10 @@ export function CourseActions({
   const statusVariant =
     status === "published" ? "default" : status === "archived" ? "destructive" : "secondary";
   const hasStateActions = !!onPublishCourse || !!onArchiveCourse || !!onDeleteCourse;
+
+  function handleAiAccessToggle() {
+    onAiAccessChange?.(!aiAccessEnabled);
+  }
 
   function openDialog(key: CourseDialogKey) {
     if (isMobile) {
@@ -205,6 +215,18 @@ export function CourseActions({
     </>
   );
 
+  const aiAccessAction = onAiAccessChange && (
+    <label className="flex items-start justify-between gap-3">
+      <span className="flex flex-col gap-1">
+        <span className="text-sm">{t("courses.editor.aiAccessLabel")}</span>
+        <span className="text-xs text-muted-foreground">
+          {t("courses.editor.aiAccessDescription")}
+        </span>
+      </span>
+      <Switch className="mt-0.5" checked={aiAccessEnabled} onCheckedChange={onAiAccessChange} />
+    </label>
+  );
+
   const deleteAction = onDeleteCourse && (
     <Button
       variant="destructive"
@@ -272,6 +294,16 @@ export function CourseActions({
           )}
         </>
       )}
+      {onAiAccessChange && (
+        <CollapsedAction
+          label={t("courses.editor.aiAccessLabel")}
+          variant={aiAccessEnabled ? "secondary" : "ghost"}
+          aria-pressed={aiAccessEnabled}
+          onClick={handleAiAccessToggle}
+        >
+          <Bot className="size-4" />
+        </CollapsedAction>
+      )}
       {onVisibilityChange && hasStateActions && <Separator />}
       {onPublishCourse && (
         <CollapsedAction
@@ -317,6 +349,15 @@ export function CourseActions({
                   <h2 className="text-sm font-medium">{t("courses.editor.visibility")}</h2>
                   {visibilityActions}
                 </section>
+              )}
+              {onAiAccessChange && (
+                <>
+                  <Separator className="-mx-4 !w-auto" />
+                  <section className="flex flex-col gap-3">
+                    <h2 className="text-sm font-medium">{t("courses.editor.aiAccess")}</h2>
+                    {aiAccessAction}
+                  </section>
+                </>
               )}
               {onVisibilityChange && hasStateActions && <Separator className="-mx-4 !w-auto" />}
               {hasStateActions && (
@@ -372,6 +413,16 @@ export function CourseActions({
               {t("courses.editor.visibility")}
             </h2>
             {visibilityActions}
+            <Separator className="-mx-4 !w-auto" />
+          </SidebarGroup>
+        )}
+
+        {onAiAccessChange && (
+          <SidebarGroup className="gap-3">
+            <h2 className="text-sm font-medium text-sidebar-foreground/70">
+              {t("courses.editor.aiAccess")}
+            </h2>
+            {aiAccessAction}
             <Separator className="-mx-4 !w-auto" />
           </SidebarGroup>
         )}

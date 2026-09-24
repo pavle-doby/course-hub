@@ -176,6 +176,10 @@ export const common = {
         title: "Not Enrolled",
         message: "You are not enrolled in this course.",
       },
+      AI_ACCESS_DISABLED: {
+        title: "AI Access Disabled",
+        message: "The creator of this course hasn't allowed it to be used in AI agents.",
+      },
     },
     lesson: {
       NOT_FOUND: {

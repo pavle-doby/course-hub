@@ -17,4 +17,8 @@ export const enrollmentErrorMessages = {
     title: "errors.enrollment.NOT_ENROLLED.title",
     message: "errors.enrollment.NOT_ENROLLED.message",
   },
+  [ErrorCodeEnrollment.AI_ACCESS_DISABLED]: {
+    title: "errors.enrollment.AI_ACCESS_DISABLED.title",
+    message: "errors.enrollment.AI_ACCESS_DISABLED.message",
+  },
 } as const satisfies Record<ErrorCodeEnrollment, { title: string; message: string }>;

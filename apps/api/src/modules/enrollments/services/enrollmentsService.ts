@@ -1,5 +1,7 @@
 import {
   ConflictError,
+  CourseTree,
+  ForbiddenError,
   ErrorCodeEnrollment,
   EnrollCourseRes,
   GetAllEnrolledCoursesRes,
@@ -119,6 +121,25 @@ export const enrollmentsService = {
     }
 
     return await lessonsRepository.getLessonsByCourseId(course.id);
+  },
+
+  // AI agent (MCP) access: enrolled student + creator opt-in via `aiAccessEnabled`
+  getEnrolledCourseTreeForAi: async (authUserId: string, publicId: string): Promise<CourseTree> => {
+    const user = await usersRepository.getUserByAuthUserId(authUserId);
+    if (!user) throw new NotFoundError({ code: ErrorCodeEnrollment.COURSE_NOT_FOUND });
+
+    const course = await getPublishedCourseOrThrow(publicId);
+    const enrollment = await enrollmentsRepository.getEnrollment(user.id, course.id);
+    if (!enrollment || enrollment.withdrawnAt) {
+      throw new NotFoundError({ code: ErrorCodeEnrollment.NOT_ENROLLED });
+    }
+    if (!course.aiAccessEnabled) {
+      throw new ForbiddenError({ code: ErrorCodeEnrollment.AI_ACCESS_DISABLED });
+    }
+
+    const tree = await coursesRepository.getCourseTree(course.id);
+    if (!tree) throw new NotFoundError({ code: ErrorCodeEnrollment.COURSE_NOT_FOUND });
+    return tree;
   },
 
   getAllEnrolledCourses: async (

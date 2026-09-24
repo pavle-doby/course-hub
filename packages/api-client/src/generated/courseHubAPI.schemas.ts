@@ -171,6 +171,7 @@ export interface Course {
   description: string | null;
   status: CourseStatus;
   visibility: CourseVisibility;
+  aiAccessEnabled: boolean;
   /** @nullable */
   publishedAt: string | null;
   /**
@@ -234,6 +235,7 @@ export interface CourseWithStats {
   description: string | null;
   status: CourseWithStatsStatus;
   visibility: CourseWithStatsVisibility;
+  aiAccessEnabled: boolean;
   /** @nullable */
   publishedAt: string | null;
   /**
@@ -309,6 +311,7 @@ export interface EnrolledCourse {
   description: string | null;
   status: EnrolledCourseStatus;
   visibility: EnrolledCourseVisibility;
+  aiAccessEnabled: boolean;
   /** @nullable */
   publishedAt: string | null;
   /**
@@ -1354,6 +1357,7 @@ export type CreateCourseBody = {
   description?: string | null;
   status?: CreateCourseBodyStatus;
   visibility?: CreateCourseBodyVisibility;
+  aiAccessEnabled?: boolean;
   publishedAt?: string;
 };
 
@@ -1550,6 +1554,7 @@ export type UpdateCourseBody = {
   description?: string | null;
   status?: UpdateCourseBodyStatus;
   visibility?: UpdateCourseBodyVisibility;
+  aiAccessEnabled?: boolean;
   publishedAt?: string;
 };
 

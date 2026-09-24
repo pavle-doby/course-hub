@@ -173,6 +173,10 @@ export const common = {
         title: "Niste upisani",
         message: "Niste upisani na ovaj kurs.",
       },
+      AI_ACCESS_DISABLED: {
+        title: "AI pristup je isključen",
+        message: "Autor ovog kursa nije dozvolio njegovo korišćenje u AI agentima.",
+      },
     },
     lesson: {
       NOT_FOUND: {

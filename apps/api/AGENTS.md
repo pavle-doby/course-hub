@@ -145,7 +145,7 @@ To add a tool:
 Tool rules:
 
 - Name it `ch_<verb>_<noun>`, and write `description` for an LLM reader: what it returns, that writes never publish, and when to call `ch_get_course` first.
-- Handlers call the feature's **services** (not HTTP), so ownership checks and business logic are never duplicated. Every tool acts only on courses the caller created (`ctx.authUserId`); `ch_search_public_courses` is the only exception.
+- Handlers call the feature's **services** (not HTTP), so ownership checks and business logic are never duplicated. Every tool acts only on courses the caller created (`ctx.authUserId`); `ch_search_public_courses` is the only exception, plus the student tools `ch_list_enrolled_courses` / `ch_get_enrolled_course`, which only read courses the caller is enrolled in and whose creator set `aiAccessEnabled`.
 - Never accept `status` or `visibility`, and never expose deletes.
 - Return compact data (no timestamps, media ids or creator info).
 

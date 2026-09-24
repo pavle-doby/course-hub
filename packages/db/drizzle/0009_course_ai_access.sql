@@ -1,0 +1,1 @@
+ALTER TABLE "courses" ADD COLUMN "ai_access_enabled" boolean DEFAULT false NOT NULL;

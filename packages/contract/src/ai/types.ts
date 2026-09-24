@@ -5,6 +5,8 @@ import {
   CourseTreeSchema,
   CreateCourseDraftInputSchema,
   GetCourseTreeInputSchema,
+  GetEnrolledCourseInputSchema,
+  ListEnrolledCoursesInputSchema,
   ListMyCoursesInputSchema,
   SearchPublicCoursesInputSchema,
   UpdateCourseInputSchema,
@@ -16,6 +18,8 @@ export type CourseTree = z.infer<typeof CourseTreeSchema>;
 
 export type ListMyCoursesInput = z.infer<typeof ListMyCoursesInputSchema>;
 export type GetCourseTreeInput = z.infer<typeof GetCourseTreeInputSchema>;
+export type ListEnrolledCoursesInput = z.infer<typeof ListEnrolledCoursesInputSchema>;
+export type GetEnrolledCourseInput = z.infer<typeof GetEnrolledCourseInputSchema>;
 export type SearchPublicCoursesInput = z.infer<typeof SearchPublicCoursesInputSchema>;
 export type CreateCourseDraftInput = z.infer<typeof CreateCourseDraftInputSchema>;
 export type AddTopicInput = z.infer<typeof AddTopicInputSchema>;

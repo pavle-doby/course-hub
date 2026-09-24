@@ -50,6 +50,11 @@ export const courses = {
     visibilityPublic: "Public",
     visibilityPrivate: "Private",
     visibilityChangedToast: "Visibility updated",
+    aiAccess: "AI access",
+    aiAccessLabel: "Allow AI agents",
+    aiAccessDescription:
+      "Enrolled students can pull this course into their AI agent (e.g. Claude) to study it.",
+    aiAccessChangedToast: "AI access updated",
     visibilityPublicDialog: {
       title: "Make course public?",
       description: "Anyone with the course link will be able to view it.",

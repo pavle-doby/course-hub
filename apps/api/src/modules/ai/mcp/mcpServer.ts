@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { ApiError, ErrorCode } from "@repo/contract";
+import { ApiError, ErrorCode, ErrorCodeEnrollment } from "@repo/contract";
 import { logger } from "api/logger";
 import { courseTools, type CourseToolContext } from "../tools";
 
@@ -18,6 +18,12 @@ function toErrorMessage(error: unknown): string {
   }
   if (error.code === ErrorCode.FORBIDDEN) {
     return "Forbidden: you can only read or edit courses you created.";
+  }
+  if (error.code === ErrorCodeEnrollment.AI_ACCESS_DISABLED) {
+    return "The creator of this course hasn't allowed it to be used in AI agents.";
+  }
+  if (error.code === ErrorCodeEnrollment.NOT_ENROLLED) {
+    return "Not enrolled: check the publicId with ch_list_enrolled_courses.";
   }
   if (error.status === 404) {
     return `Not found (${error.code}). Check the id with ch_list_my_courses or ch_get_course.`;

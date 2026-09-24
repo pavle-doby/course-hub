@@ -20,6 +20,7 @@ import {
   getGetTopicsQueryKey,
   getGetCoursesQueryKey,
   useQueryClient,
+  type Course,
   type CourseStatus,
   type CourseVisibility,
 } from "@repo/api-client";
@@ -45,7 +46,18 @@ type CourseDraft = {
   description?: string | null;
   status?: CourseStatus;
   visibility?: CourseVisibility;
+  aiAccessEnabled?: boolean;
 };
+
+function toCourseDraft(course: Course): CourseDraft {
+  return {
+    name: course.name,
+    description: course.description,
+    status: course.status,
+    visibility: course.visibility,
+    aiAccessEnabled: course.aiAccessEnabled,
+  };
+}
 
 type CourseEditorProps = { mode: "create"; publicId?: never } | { mode: "edit"; publicId: string };
 
@@ -96,15 +108,7 @@ export function CourseEditor({ mode, publicId }: CourseEditorProps) {
 
   // seeded from the fetched course on first render (no effect needed, avoids a stale-defaultValues flash in EntityForm)
   const displayedCourse: CourseDraft =
-    course ??
-    (fetchedCourse
-      ? {
-          name: fetchedCourse.name,
-          description: fetchedCourse.description,
-          status: fetchedCourse.status,
-          visibility: fetchedCourse.visibility,
-        }
-      : { name: "", description: "" });
+    course ?? (fetchedCourse ? toCourseDraft(fetchedCourse) : { name: "", description: "" });
 
   const {
     data: topicsData,
@@ -227,12 +231,7 @@ export function CourseEditor({ mode, publicId }: CourseEditorProps) {
     });
     setCreatedCourseId(created.id);
     setCreatedCoursePublicId(created.publicId);
-    setCourse({
-      name: created.name,
-      description: created.description,
-      status: created.status,
-      visibility: created.visibility,
-    });
+    setCourse(toCourseDraft(created));
     return created.id;
   }
 
@@ -241,13 +240,21 @@ export function CourseEditor({ mode, publicId }: CourseEditorProps) {
       const id = await ensureCourseId();
       const updated = await updateCourse({ pathParams: { id }, data: { visibility } });
       if (updated) {
-        setCourse({
-          name: updated.name,
-          description: updated.description,
-          status: updated.status,
-          visibility: updated.visibility,
-        });
+        setCourse(toCourseDraft(updated));
         toast.success(t("courses.editor.visibilityChangedToast"));
+      }
+    } catch (error) {
+      handleErrorAction(error as Error);
+    }
+  }
+
+  async function handleAiAccessChange(aiAccessEnabled: boolean) {
+    try {
+      const id = await ensureCourseId();
+      const updated = await updateCourse({ pathParams: { id }, data: { aiAccessEnabled } });
+      if (updated) {
+        setCourse(toCourseDraft(updated));
+        toast.success(t("courses.editor.aiAccessChangedToast"));
       }
     } catch (error) {
       handleErrorAction(error as Error);
@@ -260,21 +267,11 @@ export function CourseEditor({ mode, publicId }: CourseEditorProps) {
         const created = await createCourse({ data });
         setCreatedCourseId(created.id);
         setCreatedCoursePublicId(created.publicId);
-        setCourse({
-          name: created.name,
-          description: created.description,
-          status: created.status,
-          visibility: created.visibility,
-        });
+        setCourse(toCourseDraft(created));
       } else {
         const updated = await updateCourse({ pathParams: { id: courseId }, data });
         if (updated) {
-          setCourse({
-            name: updated.name,
-            description: updated.description,
-            status: updated.status,
-            visibility: updated.visibility,
-          });
+          setCourse(toCourseDraft(updated));
         }
       }
     } catch (error) {
@@ -440,12 +437,7 @@ export function CourseEditor({ mode, publicId }: CourseEditorProps) {
             : { status: nextStatus },
       });
       if (updated) {
-        setCourse({
-          name: updated.name,
-          description: updated.description,
-          status: updated.status,
-          visibility: updated.visibility,
-        });
+        setCourse(toCourseDraft(updated));
         if (nextStatus === "published") {
           if (!notificationsService.isCreatorPromptDismissed(updated.id)) {
             setNotificationCourseId(updated.id);
@@ -500,12 +492,7 @@ export function CourseEditor({ mode, publicId }: CourseEditorProps) {
         data: { status: "archived" },
       });
       if (updated) {
-        setCourse({
-          name: updated.name,
-          description: updated.description,
-          status: updated.status,
-          visibility: updated.visibility,
-        });
+        setCourse(toCourseDraft(updated));
       }
       toast.success(t("courses.editor.archivedToast"));
     } catch (error) {
@@ -627,6 +614,8 @@ export function CourseEditor({ mode, publicId }: CourseEditorProps) {
             visibility={displayedCourse.visibility}
             onVisibilityChange={courseId ? handleVisibilityChange : undefined}
             onInviteClick={courseId ? handleInviteClick : undefined}
+            aiAccessEnabled={displayedCourse.aiAccessEnabled}
+            onAiAccessChange={courseId ? handleAiAccessChange : undefined}
             isPublished={displayedCourse.status === "published"}
             onPublishCourse={courseId ? handlePublish : undefined}
             onArchiveCourse={courseId ? handleArchiveCourse : undefined}

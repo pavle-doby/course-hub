@@ -25,6 +25,7 @@ export const CourseSchema = createSelectSchema(courses, {
     description: true,
     status: true,
     visibility: true,
+    aiAccessEnabled: true,
     publishedAt: true,
     ratingAverage: true,
     ratingCount: true,
@@ -59,6 +60,7 @@ export const CoursePostQuerySchema = createInsertSchema(courses, {
   description: true,
   status: true,
   visibility: true,
+  aiAccessEnabled: true,
   publishedAt: true,
 });
 
@@ -72,6 +74,7 @@ export const CoursePutQuerySchema = createUpdateSchema(courses, {
     description: true,
     status: true,
     visibility: true,
+    aiAccessEnabled: true,
     publishedAt: true,
   })
   .partial();

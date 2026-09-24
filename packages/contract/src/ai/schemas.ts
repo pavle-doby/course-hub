@@ -53,6 +53,15 @@ export const GetCourseTreeInputSchema = z
     message: "Provide exactly one of courseId or publicId",
   });
 
+export const ListEnrolledCoursesInputSchema = z.object({
+  query: z.string().max(255).optional(),
+  ...PageInputShape,
+});
+
+export const GetEnrolledCourseInputSchema = z.object({
+  publicId: z.string().max(12),
+});
+
 export const SearchPublicCoursesInputSchema = z.object({
   query: z.string().max(255).optional(),
   ...PageInputShape,
