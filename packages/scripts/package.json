@@ -8,6 +8,7 @@
     "db:add:course-content": "tsx ./dbAddCourseContent.ts",
     "db:clean:course-content": "tsx ./dbCleanCourseContent.ts",
     "db:update:user-preferences": "tsx ./dbUpdateUserPreferences.ts",
+    "db:seed:enrollments-reviews": "tsx ./dbSeedEnrollmentsReviews.ts",
     "lint-staged": "lint-staged"
   },
   "dependencies": {
