@@ -27,6 +27,7 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for the full directory tree, data-flow 
 - Course enrollment, learner lists, and email or share-link invitations
 - Cloudflare Stream videos and Cloudflare R2 documents at course, topic, or lesson level
 - Profile, settings, and localized web UI
+- AI access: an MCP server for coding agents (personal access tokens from Settings)
 
 ## How to run
 

@@ -1,5 +1,6 @@
 export const settings = {
   title: "Settings",
+  preferences: "Preferences",
   contentBehavior: "Content behavior",
   contentBehaviorCreate: "Create",
   contentBehaviorConsume: "Consume",
@@ -14,4 +15,45 @@ export const settings = {
   cancel: "Cancel",
   save: "Save",
   updated: "Settings updated",
+  aiAccess: {
+    title: "AI access",
+    description:
+      "Personal access tokens let AI agents like Claude Code or Cursor read your courses and create drafts through MCP.",
+    empty: "No access tokens yet.",
+    createToken: "Create token",
+    lastUsed: "Last used {{date}}",
+    neverUsed: "Never used",
+    created: "Created {{date}}",
+    details: "Details",
+    detailsDialog: {
+      description:
+        "Only a hash of the token is stored, so it can't be shown again. Paste the token you copied when you created it to fill in the commands, or create a new token.",
+    },
+    revoke: "Revoke",
+    revokeDialog: {
+      title: "Revoke token?",
+      description: 'Agents using "{{name}}" will lose access immediately.',
+      cancel: "Cancel",
+      confirm: "Revoke",
+    },
+    revokedToast: "Token revoked",
+    createDialog: {
+      title: "Create access token",
+      description: "Give the token a name so you can recognize it later.",
+      nameLabel: "Name",
+      namePlaceholder: "Claude Code laptop",
+      submit: "Create",
+      createdTitle: "Token created",
+      createdDescription: "Copy the token now. You won't be able to see it again.",
+      token: "Token",
+      config: "MCP config",
+      claudeCode: "Claude Code",
+      global: "Global",
+      globalHint: "Available in all your projects.",
+      localHint: "Only available in the folder where you run the command.",
+      copy: "Copy",
+      copiedToast: "Copied to clipboard",
+      done: "Done",
+    },
+  },
 };

@@ -10,6 +10,7 @@ import { logger, handleLogs } from "./logger";
 
 import apiRoutes from "./routes/apiRoutes";
 import apiPublicRoutes from "./routes/apiPublicRoutes";
+import apixRoutes from "./routes/apixRoutes";
 
 const app: express.Express = express();
 
@@ -24,6 +25,9 @@ app.use(
 app.use("/api/v1/public/videos/webhook", handleRawBody);
 app.use(express.json());
 app.use(handleLogs);
+
+// `/apix` → routes used by external systems, outside the Supabase JWT `handleAuth`
+app.use("/apix", apixRoutes);
 
 app.use("/api", apiPublicRoutes);
 app.use("/api", handleAuth, apiRoutes);

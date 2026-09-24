@@ -77,3 +77,13 @@ When Cloudflare Stream is enabled, configure its webhook URL as:
 ```text
 https://<api-domain>/api/v1/public/videos/webhook
 ```
+
+## MCP URL
+
+The MCP server for coding agents is served by the API service under `/apix` (routes used by external systems) and needs no extra env vars:
+
+```text
+https://<api-domain>/apix/v1/mcp
+```
+
+Agents authenticate with a personal access token created in Settings → AI access.

@@ -1,5 +1,6 @@
 export const settings = {
   title: "Podešavanja",
+  preferences: "Preferencije",
   contentBehavior: "Način korišćenja sadržaja",
   contentBehaviorCreate: "Kreiranje",
   contentBehaviorConsume: "Korišćenje",
@@ -14,4 +15,45 @@ export const settings = {
   cancel: "Otkaži",
   save: "Sačuvaj",
   updated: "Podešavanja su sačuvana",
+  aiAccess: {
+    title: "AI pristup",
+    description:
+      "Lični pristupni tokeni omogućavaju AI agentima, kao što su Claude Code ili Cursor, da čitaju vaše kurseve i kreiraju nacrte preko MCP-a.",
+    empty: "Još nema pristupnih tokena.",
+    createToken: "Kreiraj token",
+    lastUsed: "Poslednji put korišćen {{date}}",
+    neverUsed: "Nije korišćen",
+    created: "Kreiran {{date}}",
+    details: "Detalji",
+    detailsDialog: {
+      description:
+        "Čuva se samo heš tokena, pa ne može ponovo da se prikaže. Nalepite token koji ste kopirali pri kreiranju da popunite komande ili kreirajte novi token.",
+    },
+    revoke: "Opozovi",
+    revokeDialog: {
+      title: "Opozvati token?",
+      description: 'Agenti koji koriste "{{name}}" će odmah izgubiti pristup.',
+      cancel: "Otkaži",
+      confirm: "Opozovi",
+    },
+    revokedToast: "Token je opozvan",
+    createDialog: {
+      title: "Kreiraj pristupni token",
+      description: "Dajte tokenu ime kako biste ga kasnije prepoznali.",
+      nameLabel: "Naziv",
+      namePlaceholder: "Claude Code laptop",
+      submit: "Kreiraj",
+      createdTitle: "Token je kreiran",
+      createdDescription: "Kopirajte token sada. Nećete moći ponovo da ga vidite.",
+      token: "Token",
+      config: "MCP konfiguracija",
+      claudeCode: "Claude Code",
+      global: "Globalno",
+      globalHint: "Dostupno u svim vašim projektima.",
+      localHint: "Dostupno samo u folderu u kojem pokrenete komandu.",
+      copy: "Kopiraj",
+      copiedToast: "Kopirano",
+      done: "Gotovo",
+    },
+  },
 };

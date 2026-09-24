@@ -10,7 +10,8 @@ Each feature lives under `apps/api/src/modules/<feature>/` with this layout:
 ├── services/      # Business logic, throw typed errors
 ├── repository/    # Drizzle queries only — no business logic
 ├── routes/        # Express Router, middleware chain, delegate to controller
-└── openapi/       # registry.registerPath() calls — no runtime logic
+├── openapi/       # registry.registerPath() calls — no runtime logic
+└── ai/tools/      # (optional) AI course tools for this feature — see "AI course tools"
 ```
 
 ## Request data is in `res.locals`, never `req.body`
@@ -124,6 +125,29 @@ Split public and private routes for every feature that exposes both, following c
 ## Pagination
 
 Apply the `pagination()` middleware on list endpoints. It reads `page` (0-based) and `limit` (1–100) from query params and writes to `res.locals.pagination` (`{ page, limit, offset }`).
+
+## AI course tools
+
+AI tools (used by the MCP server at `/apix/v1/mcp` and the course-edit chat) live in the module of the feature they act on, never in `modules/ai/`:
+
+```
+modules/<feature>/ai/tools/<feature>Tools.ts   # e.g. modules/lessons/ai/tools/lessonsTools.ts
+```
+
+`modules/ai/` only holds shared infrastructure: `ai/tools/courseTool.ts` (`CourseTool` type, `defineTool`), `ai/tools/index.ts` (the `courseTools` registry) and `ai/mcp/` (MCP transport).
+
+To add a tool:
+
+1. Add its input schema to `packages/contract/src/ai/schemas.ts` (derived from the feature's contract schemas, with array size caps) and its type to `types.ts`.
+2. Define it with `defineTool` in `modules/<feature>/ai/tools/<feature>Tools.ts`. Import `defineTool` from `api/modules/ai/tools/courseTool` (not the `ai/tools` barrel — the barrel imports the tool files, so that would be circular).
+3. Register it in the `courseTools` array in `modules/ai/tools/index.ts`. MCP picks it up automatically.
+
+Tool rules:
+
+- Name it `ch_<verb>_<noun>`, and write `description` for an LLM reader: what it returns, that writes never publish, and when to call `ch_get_course` first.
+- Handlers call the feature's **services** (not HTTP), so ownership checks and business logic are never duplicated. Every tool acts only on courses the caller created (`ctx.authUserId`); `ch_search_public_courses` is the only exception.
+- Never accept `status` or `visibility`, and never expose deletes.
+- Return compact data (no timestamps, media ids or creator info).
 
 ## OpenAPI annotations
 

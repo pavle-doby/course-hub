@@ -18,6 +18,7 @@ import "../modules/documents/openapi/documentsOpenapi";
 import "../modules/documents/openapi/documentsPublicOpenapi";
 import "../modules/notifications/openapi/notificationsOpenapi";
 import "../modules/progress/openapi/progressOpenapi";
+import "../modules/api-tokens/openapi/apiTokensOpenapi";
 
 export function generateOpenAPIDocument(): OpenAPIObject {
   const generator = new OpenApiGeneratorV31(registry.definitions);

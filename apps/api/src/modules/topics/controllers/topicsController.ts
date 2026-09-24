@@ -30,20 +30,23 @@ export const topicsController = {
 
   createTopic: async (_req: Request, res: Response): Promise<void> => {
     const reqDto = res.locals.body as CreateTopicReq;
-    const resDto = await topicsService.createTopic(reqDto);
+    const authUserId: string = res.locals.user.id;
+    const resDto = await topicsService.createTopic(reqDto, authUserId);
     res.status(201).json(resDto);
   },
 
   updateTopic: async (_req: Request, res: Response): Promise<void> => {
     const { id } = res.locals.params as { id: string };
     const reqDto = res.locals.body as UpdateTopicReq;
-    const resDto = await topicsService.updateTopic(id, reqDto);
+    const authUserId: string = res.locals.user.id;
+    const resDto = await topicsService.updateTopic(id, reqDto, authUserId);
     res.status(200).json(resDto);
   },
 
   deleteTopic: async (_req: Request, res: Response): Promise<void> => {
     const { id } = res.locals.params as { id: string };
-    const resDto: DeleteTopicRes = await topicsService.deleteTopic(id);
+    const authUserId: string = res.locals.user.id;
+    const resDto: DeleteTopicRes = await topicsService.deleteTopic(id, authUserId);
     res.status(200).json(resDto);
   },
 };

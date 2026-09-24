@@ -77,13 +77,15 @@ export const coursesController = {
   updateCourse: async (_req: Request, res: Response): Promise<void> => {
     const { id } = res.locals.params as { id: string };
     const reqDto = res.locals.body as UpdateCourseReq;
-    const resDto: UpdateCourseRes = await coursesService.updateCourse(id, reqDto);
+    const authUserId: string = res.locals.user.id;
+    const resDto: UpdateCourseRes = await coursesService.updateCourse(id, reqDto, authUserId);
     res.status(200).json(resDto);
   },
 
   deleteCourse: async (_req: Request, res: Response): Promise<void> => {
     const { id } = res.locals.params as { id: string };
-    const resDto: DeleteCourseRes = await coursesService.deleteCourse(id);
+    const authUserId: string = res.locals.user.id;
+    const resDto: DeleteCourseRes = await coursesService.deleteCourse(id, authUserId);
     res.status(200).json(resDto);
   },
 

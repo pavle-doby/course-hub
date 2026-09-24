@@ -7,10 +7,11 @@ course-hub/                       # pnpm + Turborepo monorepo
 │
 ├── apps/                         # Deployable applications
 │   ├── api/                      # REST API (Express 5, Node >=22)
-│   │   ├── src/modules/          #   auth, users, courses, topics, lessons,
-│   │   │                        #   enrollments, invitations, videos, documents, health
-│   │   ├── src/middleware/       #   Auth validation, error handling
-│   │   ├── src/routes/           #   Private and public /v1 route aggregation
+│   │   ├── src/modules/          #   auth, users, courses, topics, lessons, enrollments,
+│   │   │                         #   invitations, videos, documents, notifications, progress,
+│   │   │                         #   api-tokens, ai, health
+│   │   ├── src/middleware/       #   Auth (JWT + personal access tokens), error handling
+│   │   ├── src/routes/           #   /api (private + public /v1) and /apix (external systems)
 │   │   ├── src/openapi/          #   Auto-generates openapi.json from code
 │   │   └── openapi.json          #   OpenAPI 3.1 spec (committed, consumed by Orval)
 │   │
@@ -53,6 +54,20 @@ course-hub/                       # pnpm + Turborepo monorepo
 │   └── ui-native/                # Retained React Native primitives (no native app)
 ```
 
+### API module organization
+
+Each feature in `apps/api/src/modules/` follows the same layout:
+
+```
+<feature>/
+├── routes/        # Express routers and middleware chain
+├── controllers/   # Read res.locals, call service, send response
+├── services/      # Business logic, typed errors
+├── repository/    # Drizzle queries only
+├── openapi/       # OpenAPI path registrations
+└── ai/tools/      # (optional) AI course tools for this feature
+```
+
 ## Data Flow
 
 ```
@@ -66,21 +81,22 @@ course-hub/                       # pnpm + Turborepo monorepo
 │            openapi.json  ──(Orval)──▶  api-client                │
 │                                            │                     │
 │                                    ┌───────┴───────┐             │
-│                                    ▼                             │
-│                                   web                             │
+│                                    ▼               ▼             │
+│                                   web         other apps         │
 └──────────────────────────────────────────────────────────────────┘
 ```
 
 ## Key Decisions
 
-| Decision         | Choice                                | Why                                                              |
-| ---------------- | ------------------------------------- | ---------------------------------------------------------------- |
-| API style        | REST + OpenAPI                        | Enables Orval code-gen; type-safe across all clients             |
-| Auth             | Supabase Auth (JWT)                   | API client supplies and refreshes bearer tokens                  |
-| DB               | Drizzle ORM + PostgreSQL via Supabase | Type-safe SQL-first; schema-to-Zod via drizzle-zod               |
-| Schema ownership | `db-schema` → `contract`              | Single source of truth; prevents drift between DB and validation |
-| API client       | Orval (code-gen)                      | `src/generated/` is always in sync with `openapi.json`           |
-| Media            | Cloudflare Stream + R2                | Video processing and object storage for course media             |
-| Styling          | Tailwind 4                            | Shared web tokens and components via `ui-theme` and `ui-web`     |
-| i18n             | i18next                               | Serbian default and English secondary                            |
-| Build            | Turborepo                             | Remote caching, task graph, watch mode across all packages       |
+| Decision         | Choice                                | Why                                                               |
+| ---------------- | ------------------------------------- | ----------------------------------------------------------------- |
+| API style        | REST + OpenAPI                        | Enables Orval code-gen; type-safe across all clients              |
+| Auth             | Supabase Auth (JWT)                   | API client supplies and refreshes bearer tokens                   |
+| DB               | Drizzle ORM + PostgreSQL via Supabase | Type-safe SQL-first; schema-to-Zod via drizzle-zod                |
+| Schema ownership | `db-schema` → `contract`              | Single source of truth; prevents drift between DB and validation  |
+| API client       | Orval (code-gen)                      | `src/generated/` is always in sync with `openapi.json`            |
+| Media            | Cloudflare Stream + R2                | Video processing and object storage for course media              |
+| Styling          | Tailwind 4                            | Shared web tokens and components via `ui-theme` and `ui-web`      |
+| i18n             | i18next                               | Serbian default and English secondary                             |
+| Build            | Turborepo                             | Remote caching, task graph, watch mode across all packages        |
+| AI tools         | Typed tools per feature module + MCP  | One tool layer shared by MCP (`/apix/v1/mcp`) and the course chat |

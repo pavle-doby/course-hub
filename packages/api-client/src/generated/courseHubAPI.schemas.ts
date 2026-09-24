@@ -614,6 +614,29 @@ export interface CourseProgress {
   lessons: CourseProgressLessonsItem[];
 }
 
+export interface ApiToken {
+  id: string;
+  /** @maxLength 100 */
+  name: string;
+  /** @maxLength 16 */
+  tokenPrefix: string;
+  /** @nullable */
+  lastUsedAt: string | null;
+  createdAt: string;
+}
+
+export interface CreatedApiToken {
+  id: string;
+  /** @maxLength 100 */
+  name: string;
+  /** @maxLength 16 */
+  tokenPrefix: string;
+  /** @nullable */
+  lastUsedAt: string | null;
+  createdAt: string;
+  token: string;
+}
+
 export type AuthSignUpBodyLanguage =
   (typeof AuthSignUpBodyLanguage)[keyof typeof AuthSignUpBodyLanguage];
 
@@ -2894,4 +2917,90 @@ export type UpdateLessonProgressDefault = {
   code: UpdateLessonProgressDefaultCode;
   error?: unknown;
   details?: UpdateLessonProgressDefaultDetails;
+};
+
+export type GetApiTokensDefaultCode =
+  (typeof GetApiTokensDefaultCode)[keyof typeof GetApiTokensDefaultCode];
+
+export const GetApiTokensDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type GetApiTokensDefaultDetails = { [key: string]: unknown };
+
+export type GetApiTokensDefault = {
+  status: number;
+  code: GetApiTokensDefaultCode;
+  error?: unknown;
+  details?: GetApiTokensDefaultDetails;
+};
+
+export type CreateApiTokenBody = {
+  /**
+   * @minLength 1
+   * @maxLength 100
+   */
+  name: string;
+};
+
+export type CreateApiTokenDefaultCode =
+  (typeof CreateApiTokenDefaultCode)[keyof typeof CreateApiTokenDefaultCode];
+
+export const CreateApiTokenDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type CreateApiTokenDefaultDetails = { [key: string]: unknown };
+
+export type CreateApiTokenDefault = {
+  status: number;
+  code: CreateApiTokenDefaultCode;
+  error?: unknown;
+  details?: CreateApiTokenDefaultDetails;
+};
+
+export type DeleteApiTokenPathParameters = {
+  id: string;
+};
+export type DeleteApiTokenDefaultCode =
+  (typeof DeleteApiTokenDefaultCode)[keyof typeof DeleteApiTokenDefaultCode];
+
+export const DeleteApiTokenDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type DeleteApiTokenDefaultDetails = { [key: string]: unknown };
+
+export type DeleteApiTokenDefault = {
+  status: number;
+  code: DeleteApiTokenDefaultCode;
+  error?: unknown;
+  details?: DeleteApiTokenDefaultDetails;
 };

@@ -1,5 +1,5 @@
 import { db, schema } from "@repo/db";
-import { and, asc, count, desc, eq, ilike, or } from "drizzle-orm";
+import { and, asc, count, desc, eq, ilike, max, or } from "drizzle-orm";
 import {
   CreateTopicReq,
   GetAllTopicsRes,
@@ -70,6 +70,22 @@ export const topicsRepository = {
       where: eq(schema.topics.id, id),
       columns: { createdAt: false, updatedAt: false },
     });
+  },
+
+  getCourseIdByTopicId: async (id: string): Promise<string | undefined> => {
+    const topic = await db.query.topics.findFirst({
+      where: eq(schema.topics.id, id),
+      columns: { courseId: true },
+    });
+    return topic?.courseId;
+  },
+
+  getNextPosition: async (courseId: string): Promise<number> => {
+    const [result] = await db
+      .select({ max: max(schema.topics.position) })
+      .from(schema.topics)
+      .where(eq(schema.topics.courseId, courseId));
+    return (result?.max ?? -1) + 1;
   },
 
   getTopicsByCourseId: async (courseId: string): Promise<Topic[]> => {

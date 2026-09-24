@@ -12,6 +12,7 @@ import { lessonProgress } from "./lesson-progress";
 import { documents } from "./documents";
 import { pushSubscriptions } from "./push-subscriptions";
 import { notificationPreferences } from "./notification-preferences";
+import { apiTokens } from "./api-tokens";
 
 export const usersRelations = relations(users, ({ one, many }) => ({
   preferences: one(userPreferences, { fields: [users.id], references: [userPreferences.userId] }),
@@ -22,6 +23,7 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   documents: many(documents),
   pushSubscriptions: many(pushSubscriptions),
   notificationPreferences: many(notificationPreferences),
+  apiTokens: many(apiTokens),
 }));
 
 export const userPreferencesRelations = relations(userPreferences, ({ one }) => ({
@@ -41,6 +43,10 @@ export const coursesRelations = relations(courses, ({ one, many }) => ({
 
 export const pushSubscriptionsRelations = relations(pushSubscriptions, ({ one }) => ({
   user: one(users, { fields: [pushSubscriptions.userId], references: [users.id] }),
+}));
+
+export const apiTokensRelations = relations(apiTokens, ({ one }) => ({
+  user: one(users, { fields: [apiTokens.userId], references: [users.id] }),
 }));
 
 export const notificationPreferencesRelations = relations(notificationPreferences, ({ one }) => ({

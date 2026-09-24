@@ -1,7 +1,14 @@
 import { db, schema } from "@repo/db";
 import { CourseEntity, UserEntity } from "@repo/db-schema";
-import { eq, ilike, or, and, count, desc, notInArray, isNull } from "drizzle-orm";
-import { CreateCourseReq, PaginationRes, Search, UpdateCourseReq } from "@repo/contract";
+import { eq, ilike, or, and, count, asc, desc, notInArray, isNull } from "drizzle-orm";
+import {
+  CourseTree,
+  CreateCourseDraftInput,
+  CreateCourseReq,
+  PaginationRes,
+  Search,
+  UpdateCourseReq,
+} from "@repo/contract";
 import { CourseGetAllQuerySchema } from "@repo/contract";
 import { z } from "zod";
 
@@ -10,6 +17,17 @@ type CourseRow = Omit<CourseEntity, "createdAt" | "updatedAt">;
 type CourseCreator = Pick<UserEntity, "id" | "firstName" | "lastName" | "username" | "avatarUrl">;
 
 type CourseWithCreator = CourseRow & { creator: CourseCreator };
+
+const courseTreeColumns = {
+  id: true,
+  publicId: true,
+  name: true,
+  description: true,
+  status: true,
+  visibility: true,
+} as const;
+
+const treeItemColumns = { id: true, name: true, description: true, position: true } as const;
 
 type GetAllPublishedCoursesParams = {
   offset?: number;
@@ -212,5 +230,93 @@ export const coursesRepository = {
       publishedAt: schema.courses.publishedAt,
     });
     return course;
+  },
+
+  getCourseTree: async (id: string): Promise<CourseTree | undefined> => {
+    return await db.query.courses.findFirst({
+      where: eq(schema.courses.id, id),
+      columns: courseTreeColumns,
+      with: {
+        topics: {
+          columns: treeItemColumns,
+          orderBy: [asc(schema.topics.position)],
+          with: {
+            lessons: { columns: treeItemColumns, orderBy: [asc(schema.lessons.position)] },
+          },
+        },
+      },
+    });
+  },
+
+  // Inserts course → topics → lessons in one transaction; positions follow array order
+  createCourseTree: async ({
+    topics = [],
+    ...data
+  }: CreateCourseDraftInput & { creatorId: string }): Promise<CourseTree> => {
+    return await db.transaction(async (tx) => {
+      const [course] = await tx
+        .insert(schema.courses)
+        .values({ ...data, status: "draft" })
+        .returning({
+          id: schema.courses.id,
+          publicId: schema.courses.publicId,
+          name: schema.courses.name,
+          description: schema.courses.description,
+          status: schema.courses.status,
+          visibility: schema.courses.visibility,
+        });
+
+      if (topics.length === 0) {
+        return { ...course!, topics: [] };
+      }
+
+      const insertedTopics = await tx
+        .insert(schema.topics)
+        .values(
+          topics.map((topic, position) => ({
+            courseId: course!.id,
+            name: topic.name,
+            description: topic.description,
+            position,
+          }))
+        )
+        .returning({
+          id: schema.topics.id,
+          name: schema.topics.name,
+          description: schema.topics.description,
+          position: schema.topics.position,
+        });
+      insertedTopics.sort((a, b) => a.position - b.position);
+
+      const lessonValues = insertedTopics.flatMap((topic) =>
+        (topics[topic.position]!.lessons ?? []).map((lesson, position) => ({
+          topicId: topic.id,
+          name: lesson.name,
+          description: lesson.description,
+          position,
+        }))
+      );
+      const insertedLessons =
+        lessonValues.length > 0
+          ? await tx.insert(schema.lessons).values(lessonValues).returning({
+              id: schema.lessons.id,
+              topicId: schema.lessons.topicId,
+              name: schema.lessons.name,
+              description: schema.lessons.description,
+              position: schema.lessons.position,
+            })
+          : [];
+
+      return {
+        ...course!,
+        topics: insertedTopics.map((topic) => ({
+          ...topic,
+          lessons: insertedLessons
+            .filter((lesson) => lesson.topicId === topic.id)
+            .sort((a, b) => a.position - b.position)
+            .map(({ id, name, description, position }) => ({ id, name, description, position })),
+        })),
+      };
+    });
   },
 };

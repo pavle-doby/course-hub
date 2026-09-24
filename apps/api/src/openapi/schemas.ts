@@ -18,6 +18,8 @@ import {
   PublicDocumentSchema as PublicDocumentSchemaBase,
   CourseProgressSchema as CourseProgressSchemaBase,
   LessonProgressSchema as LessonProgressSchemaBase,
+  ApiTokenSchema as ApiTokenSchemaBase,
+  CreateApiTokenResponseSchema as CreateApiTokenResponseSchemaBase,
 } from "@repo/contract";
 
 export const UserSchema = registry.register("User", UserSchemaBase);
@@ -129,3 +131,9 @@ export const PaginatedCourseInvitationsSchema = registry.register(
 
 export const LessonProgressSchema = registry.register("LessonProgress", LessonProgressSchemaBase);
 export const CourseProgressSchema = registry.register("CourseProgress", CourseProgressSchemaBase);
+
+export const ApiTokenSchema = registry.register("ApiToken", ApiTokenSchemaBase);
+export const CreateApiTokenResponseSchema = registry.register(
+  "CreatedApiToken",
+  CreateApiTokenResponseSchemaBase
+);

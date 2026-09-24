@@ -1,5 +1,5 @@
 import { db, schema } from "@repo/db";
-import { and, asc, count, desc, eq, ilike, or } from "drizzle-orm";
+import { and, asc, count, desc, eq, ilike, max, or } from "drizzle-orm";
 import {
   CreateLessonReq,
   GetAllLessonsRes,
@@ -75,6 +75,23 @@ export const lessonsRepository = {
       where: eq(schema.lessons.id, id),
       columns: { createdAt: false, updatedAt: false },
     });
+  },
+
+  getCourseIdByLessonId: async (id: string): Promise<string | undefined> => {
+    const [row] = await db
+      .select({ courseId: schema.topics.courseId })
+      .from(schema.lessons)
+      .innerJoin(schema.topics, eq(schema.lessons.topicId, schema.topics.id))
+      .where(eq(schema.lessons.id, id));
+    return row?.courseId;
+  },
+
+  getNextPosition: async (topicId: string): Promise<number> => {
+    const [result] = await db
+      .select({ max: max(schema.lessons.position) })
+      .from(schema.lessons)
+      .where(eq(schema.lessons.topicId, topicId));
+    return (result?.max ?? -1) + 1;
   },
 
   getLessonsByCourseId: async (courseId: string): Promise<Lesson[]> => {

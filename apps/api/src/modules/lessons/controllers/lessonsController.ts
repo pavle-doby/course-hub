@@ -31,20 +31,23 @@ export const lessonsController = {
 
   createLesson: async (_req: Request, res: Response): Promise<void> => {
     const reqDto = res.locals.body as CreateLessonReq;
-    const resDto = await lessonsService.createLesson(reqDto);
+    const authUserId: string = res.locals.user.id;
+    const resDto = await lessonsService.createLesson(reqDto, authUserId);
     res.status(201).json(resDto);
   },
 
   updateLesson: async (_req: Request, res: Response): Promise<void> => {
     const { id } = res.locals.params as { id: string };
     const reqDto = res.locals.body as UpdateLessonReq;
-    const resDto = await lessonsService.updateLesson(id, reqDto);
+    const authUserId: string = res.locals.user.id;
+    const resDto = await lessonsService.updateLesson(id, reqDto, authUserId);
     res.status(200).json(resDto);
   },
 
   deleteLesson: async (_req: Request, res: Response): Promise<void> => {
     const { id } = res.locals.params as { id: string };
-    const resDto: DeleteLessonRes = await lessonsService.deleteLesson(id);
+    const authUserId: string = res.locals.user.id;
+    const resDto: DeleteLessonRes = await lessonsService.deleteLesson(id, authUserId);
     res.status(200).json(resDto);
   },
 };

@@ -195,6 +195,18 @@ export const common = {
         message: "The notification subscription could not be found.",
       },
     },
+    ai: {
+      INVALID_TOKEN: {
+        title: "Invalid Access Token",
+        message: "The access token is invalid or has been revoked.",
+      },
+    },
+    apiToken: {
+      NOT_FOUND: {
+        title: "Token Not Found",
+        message: "The access token could not be found.",
+      },
+    },
     progress: {
       LESSON_NOT_FOUND: {
         title: "Lesson Not Found",

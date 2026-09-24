@@ -1,6 +1,8 @@
 import {
   BadRequestError,
   CompleteCourseThumbnailUploadReq,
+  CourseTree,
+  CreateCourseDraftInput,
   CreateCourseReq,
   CreateCourseRes,
   DeleteCourseRes,
@@ -11,6 +13,7 @@ import {
   GetAllPublicCoursesRes,
   GetCourseByPublicIdRes,
   GetCourseRes,
+  GetCourseTreeInput,
   GetPublicLessonsRes,
   GetPublicTopicsRes,
   InitializeCourseThumbnailUploadReq,
@@ -50,6 +53,8 @@ async function getOwnedCourse(courseId: string, authUserId: string) {
 }
 
 export const coursesService = {
+  assertOwnedCourse: getOwnedCourse,
+
   getAllCourses: async (
     authUserId: string,
     dto: GetAllCoursesReq<PaginationReqExtended>
@@ -103,9 +108,12 @@ export const coursesService = {
     return withThumbnailUrl(await coursesRepository.createCourse({ ...data, creatorId: user.id }));
   },
 
-  updateCourse: async (id: string, data: UpdateCourseReq): Promise<UpdateCourseRes> => {
-    const existing = await coursesRepository.getCourseById(id);
-    if (!existing) throw new NotFoundError({ code: ErrorCodeCourse.NOT_FOUND });
+  updateCourse: async (
+    id: string,
+    data: UpdateCourseReq,
+    authUserId: string
+  ): Promise<UpdateCourseRes> => {
+    const existing = await getOwnedCourse(id, authUserId);
 
     const course = await coursesRepository.updateCourse(id, data);
     if (course && existing.status !== "published" && course.status === "published") {
@@ -116,15 +124,42 @@ export const coursesService = {
     return course ? withThumbnailUrl(course) : undefined;
   },
 
-  deleteCourse: async (id: string): Promise<DeleteCourseRes> => {
-    const existing = await coursesRepository.getCourseById(id);
-    if (!existing) throw new NotFoundError({ code: ErrorCodeCourse.NOT_FOUND });
+  deleteCourse: async (id: string, authUserId: string): Promise<DeleteCourseRes> => {
+    const existing = await getOwnedCourse(id, authUserId);
     await documentsService.deleteForCourse(id);
     if (existing.thumbnailObjectKey) {
       await r2Service.deleteObject(existing.thumbnailObjectKey);
     }
     const course = await coursesRepository.deleteCourse(id);
     return course ? withThumbnailUrl(course) : undefined;
+  },
+
+  getOwnedCourseTree: async (
+    { courseId, publicId }: GetCourseTreeInput,
+    authUserId: string
+  ): Promise<CourseTree> => {
+    const id = courseId ?? (await coursesRepository.getCourseByPublicId(publicId!))?.id;
+    if (!id) {
+      throw new NotFoundError({ code: ErrorCodeCourse.NOT_FOUND });
+    }
+    await getOwnedCourse(id, authUserId);
+    const tree = await coursesRepository.getCourseTree(id);
+    if (!tree) {
+      throw new NotFoundError({ code: ErrorCodeCourse.NOT_FOUND });
+    }
+    return tree;
+  },
+
+  // Always a draft, so AI-created courses never trigger publish notifications
+  createCourseDraft: async (
+    data: CreateCourseDraftInput,
+    authUserId: string
+  ): Promise<CourseTree> => {
+    const user = await usersRepository.getUserByAuthUserId(authUserId);
+    if (!user) {
+      throw new NotFoundError({ code: ErrorCodeCourse.NOT_FOUND });
+    }
+    return await coursesRepository.createCourseTree({ ...data, creatorId: user.id });
   },
 
   initializeThumbnailUpload: async (

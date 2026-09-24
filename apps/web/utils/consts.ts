@@ -38,3 +38,12 @@ export const FIREWORK_SIDES = [
   [0.1, 0.3],
   [0.7, 0.9],
 ] as const;
+
+/**
+ * MCP endpoint that coding agents connect to with a personal access token.
+ * External-system routes live under `/apix`, next to the web app's `/api`.
+ */
+export const MCP_URL = `${process.env.NEXT_PUBLIC_API_URL?.replace(/\/api$/, "/apix")}/v1/mcp`;
+
+/** Stands in for the token in MCP config snippets until the user pastes it (only its hash is stored). */
+export const MCP_TOKEN_PLACEHOLDER = "<YOUR_TOKEN>";

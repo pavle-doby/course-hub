@@ -10,6 +10,8 @@ import { videoErrorMessages } from "./videoErrorMessages";
 import { documentErrorMessages } from "./documentErrorMessages";
 import { notificationErrorMessages } from "./notificationErrorMessages";
 import { progressErrorMessages } from "./progressErrorMessages";
+import { aiErrorMessages } from "./aiErrorMessages";
+import { apiTokenErrorMessages } from "./apiTokenErrorMessages";
 
 export const allErrorMessages = {
   ...sharedErrorMessages,
@@ -24,4 +26,6 @@ export const allErrorMessages = {
   ...documentErrorMessages,
   ...notificationErrorMessages,
   ...progressErrorMessages,
+  ...aiErrorMessages,
+  ...apiTokenErrorMessages,
 };

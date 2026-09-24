@@ -10,6 +10,7 @@ import videosRoutes from "../modules/videos/routes/videosRoutes";
 import documentsRoutes from "../modules/documents/routes/documentsRoutes";
 import notificationsRoutes from "../modules/notifications/routes/notificationsRoutes";
 import progressRoutes from "../modules/progress/routes/progressRoutes";
+import apiTokensRoutes from "../modules/api-tokens/routes/apiTokensRoutes";
 
 const api: Router = Router();
 
@@ -71,6 +72,12 @@ api.use(
   //
   "/v1/progress",
   progressRoutes
+);
+
+api.use(
+  //
+  "/v1/api-tokens",
+  apiTokensRoutes
 );
 
 export default api;

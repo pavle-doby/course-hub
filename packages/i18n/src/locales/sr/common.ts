@@ -192,6 +192,18 @@ export const common = {
         message: "Pretplata na obaveštenja nije pronađena.",
       },
     },
+    ai: {
+      INVALID_TOKEN: {
+        title: "Nevažeći token",
+        message: "Token je nevažeći ili je opozvan.",
+      },
+    },
+    apiToken: {
+      NOT_FOUND: {
+        title: "Token nije pronađen",
+        message: "Token nije pronađen.",
+      },
+    },
     progress: {
       LESSON_NOT_FOUND: {
         title: "Lekcija nije pronađena",
