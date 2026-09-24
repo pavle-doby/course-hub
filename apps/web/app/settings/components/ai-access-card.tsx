@@ -78,51 +78,78 @@ export function AiAccessCard() {
     return new Date(date).toLocaleDateString();
   }
 
+  const oauthTokens = tokens?.filter((token) => token.source === "oauth");
+  const manualTokens = tokens?.filter((token) => token.source === "manual");
+
   return (
-    <Card className="w-full max-w-2xl">
-      <CardHeader className="border-b">
-        <CardTitle>{t("settings.aiAccess.title")}</CardTitle>
-        <CardDescription>{t("settings.aiAccess.description")}</CardDescription>
-        <CardAction>
-          <Button type="button" onClick={handleOpenCreate}>
-            <Plus /> {t("settings.aiAccess.createToken")}
-          </Button>
-        </CardAction>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-3">
-        <div className="flex flex-col gap-2 border-b pb-4">
-          <Snippet label={t("settings.aiAccess.connectorUrl")} text={MCP_URL} />
-          <p className="text-xs text-muted-foreground">
-            <Trans
-              t={t}
-              i18nKey="settings.aiAccess.connectorUrlHint"
-              components={{
-                connectorsLink: (
-                  <a
-                    href={CLAUDE_CONNECTORS_SETTINGS_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-foreground underline underline-offset-4"
-                  />
-                ),
-              }}
+    <>
+      <Card className="w-full max-w-2xl">
+        <CardHeader className="border-b">
+          <CardTitle>{t("settings.aiAccess.oauth.title")}</CardTitle>
+          <CardDescription>{t("settings.aiAccess.oauth.description")}</CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-3">
+          <div className="flex flex-col gap-2 border-b pb-4">
+            <Snippet label={t("settings.aiAccess.connectorUrl")} text={MCP_URL} />
+            <p className="text-xs text-muted-foreground">
+              <Trans
+                t={t}
+                i18nKey="settings.aiAccess.connectorUrlHint"
+                components={{
+                  connectorsLink: (
+                    <a
+                      href={CLAUDE_CONNECTORS_SETTINGS_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-foreground underline underline-offset-4"
+                    />
+                  ),
+                }}
+              />
+            </p>
+          </div>
+          {isPending && <Skeleton className="h-14 w-full" />}
+          {oauthTokens?.length === 0 && (
+            <p className="text-sm text-muted-foreground">{t("settings.aiAccess.oauth.empty")}</p>
+          )}
+          {oauthTokens?.map((token) => (
+            <TokenRow
+              key={token.id}
+              token={token}
+              formatDate={formatDate}
+              onDetails={setTokenDetails}
+              onRevoke={setTokenToRevoke}
             />
-          </p>
-        </div>
-        {isPending && <Skeleton className="h-14 w-full" />}
-        {tokens?.length === 0 && (
-          <p className="text-sm text-muted-foreground">{t("settings.aiAccess.empty")}</p>
-        )}
-        {tokens?.map((token) => (
-          <TokenRow
-            key={token.id}
-            token={token}
-            formatDate={formatDate}
-            onDetails={setTokenDetails}
-            onRevoke={setTokenToRevoke}
-          />
-        ))}
-      </CardContent>
+          ))}
+        </CardContent>
+      </Card>
+
+      <Card className="w-full max-w-2xl">
+        <CardHeader className="border-b">
+          <CardTitle>{t("settings.aiAccess.manual.title")}</CardTitle>
+          <CardDescription>{t("settings.aiAccess.manual.description")}</CardDescription>
+          <CardAction>
+            <Button type="button" onClick={handleOpenCreate}>
+              <Plus /> {t("settings.aiAccess.createToken")}
+            </Button>
+          </CardAction>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-3">
+          {isPending && <Skeleton className="h-14 w-full" />}
+          {manualTokens?.length === 0 && (
+            <p className="text-sm text-muted-foreground">{t("settings.aiAccess.empty")}</p>
+          )}
+          {manualTokens?.map((token) => (
+            <TokenRow
+              key={token.id}
+              token={token}
+              formatDate={formatDate}
+              onDetails={setTokenDetails}
+              onRevoke={setTokenToRevoke}
+            />
+          ))}
+        </CardContent>
+      </Card>
 
       <CreateApiTokenDialog open={createOpen} onOpenChange={setCreateOpen} />
       <ApiTokenDetailsDialog token={tokenDetails} onOpenChange={handleDetailsOpenChange} />
@@ -137,7 +164,7 @@ export function AiAccessCard() {
         actionLabel={t("settings.aiAccess.revokeDialog.confirm")}
         actionProps={{ variant: "destructive", onClick: handleRevoke }}
       />
-    </Card>
+    </>
   );
 }
 

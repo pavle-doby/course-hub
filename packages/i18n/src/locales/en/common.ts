@@ -207,6 +207,12 @@ export const common = {
         message: "The access token could not be found.",
       },
     },
+    review: {
+      NOT_FOUND: {
+        title: "Review Not Found",
+        message: "The review could not be found.",
+      },
+    },
     oauth: {
       INVALID_CLIENT: {
         title: "Invalid Connection Request",

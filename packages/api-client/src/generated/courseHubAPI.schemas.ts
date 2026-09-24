@@ -173,6 +173,16 @@ export interface Course {
   visibility: CourseVisibility;
   /** @nullable */
   publishedAt: string | null;
+  /**
+   * @minimum -8388608
+   * @maximum 8388607
+   */
+  ratingAverage: number;
+  /**
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  ratingCount: number;
   creator?: CourseCreator;
   /** @nullable */
   thumbnailUrl: string | null;
@@ -236,6 +246,16 @@ export interface EnrolledCourse {
   visibility: EnrolledCourseVisibility;
   /** @nullable */
   publishedAt: string | null;
+  /**
+   * @minimum -8388608
+   * @maximum 8388607
+   */
+  ratingAverage: number;
+  /**
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  ratingCount: number;
   creator?: EnrolledCourseCreator;
   /** @nullable */
   thumbnailUrl: string | null;
@@ -656,6 +676,97 @@ export interface CreatedApiToken {
 
 export interface OauthApproveResponse {
   redirectUrl: string;
+}
+
+export type CourseReviewAuthor = {
+  id: string;
+  /**
+   * @maxLength 255
+   * @nullable
+   */
+  firstName: string | null;
+  /**
+   * @maxLength 255
+   * @nullable
+   */
+  lastName: string | null;
+  /** @maxLength 255 */
+  username: string;
+  /** @nullable */
+  avatarUrl: string | null;
+};
+
+export interface CourseReview {
+  id: string;
+  /**
+   * @minimum 1
+   * @maximum 5
+   */
+  rating: number;
+  /** @nullable */
+  comment: string | null;
+  /** @nullable */
+  reply: string | null;
+  /** @nullable */
+  repliedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+  author: CourseReviewAuthor;
+}
+
+export type MyCourseReviewReviewAuthor = {
+  id: string;
+  /**
+   * @maxLength 255
+   * @nullable
+   */
+  firstName: string | null;
+  /**
+   * @maxLength 255
+   * @nullable
+   */
+  lastName: string | null;
+  /** @maxLength 255 */
+  username: string;
+  /** @nullable */
+  avatarUrl: string | null;
+};
+
+/**
+ * @nullable
+ */
+export type MyCourseReviewReview = {
+  id: string;
+  /**
+   * @minimum 1
+   * @maximum 5
+   */
+  rating: number;
+  /** @nullable */
+  comment: string | null;
+  /** @nullable */
+  reply: string | null;
+  /** @nullable */
+  repliedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+  author: MyCourseReviewReviewAuthor;
+} | null;
+
+export interface MyCourseReview {
+  /** @nullable */
+  review: MyCourseReviewReview;
+}
+
+export type CourseReviewsPagination = {
+  total: number;
+  page: number;
+  limit: number;
+};
+
+export interface CourseReviews {
+  data: CourseReview[];
+  pagination: CourseReviewsPagination;
 }
 
 export type AuthSignUpBodyLanguage =
@@ -2938,6 +3049,152 @@ export type UpdateLessonProgressDefault = {
   code: UpdateLessonProgressDefaultCode;
   error?: unknown;
   details?: UpdateLessonProgressDefaultDetails;
+};
+
+export type GetMyCourseReviewPathParameters = {
+  publicId: string;
+};
+export type GetMyCourseReviewDefaultCode =
+  (typeof GetMyCourseReviewDefaultCode)[keyof typeof GetMyCourseReviewDefaultCode];
+
+export const GetMyCourseReviewDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type GetMyCourseReviewDefaultDetails = { [key: string]: unknown };
+
+export type GetMyCourseReviewDefault = {
+  status: number;
+  code: GetMyCourseReviewDefaultCode;
+  error?: unknown;
+  details?: GetMyCourseReviewDefaultDetails;
+};
+
+export type SaveCourseReviewPathParameters = {
+  publicId: string;
+};
+export type SaveCourseReviewBody = {
+  /**
+   * @minimum 1
+   * @maximum 5
+   */
+  rating: number;
+  /**
+   * @maxLength 2000
+   * @nullable
+   */
+  comment?: string | null;
+};
+
+export type SaveCourseReviewDefaultCode =
+  (typeof SaveCourseReviewDefaultCode)[keyof typeof SaveCourseReviewDefaultCode];
+
+export const SaveCourseReviewDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type SaveCourseReviewDefaultDetails = { [key: string]: unknown };
+
+export type SaveCourseReviewDefault = {
+  status: number;
+  code: SaveCourseReviewDefaultCode;
+  error?: unknown;
+  details?: SaveCourseReviewDefaultDetails;
+};
+
+export type SaveReviewReplyPathParameters = {
+  reviewId: string;
+};
+export type SaveReviewReplyBody = {
+  /**
+   * @maxLength 2000
+   * @nullable
+   */
+  reply: string | null;
+};
+
+export type SaveReviewReplyDefaultCode =
+  (typeof SaveReviewReplyDefaultCode)[keyof typeof SaveReviewReplyDefaultCode];
+
+export const SaveReviewReplyDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type SaveReviewReplyDefaultDetails = { [key: string]: unknown };
+
+export type SaveReviewReplyDefault = {
+  status: number;
+  code: SaveReviewReplyDefaultCode;
+  error?: unknown;
+  details?: SaveReviewReplyDefaultDetails;
+};
+
+export type GetCourseReviewsPathParameters = {
+  publicId: string;
+};
+export type GetCourseReviewsParams = {
+  /**
+   * @minimum 0
+   * @nullable
+   */
+  page?: number | null;
+  /**
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
+};
+
+export type GetCourseReviewsDefaultCode =
+  (typeof GetCourseReviewsDefaultCode)[keyof typeof GetCourseReviewsDefaultCode];
+
+export const GetCourseReviewsDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type GetCourseReviewsDefaultDetails = { [key: string]: unknown };
+
+export type GetCourseReviewsDefault = {
+  status: number;
+  code: GetCourseReviewsDefaultCode;
+  error?: unknown;
+  details?: GetCourseReviewsDefaultDetails;
 };
 
 export type GetApiTokensDefaultCode =

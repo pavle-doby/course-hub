@@ -1,6 +1,7 @@
 "use client";
 
-import { ChevronRight, File, Files, Folder } from "lucide-react";
+import Link from "next/link";
+import { ChevronRight, File, Files, Folder, MessageSquareText } from "lucide-react";
 import {
   Collapsible,
   CollapsibleContent,
@@ -10,6 +11,7 @@ import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuAction,
   SidebarMenuButton,
@@ -28,6 +30,7 @@ import { ProgressStatusIcon } from "./progress-status-icon";
 
 type LearnTreeNavProps = {
   courseName: string;
+  reviewsHref: string;
   tree: TopicWithLessons[];
   selection: Selection;
   contentLocked: boolean;
@@ -52,6 +55,7 @@ const PLACEHOLDER_TOPICS: SkeletonTopic[] = Array.from({ length: 3 }, (_, topicI
 
 export function LearnTreeNav({
   courseName,
+  reviewsHref,
   tree,
   selection,
   contentLocked,
@@ -75,6 +79,18 @@ export function LearnTreeNav({
 
   return (
     <Sidebar collapsible="offcanvas" className="border-r">
+      <SidebarHeader className="h-14 justify-center border-b">
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <Link href={reviewsHref}>
+                <MessageSquareText />
+                <span>{t("learn.reviews.title")}</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>

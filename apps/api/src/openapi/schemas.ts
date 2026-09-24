@@ -21,6 +21,8 @@ import {
   ApiTokenSchema as ApiTokenSchemaBase,
   CreateApiTokenResponseSchema as CreateApiTokenResponseSchemaBase,
   OauthApproveResponseSchema as OauthApproveResponseSchemaBase,
+  CourseReviewSchema as CourseReviewSchemaBase,
+  MyCourseReviewSchema as MyCourseReviewSchemaBase,
 } from "@repo/contract";
 
 export const UserSchema = registry.register("User", UserSchemaBase);
@@ -142,4 +144,15 @@ export const CreateApiTokenResponseSchema = registry.register(
 export const OauthApproveResponseSchema = registry.register(
   "OauthApproveResponse",
   OauthApproveResponseSchemaBase
+);
+
+export const CourseReviewSchema = registry.register("CourseReview", CourseReviewSchemaBase);
+export const MyCourseReviewSchema = registry.register("MyCourseReview", MyCourseReviewSchemaBase);
+
+export const PaginatedCourseReviewsSchema = registry.register(
+  "CourseReviews",
+  z.object({
+    data: z.array(CourseReviewSchema),
+    pagination: PaginationSchema,
+  })
 );

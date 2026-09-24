@@ -16,5 +16,6 @@ export * from "./generated/videos/videos";
 export * from "./generated/documents/documents";
 export * from "./generated/notifications/notifications";
 export * from "./generated/progress/progress";
+export * from "./generated/reviews/reviews";
 export * from "./generated/api-tokens/api-tokens";
 export * from "./generated/oauth/oauth";

@@ -44,6 +44,8 @@ const courseColumns = {
   status: schema.courses.status,
   visibility: schema.courses.visibility,
   publishedAt: schema.courses.publishedAt,
+  ratingAverage: schema.courses.ratingAverage,
+  ratingCount: schema.courses.ratingCount,
 };
 
 const creatorColumns = {

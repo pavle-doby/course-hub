@@ -26,6 +26,8 @@ export const CourseSchema = createSelectSchema(courses, {
     status: true,
     visibility: true,
     publishedAt: true,
+    ratingAverage: true,
+    ratingCount: true,
   })
   .extend({
     creator: CourseCreatorSchema.optional(),

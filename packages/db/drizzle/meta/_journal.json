@@ -57,6 +57,13 @@
       "when": 1790262104161,
       "tag": "0007_api_token_source",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1790266317507,
+      "tag": "0008_course_reviews",
+      "breakpoints": true
     }
   ]
 }

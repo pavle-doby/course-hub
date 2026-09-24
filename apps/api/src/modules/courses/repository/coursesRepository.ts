@@ -27,6 +27,20 @@ const courseTreeColumns = {
   visibility: true,
 } as const;
 
+const courseRowColumns = {
+  id: schema.courses.id,
+  creatorId: schema.courses.creatorId,
+  name: schema.courses.name,
+  description: schema.courses.description,
+  thumbnailObjectKey: schema.courses.thumbnailObjectKey,
+  publicId: schema.courses.publicId,
+  status: schema.courses.status,
+  visibility: schema.courses.visibility,
+  publishedAt: schema.courses.publishedAt,
+  ratingAverage: schema.courses.ratingAverage,
+  ratingCount: schema.courses.ratingCount,
+};
+
 const treeItemColumns = { id: true, name: true, description: true, position: true } as const;
 
 type GetAllPublishedCoursesParams = {
@@ -172,17 +186,7 @@ export const coursesRepository = {
   },
 
   createCourse: async (data: CreateCourseReq & { creatorId: string }): Promise<CourseRow> => {
-    const [course] = await db.insert(schema.courses).values(data).returning({
-      id: schema.courses.id,
-      creatorId: schema.courses.creatorId,
-      name: schema.courses.name,
-      description: schema.courses.description,
-      thumbnailObjectKey: schema.courses.thumbnailObjectKey,
-      publicId: schema.courses.publicId,
-      status: schema.courses.status,
-      visibility: schema.courses.visibility,
-      publishedAt: schema.courses.publishedAt,
-    });
+    const [course] = await db.insert(schema.courses).values(data).returning(courseRowColumns);
     return course!;
   },
 
@@ -191,17 +195,7 @@ export const coursesRepository = {
       .update(schema.courses)
       .set(data)
       .where(eq(schema.courses.id, id))
-      .returning({
-        id: schema.courses.id,
-        creatorId: schema.courses.creatorId,
-        name: schema.courses.name,
-        description: schema.courses.description,
-        thumbnailObjectKey: schema.courses.thumbnailObjectKey,
-        publicId: schema.courses.publicId,
-        status: schema.courses.status,
-        visibility: schema.courses.visibility,
-        publishedAt: schema.courses.publishedAt,
-      });
+      .returning(courseRowColumns);
     return course;
   },
 
@@ -218,17 +212,10 @@ export const coursesRepository = {
   },
 
   deleteCourse: async (id: string): Promise<CourseRow | undefined> => {
-    const [course] = await db.delete(schema.courses).where(eq(schema.courses.id, id)).returning({
-      id: schema.courses.id,
-      creatorId: schema.courses.creatorId,
-      name: schema.courses.name,
-      description: schema.courses.description,
-      thumbnailObjectKey: schema.courses.thumbnailObjectKey,
-      publicId: schema.courses.publicId,
-      status: schema.courses.status,
-      visibility: schema.courses.visibility,
-      publishedAt: schema.courses.publishedAt,
-    });
+    const [course] = await db
+      .delete(schema.courses)
+      .where(eq(schema.courses.id, id))
+      .returning(courseRowColumns);
     return course;
   },
 

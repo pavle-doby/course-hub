@@ -16,12 +16,20 @@ export const settings = {
   save: "Save",
   updated: "Settings updated",
   aiAccess: {
-    title: "AI access",
-    description:
-      "Personal access tokens let AI agents like Claude Code or Cursor read your courses and create drafts through MCP.",
+    oauth: {
+      title: "Claude connector",
+      description:
+        "Connect Claude (web, desktop, or mobile) with one click. Claude signs in through your browser and manages its own token.",
+      empty: "No connected apps yet.",
+    },
+    manual: {
+      title: "Access tokens",
+      description:
+        "For agents without connector support, like Claude Code or Cursor. Create a token and paste it into the agent's MCP config.",
+    },
     connectorUrl: "Connector URL",
     connectorUrlHint:
-      "In <strong>Claude</strong>, open <strong>Settings</strong> → <connectorsLink>Connectors</connectorsLink> → <strong>Add</strong> → <strong>Add custom connector</strong> and paste this URL. Other agents can use it with an access token below.",
+      "In <strong>Claude</strong>, open <strong>Settings</strong> → <connectorsLink>Connectors</connectorsLink> → <strong>Add</strong> → <strong>Add custom connector</strong> and paste this URL.",
     empty: "No access tokens yet.",
     createToken: "Create token",
     lastUsed: "Last used {{date}}",

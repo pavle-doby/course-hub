@@ -13,6 +13,7 @@ import { progressErrorMessages } from "./progressErrorMessages";
 import { aiErrorMessages } from "./aiErrorMessages";
 import { apiTokenErrorMessages } from "./apiTokenErrorMessages";
 import { oauthErrorMessages } from "./oauthErrorMessages";
+import { reviewErrorMessages } from "./reviewErrorMessages";
 
 export const allErrorMessages = {
   ...sharedErrorMessages,
@@ -30,4 +31,5 @@ export const allErrorMessages = {
   ...aiErrorMessages,
   ...apiTokenErrorMessages,
   ...oauthErrorMessages,
+  ...reviewErrorMessages,
 };

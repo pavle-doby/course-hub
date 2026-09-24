@@ -3,26 +3,33 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import confetti from "canvas-confetti";
+import { Star } from "lucide-react";
 import { useT } from "@repo/i18n/client";
-import { Button } from "@repo/ui-web/components/button";
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@repo/ui-web/components/dialog";
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@repo/ui-web/components/alert-dialog";
 import { FIREWORK_INTERVAL, FIREWORK_SIDES } from "@/utils/consts";
 
 type CourseCompletedDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  /** Set while the learner has no review yet; swaps "Thank you" for a Review button. */
+  onReview?: () => void;
 };
 
 /** Congratulations dialog for a just-finished course; fireworks run while it is open. */
-export function CourseCompletedDialog({ open, onOpenChange }: CourseCompletedDialogProps) {
+export function CourseCompletedDialog({
+  open,
+  onOpenChange,
+  onReview,
+}: CourseCompletedDialogProps) {
   const { t } = useT();
   const router = useRouter();
 
@@ -55,19 +62,33 @@ export function CourseCompletedDialog({ open, onOpenChange }: CourseCompletedDia
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>{t("learn.completed.title")}</DialogTitle>
-          <DialogDescription>{t("learn.completed.description")}</DialogDescription>
-        </DialogHeader>
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button variant="outline">{t("learn.completed.thankYou")}</Button>
-          </DialogClose>
-          <Button onClick={handleNewCourse}>{t("learn.completed.newCourse")}</Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+    <AlertDialog open={open} onOpenChange={onOpenChange}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>{t("learn.completed.title")}</AlertDialogTitle>
+          <AlertDialogDescription>{t("learn.completed.description")}</AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          {onReview ? (
+            <>
+              <AlertDialogAction variant="outline" onClick={handleNewCourse}>
+                {t("learn.completed.newCourse")}
+              </AlertDialogAction>
+              <AlertDialogAction onClick={onReview}>
+                <Star className="size-4" />
+                {t("learn.reviews.review")}
+              </AlertDialogAction>
+            </>
+          ) : (
+            <>
+              <AlertDialogCancel>{t("learn.completed.thankYou")}</AlertDialogCancel>
+              <AlertDialogAction onClick={handleNewCourse}>
+                {t("learn.completed.newCourse")}
+              </AlertDialogAction>
+            </>
+          )}
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }

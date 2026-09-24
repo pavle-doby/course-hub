@@ -9,6 +9,7 @@ import {
   useGetEnrolledCourseLessons,
   useGetEnrolledCourseTopics,
   useGetEnrollmentStatus,
+  useGetMyCourseReview,
   useGetPublicCourseByPublicId,
   useGetPublicCourseLessons,
   useGetPublicCourseTopics,
@@ -33,6 +34,7 @@ import { LearnCourseDetailSkeleton } from "./components/learn-course-detail-skel
 import { LearnHeader } from "./components/learn-header";
 import { LearnTreeNav } from "./components/learn-tree-nav";
 import { LearnWorkingArea } from "./components/learn-working-area";
+import { ReviewDialog } from "./components/review-dialog";
 
 const COURSE_SELECTION: Selection = { type: "course" };
 
@@ -44,6 +46,7 @@ export default function LearnCourseDetailPage() {
   const hasRestoredLessonRef = useRef(false);
   const [notificationCourseId, setNotificationCourseId] = useState<string>();
   const [isCompletedDialogOpen, setIsCompletedDialogOpen] = useState(false);
+  const [isReviewDialogOpen, setIsReviewDialogOpen] = useState(false);
 
   const hasAccessToken = Boolean(getAccessToken());
   const { data: currentUser, isFetching: isUserPending } = useGetUserSelf({
@@ -121,6 +124,8 @@ export default function LearnCourseDetailPage() {
     ? fullLessons
     : publicLessons?.map((lesson) => ({ ...lesson, description: null }));
   const isLoadingTree = isEnrolled && (isFullTopicsLoading || isFullLessonsLoading);
+
+  const { data: myReview } = useGetMyCourseReview({ publicId }, { query: { enabled: isEnrolled } });
 
   const { data: progress } = useGetCourseProgress({ publicId }, { query: { enabled: isEnrolled } });
   const statusById = new Map([
@@ -279,6 +284,11 @@ export default function LearnCourseDetailPage() {
       });
   }
 
+  function handleOpenReview() {
+    setIsCompletedDialogOpen(false);
+    setIsReviewDialogOpen(true);
+  }
+
   function handleSelectCourse() {
     setSelection({ type: "course" });
   }
@@ -315,10 +325,22 @@ export default function LearnCourseDetailPage() {
         onEnable={handleEnableNotifications}
         description={t("notifications.learnerPrompt")}
       />
-      <CourseCompletedDialog open={isCompletedDialogOpen} onOpenChange={setIsCompletedDialogOpen} />
+      <CourseCompletedDialog
+        open={isCompletedDialogOpen}
+        onOpenChange={setIsCompletedDialogOpen}
+        onReview={myReview && !myReview.review ? handleOpenReview : undefined}
+      />
+      {isEnrolled && (
+        <ReviewDialog
+          publicId={publicId}
+          open={isReviewDialogOpen}
+          onOpenChange={setIsReviewDialogOpen}
+        />
+      )}
       <div className="flex min-h-svh flex-1 flex-row">
         <LearnTreeNav
           courseName={course.name}
+          reviewsHref={`/learn/${publicId}/reviews`}
           tree={tree}
           selection={selection}
           contentLocked={!isEnrolled}
@@ -339,6 +361,7 @@ export default function LearnCourseDetailPage() {
             onEnroll={handleEnroll}
             isWithdrawing={isWithdrawing}
             onWithdraw={handleWithdraw}
+            onReview={handleOpenReview}
             isLoadingEnrollment={isLoadingEnrollment}
             progressPercent={progressPercent}
           />

@@ -5,6 +5,7 @@ import documentsPublicRoutes from "../modules/documents/routes/documentsPublicRo
 import invitationsPublicRoutes from "../modules/invitations/routes/invitationsPublicRoutes";
 import healthRoutes from "../modules/health/routes/healthRoutes";
 import videosPublicRoutes from "../modules/videos/routes/videosPublicRoutes";
+import reviewsPublicRoutes from "../modules/reviews/routes/reviewsPublicRoutes";
 
 const apiPublic: Router = Router();
 
@@ -42,6 +43,12 @@ apiPublic.use(
   //
   "/v1/public/invitations",
   invitationsPublicRoutes
+);
+
+apiPublic.use(
+  //
+  "/v1/public/reviews",
+  reviewsPublicRoutes
 );
 
 export default apiPublic;

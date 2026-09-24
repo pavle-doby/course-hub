@@ -27,6 +27,7 @@ import type { Selection, TopicWithLessons } from "@/hooks/use-course-tree";
 import { useLessonVideoProgress, useSaveLessonProgress } from "@/hooks/use-lesson-progress";
 import { NEXT_LESSON_STATUS, PROGRESS_STATUS_LABEL_KEYS } from "@/utils/consts";
 import { getVideoRefetchInterval } from "@/utils/get-video-refetch-interval";
+import { StarRating } from "@/components/star-rating";
 import { LessonStatusSelect } from "./lesson-status-select";
 import { ProgressStatusIcon } from "./progress-status-icon";
 
@@ -38,6 +39,8 @@ type LearnWorkingAreaProps = {
     name: string;
     description?: string | null;
     thumbnailUrl?: string | null;
+    ratingAverage: number;
+    ratingCount: number;
   };
   tree: TopicWithLessons[];
   flatLessons: Lesson[];
@@ -132,6 +135,8 @@ export function LearnWorkingArea({
   const nextStatus =
     isEnrolled && lessonProgress ? NEXT_LESSON_STATUS[lessonProgress.status] : undefined;
 
+  const isCompleteStep = nextStatus?.status === "done";
+
   function handleLessonStatusChange(status: LessonProgressStatus) {
     if (lessonProgress) {
       setIsSavingStatus(true);
@@ -183,6 +188,16 @@ export function LearnWorkingArea({
         )}
         <div className="flex items-center justify-between gap-2">
           <h2 className="text-2xl font-semibold">{name}</h2>
+          {nextStatus && !isCompleteStep && (
+            <Button
+              className="ml-auto hidden shrink-0 md:flex"
+              size="sm"
+              disabled={isSavingStatus}
+              onClick={handleAdvanceStatus}
+            >
+              {t(nextStatus.labelKey)}
+            </Button>
+          )}
           {isEnrolled && lessonProgress && isSavingStatus && (
             <Skeleton className="h-8 w-32 shrink-0" />
           )}
@@ -199,6 +214,9 @@ export function LearnWorkingArea({
             </Badge>
           )}
         </div>
+        {selection.type === "course" && (
+          <StarRating className="mt-2" average={course.ratingAverage} count={course.ratingCount} />
+        )}
         {hasVideo && (
           <>
             {isVideoReady && (
@@ -266,14 +284,16 @@ export function LearnWorkingArea({
 
         {nextStatus && (
           <>
-            {/* Desktop: at the end of the lesson */}
-            <Button
-              className="mt-6 hidden w-full md:flex"
-              disabled={isSavingStatus}
-              onClick={handleAdvanceStatus}
-            >
-              {t(nextStatus.labelKey)}
-            </Button>
+            {/* Desktop: completing sits at the end of the lesson; starting sits next to the title */}
+            {isCompleteStep && (
+              <Button
+                className="mt-6 hidden w-full md:flex"
+                disabled={isSavingStatus}
+                onClick={handleAdvanceStatus}
+              >
+                {t(nextStatus.labelKey)}
+              </Button>
+            )}
             {/* Mobile/tablet: fixed primary button above the bottom nav */}
             <div className="fixed inset-x-0 bottom-20 z-40 px-4 pb-2 md:hidden">
               <Button className="w-full" disabled={isSavingStatus} onClick={handleAdvanceStatus}>

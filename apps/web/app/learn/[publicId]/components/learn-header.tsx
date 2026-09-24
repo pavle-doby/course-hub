@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Star } from "lucide-react";
 import { Button } from "@repo/ui-web/components/button";
 import { Progress } from "@repo/ui-web/components/progress";
 import { Skeleton } from "@repo/ui-web/components/skeleton";
@@ -18,6 +18,7 @@ type LearnHeaderProps = {
   onEnroll: () => void;
   isWithdrawing: boolean;
   onWithdraw: () => void;
+  onReview: () => void;
   isLoadingEnrollment?: boolean;
   /** Percent of lessons done; omitted when not enrolled. */
   progressPercent?: number;
@@ -31,6 +32,7 @@ export function LearnHeader({
   onEnroll,
   isWithdrawing,
   onWithdraw,
+  onReview,
   isLoadingEnrollment = false,
   progressPercent,
 }: LearnHeaderProps) {
@@ -62,11 +64,15 @@ export function LearnHeader({
         </span>
       )}
 
-      <span className="flex justify-end md:col-start-3">
+      <span className="flex justify-end gap-2 md:col-start-3">
         {isLoadingEnrollment ? (
           <Skeleton className="h-9 w-24" />
         ) : isEnrolled ? (
           <>
+            <Button variant="outline" onClick={onReview}>
+              <Star className="size-4" />
+              {t("learn.reviews.review")}
+            </Button>
             <Button
               variant="outline"
               disabled={isWithdrawing}

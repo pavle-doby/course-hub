@@ -13,4 +13,5 @@ export * from "./lesson-progress";
 export * from "./push-subscriptions";
 export * from "./notification-preferences";
 export * from "./api-tokens";
+export * from "./course-reviews";
 export * from "./relations";

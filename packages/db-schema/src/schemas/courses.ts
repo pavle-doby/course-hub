@@ -1,5 +1,5 @@
 import { randomBytes } from "node:crypto";
-import { pgTable, uuid, varchar, text, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, uuid, varchar, text, timestamp, real, integer } from "drizzle-orm/pg-core";
 import { courseStatusEnum, courseVisibilityEnum } from "./enums";
 import { users } from "./users";
 
@@ -20,4 +20,7 @@ export const courses = pgTable("courses", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
   publishedAt: timestamp("published_at", { withTimezone: true }),
+  // Denormalized from course_reviews; recomputed whenever a review is saved.
+  ratingAverage: real("rating_average").notNull().default(0),
+  ratingCount: integer("rating_count").notNull().default(0),
 });

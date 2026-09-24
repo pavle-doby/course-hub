@@ -14,6 +14,7 @@ import type {
   pushSubscriptions,
   notificationPreferences,
   apiTokens,
+  courseReviews,
 } from "./schemas";
 
 export type UserEntity = InferSelectModel<typeof users>;
@@ -30,3 +31,4 @@ export type DocumentEntity = InferSelectModel<typeof documents>;
 export type PushSubscriptionEntity = InferSelectModel<typeof pushSubscriptions>;
 export type NotificationPreferenceEntity = InferSelectModel<typeof notificationPreferences>;
 export type ApiTokenEntity = InferSelectModel<typeof apiTokens>;
+export type CourseReviewEntity = InferSelectModel<typeof courseReviews>;

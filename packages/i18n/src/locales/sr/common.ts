@@ -204,6 +204,12 @@ export const common = {
         message: "Token nije pronađen.",
       },
     },
+    review: {
+      NOT_FOUND: {
+        title: "Recenzija nije pronađena",
+        message: "Recenzija nije pronađena.",
+      },
+    },
     oauth: {
       INVALID_CLIENT: {
         title: "Nevažeći zahtev za povezivanje",

@@ -12,6 +12,7 @@ export * from "./videos";
 export * from "./documents";
 export * from "./notifications";
 export * from "./progress";
+export * from "./reviews";
 export * from "./ai";
 export * from "./api-tokens";
 export * from "./oauth";

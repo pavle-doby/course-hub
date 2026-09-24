@@ -11,6 +11,7 @@ import { BookOpen } from "lucide-react";
 import { cn } from "@repo/ui-web/lib/utils";
 import { courseCardGradient } from "@/utils/course-card-gradient";
 import { getProgressColor } from "@/utils/get-progress-color";
+import { StarRating } from "@/components/star-rating";
 
 type LearnCourseCardProps = {
   course: Course;
@@ -57,7 +58,8 @@ export function LearnCourseCard({ course, progressPercent }: LearnCourseCardProp
               )}
               <AvatarFallback>{creatorInitials(course.creator)}</AvatarFallback>
             </Avatar>
-            <h3 className="line-clamp-1 font-semibold">{course.name}</h3>
+            <h3 className="line-clamp-1 flex-1 font-semibold">{course.name}</h3>
+            <StarRating average={course.ratingAverage} count={course.ratingCount} />
           </div>
           {progressPercent !== undefined && (
             <div className={cn("flex items-center gap-2", getProgressColor(progressPercent))}>
