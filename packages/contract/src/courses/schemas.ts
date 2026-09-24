@@ -34,6 +34,11 @@ export const CourseSchema = createSelectSchema(courses, {
     thumbnailUrl: z.url().nullable(),
   });
 
+// GET /courses list item: adds the number of active (non-withdrawn) enrollments
+export const CourseWithStatsSchema = CourseSchema.extend({
+  enrolledCount: z.int().nonnegative(),
+});
+
 export const CourseGetAllQuerySchema = z.object({
   status: z.enum(courseStatusEnum.enumValues).optional(),
   excludeEnrolled: paramBoolean().optional(),

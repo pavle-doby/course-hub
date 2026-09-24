@@ -14,8 +14,9 @@ import { Search, Folder, File } from "lucide-react";
 import { useT } from "@repo/i18n/client";
 import { useErrorHandlingQuery } from "@repo/shared";
 import { toast } from "@repo/ui-web/components/sonner";
-import { CourseCard } from "./components/course-card";
-import { CourseCardSkeleton } from "./components/course-card-skeleton";
+import { CourseCard } from "@/components/course-card";
+import { CourseCardSkeleton } from "@/components/course-card-skeleton";
+import { CourseCardActions } from "./components/course-card-actions";
 import { useDebounce } from "@/hooks/use-debounce";
 import { usePagination } from "@/hooks/use-pagination";
 import { cn } from "@repo/ui-web/lib/utils";
@@ -141,7 +142,13 @@ export default function CoursesPage() {
             <div className="flex flex-1 flex-col justify-between">
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
                 {courses?.data.map((course) => (
-                  <CourseCard key={course.id} course={course} onDelete={handleDelete} />
+                  <CourseCard
+                    key={course.id}
+                    course={course}
+                    href={`/courses/${course.publicId}/edit`}
+                    showStatus
+                    actions={<CourseCardActions course={course} onDelete={handleDelete} />}
+                  />
                 ))}
               </div>
 

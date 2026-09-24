@@ -1,6 +1,7 @@
 "use client";
 
-import { Lesson } from "@repo/api-client";
+import { useRouter } from "next/navigation";
+import { LessonListItem } from "@repo/api-client";
 import {
   Card,
   CardHeader,
@@ -16,14 +17,16 @@ import { LessonCardDropdownActions } from "./lesson-card-dropdown-actions";
 import { LessonCardDrawerActions } from "./lesson-card-drawer-actions";
 
 type LessonCardProps = {
-  lesson: Lesson;
+  lesson: LessonListItem;
   onDelete: (id: string) => void;
 };
 
 export function LessonCard({ lesson, onDelete }: LessonCardProps) {
+  const router = useRouter();
   const isMobile = useIsMobile();
 
   const actionMenuProps = {
+    onEdit: () => router.push(`/courses/${lesson.coursePublicId}/edit?lesson=${lesson.id}`),
     onDelete: () => onDelete(lesson.id),
   };
 
@@ -43,7 +46,7 @@ export function LessonCard({ lesson, onDelete }: LessonCardProps) {
         </CardAction>
       </CardHeader>
 
-      <CardContent className="flex-1">{lesson.description}</CardContent>
+      <CardContent className="line-clamp-3 flex-1">{lesson.description}</CardContent>
 
       <CardFooter>
         <Badge variant="secondary">#{lesson.position}</Badge>

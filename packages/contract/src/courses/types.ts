@@ -6,12 +6,14 @@ import {
   CoursePostQuerySchema,
   CoursePutQuerySchema,
   CourseSchema,
+  CourseWithStatsSchema,
   CourseThumbnailUploadBodySchema,
   CourseThumbnailUploadCompleteBodySchema,
   CourseThumbnailUploadResponseSchema,
 } from "./schemas";
 
 export type Course = z.infer<typeof CourseSchema>;
+export type CourseWithStats = z.infer<typeof CourseWithStatsSchema>;
 
 export type CourseStatus = CourseEntity["status"];
 export type CourseVisibility = CourseEntity["visibility"];
@@ -20,11 +22,11 @@ export type CourseVisibility = CourseEntity["visibility"];
 export type GetAllCoursesReq<Pagination = PaginationReq> = Pagination &
   Partial<Search> &
   z.infer<typeof CourseGetAllQuerySchema>;
-export type GetAllCoursesRes = PaginationRes<Course>;
+export type GetAllCoursesRes = PaginationRes<CourseWithStats>;
 
 // GET /public/courses → get all published courses, no auth required
 export type GetAllPublicCoursesReq<Pagination = PaginationReq> = Pagination & Partial<Search>;
-export type GetAllPublicCoursesRes = PaginationRes<Course>;
+export type GetAllPublicCoursesRes = PaginationRes<CourseWithStats>;
 
 // GET /courses/:id → get course by id
 export type GetCourseRes = Course | undefined;

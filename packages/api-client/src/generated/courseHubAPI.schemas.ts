@@ -188,15 +188,80 @@ export interface Course {
   thumbnailUrl: string | null;
 }
 
-export type CoursesPagination = {
+export type CourseWithStatsStatus =
+  (typeof CourseWithStatsStatus)[keyof typeof CourseWithStatsStatus];
+
+export const CourseWithStatsStatus = {
+  draft: "draft",
+  published: "published",
+  archived: "archived",
+} as const;
+
+export type CourseWithStatsVisibility =
+  (typeof CourseWithStatsVisibility)[keyof typeof CourseWithStatsVisibility];
+
+export const CourseWithStatsVisibility = {
+  public: "public",
+  private: "private",
+} as const;
+
+export type CourseWithStatsCreator = {
+  id: string;
+  /**
+   * @maxLength 255
+   * @nullable
+   */
+  firstName: string | null;
+  /**
+   * @maxLength 255
+   * @nullable
+   */
+  lastName: string | null;
+  /** @maxLength 255 */
+  username: string;
+  /** @nullable */
+  avatarUrl: string | null;
+};
+
+export interface CourseWithStats {
+  id: string;
+  creatorId: string;
+  /** @maxLength 255 */
+  name: string;
+  /** @maxLength 12 */
+  publicId: string;
+  /** @nullable */
+  description: string | null;
+  status: CourseWithStatsStatus;
+  visibility: CourseWithStatsVisibility;
+  /** @nullable */
+  publishedAt: string | null;
+  /**
+   * @minimum -8388608
+   * @maximum 8388607
+   */
+  ratingAverage: number;
+  /**
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  ratingCount: number;
+  creator?: CourseWithStatsCreator;
+  /** @nullable */
+  thumbnailUrl: string | null;
+  /** @minimum 0 */
+  enrolledCount: number;
+}
+
+export type CoursesWithStatsPagination = {
   total: number;
   page: number;
   limit: number;
 };
 
-export interface Courses {
-  data: Course[];
-  pagination: CoursesPagination;
+export interface CoursesWithStats {
+  data: CourseWithStats[];
+  pagination: CoursesWithStatsPagination;
 }
 
 export type EnrolledCourseStatus = (typeof EnrolledCourseStatus)[keyof typeof EnrolledCourseStatus];
@@ -259,6 +324,8 @@ export interface EnrolledCourse {
   creator?: EnrolledCourseCreator;
   /** @nullable */
   thumbnailUrl: string | null;
+  /** @minimum 0 */
+  enrolledCount: number;
   /**
    * @minimum 0
    * @maximum 100
@@ -291,6 +358,21 @@ export interface Lesson {
   position: number;
 }
 
+export interface LessonListItem {
+  id: string;
+  topicId: string;
+  /** @maxLength 255 */
+  name: string;
+  /** @nullable */
+  description: string | null;
+  /**
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  position: number;
+  coursePublicId: string;
+}
+
 export type LessonsPagination = {
   total: number;
   page: number;
@@ -298,7 +380,7 @@ export type LessonsPagination = {
 };
 
 export interface Lessons {
-  data: Lesson[];
+  data: LessonListItem[];
   pagination: LessonsPagination;
 }
 

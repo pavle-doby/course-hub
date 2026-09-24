@@ -7,6 +7,11 @@ export const LessonSchema = createSelectSchema(lessons).omit({
   updatedAt: true,
 });
 
+// Lesson list item carries its course's public id so the UI can link to the course editor
+export const LessonListItemSchema = LessonSchema.extend({
+  coursePublicId: z.string(),
+});
+
 // Names-only shape for non-enrolled learners (no description)
 export const PublicLessonSchema = LessonSchema.pick({
   id: true,

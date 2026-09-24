@@ -8,13 +8,14 @@ import {
   DropdownMenuItem,
 } from "@repo/ui-web/components/dropdown-menu";
 import { Button } from "@repo/ui-web/components/button";
-import { EllipsisVertical, Trash2 } from "lucide-react";
+import { EllipsisVertical, Pencil, Trash2 } from "lucide-react";
 
 type LessonCardDropdownActionsProps = {
+  onEdit: () => void;
   onDelete: () => void;
 };
 
-export function LessonCardDropdownActions({ onDelete }: LessonCardDropdownActionsProps) {
+export function LessonCardDropdownActions({ onEdit, onDelete }: LessonCardDropdownActionsProps) {
   const { t } = useT();
 
   return (
@@ -25,6 +26,10 @@ export function LessonCardDropdownActions({ onDelete }: LessonCardDropdownAction
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={onEdit}>
+          <Pencil className="size-4" />
+          {t("lessons.card.edit")}
+        </DropdownMenuItem>
         <DropdownMenuItem variant="destructive" onClick={onDelete}>
           <Trash2 className="size-4" />
           {t("lessons.card.delete")}

@@ -1,6 +1,6 @@
 import { db, schema } from "@repo/db";
 import { CourseEntity, UserEntity } from "@repo/db-schema";
-import { eq, ilike, or, and, count, asc, desc, notInArray, isNull } from "drizzle-orm";
+import { eq, ilike, or, and, count, asc, desc, notInArray, isNull, inArray } from "drizzle-orm";
 import {
   CourseTree,
   CreateCourseDraftInput,
@@ -17,6 +17,8 @@ type CourseRow = Omit<CourseEntity, "createdAt" | "updatedAt">;
 type CourseCreator = Pick<UserEntity, "id" | "firstName" | "lastName" | "username" | "avatarUrl">;
 
 type CourseWithCreator = CourseRow & { creator: CourseCreator };
+
+type CourseWithCreatorAndStats = CourseWithCreator & { enrolledCount: number };
 
 const courseTreeColumns = {
   id: true,
@@ -57,6 +59,33 @@ type GetAllCoursesParams = {
 } & Partial<Search> &
   z.infer<typeof CourseGetAllQuerySchema>;
 
+// Adds the number of active (non-withdrawn) enrollments to each course in one grouped query
+async function withEnrolledCounts<T extends { id: string }>(
+  courses: T[]
+): Promise<(T & { enrolledCount: number })[]> {
+  const courseIds = courses.map((course) => course.id);
+  if (courseIds.length === 0) {
+    return [];
+  }
+
+  const enrollmentCounts = await db
+    .select({ courseId: schema.courseEnrollments.courseId, count: count() })
+    .from(schema.courseEnrollments)
+    .where(
+      and(
+        inArray(schema.courseEnrollments.courseId, courseIds),
+        isNull(schema.courseEnrollments.withdrawnAt)
+      )
+    )
+    .groupBy(schema.courseEnrollments.courseId);
+  const countByCourseId = new Map(enrollmentCounts.map((row) => [row.courseId, row.count]));
+
+  return courses.map((course) => ({
+    ...course,
+    enrolledCount: countByCourseId.get(course.id) ?? 0,
+  }));
+}
+
 export const coursesRepository = {
   getAllCourses: async ({
     offset,
@@ -67,7 +96,7 @@ export const coursesRepository = {
     status,
     excludeEnrolled,
     showAllCreators,
-  }: GetAllCoursesParams): Promise<PaginationRes<CourseWithCreator>> => {
+  }: GetAllCoursesParams): Promise<PaginationRes<CourseWithCreatorAndStats>> => {
     const searchCondition = query
       ? or(
           ilike(schema.courses.name, `%${query}%`),
@@ -122,7 +151,7 @@ export const coursesRepository = {
     });
 
     return {
-      data,
+      data: await withEnrolledCounts(data),
       pagination: { total, page, limit: limit || total },
     };
   },
@@ -146,7 +175,7 @@ export const coursesRepository = {
     limit,
     page,
     query,
-  }: GetAllPublishedCoursesParams): Promise<PaginationRes<CourseWithCreator>> => {
+  }: GetAllPublishedCoursesParams): Promise<PaginationRes<CourseWithCreatorAndStats>> => {
     const searchCondition = query
       ? or(
           ilike(schema.courses.name, `%${query}%`),
@@ -180,7 +209,7 @@ export const coursesRepository = {
     });
 
     return {
-      data,
+      data: await withEnrolledCounts(data),
       pagination: { total, page, limit: limit || total },
     };
   },

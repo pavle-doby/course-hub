@@ -1,5 +1,5 @@
 import { registry } from "api/openapi/registry";
-import { CourseSchema, PaginatedCoursesSchema } from "api/openapi/schemas";
+import { CourseSchema, PaginatedCoursesWithStatsSchema } from "api/openapi/schemas";
 import {
   CourseGetAllQuerySchema,
   CoursePostQuerySchema,
@@ -24,7 +24,7 @@ registry.registerPath({
   responses: {
     200: {
       description: "Paginated list of courses",
-      content: { "application/json": { schema: PaginatedCoursesSchema } },
+      content: { "application/json": { schema: PaginatedCoursesWithStatsSchema } },
     },
     default: {
       description: "Error",

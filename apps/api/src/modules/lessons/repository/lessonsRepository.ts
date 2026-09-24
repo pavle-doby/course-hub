@@ -58,7 +58,7 @@ export const lessonsRepository = {
     const total = countResult[0]?.count ?? 0;
 
     const data = await db
-      .select(lessonColumns)
+      .select({ ...lessonColumns, coursePublicId: schema.courses.publicId })
       .from(schema.lessons)
       .innerJoin(schema.topics, eq(schema.lessons.topicId, schema.topics.id))
       .innerJoin(schema.courses, eq(schema.topics.courseId, schema.courses.id))

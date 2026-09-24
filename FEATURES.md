@@ -6,7 +6,7 @@ Fully implemented features and what is still in progress.
 
 - **Auth** — email/password signup, login, signout, refresh. Supabase JWT verified per-request by `handleAuth` on every private route. Signup picks language + theme (defaulted from browser); login/signup responses return saved preferences and apply them. Web: `apps/web/app/auth/[mode]/`.
 - **User profile & account** — view/edit profile (firstName, lastName, username, bio), delete own account. `apps/api/src/modules/users/`, `apps/web/app/profile/`.
-- **Course authoring** — CRUD, draft→published→archived, public/private visibility, auto-save editor, duplicate. `apps/api/src/modules/courses/`, `apps/web/app/courses/`.
+- **Course authoring** — CRUD, draft→published→archived, public/private visibility, auto-save editor, duplicate. Course cards (creator and learn/explore/home) share `CourseStats`: enrolled students (active enrollments, `enrolledCount` on `GET /v1/courses`, `GET /v1/public/courses`, `GET /v1/enrollments/courses`), rating average + count, and visibility. `apps/api/src/modules/courses/`, `apps/web/app/courses/`.
 - **Course thumbnail (Cloudflare R2)** — initialize → direct upload → verify → save/delete. `apps/api/src/modules/courses/`.
 - **Topics management** — CRUD, `position` reorder, duplicate. `apps/api/src/modules/topics/`.
 - **Lessons management** — CRUD, reorder, duplicate, standalone searchable list with pagination. `apps/api/src/modules/lessons/`, `apps/web/app/lessons/`.

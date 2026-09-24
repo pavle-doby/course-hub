@@ -1,7 +1,7 @@
 import { createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 import { courseEnrollments } from "@repo/db-schema";
-import { CourseSchema } from "../courses/schemas";
+import { CourseSchema, CourseWithStatsSchema } from "../courses/schemas";
 import { UserSchema } from "../users/schemas";
 
 export const CourseEnrollmentSchema = createSelectSchema(courseEnrollments);
@@ -11,7 +11,7 @@ export const EnrollCourseBodySchema = z.object({
 });
 
 // A course in the current user's enrolled list, with the percent of its lessons they finished.
-export const EnrolledCourseSchema = CourseSchema.extend({
+export const EnrolledCourseSchema = CourseWithStatsSchema.extend({
   progressPercent: z.number().int().min(0).max(100),
 });
 

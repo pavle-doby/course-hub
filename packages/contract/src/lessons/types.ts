@@ -4,17 +4,19 @@ import {
   LessonGetAllQuerySchema,
   LessonPostQuerySchema,
   LessonPutQuerySchema,
+  LessonListItemSchema,
   LessonSchema,
   PublicLessonSchema,
 } from "./schemas";
 
 export type Lesson = z.infer<typeof LessonSchema>;
+export type LessonListItem = z.infer<typeof LessonListItemSchema>;
 export type PublicLesson = z.infer<typeof PublicLessonSchema>;
 
 export type GetAllLessonsReq<Pagination = PaginationReq> = Pagination &
   Partial<Search> &
   z.infer<typeof LessonGetAllQuerySchema>;
-export type GetAllLessonsRes = PaginationRes<Lesson>;
+export type GetAllLessonsRes = PaginationRes<LessonListItem>;
 
 // GET /courses/public/:publicId/lessons → lesson names for a published course (no auth)
 export type GetPublicLessonsRes = PublicLesson[];

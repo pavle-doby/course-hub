@@ -9,6 +9,8 @@ export const courses = {
     next: "Sledeća",
   },
   card: {
+    enrolledLabel: "Upisanih studenata: {{count}}",
+    ratingLabel: "Ocena {{average}} od 5, na osnovu {{count}} recenzija",
     actions: "Akcije kursa",
     edit: "Izmeni",
     preview: "Pregled",

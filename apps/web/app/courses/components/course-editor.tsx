@@ -66,7 +66,11 @@ export function CourseEditor({ mode, publicId }: CourseEditorProps) {
   const [course, setCourse] = useState<CourseDraft | undefined>(
     mode === "create" ? { name: "", description: "" } : undefined
   );
-  const [selection, setSelection] = useState<Selection>({ type: "course" });
+  // "?lesson=<id>" (e.g. from the lessons page) opens the editor on that lesson
+  const [selection, setSelection] = useState<Selection>(() => {
+    const lessonId = searchParams.get("lesson");
+    return lessonId ? { type: "lesson", id: lessonId } : { type: "course" };
+  });
   const [autoSave, setAutoSave] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [actionsOpenMobile, setActionsOpenMobile] = useState(false);

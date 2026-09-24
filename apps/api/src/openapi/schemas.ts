@@ -6,7 +6,9 @@ import {
   UserPreferencesSchema as UserPreferencesSchemaBase,
   UserSchema as UserSchemaBase,
   CourseSchema as CourseSchemaBase,
+  CourseWithStatsSchema as CourseWithStatsSchemaBase,
   LessonSchema as LessonSchemaBase,
+  LessonListItemSchema as LessonListItemSchemaBase,
   PublicLessonSchema as PublicLessonSchemaBase,
   TopicSchema as TopicSchemaBase,
   PublicTopicSchema as PublicTopicSchemaBase,
@@ -59,10 +61,15 @@ export const PaginatedUsersSchema = registry.register(
 
 export const CourseSchema = registry.register("Course", CourseSchemaBase);
 
-export const PaginatedCoursesSchema = registry.register(
-  "Courses",
+export const CourseWithStatsSchema = registry.register(
+  "CourseWithStats",
+  CourseWithStatsSchemaBase
+);
+
+export const PaginatedCoursesWithStatsSchema = registry.register(
+  "CoursesWithStats",
   z.object({
-    data: z.array(CourseSchema),
+    data: z.array(CourseWithStatsSchema),
     pagination: PaginationSchema,
   })
 );
@@ -79,10 +86,12 @@ export const PaginatedEnrolledCoursesSchema = registry.register(
 
 export const LessonSchema = registry.register("Lesson", LessonSchemaBase);
 
+export const LessonListItemSchema = registry.register("LessonListItem", LessonListItemSchemaBase);
+
 export const PaginatedLessonsSchema = registry.register(
   "Lessons",
   z.object({
-    data: z.array(LessonSchema),
+    data: z.array(LessonListItemSchema),
     pagination: PaginationSchema,
   })
 );

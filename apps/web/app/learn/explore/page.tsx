@@ -9,8 +9,8 @@ import { usePagination } from "@/hooks/use-pagination";
 import { NavigationLayoutProvider } from "@/components/navigation-layout-provider";
 import { PageHeader } from "@/components/page-header";
 import { ChPagination, ChPaginationSkeleton } from "@/components/ch-pagination";
-import { LearnCourseCard } from "../components/learn-course-card";
-import { LearnCourseCardSkeleton } from "../components/learn-course-card-skeleton";
+import { CourseCard } from "@/components/course-card";
+import { CourseCardSkeleton } from "@/components/course-card-skeleton";
 
 const SKELETON_ITEMS = Array.from({ length: 6 });
 const PAGE_LIMIT = 6;
@@ -59,7 +59,7 @@ export default function LearnExplorePage() {
             <div className="flex flex-1 flex-col justify-between">
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
                 {SKELETON_ITEMS.map((_, i) => (
-                  <LearnCourseCardSkeleton key={i} />
+                  <CourseCardSkeleton key={i} />
                 ))}
               </div>
 
@@ -69,7 +69,7 @@ export default function LearnExplorePage() {
             <div className="flex flex-1 flex-col justify-between">
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
                 {courses.data.map((course) => (
-                  <LearnCourseCard key={course.id} course={course} />
+                  <CourseCard key={course.id} href={`/learn/${course.publicId}`} course={course} />
                 ))}
               </div>
 

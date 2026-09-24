@@ -2,7 +2,7 @@ import z from "zod";
 import { registry } from "api/openapi/registry";
 import {
   CourseSchema,
-  PaginatedCoursesSchema,
+  PaginatedCoursesWithStatsSchema,
   PublicTopicSchema,
   PublicLessonSchema,
 } from "api/openapi/schemas";
@@ -22,7 +22,7 @@ registry.registerPath({
   responses: {
     200: {
       description: "Paginated list of published courses",
-      content: { "application/json": { schema: PaginatedCoursesSchema } },
+      content: { "application/json": { schema: PaginatedCoursesWithStatsSchema } },
     },
     default: {
       description: "Error",

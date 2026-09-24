@@ -9,6 +9,8 @@ export const courses = {
     next: "Next",
   },
   card: {
+    enrolledLabel: "{{count}} enrolled students",
+    ratingLabel: "Rated {{average}} out of 5 from {{count}} reviews",
     actions: "Course actions",
     edit: "Edit",
     preview: "Preview",

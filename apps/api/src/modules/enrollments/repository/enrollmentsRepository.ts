@@ -16,6 +16,7 @@ type EnrolledCourse = CourseRow & {
   creator: CourseCreator | undefined;
   lessonsCount: number;
   doneLessonsCount: number;
+  enrolledCount: number;
 };
 
 type GetEnrolledCoursesParams = {
@@ -154,6 +155,11 @@ export const enrollmentsRepository = {
           inner join ${schema.topics} on ${schema.lessons.topicId} = ${schema.topics.id}
           where ${schema.topics.courseId} = ${schema.courses.id}
         )`,
+        enrolledCount: sql<number>`(
+          select count(*)::int from ${schema.courseEnrollments} as active_enrollments
+          where active_enrollments.course_id = ${schema.courses.id}
+            and active_enrollments.withdrawn_at is null
+        )`,
         doneLessonsCount: sql<number>`(
           select count(*)::int from ${schema.lessonProgress}
           inner join ${schema.lessons} on ${schema.lessonProgress.lessonId} = ${schema.lessons.id}
@@ -177,6 +183,7 @@ export const enrollmentsRepository = {
         creator: row.creator ?? undefined,
         lessonsCount: row.lessonsCount,
         doneLessonsCount: row.doneLessonsCount,
+        enrolledCount: row.enrolledCount,
       })),
       pagination: { total, page, limit: limit || total },
     };

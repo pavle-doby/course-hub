@@ -24,7 +24,7 @@ import type {
   CompleteCourseThumbnailUploadBody,
   CompleteCourseThumbnailUploadDefault,
   Course,
-  Courses,
+  CoursesWithStats,
   CreateCourseBody,
   CreateCourseDefault,
   DeleteCourseDefault,
@@ -81,7 +81,10 @@ export const getCourses = (
   options?: SecondParameter<typeof customInstance>,
   signal?: AbortSignal
 ) => {
-  return customInstance<Courses>({ url: `/v1/courses`, method: "GET", params, signal }, options);
+  return customInstance<CoursesWithStats>(
+    { url: `/v1/courses`, method: "GET", params, signal },
+    options
+  );
 };
 
 export const getGetCoursesQueryKey = (params?: GetCoursesParams) => {
@@ -785,7 +788,7 @@ export const getPublicCourses = (
   options?: SecondParameter<typeof customInstance>,
   signal?: AbortSignal
 ) => {
-  return customInstance<Courses>(
+  return customInstance<CoursesWithStats>(
     { url: `/v1/public/courses`, method: "GET", params, signal },
     options
   );

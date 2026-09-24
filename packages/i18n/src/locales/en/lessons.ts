@@ -8,6 +8,7 @@ export const lessons = {
   },
   card: {
     actions: "Lesson actions",
+    edit: "Edit",
     delete: "Delete",
   },
 };
