@@ -19,10 +19,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui-web/components/card";
+import { Skeleton } from "@repo/ui-web/components/skeleton";
 import { toast } from "@repo/ui-web/components/sonner";
 import { useIsMobile } from "@repo/ui-web/hooks/use-mobile";
 import { celebrate } from "./celebrate";
 import { QuizQuestionnaire } from "./quiz-questionnaire";
+import { QuizQuestionnaireSkeleton } from "./quiz-questionnaire-skeleton";
 import { QuizResult } from "./quiz-result";
 
 type LearnQuizProps = {
@@ -44,14 +46,27 @@ export function LearnQuiz({ parent, isEnrolled, onStart, onResponseChange }: Lea
     showToastError: ({ title, description }) => toast.error(title, { description }),
   });
 
-  const { data } = useGetPublicQuiz(parent);
+  const { data, isLoading: isQuizLoading } = useGetPublicQuiz(parent);
   const quiz = data?.quiz;
-  const { data: myResponse } = useGetMyQuizResponse(parent, {
+  const { data: myResponse, isLoading: isResponseLoading } = useGetMyQuizResponse(parent, {
     query: { enabled: isEnrolled && !!quiz },
   });
   const { mutate: saveResponse, isPending: isSaving } = useSaveQuizResponse();
   const { mutate: clearResponse } = useDeleteQuizResponse();
   const responseQueryKey = getGetMyQuizResponseQueryKey(parent);
+
+  if (isQuizLoading) {
+    return (
+      <Card className="mt-6">
+        <CardHeader>
+          <Skeleton className="h-5 w-20" />
+        </CardHeader>
+        <CardContent>
+          <QuizQuestionnaireSkeleton />
+        </CardContent>
+      </Card>
+    );
+  }
 
   if (!quiz) {
     return null;
@@ -103,6 +118,11 @@ export function LearnQuiz({ parent, isEnrolled, onStart, onResponseChange }: Lea
           </CardDescription>
         )}
       </CardHeader>
+      {isResponseLoading && (
+        <CardContent>
+          <QuizQuestionnaireSkeleton />
+        </CardContent>
+      )}
       {isEnrolled && myResponse && (
         <CardContent>
           {myResponse.response ? (
