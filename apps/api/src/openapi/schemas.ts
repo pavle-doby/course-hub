@@ -25,6 +25,11 @@ import {
   OauthApproveResponseSchema as OauthApproveResponseSchemaBase,
   CourseReviewSchema as CourseReviewSchemaBase,
   MyCourseReviewSchema as MyCourseReviewSchemaBase,
+  QuizSchema as QuizSchemaBase,
+  QuizOrNullSchema as QuizOrNullSchemaBase,
+  PublicQuizOrNullSchema as PublicQuizOrNullSchemaBase,
+  GeneratedQuizSchema as GeneratedQuizSchemaBase,
+  MyQuizResponseSchema as MyQuizResponseSchemaBase,
 } from "@repo/contract";
 
 export const UserSchema = registry.register("User", UserSchemaBase);
@@ -165,3 +170,12 @@ export const PaginatedCourseReviewsSchema = registry.register(
     pagination: PaginationSchema,
   })
 );
+
+export const QuizSchema = registry.register("Quiz", QuizSchemaBase);
+export const QuizOrNullSchema = registry.register("QuizOrNull", QuizOrNullSchemaBase);
+export const PublicQuizOrNullSchema = registry.register(
+  "PublicQuizOrNull",
+  PublicQuizOrNullSchemaBase
+);
+export const GeneratedQuizSchema = registry.register("GeneratedQuiz", GeneratedQuizSchemaBase);
+export const MyQuizResponseSchema = registry.register("MyQuizResponse", MyQuizResponseSchemaBase);

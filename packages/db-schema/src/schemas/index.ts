@@ -14,4 +14,6 @@ export * from "./push-subscriptions";
 export * from "./notification-preferences";
 export * from "./api-tokens";
 export * from "./course-reviews";
+export * from "./quizzes";
+export * from "./quiz-responses";
 export * from "./relations";

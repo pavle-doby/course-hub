@@ -13,6 +13,7 @@ export * from "./documents";
 export * from "./notifications";
 export * from "./progress";
 export * from "./reviews";
+export * from "./quizzes";
 export * from "./ai";
 export * from "./api-tokens";
 export * from "./oauth";

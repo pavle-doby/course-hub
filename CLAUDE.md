@@ -6,13 +6,13 @@ AGENTS.md (imported above) and the scoped `AGENTS.md` files in `apps/` and `pack
 
 ## Where to look first
 
-| Question                              | Source                                                                        |
-| ------------------------------------- | ----------------------------------------------------------------------------- |
-| Package map, data flow, key decisions | [ARCHITECTURE.md](ARCHITECTURE.md)                                            |
-| What's done vs. stubbed/in progress   | [FEATURES.md](FEATURES.md) (keep it updated when a feature changes)           |
-| Specs for planned/ongoing work        | `spec/task-*` (e.g. `spec/task-6.2.md` = notification history)                |
-| Deployment (Railway, two services)    | [README.deploy.md](README.deploy.md)                                          |
-| Intentional shortcuts                 | `// ponytail:` comments mark deliberate simplifications; read before "fixing" |
+| Question                              | Source                                                                                            |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| Package map, data flow, key decisions | [ARCHITECTURE.md](ARCHITECTURE.md)                                                                |
+| What's done vs. stubbed/in progress   | [FEATURES.md](FEATURES.md) (keep it updated when a feature changes)                               |
+| Specs for planned/ongoing work        | [spec/task-init.md](spec/task-init.md) indexes `spec/[{done,in-progress,todo}]-task-*` by feature |
+| Deployment (Railway, two services)    | [README.deploy.md](README.deploy.md)                                                              |
+| Intentional shortcuts                 | `// ponytail:` comments mark deliberate simplifications; read before "fixing"                     |
 
 ## Verifying changes
 

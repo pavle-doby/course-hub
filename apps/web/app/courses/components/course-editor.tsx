@@ -78,10 +78,14 @@ export function CourseEditor({ mode, publicId }: CourseEditorProps) {
   const [course, setCourse] = useState<CourseDraft | undefined>(
     mode === "create" ? { name: "", description: "" } : undefined
   );
-  // "?lesson=<id>" (e.g. from the lessons page) opens the editor on that lesson
+  // "?lesson=<id>" / "?topic=<id>" open the editor on that item (bookmarkable, kept in sync below)
   const [selection, setSelection] = useState<Selection>(() => {
     const lessonId = searchParams.get("lesson");
-    return lessonId ? { type: "lesson", id: lessonId } : { type: "course" };
+    if (lessonId) {
+      return { type: "lesson", id: lessonId };
+    }
+    const topicId = searchParams.get("topic");
+    return topicId ? { type: "topic", id: topicId } : { type: "course" };
   });
   const [autoSave, setAutoSave] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -173,18 +177,38 @@ export function CourseEditor({ mode, publicId }: CourseEditorProps) {
     toast.success(t(value ? "courses.editor.autoSaveOnToast" : "courses.editor.autoSaveOffToast"));
   }
 
-  function handleActiveTabChange(value: "edit" | "invite") {
-    setActiveTab(value);
+  // mirrors the selected topic/lesson and tab into the query string so the URL can be bookmarked or shared
+  function syncUrl(nextSelection: Selection, nextTab: "edit" | "invite") {
     const params = new URLSearchParams(searchParams.toString());
-    if (value === "invite") params.set("tab", value);
-    else params.delete("tab");
+    params.delete("topic");
+    params.delete("lesson");
+    // create mode has no stable URL to deep-link into, so only the tab is tracked there
+    if (mode === "edit" && nextSelection.type !== "course") {
+      params.set(nextSelection.type, nextSelection.id);
+    }
+    if (nextTab === "invite") {
+      params.set("tab", nextTab);
+    } else {
+      params.delete("tab");
+    }
     const qs = params.toString();
     router.replace(qs ? `${baseRoute}?${qs}` : baseRoute, { scroll: false });
   }
 
+  function selectItem(next: Selection) {
+    setSelection(next);
+    syncUrl(next, activeTab);
+  }
+
+  function handleActiveTabChange(value: "edit" | "invite") {
+    setActiveTab(value);
+    syncUrl(selection, value);
+  }
+
   function handleInviteClick() {
     setSelection({ type: "course" });
-    handleActiveTabChange("invite");
+    setActiveTab("invite");
+    syncUrl({ type: "course" }, "invite");
   }
 
   const showInviteTab = selection.type === "course" && displayedCourse.visibility === "private";
@@ -304,7 +328,7 @@ export function CourseEditor({ mode, publicId }: CourseEditorProps) {
         data: { courseId: id, name: t("courses.editor.newTopicName"), position: tree.length },
       });
       await invalidateTopicsAndLessons();
-      setSelection({ type: "topic", id: created.id });
+      selectItem({ type: "topic", id: created.id });
     } catch (error) {
       handleErrorAction(error as Error);
     }
@@ -322,7 +346,7 @@ export function CourseEditor({ mode, publicId }: CourseEditorProps) {
         },
       });
       await invalidateTopicsAndLessons();
-      setSelection({ type: "lesson", id: created.id });
+      selectItem({ type: "lesson", id: created.id });
     } catch (error) {
       handleErrorAction(error as Error);
     }
@@ -355,7 +379,7 @@ export function CourseEditor({ mode, publicId }: CourseEditorProps) {
       await deleteTopic({ pathParams: { id } });
       await invalidateTopicsAndLessons();
       if (selection.type === "topic" && selection.id === id) {
-        setSelection({ type: "course" });
+        selectItem({ type: "course" });
       }
     } catch (error) {
       handleErrorAction(error as Error);
@@ -375,7 +399,7 @@ export function CourseEditor({ mode, publicId }: CourseEditorProps) {
         },
       });
       await invalidateTopicsAndLessons();
-      setSelection({ type: "topic", id: created.id });
+      selectItem({ type: "topic", id: created.id });
       toast.success(t("courses.editor.duplicatedToast"));
     } catch (error) {
       handleErrorAction(error as Error);
@@ -387,7 +411,7 @@ export function CourseEditor({ mode, publicId }: CourseEditorProps) {
       await deleteLesson({ pathParams: { id } });
       await invalidateTopicsAndLessons();
       if (selection.type === "lesson" && selection.id === id) {
-        setSelection({ type: "course" });
+        selectItem({ type: "course" });
       }
     } catch (error) {
       handleErrorAction(error as Error);
@@ -408,7 +432,7 @@ export function CourseEditor({ mode, publicId }: CourseEditorProps) {
         },
       });
       await invalidateTopicsAndLessons();
-      setSelection({ type: "lesson", id: created.id });
+      selectItem({ type: "lesson", id: created.id });
       toast.success(t("courses.editor.duplicatedToast"));
     } catch (error) {
       handleErrorAction(error as Error);
@@ -537,9 +561,9 @@ export function CourseEditor({ mode, publicId }: CourseEditorProps) {
           courseName={displayedCourse.name || t("courses.editor.untitledCourse")}
           tree={tree}
           selection={selection}
-          onSelectCourse={() => setSelection({ type: "course" })}
-          onSelectTopic={(id) => setSelection({ type: "topic", id })}
-          onSelectLesson={(id) => setSelection({ type: "lesson", id })}
+          onSelectCourse={() => selectItem({ type: "course" })}
+          onSelectTopic={(id) => selectItem({ type: "topic", id })}
+          onSelectLesson={(id) => selectItem({ type: "lesson", id })}
           onAddTopic={handleAddTopic}
           onAddLesson={handleAddLesson}
           onReorderTopics={handleReorderTopics}
@@ -584,7 +608,7 @@ export function CourseEditor({ mode, publicId }: CourseEditorProps) {
             onDuplicateTopic={handleDuplicateTopic}
             onDeleteLesson={handleDeleteLesson}
             onDuplicateLesson={handleDuplicateLesson}
-            onNavigate={setSelection}
+            onNavigate={selectItem}
             onSavingChange={setIsSaving}
             onDuplicateCourse={handleDuplicateCourse}
             onDeleteCourse={courseId ? handleDeleteCourse : undefined}
@@ -596,8 +620,8 @@ export function CourseEditor({ mode, publicId }: CourseEditorProps) {
             onSave={handleSave}
             hasPrevious={!!previousItem}
             hasNext={!!nextItem}
-            onPrevious={() => previousItem && setSelection(previousItem)}
-            onNext={() => nextItem && setSelection(nextItem)}
+            onPrevious={() => previousItem && selectItem(previousItem)}
+            onNext={() => nextItem && selectItem(nextItem)}
             onOpenActions={() => setActionsOpenMobile(true)}
           />
         </div>

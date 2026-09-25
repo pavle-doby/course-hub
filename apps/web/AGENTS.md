@@ -180,11 +180,15 @@ Use `Button` from `@repo/ui-web/components/button` for actions. Use `Link` only 
 
 ## Icons
 
-Use `lucide-react` only. Size with Tailwind (`size-4`, `size-5`).
+Use `lucide-react` only. Size with Tailwind (`size-4`, `size-5`). When adding icons, import the `Icon`-suffixed name (`SaveIcon`, not `Save`) so icons can't be mistaken for components.
 
 ```tsx
+// ✅ correct
+import { ChevronDownIcon } from "lucide-react";
+<ChevronDownIcon className="size-4" />;
+
+// ❌ wrong — unsuffixed name
 import { ChevronDown } from "lucide-react";
-<ChevronDown className="size-4" />;
 ```
 
 ## Images

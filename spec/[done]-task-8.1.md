@@ -1,6 +1,6 @@
 # Task 8.1: MCP Server For Coding Agents
 
-Depends on `spec/task-8.0.md`. Scope: expose the shared course tools over MCP so coding agents (Claude Code, Cursor, etc.) can read a creator's courses and generate new ones. Agents authenticate with personal access tokens (PATs) that users create in Settings.
+Depends on `spec/[done]-task-8.0.md`. Scope: expose the shared course tools over MCP so coding agents (Claude Code, Cursor, etc.) can read a creator's courses and generate new ones. Agents authenticate with personal access tokens (PATs) that users create in Settings.
 
 ## Status (checked 2026-09-24): implemented, most manual checks pending
 

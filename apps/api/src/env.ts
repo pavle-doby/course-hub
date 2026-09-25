@@ -26,4 +26,6 @@ export const env = process.env as {
   API_PUBLIC_URL: string;
   WEB_APP_URL: string;
   OAUTH_SECRET: string;
+  ANTHROPIC_API_KEY: string;
+  QUIZ_MODEL?: string;
 };

@@ -1,6 +1,13 @@
 "use client";
 
-import { ChevronLeft, ChevronRight, ListTree, TableOfContents } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  ListTree,
+  SaveIcon,
+  TableOfContents,
+  XIcon,
+} from "lucide-react";
 import { Button } from "@repo/ui-web/components/button";
 import { useSidebar } from "@repo/ui-web/components/sidebar";
 import { useT } from "@repo/i18n/client";
@@ -35,9 +42,11 @@ export function CourseBottomNav({
     <div className="sticky bottom-0 z-40 flex flex-col md:hidden">
       <div className="flex items-center gap-2 bg-background px-4 py-2">
         <Button variant="outline" size="sm" className="flex-1" onClick={onCancel}>
+          <XIcon />
           {t("courses.editor.cancel")}
         </Button>
         <Button variant="outline" size="sm" className="flex-1" onClick={onSave} disabled={isSaving}>
+          <SaveIcon />
           {isSaving ? t("courses.editor.saving") : t("courses.editor.save")}
         </Button>
       </div>

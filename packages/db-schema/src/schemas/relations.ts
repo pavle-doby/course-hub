@@ -14,6 +14,8 @@ import { pushSubscriptions } from "./push-subscriptions";
 import { notificationPreferences } from "./notification-preferences";
 import { apiTokens } from "./api-tokens";
 import { courseReviews } from "./course-reviews";
+import { quizzes } from "./quizzes";
+import { quizResponses } from "./quiz-responses";
 
 export const usersRelations = relations(users, ({ one, many }) => ({
   preferences: one(userPreferences, { fields: [users.id], references: [userPreferences.userId] }),
@@ -26,6 +28,7 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   notificationPreferences: many(notificationPreferences),
   apiTokens: many(apiTokens),
   reviews: many(courseReviews),
+  quizResponses: many(quizResponses),
 }));
 
 export const userPreferencesRelations = relations(userPreferences, ({ one }) => ({
@@ -42,6 +45,7 @@ export const coursesRelations = relations(courses, ({ one, many }) => ({
   documents: many(documents),
   notificationPreferences: many(notificationPreferences),
   reviews: many(courseReviews),
+  quiz: one(quizzes),
 }));
 
 export const pushSubscriptionsRelations = relations(pushSubscriptions, ({ one }) => ({
@@ -79,6 +83,7 @@ export const topicsRelations = relations(topics, ({ one, many }) => ({
   video: one(videos),
   lessons: many(lessons),
   documents: many(documents),
+  quiz: one(quizzes),
 }));
 
 export const lessonsRelations = relations(lessons, ({ one, many }) => ({
@@ -86,6 +91,7 @@ export const lessonsRelations = relations(lessons, ({ one, many }) => ({
   video: one(videos),
   progress: many(lessonProgress),
   documents: many(documents),
+  quiz: one(quizzes),
 }));
 
 export const videosRelations = relations(videos, ({ one }) => ({
@@ -119,4 +125,19 @@ export const lessonProgressRelations = relations(lessonProgress, ({ one }) => ({
 export const courseReviewsRelations = relations(courseReviews, ({ one }) => ({
   user: one(users, { fields: [courseReviews.userId], references: [users.id] }),
   course: one(courses, { fields: [courseReviews.courseId], references: [courses.id] }),
+}));
+
+export const quizzesRelations = relations(quizzes, ({ one, many }) => ({
+  course: one(courses, { fields: [quizzes.courseId], references: [courses.id] }),
+  topic: one(topics, { fields: [quizzes.topicId], references: [topics.id] }),
+  lesson: one(lessons, { fields: [quizzes.lessonId], references: [lessons.id] }),
+  responses: many(quizResponses),
+}));
+
+export const quizResponsesRelations = relations(quizResponses, ({ one }) => ({
+  user: one(users, { fields: [quizResponses.userId], references: [users.id] }),
+  quiz: one(quizzes, {
+    fields: [quizResponses.quizId],
+    references: [quizzes.id],
+  }),
 }));

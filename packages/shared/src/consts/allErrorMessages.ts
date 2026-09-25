@@ -14,6 +14,7 @@ import { aiErrorMessages } from "./aiErrorMessages";
 import { apiTokenErrorMessages } from "./apiTokenErrorMessages";
 import { oauthErrorMessages } from "./oauthErrorMessages";
 import { reviewErrorMessages } from "./reviewErrorMessages";
+import { quizErrorMessages } from "./quizErrorMessages";
 
 export const allErrorMessages = {
   ...sharedErrorMessages,
@@ -32,4 +33,5 @@ export const allErrorMessages = {
   ...apiTokenErrorMessages,
   ...oauthErrorMessages,
   ...reviewErrorMessages,
+  ...quizErrorMessages,
 };

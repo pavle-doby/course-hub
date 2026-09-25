@@ -3,7 +3,7 @@
 import { useId } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertCircleIcon } from "lucide-react";
+import { AlertCircleIcon, SaveIcon, XIcon } from "lucide-react";
 import { getGetCourseReviewsQueryKey, useQueryClient, useSaveReviewReply } from "@repo/api-client";
 import { SaveReviewReplyBodySchema, type SaveReviewReplyReq } from "@repo/contract";
 import { useT } from "@repo/i18n/client";
@@ -89,9 +89,11 @@ export function ReviewReplyForm({ publicId, reviewId, reply, onDone }: ReviewRep
           </Button>
         )}
         <Button type="button" variant="outline" size="sm" onClick={onDone}>
+          <XIcon />
           {t("learn.reviews.cancel")}
         </Button>
         <Button type="submit" size="sm" disabled={isPending}>
+          <SaveIcon />
           {isPending ? t("learn.reviews.saving") : t("learn.reviews.saveReply")}
         </Button>
       </div>

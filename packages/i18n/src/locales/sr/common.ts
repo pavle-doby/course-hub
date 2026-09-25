@@ -201,6 +201,15 @@ export const common = {
         title: "Nevažeći token",
         message: "Token je nevažeći ili je opozvan.",
       },
+      LIMIT_REACHED: {
+        title: "Dnevni AI limit je dostignut",
+        message: "Iskoristili ste sva AI generisanja za danas. Pokušajte ponovo sutra.",
+      },
+      GENERATION_FAILED: {
+        title: "AI generisanje nije uspelo",
+        message:
+          "AI ovog puta nije uspeo da napravi pitanja. Pokušajte ponovo ili ih napravite ručno.",
+      },
     },
     apiToken: {
       NOT_FOUND: {
@@ -212,6 +221,16 @@ export const common = {
       NOT_FOUND: {
         title: "Recenzija nije pronađena",
         message: "Recenzija nije pronađena.",
+      },
+    },
+    quiz: {
+      NOT_FOUND: {
+        title: "Kviz nije pronađen",
+        message: "Kviz nije pronađen.",
+      },
+      PARENT_NOT_FOUND: {
+        title: "Sadržaj nije pronađen",
+        message: "Kurs, tema ili lekcija za ovaj kviz nije pronađena.",
       },
     },
     oauth: {

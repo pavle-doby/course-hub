@@ -1,6 +1,6 @@
 # Task 8.0: AI Foundation (Shared Course Tools)
 
-Scope: one shared layer of typed "course tools" that both AI features call: the MCP server (`spec/task-8.1.md`) and the course-edit chat (`spec/task-8.2.md`). This task also closes the ownership gaps that become exploitable once an AI can call write operations with arbitrary ids. There is no LLM, no new UI, and no new public endpoint in this task.
+Scope: one shared layer of typed "course tools" that both AI features call: the MCP server (`spec/[done]-task-8.1.md`) and the course-edit chat (`spec/[todo]-task-8.2.md`). This task also closes the ownership gaps that become exploitable once an AI can call write operations with arbitrary ids. There is no LLM, no new UI, and no new public endpoint in this task.
 
 ## Status (checked 2026-09-24): implemented, manual 403 check pending
 

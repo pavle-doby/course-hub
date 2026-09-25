@@ -95,3 +95,7 @@ Agents authenticate with a personal access token created in Settings → AI acce
 | `OAUTH_SECRET`   | Random secret (`openssl rand -base64 32`); rotating it invalidates registered clients (they must reconnect), not issued tokens |
 
 Production: `https://api-production-e54c.up.railway.app/apix/v1/mcp`.
+
+## AI quiz generation
+
+**AI Create** in the course editor calls the Claude API from the API service. Set `ANTHROPIC_API_KEY` on the API service. Optionally set `QUIZ_MODEL` to switch the Claude model (default `claude-sonnet-5`) without a code change. Without it, AI Create fails with a "generation failed" toast; manual quizzes still work.

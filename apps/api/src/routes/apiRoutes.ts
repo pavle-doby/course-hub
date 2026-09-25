@@ -11,6 +11,7 @@ import documentsRoutes from "../modules/documents/routes/documentsRoutes";
 import notificationsRoutes from "../modules/notifications/routes/notificationsRoutes";
 import progressRoutes from "../modules/progress/routes/progressRoutes";
 import reviewsRoutes from "../modules/reviews/routes/reviewsRoutes";
+import quizzesRoutes from "../modules/quizzes/routes/quizzesRoutes";
 import apiTokensRoutes from "../modules/api-tokens/routes/apiTokensRoutes";
 import oauthRoutes from "../modules/oauth/routes/oauthRoutes";
 
@@ -80,6 +81,12 @@ api.use(
   //
   "/v1/reviews",
   reviewsRoutes
+);
+
+api.use(
+  //
+  "/v1/quizzes",
+  quizzesRoutes
 );
 
 api.use(

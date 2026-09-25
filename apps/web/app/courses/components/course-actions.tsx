@@ -333,14 +333,16 @@ export function CourseActions({
         <Drawer open={openMobile} onOpenChange={setOpenMobile}>
           <DrawerContent>
             <DrawerHeader className="border-b text-left">
-              <DrawerTitle>{t("courses.editor.actions")}</DrawerTitle>
-              <div className="flex items-center gap-2 pt-2">
-                <span className="text-xs font-medium text-muted-foreground">
-                  {t("courses.editor.status")}
-                </span>
-                <Badge variant={statusVariant} className="ml-auto">
-                  {t(`courses.status.${status}`)}
-                </Badge>
+              <div className="flex flex-1 items-center justify-between">
+                <DrawerTitle>{t("courses.editor.actions")}</DrawerTitle>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-medium text-muted-foreground">
+                    {t("courses.editor.status")}
+                  </span>
+                  <Badge variant={statusVariant} className="ml-auto">
+                    {t(`courses.status.${status}`)}
+                  </Badge>
+                </div>
               </div>
             </DrawerHeader>
             <div className="flex max-h-[calc(80vh-7rem)] flex-col gap-5 overflow-y-auto p-4 pb-16">

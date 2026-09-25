@@ -1,4 +1,5 @@
 import type { ComponentProps, ReactNode } from "react";
+import { XIcon } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -38,7 +39,12 @@ export function ChAlertDialog({
           {description && <AlertDialogDescription>{description}</AlertDialogDescription>}
         </AlertDialogHeader>
         <AlertDialogFooter>
-          {cancelLabel && <AlertDialogCancel>{cancelLabel}</AlertDialogCancel>}
+          {cancelLabel && (
+            <AlertDialogCancel>
+              <XIcon />
+              {cancelLabel}
+            </AlertDialogCancel>
+          )}
           <AlertDialogAction {...actionProps}>{actionLabel}</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

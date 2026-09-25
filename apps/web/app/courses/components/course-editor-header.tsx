@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, SaveIcon, XIcon } from "lucide-react";
 import { Button } from "@repo/ui-web/components/button";
 import { Switch } from "@repo/ui-web/components/switch";
 import { Label } from "@repo/ui-web/components/label";
@@ -58,9 +58,11 @@ export function CourseEditorHeader({
 
         <div className="hidden items-center gap-2 justify-self-end md:flex">
           <Button variant="outline" onClick={onCancel}>
+            <XIcon />
             {t("courses.editor.cancel")}
           </Button>
           <Button variant="outline" onClick={onSave} disabled={isSaving}>
+            <SaveIcon />
             {isSaving ? t("courses.editor.saving") : t("courses.editor.save")}
           </Button>
         </div>

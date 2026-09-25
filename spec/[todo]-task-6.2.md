@@ -1,6 +1,6 @@
 # Task 6.2: Notification History (Amendment to Task 6)
 
-Amendment to `spec/task-6.md`. Scope: add persistent in-app notification history on top of the push-only system from Task 6. The push plumbing (VAPID, subscription preferences, service worker) is untouched.
+Amendment to `spec/[done]-task-6.1.md`. Scope: add persistent in-app notification history on top of the push-only system from Task 6. The push plumbing (VAPID, subscription preferences, service worker) is untouched.
 
 ## Decisions
 

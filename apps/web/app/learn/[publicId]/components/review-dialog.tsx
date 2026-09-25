@@ -3,7 +3,7 @@
 import { useId } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertCircleIcon } from "lucide-react";
+import { AlertCircleIcon, SaveIcon, XIcon } from "lucide-react";
 import {
   getGetCourseReviewsQueryKey,
   getGetMyCourseReviewQueryKey,
@@ -127,10 +127,12 @@ export function ReviewDialog({ publicId, open, onOpenChange }: ReviewDialogProps
           <DialogFooter>
             <DialogClose asChild>
               <Button type="button" variant="outline">
+                <XIcon />
                 {t("learn.reviews.cancel")}
               </Button>
             </DialogClose>
             <Button type="submit" disabled={isPending || !rating}>
+              <SaveIcon />
               {isPending ? t("learn.reviews.saving") : t("learn.reviews.save")}
             </Button>
           </DialogFooter>

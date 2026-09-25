@@ -13,6 +13,7 @@ import { ChAlertDialog } from "@/components/ch-alert-dialog";
 import { EntityForm, type EntityFormHandle, type EntityFormValues } from "./entity-form";
 import { CourseThumbnailInput } from "./course-thumbnail-input";
 import { InviteForm } from "./invite-form";
+import { QuizSection } from "./quiz/quiz-section";
 import {
   useAdjacentSelection,
   type Selection,
@@ -133,6 +134,8 @@ export function CourseWorkingArea({
     (selection.type === "lesson" && !!selectedLesson);
   const showHeader = isCourseSelected || hasSelectedTopicOrLesson;
   const isInviteActive = isCourseSelected && showInviteTab && activeTab === "invite";
+  // needs a saved id, so the course-level quiz appears once the new course is first saved
+  const quizParentId = isCourseSelected ? courseId : (selectedTopic?.id ?? selectedLesson?.id);
 
   return (
     <div className="flex flex-1 flex-col">
@@ -263,6 +266,13 @@ export function CourseWorkingArea({
             )}
           </CardContent>
         </Card>
+
+        {!isInviteActive && quizParentId && (
+          <QuizSection
+            key={selectionKey}
+            parent={{ parentType: selection.type, parentId: quizParentId }}
+          />
+        )}
 
         {!isInviteActive && (
           <div className="mx-auto flex w-full max-w-2xl flex-col justify-center gap-2 sm:flex-row">

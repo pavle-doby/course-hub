@@ -854,6 +854,370 @@ export interface CourseReviews {
   pagination: CourseReviewsPagination;
 }
 
+export type QuizQuestionsItem =
+  | {
+      /**
+       * @minLength 1
+       * @maxLength 50
+       */
+      id: string;
+      /**
+       * @minLength 1
+       * @maxLength 500
+       */
+      prompt: string;
+      /** @maxLength 500 */
+      description?: string;
+      required: boolean;
+      type: "single";
+      /**
+       * @minItems 2
+       * @maxItems 6
+       */
+      choices: {
+        /**
+         * @minLength 1
+         * @maxLength 50
+         */
+        value: string;
+        /**
+         * @minLength 1
+         * @maxLength 200
+         */
+        label: string;
+        correct: boolean;
+      }[];
+    }
+  | {
+      /**
+       * @minLength 1
+       * @maxLength 50
+       */
+      id: string;
+      /**
+       * @minLength 1
+       * @maxLength 500
+       */
+      prompt: string;
+      /** @maxLength 500 */
+      description?: string;
+      required: boolean;
+      type: "multiple";
+      /**
+       * @minItems 2
+       * @maxItems 6
+       */
+      choices: {
+        /**
+         * @minLength 1
+         * @maxLength 50
+         */
+        value: string;
+        /**
+         * @minLength 1
+         * @maxLength 200
+         */
+        label: string;
+        correct: boolean;
+      }[];
+    }
+  | {
+      /**
+       * @minLength 1
+       * @maxLength 50
+       */
+      id: string;
+      /**
+       * @minLength 1
+       * @maxLength 500
+       */
+      prompt: string;
+      /** @maxLength 500 */
+      description?: string;
+      required: boolean;
+      type: "text";
+    };
+
+export interface Quiz {
+  id: string;
+  questions: QuizQuestionsItem[];
+  updatedAt: string;
+}
+
+export type QuizOrNullQuizQuestionsItem =
+  | {
+      /**
+       * @minLength 1
+       * @maxLength 50
+       */
+      id: string;
+      /**
+       * @minLength 1
+       * @maxLength 500
+       */
+      prompt: string;
+      /** @maxLength 500 */
+      description?: string;
+      required: boolean;
+      type: "single";
+      /**
+       * @minItems 2
+       * @maxItems 6
+       */
+      choices: {
+        /**
+         * @minLength 1
+         * @maxLength 50
+         */
+        value: string;
+        /**
+         * @minLength 1
+         * @maxLength 200
+         */
+        label: string;
+        correct: boolean;
+      }[];
+    }
+  | {
+      /**
+       * @minLength 1
+       * @maxLength 50
+       */
+      id: string;
+      /**
+       * @minLength 1
+       * @maxLength 500
+       */
+      prompt: string;
+      /** @maxLength 500 */
+      description?: string;
+      required: boolean;
+      type: "multiple";
+      /**
+       * @minItems 2
+       * @maxItems 6
+       */
+      choices: {
+        /**
+         * @minLength 1
+         * @maxLength 50
+         */
+        value: string;
+        /**
+         * @minLength 1
+         * @maxLength 200
+         */
+        label: string;
+        correct: boolean;
+      }[];
+    }
+  | {
+      /**
+       * @minLength 1
+       * @maxLength 50
+       */
+      id: string;
+      /**
+       * @minLength 1
+       * @maxLength 500
+       */
+      prompt: string;
+      /** @maxLength 500 */
+      description?: string;
+      required: boolean;
+      type: "text";
+    };
+
+/**
+ * @nullable
+ */
+export type QuizOrNullQuiz = {
+  id: string;
+  questions: QuizOrNullQuizQuestionsItem[];
+  updatedAt: string;
+} | null;
+
+export interface QuizOrNull {
+  /** @nullable */
+  quiz: QuizOrNullQuiz;
+}
+
+export type PublicQuizOrNullQuizQuestionsItemType =
+  (typeof PublicQuizOrNullQuizQuestionsItemType)[keyof typeof PublicQuizOrNullQuizQuestionsItemType];
+
+export const PublicQuizOrNullQuizQuestionsItemType = {
+  single: "single",
+  multiple: "multiple",
+  text: "text",
+} as const;
+
+export type PublicQuizOrNullQuizQuestionsItemChoicesItem = {
+  /**
+   * @minLength 1
+   * @maxLength 50
+   */
+  value: string;
+  /**
+   * @minLength 1
+   * @maxLength 200
+   */
+  label: string;
+};
+
+export type PublicQuizOrNullQuizQuestionsItem = {
+  /**
+   * @minLength 1
+   * @maxLength 50
+   */
+  id: string;
+  /**
+   * @minLength 1
+   * @maxLength 500
+   */
+  prompt: string;
+  /** @maxLength 500 */
+  description?: string;
+  required: boolean;
+  type: PublicQuizOrNullQuizQuestionsItemType;
+  choices: PublicQuizOrNullQuizQuestionsItemChoicesItem[];
+};
+
+/**
+ * @nullable
+ */
+export type PublicQuizOrNullQuiz = {
+  id: string;
+  questions: PublicQuizOrNullQuizQuestionsItem[];
+} | null;
+
+export interface PublicQuizOrNull {
+  /** @nullable */
+  quiz: PublicQuizOrNullQuiz;
+}
+
+export type GeneratedQuizQuestionsItem =
+  | {
+      /**
+       * @minLength 1
+       * @maxLength 50
+       */
+      id: string;
+      /**
+       * @minLength 1
+       * @maxLength 500
+       */
+      prompt: string;
+      /** @maxLength 500 */
+      description?: string;
+      required: boolean;
+      type: "single";
+      /**
+       * @minItems 2
+       * @maxItems 6
+       */
+      choices: {
+        /**
+         * @minLength 1
+         * @maxLength 50
+         */
+        value: string;
+        /**
+         * @minLength 1
+         * @maxLength 200
+         */
+        label: string;
+        correct: boolean;
+      }[];
+    }
+  | {
+      /**
+       * @minLength 1
+       * @maxLength 50
+       */
+      id: string;
+      /**
+       * @minLength 1
+       * @maxLength 500
+       */
+      prompt: string;
+      /** @maxLength 500 */
+      description?: string;
+      required: boolean;
+      type: "multiple";
+      /**
+       * @minItems 2
+       * @maxItems 6
+       */
+      choices: {
+        /**
+         * @minLength 1
+         * @maxLength 50
+         */
+        value: string;
+        /**
+         * @minLength 1
+         * @maxLength 200
+         */
+        label: string;
+        correct: boolean;
+      }[];
+    }
+  | {
+      /**
+       * @minLength 1
+       * @maxLength 50
+       */
+      id: string;
+      /**
+       * @minLength 1
+       * @maxLength 500
+       */
+      prompt: string;
+      /** @maxLength 500 */
+      description?: string;
+      required: boolean;
+      type: "text";
+    };
+
+export interface GeneratedQuiz {
+  /**
+   * @minItems 3
+   * @maxItems 5
+   */
+  questions: GeneratedQuizQuestionsItem[];
+}
+
+export type MyQuizResponseResponseAnswers = { [key: string]: string | string[] };
+
+export type MyQuizResponseResponseResultQuestionsItem = {
+  id: string;
+  /** @nullable */
+  isCorrect: boolean | null;
+  correctValues: string[];
+};
+
+export type MyQuizResponseResponseResult = {
+  /** @minimum 0 */
+  score: number;
+  /** @minimum 0 */
+  total: number;
+  questions: MyQuizResponseResponseResultQuestionsItem[];
+};
+
+/**
+ * @nullable
+ */
+export type MyQuizResponseResponse = {
+  answers: MyQuizResponseResponseAnswers;
+  result: MyQuizResponseResponseResult;
+  updatedAt: string;
+} | null;
+
+export interface MyQuizResponse {
+  /** @nullable */
+  response: MyQuizResponseResponse;
+}
+
 export type AuthSignUpBodyLanguage =
   (typeof AuthSignUpBodyLanguage)[keyof typeof AuthSignUpBodyLanguage];
 
@@ -3282,6 +3646,339 @@ export type GetCourseReviewsDefault = {
   code: GetCourseReviewsDefaultCode;
   error?: unknown;
   details?: GetCourseReviewsDefaultDetails;
+};
+
+export type GetQuizPathParameters = {
+  parentType: "course" | "topic" | "lesson";
+  parentId: string;
+};
+export type GetQuizDefaultCode = (typeof GetQuizDefaultCode)[keyof typeof GetQuizDefaultCode];
+
+export const GetQuizDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type GetQuizDefaultDetails = { [key: string]: unknown };
+
+export type GetQuizDefault = {
+  status: number;
+  code: GetQuizDefaultCode;
+  error?: unknown;
+  details?: GetQuizDefaultDetails;
+};
+
+export type SaveQuizPathParameters = {
+  parentType: "course" | "topic" | "lesson";
+  parentId: string;
+};
+export type SaveQuizBodyQuestionsItem =
+  | {
+      /**
+       * @minLength 1
+       * @maxLength 50
+       */
+      id: string;
+      /**
+       * @minLength 1
+       * @maxLength 500
+       */
+      prompt: string;
+      /** @maxLength 500 */
+      description?: string;
+      required: boolean;
+      type: "single";
+      /**
+       * @minItems 2
+       * @maxItems 6
+       */
+      choices: {
+        /**
+         * @minLength 1
+         * @maxLength 50
+         */
+        value: string;
+        /**
+         * @minLength 1
+         * @maxLength 200
+         */
+        label: string;
+        correct: boolean;
+      }[];
+    }
+  | {
+      /**
+       * @minLength 1
+       * @maxLength 50
+       */
+      id: string;
+      /**
+       * @minLength 1
+       * @maxLength 500
+       */
+      prompt: string;
+      /** @maxLength 500 */
+      description?: string;
+      required: boolean;
+      type: "multiple";
+      /**
+       * @minItems 2
+       * @maxItems 6
+       */
+      choices: {
+        /**
+         * @minLength 1
+         * @maxLength 50
+         */
+        value: string;
+        /**
+         * @minLength 1
+         * @maxLength 200
+         */
+        label: string;
+        correct: boolean;
+      }[];
+    }
+  | {
+      /**
+       * @minLength 1
+       * @maxLength 50
+       */
+      id: string;
+      /**
+       * @minLength 1
+       * @maxLength 500
+       */
+      prompt: string;
+      /** @maxLength 500 */
+      description?: string;
+      required: boolean;
+      type: "text";
+    };
+
+export type SaveQuizBody = {
+  /**
+   * @minItems 1
+   * @maxItems 20
+   */
+  questions: SaveQuizBodyQuestionsItem[];
+};
+
+export type SaveQuizDefaultCode = (typeof SaveQuizDefaultCode)[keyof typeof SaveQuizDefaultCode];
+
+export const SaveQuizDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type SaveQuizDefaultDetails = { [key: string]: unknown };
+
+export type SaveQuizDefault = {
+  status: number;
+  code: SaveQuizDefaultCode;
+  error?: unknown;
+  details?: SaveQuizDefaultDetails;
+};
+
+export type DeleteQuizPathParameters = {
+  parentType: "course" | "topic" | "lesson";
+  parentId: string;
+};
+export type DeleteQuizDefaultCode =
+  (typeof DeleteQuizDefaultCode)[keyof typeof DeleteQuizDefaultCode];
+
+export const DeleteQuizDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type DeleteQuizDefaultDetails = { [key: string]: unknown };
+
+export type DeleteQuizDefault = {
+  status: number;
+  code: DeleteQuizDefaultCode;
+  error?: unknown;
+  details?: DeleteQuizDefaultDetails;
+};
+
+export type GenerateQuizPathParameters = {
+  parentType: "course" | "topic" | "lesson";
+  parentId: string;
+};
+export type GenerateQuizBody = {
+  /** @maxLength 500 */
+  instructions?: string;
+};
+
+export type GenerateQuizDefaultCode =
+  (typeof GenerateQuizDefaultCode)[keyof typeof GenerateQuizDefaultCode];
+
+export const GenerateQuizDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type GenerateQuizDefaultDetails = { [key: string]: unknown };
+
+export type GenerateQuizDefault = {
+  status: number;
+  code: GenerateQuizDefaultCode;
+  error?: unknown;
+  details?: GenerateQuizDefaultDetails;
+};
+
+export type GetMyQuizResponsePathParameters = {
+  parentType: "course" | "topic" | "lesson";
+  parentId: string;
+};
+export type GetMyQuizResponseDefaultCode =
+  (typeof GetMyQuizResponseDefaultCode)[keyof typeof GetMyQuizResponseDefaultCode];
+
+export const GetMyQuizResponseDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type GetMyQuizResponseDefaultDetails = { [key: string]: unknown };
+
+export type GetMyQuizResponseDefault = {
+  status: number;
+  code: GetMyQuizResponseDefaultCode;
+  error?: unknown;
+  details?: GetMyQuizResponseDefaultDetails;
+};
+
+export type SaveQuizResponsePathParameters = {
+  parentType: "course" | "topic" | "lesson";
+  parentId: string;
+};
+export type SaveQuizResponseBodyAnswers = { [key: string]: string | string[] };
+
+export type SaveQuizResponseBody = {
+  answers: SaveQuizResponseBodyAnswers;
+};
+
+export type SaveQuizResponseDefaultCode =
+  (typeof SaveQuizResponseDefaultCode)[keyof typeof SaveQuizResponseDefaultCode];
+
+export const SaveQuizResponseDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type SaveQuizResponseDefaultDetails = { [key: string]: unknown };
+
+export type SaveQuizResponseDefault = {
+  status: number;
+  code: SaveQuizResponseDefaultCode;
+  error?: unknown;
+  details?: SaveQuizResponseDefaultDetails;
+};
+
+export type DeleteQuizResponsePathParameters = {
+  parentType: "course" | "topic" | "lesson";
+  parentId: string;
+};
+export type DeleteQuizResponseDefaultCode =
+  (typeof DeleteQuizResponseDefaultCode)[keyof typeof DeleteQuizResponseDefaultCode];
+
+export const DeleteQuizResponseDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type DeleteQuizResponseDefaultDetails = { [key: string]: unknown };
+
+export type DeleteQuizResponseDefault = {
+  status: number;
+  code: DeleteQuizResponseDefaultCode;
+  error?: unknown;
+  details?: DeleteQuizResponseDefaultDetails;
+};
+
+export type GetPublicQuizPathParameters = {
+  parentType: "course" | "topic" | "lesson";
+  parentId: string;
+};
+export type GetPublicQuizDefaultCode =
+  (typeof GetPublicQuizDefaultCode)[keyof typeof GetPublicQuizDefaultCode];
+
+export const GetPublicQuizDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type GetPublicQuizDefaultDetails = { [key: string]: unknown };
+
+export type GetPublicQuizDefault = {
+  status: number;
+  code: GetPublicQuizDefaultCode;
+  error?: unknown;
+  details?: GetPublicQuizDefaultDetails;
 };
 
 export type GetApiTokensDefaultCode =

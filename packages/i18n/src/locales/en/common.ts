@@ -204,6 +204,14 @@ export const common = {
         title: "Invalid Access Token",
         message: "The access token is invalid or has been revoked.",
       },
+      LIMIT_REACHED: {
+        title: "Daily AI Limit Reached",
+        message: "You've used all AI generations for today. Try again tomorrow.",
+      },
+      GENERATION_FAILED: {
+        title: "AI Generation Failed",
+        message: "The AI couldn't create questions this time. Try again or create them manually.",
+      },
     },
     apiToken: {
       NOT_FOUND: {
@@ -215,6 +223,16 @@ export const common = {
       NOT_FOUND: {
         title: "Review Not Found",
         message: "The review could not be found.",
+      },
+    },
+    quiz: {
+      NOT_FOUND: {
+        title: "Quiz Not Found",
+        message: "The quiz could not be found.",
+      },
+      PARENT_NOT_FOUND: {
+        title: "Content Not Found",
+        message: "The course, topic or lesson for this quiz could not be found.",
       },
     },
     oauth: {

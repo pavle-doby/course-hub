@@ -4,7 +4,7 @@ import { useEffect, useId, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertCircleIcon } from "lucide-react";
+import { AlertCircleIcon, SaveIcon, XIcon } from "lucide-react";
 import { useAuthSignOut, useDeleteUser, useGetUserSelf, useUpdateUser } from "@repo/api-client";
 import { UserPutQuerySchema } from "@repo/contract";
 import { useT } from "@repo/i18n/client";
@@ -191,9 +191,11 @@ export default function ProfileEditPage() {
                   </AlertDialogTrigger>
                 </ChAlertDialog>
                 <Button type="button" variant="outline" onClick={() => router.back()}>
+                  <XIcon />
                   {t("profile.edit.cancel")}
                 </Button>
                 <Button type="submit" disabled={isSaving}>
+                  <SaveIcon />
                   {t("profile.edit.save")}
                 </Button>
               </div>

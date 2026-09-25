@@ -12,17 +12,18 @@ const parentColumns = {
 export const documentsRepository = {
   getParentCreator: async (
     parent: GetDocumentsByParentReq
-  ): Promise<{ creatorId: string } | undefined> => {
+  ): Promise<{ creatorId: string; courseId: string } | undefined> => {
     if (parent.parentType === "course") {
-      return await db.query.courses.findFirst({
-        where: eq(schema.courses.id, parent.parentId),
-        columns: { creatorId: true },
-      });
+      const [course] = await db
+        .select({ creatorId: schema.courses.creatorId, courseId: schema.courses.id })
+        .from(schema.courses)
+        .where(eq(schema.courses.id, parent.parentId));
+      return course;
     }
 
     if (parent.parentType === "topic") {
       const [topic] = await db
-        .select({ creatorId: schema.courses.creatorId })
+        .select({ creatorId: schema.courses.creatorId, courseId: schema.courses.id })
         .from(schema.topics)
         .innerJoin(schema.courses, eq(schema.topics.courseId, schema.courses.id))
         .where(eq(schema.topics.id, parent.parentId));
@@ -30,7 +31,7 @@ export const documentsRepository = {
     }
 
     const [lesson] = await db
-      .select({ creatorId: schema.courses.creatorId })
+      .select({ creatorId: schema.courses.creatorId, courseId: schema.courses.id })
       .from(schema.lessons)
       .innerJoin(schema.topics, eq(schema.lessons.topicId, schema.topics.id))
       .innerJoin(schema.courses, eq(schema.topics.courseId, schema.courses.id))

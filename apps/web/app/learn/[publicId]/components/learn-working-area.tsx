@@ -29,6 +29,7 @@ import { NEXT_LESSON_STATUS, PROGRESS_STATUS_LABEL_KEYS } from "@/utils/consts";
 import { getVideoRefetchInterval } from "@/utils/get-video-refetch-interval";
 import { StarRating } from "@/components/star-rating";
 import { LessonStatusSelect } from "./lesson-status-select";
+import { LearnQuiz } from "./quiz/learn-quiz";
 import { ProgressStatusIcon } from "./progress-status-icon";
 
 type LearnWorkingAreaProps = {
@@ -281,6 +282,8 @@ export function LearnWorkingArea({
         <p className="mt-4 whitespace-pre-wrap text-muted-foreground">
           {description || t("learn.detail.noDescription")}
         </p>
+
+        <LearnQuiz key={parent.parentId} parent={parent} isEnrolled={isEnrolled} />
 
         {nextStatus && (
           <>

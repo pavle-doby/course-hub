@@ -1,6 +1,6 @@
 # Task 8.2: AI Chat In The Course Editor
 
-Depends on `spec/task-8.0.md`. Scope: a chat panel in the course editor (`apps/web/app/courses/[publicId]/edit`) where the creator asks Claude to draft or improve course content. **The AI never writes directly.** Every change is proposed as an Apply card, and nothing is saved until the user clicks Apply.
+Depends on `spec/[done]-task-8.0.md`. Scope: a chat panel in the course editor (`apps/web/app/courses/[publicId]/edit`) where the creator asks Claude to draft or improve course content. **The AI never writes directly.** Every change is proposed as an Apply card, and nothing is saved until the user clicks Apply.
 
 ## Decisions
 

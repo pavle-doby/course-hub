@@ -20,6 +20,8 @@ import "../modules/notifications/openapi/notificationsOpenapi";
 import "../modules/progress/openapi/progressOpenapi";
 import "../modules/reviews/openapi/reviewsOpenapi";
 import "../modules/reviews/openapi/reviewsPublicOpenapi";
+import "../modules/quizzes/openapi/quizzesOpenapi";
+import "../modules/quizzes/openapi/quizzesPublicOpenapi";
 import "../modules/api-tokens/openapi/apiTokensOpenapi";
 import "../modules/oauth/openapi/oauthOpenapi";
 
