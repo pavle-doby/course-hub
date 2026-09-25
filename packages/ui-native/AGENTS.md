@@ -6,8 +6,9 @@
 
 ```
 src/
-├── components/   # One file per component (e.g. button.tsx, text.tsx, icon.tsx)
+├── components/   # One file per component, flat (no ui/ subfolder), like @repo/ui-web
 ├── hooks/        # Shared React Native hooks
+├── index.ts      # Barrel re-exporting every component + lib/utils
 └── lib/
     └── utils.ts  # cn() helper — clsx + tailwind-merge
 ```
@@ -17,7 +18,7 @@ src/
 Use `cva` for variants. Web-only CSS behaviours (hover, focus-visible, outline, whitespace, transitions) must be wrapped in `Platform.select({ web: '...' })` so they are never applied on iOS/Android.
 
 ```tsx
-import { cn } from "../lib/utils";
+import { cn } from "@repo/ui-native/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 import { Platform, Pressable } from "react-native";
 
@@ -64,7 +65,7 @@ import { Slot } from "radix-ui";
 `TextClassContext` is a React context that carries the current text Tailwind class down the tree. Consume it in components that need to inherit text color (e.g. icons inside buttons):
 
 ```tsx
-import { TextClassContext } from "./text";
+import { TextClassContext } from "@repo/ui-native/components/text";
 
 function Icon({ className, ...props }) {
   const textClass = React.useContext(TextClassContext);
@@ -97,6 +98,10 @@ Default icon size is `14`. Pass `className="size-4"` (NativeWind resolves to px)
 NativeWind resolves Tailwind utility classes to React Native styles using the theme defined in `@repo/ui-theme/native`. Use the same token class names as the web package (`bg-primary`, `text-foreground`, etc.) — never hardcode colours.
 
 ## Exports
+
+Inside the package, import sibling components and utils through the package alias (`@repo/ui-native/...`), never relative paths — the same pattern as `@repo/ui-web`. Add every new component to `src/index.ts`.
+
+Add registry components with `pnpm dlx @react-native-reusables/cli@latest add <name>`; `components.json` points the `ui` alias at `@repo/ui-native/components`, so files land flat in `src/components/`.
 
 Components, hooks, and lib utilities are exported via path aliases:
 

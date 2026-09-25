@@ -5,6 +5,8 @@
   "scripts": {
     "api": "cd apps/api && pnpm dev",
     "web": "cd apps/web && pnpm dev",
+    "ios": "cd apps/native && pnpm ios",
+    "android": "cd apps/native && pnpm android",
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
@@ -37,10 +39,5 @@
   "engines": {
     "node": ">=22"
   },
-  "version": "1.0.0",
-  "dependencies": {
-    "expo": "~57.0.16",
-    "react": "19.2.8",
-    "react-native": "0.87.0"
-  }
+  "version": "1.0.0"
 }
