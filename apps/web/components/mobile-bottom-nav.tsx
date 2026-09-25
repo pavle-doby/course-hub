@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   AppleIcon,
+  BellIcon,
   UsersIcon,
   UserIcon,
   FolderIcon,
@@ -22,10 +23,13 @@ import {
   DrawerTrigger,
 } from "@repo/ui-web/components/drawer";
 import { useT } from "@repo/i18n/client";
+import { cn } from "@repo/ui-web/lib/utils";
 import { ChBottomNav } from "@/components/ch-bottom-nav";
+import { useUnreadNotificationsCount } from "@/hooks/use-unread-notifications";
 
 const NAV_LINKS = [
   { href: "/students", icon: UsersIcon, labelKey: "nav.students" as const },
+  { href: "/notifications", icon: BellIcon, labelKey: "nav.notifications" as const },
   { href: "/profile", icon: UserIcon, labelKey: "nav.profile" as const },
 ];
 
@@ -42,6 +46,7 @@ const CREATE_LINKS = [
 export function MobileBottomNav() {
   const { t } = useT();
   const pathname = usePathname();
+  const unreadCount = useUnreadNotificationsCount();
   const isCreateActive = pathname === "/courses" || pathname === "/lessons";
   const isLearnActive = pathname.startsWith("/learn");
 
@@ -113,9 +118,15 @@ export function MobileBottomNav() {
             <Button
               variant="ghost"
               size="icon-lg"
-              className={pathname === href ? "text-primary" : "text-muted-foreground"}
+              className={cn(
+                "relative",
+                pathname === href ? "text-primary" : "text-muted-foreground"
+              )}
             >
               <Icon className="size-5" />
+              {href === "/notifications" && unreadCount > 0 && (
+                <span className="absolute top-2 right-2 size-2 rounded-full bg-destructive ring-2 ring-background" />
+              )}
             </Button>
           </Link>
         ))}
