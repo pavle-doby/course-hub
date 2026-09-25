@@ -1,6 +1,6 @@
 "use client";
 
-import { ListChecks } from "lucide-react";
+import { ListChecksIcon } from "lucide-react";
 import {
   getGetMyQuizResponseQueryKey,
   useDeleteQuizResponse,
@@ -84,7 +84,7 @@ export function LearnQuiz({ parent, isEnrolled }: LearnQuizProps) {
     <Card className="mt-6">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <ListChecks className="size-4" />
+          <ListChecksIcon className="size-4" />
           {t("learn.quiz.title")}
         </CardTitle>
         {!isEnrolled && (

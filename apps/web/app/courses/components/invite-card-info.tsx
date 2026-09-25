@@ -3,7 +3,7 @@
 import type { CourseInvitation } from "@repo/api-client";
 import { useT } from "@repo/i18n/client";
 import { Badge } from "@repo/ui-web/components/badge";
-import { Mail, UserPlus } from "lucide-react";
+import { MailIcon, UserPlusIcon } from "lucide-react";
 
 type InvitationInfoProps = {
   invitation: CourseInvitation;
@@ -33,9 +33,9 @@ export function InviteCardInfo({ invitation }: InvitationInfoProps) {
     <div className="flex min-w-0 flex-col gap-1.5">
       <span className="flex items-center gap-2 truncate font-medium">
         {invitation.type === "email" ? (
-          <Mail className="size-3.5" />
+          <MailIcon className="size-3.5" />
         ) : (
-          <UserPlus className="size-3.5" />
+          <UserPlusIcon className="size-3.5" />
         )}
         {invitation.type === "email" ? t("invite.dialog.type.email") : t("invite.dialog.type.link")}
         <Badge variant={statusVariant(invitation.status)} className="w-fit">

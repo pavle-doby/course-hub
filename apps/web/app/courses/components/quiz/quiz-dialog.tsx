@@ -1,6 +1,6 @@
 "use client";
 
-import { PencilLine, Sparkles } from "lucide-react";
+import { PencilLineIcon, SparklesIcon } from "lucide-react";
 import { useT } from "@repo/i18n/client";
 import { Button } from "@repo/ui-web/components/button";
 import {
@@ -41,7 +41,7 @@ export function QuizDialog({
           <section className="flex flex-col gap-3 rounded-lg border p-4">
             <div className="flex flex-col gap-1">
               <h3 className="flex items-center gap-2 font-medium">
-                <Sparkles className="size-4" />
+                <SparklesIcon className="size-4" />
                 {t("courses.quiz.aiCreate")}
               </h3>
               <p className="text-sm text-muted-foreground">
@@ -57,7 +57,7 @@ export function QuizDialog({
           <section className="flex flex-col gap-3 rounded-lg border p-4">
             <div className="flex flex-1 flex-col gap-1">
               <h3 className="flex items-center gap-2 font-medium">
-                <PencilLine className="size-4" />
+                <PencilLineIcon className="size-4" />
                 {t("courses.quiz.manualCreate")}
               </h3>
               <p className="text-sm text-muted-foreground">

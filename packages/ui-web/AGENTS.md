@@ -64,11 +64,11 @@ Design tokens come from `@repo/ui-theme/web` (imported in `globals.css`). Use CS
 
 ## Icons
 
-Use `lucide-react`. Size classes via Tailwind (`size-4`, `size-5`). The default `[&_svg:not([class*='size-'])]:size-4` base class in button handles unsized SVGs automatically.
+Use `lucide-react` and always import the `Icon`-suffixed names (`ChevronDownIcon`, not `ChevronDown`). Size classes via Tailwind (`size-4`, `size-5`). The default `[&_svg:not([class*='size-'])]:size-4` base class in button handles unsized SVGs automatically.
 
 ```tsx
-import { ChevronDown } from "lucide-react";
-<ChevronDown className="size-4" />;
+import { ChevronDownIcon } from "lucide-react";
+<ChevronDownIcon className="size-4" />;
 ```
 
 ## Dark mode

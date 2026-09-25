@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
 } from "@repo/ui-web/components/dropdown-menu";
 import { Button } from "@repo/ui-web/components/button";
-import { EllipsisVertical, Pencil, Trash2 } from "lucide-react";
+import { EllipsisVerticalIcon, PencilIcon, Trash2Icon } from "lucide-react";
 
 type LessonCardDropdownActionsProps = {
   onEdit: () => void;
@@ -22,16 +22,16 @@ export function LessonCardDropdownActions({ onEdit, onDelete }: LessonCardDropdo
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon" className="size-7">
-          <EllipsisVertical className="size-4" />
+          <EllipsisVerticalIcon className="size-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={onEdit}>
-          <Pencil className="size-4" />
+          <PencilIcon className="size-4" />
           {t("lessons.card.edit")}
         </DropdownMenuItem>
         <DropdownMenuItem variant="destructive" onClick={onDelete}>
-          <Trash2 className="size-4" />
+          <Trash2Icon className="size-4" />
           {t("lessons.card.delete")}
         </DropdownMenuItem>
       </DropdownMenuContent>

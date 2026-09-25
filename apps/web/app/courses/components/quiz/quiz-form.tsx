@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useFieldArray, useForm, useWatch, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertCircleIcon, Plus, SaveIcon, Sparkles, XIcon } from "lucide-react";
+import { AlertCircleIcon, PlusIcon, SaveIcon, SparklesIcon, XIcon } from "lucide-react";
 import { SaveQuizBodySchema, type SaveQuizReq } from "@repo/contract";
 import { useT } from "@repo/i18n/client";
 import { useErrorHandlingForm, useZodLocale } from "@repo/shared";
@@ -92,7 +92,7 @@ export function QuizForm({
     <form id={id} onSubmit={handleSubmit(handleSave)} noValidate className="flex flex-col gap-4">
       {isAiDraft && (
         <Badge variant="secondary" className="w-fit gap-1">
-          <Sparkles className="size-3" />
+          <SparklesIcon className="size-3" />
           {t("courses.quiz.aiDraft")}
         </Badge>
       )}
@@ -134,7 +134,7 @@ export function QuizForm({
             disabled={isSubmitting || isRegenerating}
             onClick={handleAddQuestion}
           >
-            <Plus />
+            <PlusIcon />
             {t("courses.quiz.addQuestion")}
           </Button>
           <Button
@@ -145,7 +145,7 @@ export function QuizForm({
             disabled={isSubmitting || isRegenerating}
             onClick={handleToggleRegeneratePanel}
           >
-            <Sparkles />
+            <SparklesIcon />
             {t("courses.quiz.regenerate")}
           </Button>
         </div>

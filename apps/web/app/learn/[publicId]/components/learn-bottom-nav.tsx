@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronLeft, ChevronRight, ListTree } from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon, ListTreeIcon } from "lucide-react";
 import { Button } from "@repo/ui-web/components/button";
 import { useSidebar } from "@repo/ui-web/components/sidebar";
 import { useT } from "@repo/i18n/client";
@@ -28,7 +28,7 @@ export function LearnBottomNav({ hasPrevious, hasNext, onPrevious, onNext }: Lea
           disabled={!hasPrevious}
           onClick={onPrevious}
         >
-          <ChevronLeft className="size-4" />
+          <ChevronLeftIcon className="size-4" />
           {t("learn.detail.previous")}
         </Button>
         <Button
@@ -37,11 +37,11 @@ export function LearnBottomNav({ hasPrevious, hasNext, onPrevious, onNext }: Lea
           onClick={toggleSidebar}
           aria-label={t("learn.detail.contents")}
         >
-          <ListTree className="size-5" />
+          <ListTreeIcon className="size-5" />
         </Button>
         <Button variant="ghost" size="sm" className="min-w-30" disabled={!hasNext} onClick={onNext}>
           {t("learn.detail.next")}
-          <ChevronRight className="size-4" />
+          <ChevronRightIcon className="size-4" />
         </Button>
       </div>
     </ChBottomNav>

@@ -2,16 +2,16 @@
 
 import { useState, type ComponentProps } from "react";
 import {
-  Archive,
-  Bot,
-  Globe,
-  Lock,
-  PanelRightClose,
-  PanelRightOpen,
-  Trash2,
-  Undo2,
-  Upload,
-  UserPlus,
+  ArchiveIcon,
+  BotIcon,
+  GlobeIcon,
+  LockIcon,
+  PanelRightCloseIcon,
+  PanelRightOpenIcon,
+  Trash2Icon,
+  Undo2Icon,
+  UploadIcon,
+  UserPlusIcon,
 } from "lucide-react";
 import type { CourseStatus, CourseVisibility } from "@repo/api-client";
 import { Button } from "@repo/ui-web/components/button";
@@ -193,7 +193,7 @@ export function CourseActions({
           className="w-1/2 gap-1.5"
           onClick={() => openDialog("visibilityPublic")}
         >
-          <Globe className="size-4" />
+          <GlobeIcon className="size-4" />
           {t("courses.editor.visibilityPublic")}
         </Button>
         <Button
@@ -202,13 +202,13 @@ export function CourseActions({
           className="w-1/2 gap-1.5"
           onClick={() => openDialog("visibilityPrivate")}
         >
-          <Lock className="size-4" />
+          <LockIcon className="size-4" />
           {t("courses.editor.visibilityPrivate")}
         </Button>
       </ButtonGroup>
       {isPrivate && onInviteClick && (
         <Button type="button" variant="outline" className="w-full gap-1.5" onClick={onInviteClick}>
-          <UserPlus className="size-4" />
+          <UserPlusIcon className="size-4" />
           {t("courses.editor.invite")}
         </Button>
       )}
@@ -233,7 +233,7 @@ export function CourseActions({
       className="w-full justify-start gap-2"
       onClick={() => openDialog("delete")}
     >
-      <Trash2 className="size-4" />
+      <Trash2Icon className="size-4" />
       {t("courses.editor.delete")}
     </Button>
   );
@@ -247,7 +247,7 @@ export function CourseActions({
             className="w-full justify-start gap-2"
             onClick={() => openDialog(isPublished ? "unpublish" : "publish")}
           >
-            {isPublished ? <Undo2 className="size-4" /> : <Upload className="size-4" />}
+            {isPublished ? <Undo2Icon className="size-4" /> : <UploadIcon className="size-4" />}
             {isPublished ? t("courses.editor.unpublish") : t("courses.editor.publish")}
           </Button>
         )}
@@ -257,7 +257,7 @@ export function CourseActions({
             className="w-full justify-start gap-2"
             onClick={() => openDialog("archive")}
           >
-            <Archive className="size-4" />
+            <ArchiveIcon className="size-4" />
             {t("courses.editor.archive")}
           </Button>
         )}
@@ -278,18 +278,18 @@ export function CourseActions({
             variant={isPrivate ? "ghost" : "secondary"}
             onClick={() => openDialog("visibilityPublic")}
           >
-            <Globe className="size-4" />
+            <GlobeIcon className="size-4" />
           </CollapsedAction>
           <CollapsedAction
             label={t("courses.editor.visibilityPrivate")}
             variant={isPrivate ? "secondary" : "ghost"}
             onClick={() => openDialog("visibilityPrivate")}
           >
-            <Lock className="size-4" />
+            <LockIcon className="size-4" />
           </CollapsedAction>
           {isPrivate && onInviteClick && (
             <CollapsedAction label={t("courses.editor.invite")} onClick={onInviteClick}>
-              <UserPlus className="size-4" />
+              <UserPlusIcon className="size-4" />
             </CollapsedAction>
           )}
         </>
@@ -301,7 +301,7 @@ export function CourseActions({
           aria-pressed={aiAccessEnabled}
           onClick={handleAiAccessToggle}
         >
-          <Bot className="size-4" />
+          <BotIcon className="size-4" />
         </CollapsedAction>
       )}
       {onVisibilityChange && hasStateActions && <Separator />}
@@ -310,18 +310,18 @@ export function CourseActions({
           label={isPublished ? t("courses.editor.unpublish") : t("courses.editor.publish")}
           onClick={() => openDialog(isPublished ? "unpublish" : "publish")}
         >
-          {isPublished ? <Undo2 className="size-4" /> : <Upload className="size-4" />}
+          {isPublished ? <Undo2Icon className="size-4" /> : <UploadIcon className="size-4" />}
         </CollapsedAction>
       )}
       {onArchiveCourse && (
         <CollapsedAction label={t("courses.editor.archive")} onClick={() => openDialog("archive")}>
-          <Archive className="size-4" />
+          <ArchiveIcon className="size-4" />
         </CollapsedAction>
       )}
       {onArchiveCourse && onDeleteCourse && <Separator />}
       {onDeleteCourse && (
         <CollapsedAction label={t("courses.editor.delete")} onClick={() => openDialog("delete")}>
-          <Trash2 className="size-4" />
+          <Trash2Icon className="size-4" />
         </CollapsedAction>
       )}
     </SidebarContent>
@@ -387,9 +387,9 @@ export function CourseActions({
           aria-label={t("courses.editor.collapseActions")}
         >
           {state === "collapsed" ? (
-            <PanelRightOpen className="size-4" />
+            <PanelRightOpenIcon className="size-4" />
           ) : (
-            <PanelRightClose className="size-4" />
+            <PanelRightCloseIcon className="size-4" />
           )}
         </Button>
         <span className="px-2 font-medium group-data-[collapsible=icon]:hidden">

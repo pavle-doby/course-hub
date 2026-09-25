@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { PlugZap } from "lucide-react";
+import { PlugZapIcon } from "lucide-react";
 import { useApproveOauth } from "@repo/api-client";
 import { useT } from "@repo/i18n/client";
 import { useErrorHandlingAction } from "@repo/shared";
@@ -94,7 +94,7 @@ export function OauthConsent() {
     <Card className="w-full max-w-sm">
       <CardHeader className="border-b">
         <CardTitle className="flex items-center gap-2">
-          <PlugZap className="size-4" />
+          <PlugZapIcon className="size-4" />
           {t("settings.aiAccess.authorize.title", { client: clientName })}
         </CardTitle>
       </CardHeader>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useState, type ReactNode } from "react";
-import { Copy } from "lucide-react";
+import { CopyIcon } from "lucide-react";
 import { useT } from "@repo/i18n/client";
 import { Button } from "@repo/ui-web/components/button";
 import { Label } from "@repo/ui-web/components/label";
@@ -91,7 +91,7 @@ export function Snippet({ label, text, children }: SnippetProps) {
         <div className="flex items-center gap-2">
           {children}
           <Button type="button" variant="ghost" size="sm" onClick={handleCopy}>
-            <Copy /> {t("settings.aiAccess.createDialog.copy")}
+            <CopyIcon /> {t("settings.aiAccess.createDialog.copy")}
           </Button>
         </div>
       </div>

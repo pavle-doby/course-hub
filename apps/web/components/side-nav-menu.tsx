@@ -19,18 +19,18 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import type { LucideIcon } from "lucide-react";
 import {
-  Apple,
-  ChevronRight,
-  CirclePlus,
-  Compass,
-  File,
-  Folder,
-  GraduationCap,
-  LogOut,
-  Settings,
-  Sparkles,
-  User,
-  Users,
+  AppleIcon,
+  ChevronRightIcon,
+  CirclePlusIcon,
+  CompassIcon,
+  FileIcon,
+  FolderIcon,
+  GraduationCapIcon,
+  LogOutIcon,
+  SettingsIcon,
+  SparklesIcon,
+  UserIcon,
+  UsersIcon,
 } from "lucide-react";
 
 import { useAuthSignOut } from "@repo/api-client";
@@ -61,28 +61,28 @@ type FooterItem =
 const NAV_ITEMS: NavItem[] = [
   {
     label: "nav.learn",
-    icon: Apple,
+    icon: AppleIcon,
     items: [
-      { label: "nav.learnExplore", href: "/learn/explore", icon: Compass },
-      { label: "nav.learnEnrolled", href: "/learn/enrolled", icon: GraduationCap },
+      { label: "nav.learnExplore", href: "/learn/explore", icon: CompassIcon },
+      { label: "nav.learnEnrolled", href: "/learn/enrolled", icon: GraduationCapIcon },
     ],
   },
   {
     label: "nav.create",
-    icon: CirclePlus,
+    icon: CirclePlusIcon,
     items: [
-      { label: "nav.courses", href: "/courses", icon: Folder },
-      { label: "nav.lessons", href: "/lessons", icon: File },
+      { label: "nav.courses", href: "/courses", icon: FolderIcon },
+      { label: "nav.lessons", href: "/lessons", icon: FileIcon },
     ],
   },
-  { label: "nav.students", icon: Users, href: "/students" },
-  { label: "nav.profile", icon: User, href: "/profile" },
+  { label: "nav.students", icon: UsersIcon, href: "/students" },
+  { label: "nav.profile", icon: UserIcon, href: "/profile" },
 ];
 
 const FOOTER_ITEMS = (onSignOut: () => void): FooterItem[] => [
-  { label: "nav.aiConnect", icon: Sparkles, href: "/ai-connect" },
-  { label: "nav.settings", icon: Settings, href: "/settings" },
-  { label: "nav.logOut", icon: LogOut, action: onSignOut },
+  { label: "nav.aiConnect", icon: SparklesIcon, href: "/ai-connect" },
+  { label: "nav.settings", icon: SettingsIcon, href: "/settings" },
+  { label: "nav.logOut", icon: LogOutIcon, action: onSignOut },
 ];
 
 export function SideNavMenu() {
@@ -122,7 +122,7 @@ export function SideNavMenu() {
                       <SidebarMenuButton size="lg">
                         <item.icon />
                         <span>{t(item.label)}</span>
-                        <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                        <ChevronRightIcon className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                       </SidebarMenuButton>
                     </CollapsibleTrigger>
                     <CollapsibleContent>

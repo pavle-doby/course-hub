@@ -8,7 +8,7 @@ import { toast } from "@repo/ui-web/components/sonner";
 import { Input } from "@repo/ui-web/components/input";
 import { useDebounce } from "@/hooks/use-debounce";
 import { ChPagination } from "@/components/ch-pagination";
-import { Search } from "lucide-react";
+import { SearchIcon } from "lucide-react";
 import { InviteCard } from "./invite-card";
 import { InviteEmailSkeleton, InviteLinkSkeleton } from "./invite-card-skeleton";
 
@@ -47,7 +47,7 @@ export function InvitesList({ publicId, onCopy, onRevoke }: InvitesListProps) {
   return (
     <div className="flex flex-col gap-2">
       <div className="relative">
-        <Search className="absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
+        <SearchIcon className="absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
         <Input
           className="pl-8"
           placeholder={t("invite.dialog.searchPlaceholder")}

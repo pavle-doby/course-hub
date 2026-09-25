@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronLeft, Star } from "lucide-react";
+import { ChevronLeftIcon, StarIcon } from "lucide-react";
 import { Button } from "@repo/ui-web/components/button";
 import { Progress } from "@repo/ui-web/components/progress";
 import { Skeleton } from "@repo/ui-web/components/skeleton";
@@ -43,7 +43,7 @@ export function LearnHeader({
     <header className="sticky top-0 z-40 grid grid-cols-[1fr_auto] items-center gap-2 border-b bg-background px-4 py-2 md:h-14 md:grid-cols-[1fr_auto_1fr] md:py-0">
       <span className="flex min-w-0 items-center gap-1">
         <Button variant="ghost" size="icon" onClick={onBack} aria-label={t("learn.detail.back")}>
-          <ChevronLeft className="size-5" />
+          <ChevronLeftIcon className="size-5" />
         </Button>
         <span className="max-w-40 min-w-0 flex-1 truncate text-lg font-bold">{title}</span>
       </span>
@@ -70,7 +70,7 @@ export function LearnHeader({
         ) : isEnrolled ? (
           <>
             <Button variant="outline" onClick={onReview}>
-              <Star className="size-4" />
+              <StarIcon className="size-4" />
               {t("learn.reviews.review")}
             </Button>
             <Button

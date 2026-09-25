@@ -3,7 +3,7 @@
 import { useId } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Sparkles, XIcon } from "lucide-react";
+import { SparklesIcon, XIcon } from "lucide-react";
 import { GenerateQuizBodySchema, type GenerateQuizReq } from "@repo/contract";
 import { useT } from "@repo/i18n/client";
 import { useZodLocale } from "@repo/shared";
@@ -70,7 +70,7 @@ export function AiInstructionsInput({
           disabled={isGenerating}
           onClick={handleGenerateClick}
         >
-          {isGenerating ? <Spinner /> : <Sparkles />}
+          {isGenerating ? <Spinner /> : <SparklesIcon />}
           {isGenerating ? t("courses.quiz.generating") : submitLabel}
         </Button>
       </div>

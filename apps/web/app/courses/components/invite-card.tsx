@@ -7,7 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui-web/components/ava
 import { Button } from "@repo/ui-web/components/button";
 import { Separator } from "@repo/ui-web/components/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui-web/components/tooltip";
-import { Copy, Undo2 } from "lucide-react";
+import { CopyIcon, Undo2Icon } from "lucide-react";
 import { ChAlertDialog } from "@/components/ch-alert-dialog";
 import { InviteCardInfo } from "./invite-card-info";
 
@@ -83,7 +83,7 @@ export function InviteCard({ invitation, onCopy, onRevoke }: InviteCardProps) {
               onClick={() => onCopy(invitation.token)}
               aria-label={t("invite.dialog.copyLinkTooltip")}
             >
-              <Copy className="size-4" />
+              <CopyIcon className="size-4" />
             </Button>
           </TooltipTrigger>
           <TooltipContent>{t("invite.dialog.copyLinkTooltip")}</TooltipContent>
@@ -101,7 +101,7 @@ export function InviteCard({ invitation, onCopy, onRevoke }: InviteCardProps) {
               <TooltipTrigger asChild>
                 <AlertDialogTrigger asChild>
                   <Button variant="ghost" size="icon-sm" aria-label={t("invite.dialog.revoke")}>
-                    <Undo2 className="size-4" />
+                    <Undo2Icon className="size-4" />
                   </Button>
                 </AlertDialogTrigger>
               </TooltipTrigger>

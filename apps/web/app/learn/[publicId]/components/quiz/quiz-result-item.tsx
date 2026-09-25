@@ -1,6 +1,6 @@
 "use client";
 
-import { CircleCheckBig, XCircle } from "lucide-react";
+import { CircleCheckBigIcon, XCircleIcon } from "lucide-react";
 import type { MyQuizResponseResponse } from "@repo/api-client";
 import { useT } from "@repo/i18n/client";
 import type { PublicQuizQuestion } from "./public-quiz";
@@ -26,10 +26,10 @@ export function QuizResultItem({ question, answer, questionResult }: QuizResultI
   return (
     <li className="flex gap-2 rounded-lg border p-3">
       {questionResult?.isCorrect === true && (
-        <CircleCheckBig className="mt-0.5 size-4 shrink-0 text-green-600 dark:text-green-400" />
+        <CircleCheckBigIcon className="mt-0.5 size-4 shrink-0 text-green-600 dark:text-green-400" />
       )}
       {questionResult?.isCorrect === false && (
-        <XCircle className="mt-0.5 size-4 shrink-0 text-destructive" />
+        <XCircleIcon className="mt-0.5 size-4 shrink-0 text-destructive" />
       )}
       <div className="flex min-w-0 flex-col gap-1 text-sm">
         <span className="font-medium">{question.prompt}</span>

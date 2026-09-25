@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Info, KeyRound, Plus } from "lucide-react";
+import { InfoIcon, KeyRoundIcon, PlusIcon } from "lucide-react";
 import {
   getGetApiTokensQueryKey,
   useDeleteApiToken,
@@ -130,7 +130,7 @@ export function AiAccessCard() {
           <CardDescription>{t("settings.aiAccess.manual.description")}</CardDescription>
           <CardAction>
             <Button type="button" onClick={handleOpenCreate}>
-              <Plus /> {t("settings.aiAccess.createToken")}
+              <PlusIcon /> {t("settings.aiAccess.createToken")}
             </Button>
           </CardAction>
         </CardHeader>
@@ -188,7 +188,7 @@ function TokenRow({ token, formatDate, onDetails, onRevoke }: TokenRowProps) {
 
   return (
     <div className="flex items-center gap-3 rounded-lg border p-3">
-      <KeyRound className="size-4 shrink-0 text-muted-foreground" />
+      <KeyRoundIcon className="size-4 shrink-0 text-muted-foreground" />
       <div className="flex min-w-0 flex-1 flex-col gap-0.5">
         <span className="truncate text-sm font-medium">{token.name}</span>
         <span className="text-xs text-muted-foreground">
@@ -206,7 +206,7 @@ function TokenRow({ token, formatDate, onDetails, onRevoke }: TokenRowProps) {
         aria-label={t("settings.aiAccess.details")}
         onClick={handleDetails}
       >
-        <Info /> <span className="hidden md:inline">{t("settings.aiAccess.details")}</span>
+        <InfoIcon /> <span className="hidden md:inline">{t("settings.aiAccess.details")}</span>
       </Button>
       <Button type="button" variant="outline" size="sm" onClick={handleRevoke}>
         {t("settings.aiAccess.revoke")}

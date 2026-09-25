@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { FileText, Trash2 } from "lucide-react";
+import { FileTextIcon, Trash2Icon } from "lucide-react";
 import {
   Attachment,
   AttachmentAction,
@@ -41,7 +41,7 @@ export function ChAttachment({
   src,
   alt = "",
   href,
-  icon = <FileText />,
+  icon = <FileTextIcon />,
   onDelete,
   deleteLabel = "Delete",
   deleteDisabled,
@@ -78,7 +78,7 @@ export function ChAttachment({
                 onClick={onDelete}
                 aria-label={deleteLabel}
               >
-                <Trash2 />
+                <Trash2Icon />
               </AttachmentAction>
             )}
           </AttachmentActions>

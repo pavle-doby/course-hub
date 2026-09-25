@@ -11,7 +11,7 @@ import {
   CardFooter,
 } from "@repo/ui-web/components/card";
 import { useIsMobile } from "@repo/ui-web/hooks/use-mobile";
-import { File } from "lucide-react";
+import { FileIcon } from "lucide-react";
 import { Badge } from "@repo/ui-web/components/badge";
 import { LessonCardDropdownActions } from "./lesson-card-dropdown-actions";
 import { LessonCardDrawerActions } from "./lesson-card-drawer-actions";
@@ -34,7 +34,7 @@ export function LessonCard({ lesson, onDelete }: LessonCardProps) {
     <Card>
       <CardHeader>
         <div className="flex items-center gap-2 text-primary">
-          <File className="size-4 shrink-0" />
+          <FileIcon className="size-4 shrink-0" />
           <CardTitle>{lesson.name}</CardTitle>
         </div>
         <CardAction>

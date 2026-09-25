@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { ChevronLeft, MessageSquareReply } from "lucide-react";
+import { ChevronLeftIcon, MessageSquareReplyIcon } from "lucide-react";
 import {
   useGetCourseReviews,
   useGetEnrollmentStatus,
@@ -73,7 +73,7 @@ export default function LearnCourseReviewsPage() {
           onClick={() => router.back()}
           aria-label={t("learn.detail.back")}
         >
-          <ChevronLeft className="size-5" />
+          <ChevronLeftIcon className="size-5" />
         </Button>
         <span className="min-w-0 flex-1 truncate text-lg font-bold">
           {t("learn.reviews.title")}
@@ -149,7 +149,7 @@ export default function LearnCourseReviewsPage() {
                         className="self-start"
                         onClick={() => setReplyingToId(review.id)}
                       >
-                        <MessageSquareReply className="size-4" />
+                        <MessageSquareReplyIcon className="size-4" />
                         {review.reply ? t("learn.reviews.editReply") : t("learn.reviews.reply")}
                       </Button>
                     )}

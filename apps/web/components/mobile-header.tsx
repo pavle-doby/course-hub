@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Menu, Settings, Sparkles, LogOut } from "lucide-react";
+import { MenuIcon, SettingsIcon, SparklesIcon, LogOutIcon } from "lucide-react";
 import { useRouter, usePathname } from "next/navigation";
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@repo/ui-web/components/sheet";
 import { Button } from "@repo/ui-web/components/button";
@@ -54,7 +54,7 @@ export function MobileHeader() {
       <Sheet>
         <SheetTrigger asChild>
           <Button variant="ghost" size="icon">
-            <Menu className="size-5" />
+            <MenuIcon className="size-5" />
           </Button>
         </SheetTrigger>
         <SheetContent side="right" className="flex flex-col p-0 pt-12">
@@ -64,7 +64,7 @@ export function MobileHeader() {
                 href="/ai-connect"
                 className="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm hover:bg-accent"
               >
-                <Sparkles className="size-4" />
+                <SparklesIcon className="size-4" />
                 {t("nav.aiConnect")}
               </Link>
             </SheetClose>
@@ -73,7 +73,7 @@ export function MobileHeader() {
                 href="/settings"
                 className="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm hover:bg-accent"
               >
-                <Settings className="size-4" />
+                <SettingsIcon className="size-4" />
                 {t("nav.settings")}
               </Link>
             </SheetClose>
@@ -84,7 +84,7 @@ export function MobileHeader() {
                 onClick={handleSignOut}
                 className="flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-sm hover:bg-accent"
               >
-                <LogOut className="size-4" />
+                <LogOutIcon className="size-4" />
                 {t("nav.logOut")}
               </button>
             </SheetClose>

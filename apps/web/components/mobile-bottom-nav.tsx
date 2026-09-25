@@ -2,7 +2,16 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Apple, Users, User, Folder, File, CirclePlus, Compass, GraduationCap } from "lucide-react";
+import {
+  AppleIcon,
+  UsersIcon,
+  UserIcon,
+  FolderIcon,
+  FileIcon,
+  CirclePlusIcon,
+  CompassIcon,
+  GraduationCapIcon,
+} from "lucide-react";
 import { Button } from "@repo/ui-web/components/button";
 import {
   Drawer,
@@ -16,18 +25,18 @@ import { useT } from "@repo/i18n/client";
 import { ChBottomNav } from "@/components/ch-bottom-nav";
 
 const NAV_LINKS = [
-  { href: "/students", icon: Users, labelKey: "nav.students" as const },
-  { href: "/profile", icon: User, labelKey: "nav.profile" as const },
+  { href: "/students", icon: UsersIcon, labelKey: "nav.students" as const },
+  { href: "/profile", icon: UserIcon, labelKey: "nav.profile" as const },
 ];
 
 const LEARN_LINKS = [
-  { href: "/learn/explore", icon: Compass, labelKey: "nav.learnExplore" as const },
-  { href: "/learn/enrolled", icon: GraduationCap, labelKey: "nav.learnEnrolled" as const },
+  { href: "/learn/explore", icon: CompassIcon, labelKey: "nav.learnExplore" as const },
+  { href: "/learn/enrolled", icon: GraduationCapIcon, labelKey: "nav.learnEnrolled" as const },
 ];
 
 const CREATE_LINKS = [
-  { href: "/courses", icon: Folder, labelKey: "nav.courses" as const },
-  { href: "/lessons", icon: File, labelKey: "nav.lessons" as const },
+  { href: "/courses", icon: FolderIcon, labelKey: "nav.courses" as const },
+  { href: "/lessons", icon: FileIcon, labelKey: "nav.lessons" as const },
 ];
 
 export function MobileBottomNav() {
@@ -47,7 +56,7 @@ export function MobileBottomNav() {
               aria-label={t("nav.learn")}
               className={isLearnActive ? "text-primary" : "text-muted-foreground"}
             >
-              <Apple className="size-5" />
+              <AppleIcon className="size-5" />
             </Button>
           </DrawerTrigger>
           <DrawerContent className="p-0">
@@ -77,7 +86,7 @@ export function MobileBottomNav() {
               aria-label={t("nav.create")}
               className={isCreateActive ? "text-primary" : "text-muted-foreground"}
             >
-              <CirclePlus className="size-5" />
+              <CirclePlusIcon className="size-5" />
             </Button>
           </DrawerTrigger>
           <DrawerContent className="p-0">

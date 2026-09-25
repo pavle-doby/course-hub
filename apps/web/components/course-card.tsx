@@ -9,7 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui-web/components/ava
 import { Badge } from "@repo/ui-web/components/badge";
 import { Progress } from "@repo/ui-web/components/progress";
 import { useT } from "@repo/i18n/client";
-import { BookOpen } from "lucide-react";
+import { BookOpenIcon } from "lucide-react";
 import { cn } from "@repo/ui-web/lib/utils";
 import { courseCardGradient } from "@/utils/course-card-gradient";
 import { getProgressColor } from "@/utils/get-progress-color";
@@ -65,7 +65,7 @@ export function CourseCard({
             courseCardGradient(course.id)
           )}
         >
-          <BookOpen className="size-10 text-white dark:text-black" />
+          <BookOpenIcon className="size-10 text-white dark:text-black" />
         </div>
       )}
 

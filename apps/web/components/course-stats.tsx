@@ -3,7 +3,7 @@
 import { type CourseWithStats } from "@repo/api-client";
 import { useT } from "@repo/i18n/client";
 import { cn } from "@repo/ui-web/lib/utils";
-import { Globe, Lock, Star, User } from "lucide-react";
+import { GlobeIcon, LockIcon, StarIcon, UserIcon } from "lucide-react";
 
 type CourseStatsProps = {
   course: Pick<CourseWithStats, "enrolledCount" | "ratingAverage" | "ratingCount" | "visibility">;
@@ -31,7 +31,7 @@ export function CourseStats({ course, className }: CourseStatsProps) {
         className="flex items-center gap-1"
         aria-label={t("courses.card.enrolledLabel", { count: course.enrolledCount })}
       >
-        <User className="size-4" />
+        <UserIcon className="size-4" />
         <span className="tabular-nums">{enrolledCount}</span>
       </span>
       <span
@@ -41,7 +41,9 @@ export function CourseStats({ course, className }: CourseStatsProps) {
           count: course.ratingCount,
         })}
       >
-        <Star className={cn("size-4", course.ratingCount > 0 && "fill-amber-400 text-amber-400")} />
+        <StarIcon
+          className={cn("size-4", course.ratingCount > 0 && "fill-amber-400 text-amber-400")}
+        />
         {course.ratingCount > 0 && (
           <span className="font-semibold text-foreground tabular-nums">
             {course.ratingAverage.toFixed(1)}
@@ -50,7 +52,7 @@ export function CourseStats({ course, className }: CourseStatsProps) {
         <span className="tabular-nums">({course.ratingCount})</span>
       </span>
       <span className="flex items-center gap-1">
-        {isPublic ? <Globe className="size-4" /> : <Lock className="size-4" />}
+        {isPublic ? <GlobeIcon className="size-4" /> : <LockIcon className="size-4" />}
         {isPublic ? t("courses.editor.visibilityPublic") : t("courses.editor.visibilityPrivate")}
       </span>
     </div>

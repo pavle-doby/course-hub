@@ -1,7 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { ChevronRight, File, Files, Folder, MessageSquareText } from "lucide-react";
+import {
+  ChevronRightIcon,
+  FileIcon,
+  FilesIcon,
+  FolderIcon,
+  MessageSquareTextIcon,
+} from "lucide-react";
 import {
   Collapsible,
   CollapsibleContent,
@@ -84,7 +90,7 @@ export function LearnTreeNav({
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
               <Link href={reviewsHref}>
-                <MessageSquareText />
+                <MessageSquareTextIcon />
                 <span>{t("learn.reviews.title")}</span>
               </Link>
             </SidebarMenuButton>
@@ -101,7 +107,7 @@ export function LearnTreeNav({
                 isActive={selection.type === "course"}
                 onClick={() => selectAndClose(onSelectCourse)}
               >
-                <Folder />
+                <FolderIcon />
                 <span>{courseName}</span>
                 {courseStatus && <ProgressStatusIcon status={courseStatus} className="ml-auto" />}
               </SidebarMenuButton>
@@ -130,7 +136,7 @@ export function LearnTreeNav({
                         disabled={contentLocked}
                         onClick={() => selectAndClose(() => onSelectTopic(topic.id))}
                       >
-                        <Files />
+                        <FilesIcon />
                         <span>{topic.name}</span>
                         {statusById.has(topic.id) && (
                           <ProgressStatusIcon
@@ -144,7 +150,7 @@ export function LearnTreeNav({
                           className="right-auto left-1"
                           aria-label={t("courses.editor.toggleTopic")}
                         >
-                          <ChevronRight className="transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                          <ChevronRightIcon className="transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                         </SidebarMenuAction>
                       </CollapsibleTrigger>
                       <CollapsibleContent>
@@ -157,7 +163,7 @@ export function LearnTreeNav({
                                 aria-disabled={contentLocked}
                                 onClick={() => selectAndClose(() => onSelectLesson(lesson.id))}
                               >
-                                <File />
+                                <FileIcon />
                                 <span>{lesson.name}</span>
                                 {statusById.has(lesson.id) && (
                                   <ProgressStatusIcon

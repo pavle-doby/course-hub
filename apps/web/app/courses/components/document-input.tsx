@@ -16,7 +16,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Check, FileText, GripVertical, Shuffle, Upload } from "lucide-react";
+import { CheckIcon, FileTextIcon, GripVerticalIcon, ShuffleIcon, UploadIcon } from "lucide-react";
 import {
   getGetPublicDocumentsByParentQueryKey,
   useCompleteDocumentUpload,
@@ -223,7 +223,7 @@ export function DocumentInput({ className, parent }: { className?: string; paren
           disabled={!parent.id || isInitializing || uploadingFile !== null || isReordering}
           onClick={() => inputRef.current?.click()}
         >
-          <Upload />
+          <UploadIcon />
           {t("courses.editor.uploadDocuments")}
         </Button>
         <Button
@@ -238,7 +238,7 @@ export function DocumentInput({ className, parent }: { className?: string; paren
           }
           onClick={() => void (isReordering ? handleDoneReorder() : handleStartReorder())}
         >
-          {isReordering ? <Check /> : <Shuffle />}
+          {isReordering ? <CheckIcon /> : <ShuffleIcon />}
           {isReordering ? t("courses.editor.reorderDone") : t("courses.editor.reorder")}
         </Button>
       </div>
@@ -248,7 +248,7 @@ export function DocumentInput({ className, parent }: { className?: string; paren
           name={uploadingFile}
           state="uploading"
           progress={uploadProgress}
-          icon={<FileText />}
+          icon={<FileTextIcon />}
         />
       )}
 
@@ -287,13 +287,13 @@ export function DocumentInput({ className, parent }: { className?: string; paren
                         src={isImage ? document.publicUrl : undefined}
                         alt={document.originalFileName}
                         href={document.publicUrl}
-                        icon={<FileText />}
+                        icon={<FileTextIcon />}
                         onDelete={isReordering ? undefined : () => setDeleteId(document.id)}
                         deleteLabel={t("courses.editor.documentDeleted")}
                         deleteDisabled={isDeleting}
                         extraActions={
                           isReordering ? (
-                            <GripVertical className="size-4 cursor-grab text-muted-foreground" />
+                            <GripVerticalIcon className="size-4 cursor-grab text-muted-foreground" />
                           ) : undefined
                         }
                       />

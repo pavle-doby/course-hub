@@ -14,14 +14,14 @@ import {
 import { Button } from "@repo/ui-web/components/button";
 import { Separator } from "@repo/ui-web/components/separator";
 import {
-  EllipsisVertical,
-  Pencil,
-  Eye,
-  Upload,
-  Undo2,
-  Archive,
-  Trash2,
-  UserPlus,
+  EllipsisVerticalIcon,
+  PencilIcon,
+  EyeIcon,
+  UploadIcon,
+  Undo2Icon,
+  ArchiveIcon,
+  Trash2Icon,
+  UserPlusIcon,
 } from "lucide-react";
 
 type CourseCardDrawerActionsProps = {
@@ -54,7 +54,7 @@ export function CourseCardDrawerActions({
     <Drawer open={actionsOpen} onOpenChange={setActionsOpen}>
       <DrawerTrigger asChild>
         <Button variant="ghost" size="icon" className="size-7">
-          <EllipsisVertical className="size-4" />
+          <EllipsisVerticalIcon className="size-4" />
         </Button>
       </DrawerTrigger>
       <DrawerContent>
@@ -64,7 +64,7 @@ export function CourseCardDrawerActions({
         <div className="flex max-h-[calc(80vh-3.5rem)] flex-col gap-3 overflow-y-auto p-2 pb-16">
           <DrawerClose asChild>
             <Button variant="outline" className="w-full justify-start gap-2" onClick={onEdit}>
-              <Pencil className="size-4" />
+              <PencilIcon className="size-4" />
               {t("courses.card.edit")}
             </Button>
           </DrawerClose>
@@ -72,7 +72,7 @@ export function CourseCardDrawerActions({
           {isPrivate && (
             <DrawerClose asChild>
               <Button variant="outline" className="w-full justify-start gap-2" onClick={onInvite}>
-                <UserPlus className="size-4" />
+                <UserPlusIcon className="size-4" />
                 {t("courses.card.invite")}
               </Button>
             </DrawerClose>
@@ -80,7 +80,7 @@ export function CourseCardDrawerActions({
 
           <DrawerClose asChild>
             <Button variant="outline" className="w-full justify-start gap-2" onClick={onPreview}>
-              <Eye className="size-4" />
+              <EyeIcon className="size-4" />
               {t("courses.card.preview")}
             </Button>
           </DrawerClose>
@@ -92,7 +92,7 @@ export function CourseCardDrawerActions({
                 className="w-full justify-start gap-2"
                 onClick={onTogglePublish}
               >
-                <Upload className="size-4" />
+                <UploadIcon className="size-4" />
                 {t("courses.card.publish")}
               </Button>
             </DrawerClose>
@@ -107,7 +107,7 @@ export function CourseCardDrawerActions({
                 className="w-full justify-start gap-2"
                 onClick={onTogglePublish}
               >
-                <Undo2 className="size-4" />
+                <Undo2Icon className="size-4" />
                 {t("courses.card.unpublish")}
               </Button>
             </DrawerClose>
@@ -119,14 +119,14 @@ export function CourseCardDrawerActions({
                 className="w-full justify-start gap-2"
                 onClick={onArchive}
               >
-                <Archive className="size-4" />
+                <ArchiveIcon className="size-4" />
                 {t("courses.card.archive")}
               </Button>
             </DrawerClose>
           )}
           <DrawerClose asChild>
             <Button variant="destructive" className="w-full justify-start gap-2" onClick={onDelete}>
-              <Trash2 className="size-4" />
+              <Trash2Icon className="size-4" />
               {t("courses.card.delete")}
             </Button>
           </DrawerClose>

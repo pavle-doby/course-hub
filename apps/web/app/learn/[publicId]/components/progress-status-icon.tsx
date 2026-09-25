@@ -1,13 +1,13 @@
-import { Circle, CircleCheckBig, CircleDashedCheck } from "lucide-react";
+import { CircleIcon, CircleCheckBigIcon, CircleDashedCheckIcon } from "lucide-react";
 import type { LessonProgressStatus } from "@repo/api-client";
 import { useT } from "@repo/i18n/client";
 import { cn } from "@repo/ui-web/lib/utils";
 import { PROGRESS_STATUS_LABEL_KEYS } from "@/utils/consts";
 
 const STATUS_ICONS = {
-  todo: Circle,
-  in_progress: CircleDashedCheck,
-  done: CircleCheckBig,
+  todo: CircleIcon,
+  in_progress: CircleDashedCheckIcon,
+  done: CircleCheckBigIcon,
 } as const;
 
 const STATUS_COLORS = {

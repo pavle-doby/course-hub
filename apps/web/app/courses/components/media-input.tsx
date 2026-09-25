@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { RefreshCw, Trash2, Upload, Video } from "lucide-react";
+import { RefreshCwIcon, Trash2Icon, UploadIcon, VideoIcon } from "lucide-react";
 import {
   getGetVideoByParentQueryKey,
   useCompleteVideoUpload,
@@ -132,14 +132,14 @@ export function MediaInput({ className, parent }: { className?: string; parent: 
           }
           state={attachmentState}
           progress={progress}
-          icon={<Video />}
+          icon={<VideoIcon />}
           onDelete={() => setDeleteDialogOpen(true)}
           deleteLabel={t("courses.editor.deleteVideo")}
           deleteDisabled={isDeleting}
         />
       ) : (
         <div className="flex aspect-video w-full items-center justify-center gap-2 rounded-lg border border-dashed border-input text-sm text-muted-foreground">
-          <Video className="size-4" />
+          <VideoIcon className="size-4" />
           {t("courses.editor.mediaPlaceholder")}
         </div>
       )}
@@ -160,7 +160,7 @@ export function MediaInput({ className, parent }: { className?: string; parent: 
             disabled={pickerDisabled}
             onClick={() => inputRef.current?.click()}
           >
-            <Upload />
+            <UploadIcon />
             {t("courses.editor.uploadVideo")}
           </Button>
         ) : (
@@ -173,7 +173,7 @@ export function MediaInput({ className, parent }: { className?: string; parent: 
                 disabled={pickerDisabled}
                 onClick={() => inputRef.current?.click()}
               >
-                <RefreshCw />
+                <RefreshCwIcon />
                 {t("courses.editor.updateVideo")}
               </Button>
               <Button
@@ -183,7 +183,7 @@ export function MediaInput({ className, parent }: { className?: string; parent: 
                 disabled={isDeleting}
                 onClick={() => setDeleteDialogOpen(true)}
               >
-                <Trash2 />
+                <Trash2Icon />
                 {t("courses.editor.deleteVideo")}
               </Button>
             </div>

@@ -2,7 +2,7 @@
 
 import { useGetPublicCourses } from "@repo/api-client";
 import { Input } from "@repo/ui-web/components/input";
-import { Search } from "lucide-react";
+import { SearchIcon } from "lucide-react";
 import { useT } from "@repo/i18n/client";
 import { useErrorHandlingQuery } from "@repo/shared";
 import { toast } from "@repo/ui-web/components/sonner";
@@ -45,7 +45,7 @@ export default function Page() {
         <div className="flex items-center gap-4 p-4 md:p-6">
           <h1 className="hidden text-xl font-semibold md:block">{t("learn.title")}</h1>
           <div className="relative w-full md:max-w-sm">
-            <Search className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
+            <SearchIcon className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               placeholder={t("learn.searchPlaceholder")}
               className="pl-8"

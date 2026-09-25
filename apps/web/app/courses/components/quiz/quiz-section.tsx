@@ -1,7 +1,15 @@
 "use client";
 
 import { useId, useState } from "react";
-import { ArrowUpDown, Check, ListChecks, Pencil, Plus, SaveIcon, Trash2 } from "lucide-react";
+import {
+  ArrowUpDownIcon,
+  CheckIcon,
+  ListChecksIcon,
+  PencilIcon,
+  PlusIcon,
+  SaveIcon,
+  Trash2Icon,
+} from "lucide-react";
 import {
   getGetPublicQuizQueryKey,
   getGetQuizQueryKey,
@@ -126,7 +134,7 @@ export function QuizSection({ parent }: { parent: QuizParentParams }) {
     <Card className="mx-auto w-full max-w-2xl">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <ListChecks className="size-4" />
+          <ListChecksIcon className="size-4" />
           {t("courses.quiz.title")}
         </CardTitle>
         <CardDescription>
@@ -151,7 +159,7 @@ export function QuizSection({ parent }: { parent: QuizParentParams }) {
               disabled={isGenerating}
               onClick={handleToggleReorder}
             >
-              {isReordering ? <Check /> : <ArrowUpDown />}
+              {isReordering ? <CheckIcon /> : <ArrowUpDownIcon />}
               {isReordering ? t("courses.quiz.reorderDone") : t("courses.quiz.reorder")}
             </Button>
             <Button
@@ -168,11 +176,11 @@ export function QuizSection({ parent }: { parent: QuizParentParams }) {
         {!isLoading && !editor && quiz && (
           <CardAction className="flex gap-2">
             <Button variant="outline" className="gap-1.5" onClick={handleEdit}>
-              <Pencil />
+              <PencilIcon />
               {t("courses.quiz.edit")}
             </Button>
             <Button variant="outline" className="gap-1.5" onClick={handleOpenDeleteDialog}>
-              <Trash2 />
+              <Trash2Icon />
               {t("courses.quiz.delete")}
             </Button>
           </CardAction>
@@ -200,7 +208,7 @@ export function QuizSection({ parent }: { parent: QuizParentParams }) {
         !quiz && (
           <CardContent>
             <Button className="gap-1.5" onClick={handleOpenChooseDialog}>
-              <Plus />
+              <PlusIcon />
               {t("courses.quiz.create")}
             </Button>
           </CardContent>

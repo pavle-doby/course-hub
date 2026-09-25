@@ -1,6 +1,6 @@
 "use client";
 
-import { Star } from "lucide-react";
+import { StarIcon } from "lucide-react";
 import { useT } from "@repo/i18n/client";
 import { cn } from "@repo/ui-web/lib/utils";
 
@@ -23,7 +23,7 @@ export function StarRating({ average, count, className }: StarRatingProps) {
       className={cn("flex items-center gap-1 text-sm", className)}
       aria-label={t("learn.reviews.averageLabel", { average: average.toFixed(1), count })}
     >
-      <Star className="size-4 fill-amber-400 text-amber-400" />
+      <StarIcon className="size-4 fill-amber-400 text-amber-400" />
       <span className="font-semibold tabular-nums">{average.toFixed(1)}</span>
       <span className="text-muted-foreground tabular-nums">({count})</span>
     </span>

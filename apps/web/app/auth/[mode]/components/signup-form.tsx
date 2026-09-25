@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useTheme } from "next-themes";
 import { z } from "zod";
 import type { TFunction } from "@repo/i18n";
-import { AlertCircleIcon, Eye, EyeOff } from "lucide-react";
+import { AlertCircleIcon, EyeIcon, EyeOffIcon } from "lucide-react";
 import { useAcceptInvitation, useAuthSignUp } from "@repo/api-client";
 import { AuthSignUpQuerySchema } from "@repo/contract";
 import { useChangeLanguage, useT } from "@repo/i18n/client";
@@ -188,7 +188,11 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
                       showPassword ? t("auth.signup.hidePassword") : t("auth.signup.showPassword")
                     }
                   >
-                    {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                    {showPassword ? (
+                      <EyeOffIcon className="size-4" />
+                    ) : (
+                      <EyeIcon className="size-4" />
+                    )}
                   </button>
                 </div>
                 <FieldError errors={[errors.password]} />
@@ -217,9 +221,9 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
                     }
                   >
                     {showConfirmPassword ? (
-                      <EyeOff className="size-4" />
+                      <EyeOffIcon className="size-4" />
                     ) : (
-                      <Eye className="size-4" />
+                      <EyeIcon className="size-4" />
                     )}
                   </button>
                 </div>

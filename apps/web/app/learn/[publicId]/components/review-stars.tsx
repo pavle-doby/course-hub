@@ -1,6 +1,6 @@
 "use client";
 
-import { Star } from "lucide-react";
+import { StarIcon } from "lucide-react";
 import { useT } from "@repo/i18n/client";
 import { cn } from "@repo/ui-web/lib/utils";
 
@@ -23,7 +23,7 @@ export function ReviewStars({ rating = 0, onRatingChange, className }: ReviewSta
         aria-label={t("learn.reviews.starsLabel", { rating })}
       >
         {RATINGS.map((value) => (
-          <Star
+          <StarIcon
             key={value}
             className={cn(
               "size-4 text-amber-400",
@@ -47,7 +47,7 @@ export function ReviewStars({ rating = 0, onRatingChange, className }: ReviewSta
           className="rounded-md p-1 transition-transform hover:scale-110 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
           onClick={() => onRatingChange(value)}
         >
-          <Star
+          <StarIcon
             className={cn(
               "size-8",
               value <= rating ? "fill-amber-400 text-amber-400" : "text-muted-foreground/40"

@@ -18,7 +18,7 @@ import { Field, FieldError, FieldLabel } from "@repo/ui-web/components/field";
 import { Input } from "@repo/ui-web/components/input";
 import { Separator } from "@repo/ui-web/components/separator";
 import { toast } from "@repo/ui-web/components/sonner";
-import { Link as LinkIcon, Mail } from "lucide-react";
+import { LinkIcon as LinkIcon, MailIcon } from "lucide-react";
 import { InvitesList } from "./invites-list";
 
 type InviteFormProps = {
@@ -121,7 +121,7 @@ export function InviteForm({ publicId }: InviteFormProps) {
               {...register("email")}
             />
             <Button type="submit" className="w-full md:w-auto" disabled={isCreatingEmail}>
-              <Mail /> {t("invite.dialog.sendEmailInvite")}
+              <MailIcon /> {t("invite.dialog.sendEmailInvite")}
             </Button>
           </div>
         </form>

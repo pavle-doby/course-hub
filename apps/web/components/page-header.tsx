@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Search } from "lucide-react";
+import { SearchIcon } from "lucide-react";
 import { Input } from "@repo/ui-web/components/input";
 import { cn } from "@repo/ui-web/lib/utils";
 
@@ -22,7 +22,7 @@ export function PageHeader({ title, titleClassName, search, action, className }:
       {search && (
         <div className="relative flex-1">
           <div className="relative mx-auto w-full md:max-w-sm">
-            <Search className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
+            <SearchIcon className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               placeholder={search.placeholder}
               className="pl-8"

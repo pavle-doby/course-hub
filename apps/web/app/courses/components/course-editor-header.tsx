@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronLeft, SaveIcon, XIcon } from "lucide-react";
+import { ChevronLeftIcon, SaveIcon, XIcon } from "lucide-react";
 import { Button } from "@repo/ui-web/components/button";
 import { Switch } from "@repo/ui-web/components/switch";
 import { Label } from "@repo/ui-web/components/label";
@@ -44,7 +44,7 @@ export function CourseEditorHeader({
             onClick={onBack}
             aria-label={t("courses.editor.back")}
           >
-            <ChevronLeft className="size-5" />
+            <ChevronLeftIcon className="size-5" />
           </Button>
           <span className="truncate text-lg font-bold">{title}</span>
         </div>

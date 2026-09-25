@@ -17,17 +17,17 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import {
-  ChevronRight,
-  Check,
-  File,
-  Files,
-  Folder,
-  GripHorizontal,
-  PanelLeftClose,
-  PanelLeftOpen,
-  Plus,
-  RefreshCw,
-  Shuffle,
+  ChevronRightIcon,
+  CheckIcon,
+  FileIcon,
+  FilesIcon,
+  FolderIcon,
+  GripHorizontalIcon,
+  PanelLeftCloseIcon,
+  PanelLeftOpenIcon,
+  PlusIcon,
+  RefreshCwIcon,
+  ShuffleIcon,
 } from "lucide-react";
 import {
   Collapsible,
@@ -239,7 +239,7 @@ export function CourseTreeNav({
             disabled={isSaving || isLoadingTree}
             onClick={reorderMode ? handleDoneReorder : handleStartReorder}
           >
-            {reorderMode ? <Check className="size-4" /> : <Shuffle className="size-4" />}
+            {reorderMode ? <CheckIcon className="size-4" /> : <ShuffleIcon className="size-4" />}
             {reorderMode ? t("courses.editor.reorderDone") : t("courses.editor.reorder")}
           </Button>
           <Button
@@ -250,9 +250,9 @@ export function CourseTreeNav({
             aria-label={t("courses.editor.collapseNavigation")}
           >
             {state === "collapsed" ? (
-              <PanelLeftOpen className="size-4" />
+              <PanelLeftOpenIcon className="size-4" />
             ) : (
-              <PanelLeftClose className="size-4" />
+              <PanelLeftCloseIcon className="size-4" />
             )}
           </Button>
         </div>
@@ -273,7 +273,7 @@ export function CourseTreeNav({
                   onClick={() => selectAndClose(onSelectCourse)}
                   tooltip={courseName}
                 >
-                  <Folder />
+                  <FolderIcon />
                   <span className="group-data-[collapsible=icon]:hidden">{courseName}</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -285,7 +285,7 @@ export function CourseTreeNav({
                       {t("errors.shared.SERVER_ERROR.message")}
                     </p>
                     <Button size="sm" variant="outline" onClick={onRetryTree}>
-                      <RefreshCw className="size-4" />
+                      <RefreshCwIcon className="size-4" />
                       {t("courses.editor.retry")}
                     </Button>
                   </div>
@@ -322,8 +322,8 @@ export function CourseTreeNav({
                                 onClick={() => selectAndClose(() => onSelectTopic(topic.id))}
                                 tooltip={topic.name}
                               >
-                                {reorderMode && <GripHorizontal className="size-3.5" />}
-                                <Files />
+                                {reorderMode && <GripHorizontalIcon className="size-3.5" />}
+                                <FilesIcon />
                                 <span>{topic.name}</span>
                               </SidebarMenuButton>
                               <CollapsibleTrigger asChild>
@@ -331,7 +331,7 @@ export function CourseTreeNav({
                                   className="right-auto left-1"
                                   aria-label={t("courses.editor.toggleTopic")}
                                 >
-                                  <ChevronRight className="transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                                  <ChevronRightIcon className="transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                                 </SidebarMenuAction>
                               </CollapsibleTrigger>
                               <CollapsibleContent>
@@ -360,9 +360,9 @@ export function CourseTreeNav({
                                               }
                                             >
                                               {reorderMode && (
-                                                <GripHorizontal className="size-3.5" />
+                                                <GripHorizontalIcon className="size-3.5" />
                                               )}
-                                              <File />
+                                              <FileIcon />
                                               <span className="group-data-[collapsible=icon]:hidden">
                                                 {lesson.name}
                                               </span>
@@ -385,7 +385,7 @@ export function CourseTreeNav({
                                         className="my-1 border border-dashed"
                                         onClick={() => onAddLesson(topic.id)}
                                       >
-                                        <Plus className="size-3.5" />
+                                        <PlusIcon className="size-3.5" />
                                         {t("courses.editor.addNewLesson")}
                                       </SidebarMenuSubButton>
                                     </SidebarMenuSubItem>
@@ -400,7 +400,7 @@ export function CourseTreeNav({
                   {!reorderMode && !isLoadingTree && (
                     <SidebarMenuItem className="group-data-[collapsible=icon]:hidden">
                       <SidebarMenuButton className="my-1 border border-dashed" onClick={onAddTopic}>
-                        <Plus />
+                        <PlusIcon />
                         <span>{t("courses.editor.addNewTopic")}</span>
                       </SidebarMenuButton>
                     </SidebarMenuItem>

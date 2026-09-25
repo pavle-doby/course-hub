@@ -3,7 +3,7 @@
 import type { ReactNode } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { GripVertical } from "lucide-react";
+import { GripVerticalIcon } from "lucide-react";
 import { Button } from "@repo/ui-web/components/button";
 import { cn } from "@repo/ui-web/lib/utils";
 
@@ -46,7 +46,7 @@ export function SortableRow({ id, handleLabel, className, children }: SortableRo
         {...attributes}
         {...listeners}
       >
-        <GripVertical />
+        <GripVerticalIcon />
       </Button>
       {children}
     </div>

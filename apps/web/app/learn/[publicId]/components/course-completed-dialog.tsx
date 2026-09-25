@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import confetti from "canvas-confetti";
-import { Star } from "lucide-react";
+import { StarIcon } from "lucide-react";
 import { useT } from "@repo/i18n/client";
 import {
   AlertDialog,
@@ -75,7 +75,7 @@ export function CourseCompletedDialog({
                 {t("learn.completed.newCourse")}
               </AlertDialogAction>
               <AlertDialogAction onClick={onReview}>
-                <Star className="size-4" />
+                <StarIcon className="size-4" />
                 {t("learn.reviews.review")}
               </AlertDialogAction>
             </>

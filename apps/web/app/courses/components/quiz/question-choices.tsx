@@ -11,7 +11,7 @@ import {
   type UseFormRegister,
   type UseFormSetValue,
 } from "react-hook-form";
-import { Plus, X } from "lucide-react";
+import { PlusIcon, XIcon } from "lucide-react";
 import type { SaveQuizReq } from "@repo/contract";
 import { useT } from "@repo/i18n/client";
 import { Button } from "@repo/ui-web/components/button";
@@ -132,7 +132,7 @@ export function QuestionChoices({
                   disabled={choices.fields.length <= 2}
                   onClick={() => handleRemoveChoice(choiceIndex)}
                 >
-                  <X />
+                  <XIcon />
                 </Button>
               </SortableRow>
             ))}
@@ -147,7 +147,7 @@ export function QuestionChoices({
           className="w-fit gap-1.5"
           onClick={handleAddChoice}
         >
-          <Plus />
+          <PlusIcon />
           {t("courses.quiz.addChoice")}
         </Button>
       )}

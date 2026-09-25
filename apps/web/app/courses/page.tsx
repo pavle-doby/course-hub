@@ -10,7 +10,7 @@ import {
 } from "@repo/api-client";
 import { Button } from "@repo/ui-web/components/button";
 import { Input } from "@repo/ui-web/components/input";
-import { Search, Folder, File } from "lucide-react";
+import { SearchIcon, FolderIcon, FileIcon } from "lucide-react";
 import { useT } from "@repo/i18n/client";
 import { useErrorHandlingQuery } from "@repo/shared";
 import { toast } from "@repo/ui-web/components/sonner";
@@ -82,7 +82,7 @@ export default function CoursesPage() {
                 : "text-muted-foreground"
             )}
           >
-            <Folder className="size-4" />
+            <FolderIcon className="size-4" />
             {t("nav.courses")}
           </Link>
           <Link
@@ -94,7 +94,7 @@ export default function CoursesPage() {
                 : "text-muted-foreground"
             )}
           >
-            <File className="size-4" />
+            <FileIcon className="size-4" />
             {t("nav.lessons")}
           </Link>
         </div>
@@ -116,7 +116,7 @@ export default function CoursesPage() {
         {/* Mobile/tablet: search */}
         <div className="p-4 md:hidden">
           <div className="relative">
-            <Search className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
+            <SearchIcon className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               placeholder={t("courses.searchPlaceholder")}
               className="pl-8"

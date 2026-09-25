@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown } from "lucide-react";
+import { ChevronDownIcon } from "lucide-react";
 import { LessonProgressStatus } from "@repo/api-client";
 import { useT } from "@repo/i18n/client";
 import { Button } from "@repo/ui-web/components/button";
@@ -35,7 +35,7 @@ export function LessonStatusSelect({ status, onStatusChange }: LessonStatusSelec
         <Button variant="outline" size="sm" className="shrink-0 gap-2">
           <ProgressStatusIcon status={status} />
           {t(PROGRESS_STATUS_LABEL_KEYS[status])}
-          <ChevronDown className="size-4" />
+          <ChevronDownIcon className="size-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-44">

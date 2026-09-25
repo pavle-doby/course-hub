@@ -14,7 +14,7 @@ import { useErrorHandlingAction } from "@repo/shared";
 import { Button } from "@repo/ui-web/components/button";
 import { Field, FieldLabel } from "@repo/ui-web/components/field";
 import { toast } from "@repo/ui-web/components/sonner";
-import { ImageIcon, Trash2 } from "lucide-react";
+import { ImageIcon, Trash2Icon } from "lucide-react";
 import { ChAttachment } from "@/components/ch-attachment";
 import { uploadToR2 } from "@/utils/upload-to-r2";
 
@@ -148,7 +148,7 @@ export function CourseThumbnailInput({
             disabled={isDeleting}
             onClick={() => void handleDelete()}
           >
-            <Trash2 />
+            <Trash2Icon />
             {t("courses.editor.deleteThumbnail")}
           </Button>
         )}

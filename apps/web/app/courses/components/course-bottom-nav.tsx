@@ -1,11 +1,11 @@
 "use client";
 
 import {
-  ChevronLeft,
-  ChevronRight,
-  ListTree,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  ListTreeIcon,
   SaveIcon,
-  TableOfContents,
+  TableOfContentsIcon,
   XIcon,
 } from "lucide-react";
 import { Button } from "@repo/ui-web/components/button";
@@ -60,7 +60,7 @@ export function CourseBottomNav({
             disabled={!hasPrevious}
             onClick={onPrevious}
           >
-            <ChevronLeft className="size-4" />
+            <ChevronLeftIcon className="size-4" />
             {t("courses.editor.previous")}
           </Button>
           <Button
@@ -69,7 +69,7 @@ export function CourseBottomNav({
             onClick={toggleSidebar}
             aria-label={t("courses.editor.contents")}
           >
-            <ListTree className="size-5" />
+            <ListTreeIcon className="size-5" />
           </Button>
           <Button
             size="icon-lg"
@@ -77,7 +77,7 @@ export function CourseBottomNav({
             aria-label={t("courses.editor.actions")}
             onClick={onOpenActions}
           >
-            <TableOfContents className="size-4" />
+            <TableOfContentsIcon className="size-4" />
           </Button>
           <Button
             variant="ghost"
@@ -87,7 +87,7 @@ export function CourseBottomNav({
             onClick={onNext}
           >
             {t("courses.editor.next")}
-            <ChevronRight className="size-4" />
+            <ChevronRightIcon className="size-4" />
           </Button>
         </div>
       </ChBottomNav>

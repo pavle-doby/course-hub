@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTheme } from "next-themes";
-import { AlertCircleIcon, Eye, EyeOff } from "lucide-react";
+import { AlertCircleIcon, EyeIcon, EyeOffIcon } from "lucide-react";
 import { useAcceptInvitation, useAuthLogin } from "@repo/api-client";
 import { AuthLoginQuerySchema, type AuthLogInUserReq } from "@repo/contract";
 import { useChangeLanguage, useT } from "@repo/i18n/client";
@@ -117,7 +117,11 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
                       showPassword ? t("auth.login.hidePassword") : t("auth.login.showPassword")
                     }
                   >
-                    {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                    {showPassword ? (
+                      <EyeOffIcon className="size-4" />
+                    ) : (
+                      <EyeIcon className="size-4" />
+                    )}
                   </button>
                 </div>
                 <FieldError errors={[errors.password]} />

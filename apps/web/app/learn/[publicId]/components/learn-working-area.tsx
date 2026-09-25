@@ -2,7 +2,13 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { AlertCircle, ChevronLeft, ChevronRight, FileText, Loader2 } from "lucide-react";
+import {
+  AlertCircleIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  FileTextIcon,
+  Loader2Icon,
+} from "lucide-react";
 import type { CourseProgress, Lesson, LessonProgressStatus } from "@repo/api-client";
 import {
   useGetPublicDocumentsByParent,
@@ -161,7 +167,7 @@ export function LearnWorkingArea({
           disabled={!hasPrevious}
           onClick={onPrevious}
         >
-          <ChevronLeft className="size-4" />
+          <ChevronLeftIcon className="size-4" />
           {t("learn.detail.previous")}
         </Button>
         <Button
@@ -172,7 +178,7 @@ export function LearnWorkingArea({
           onClick={onNext}
         >
           {t("learn.detail.next")}
-          <ChevronRight className="size-4" />
+          <ChevronRightIcon className="size-4" />
         </Button>
       </div>
 
@@ -231,13 +237,13 @@ export function LearnWorkingArea({
             )}
             {isVideoProcessing && (
               <Alert className="mt-4">
-                <Loader2 className="size-4 animate-spin" />
+                <Loader2Icon className="size-4 animate-spin" />
                 <AlertTitle>{t("learn.detail.videoProcessing")}</AlertTitle>
               </Alert>
             )}
             {isVideoError && (
               <Alert className="mt-4" variant="destructive">
-                <AlertCircle />
+                <AlertCircleIcon />
                 <AlertTitle>{t("learn.detail.videoUnavailable")}</AlertTitle>
               </Alert>
             )}
@@ -261,7 +267,7 @@ export function LearnWorkingArea({
                         unoptimized
                       />
                     ) : (
-                      <FileText />
+                      <FileTextIcon />
                     )}
                   </AttachmentMedia>
                   <AttachmentContent>

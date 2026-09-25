@@ -10,7 +10,7 @@ import {
   type UseFormRegister,
   type UseFormSetValue,
 } from "react-hook-form";
-import { Trash2 } from "lucide-react";
+import { Trash2Icon } from "lucide-react";
 import { QUESTION_TYPES, type SaveQuizReq } from "@repo/contract";
 import { useT } from "@repo/i18n/client";
 import { Button } from "@repo/ui-web/components/button";
@@ -81,7 +81,7 @@ export function QuestionFields({
             aria-label={t("courses.quiz.removeQuestion")}
             onClick={handleRemove}
           >
-            <Trash2 />
+            <Trash2Icon />
           </Button>
         )}
       </div>

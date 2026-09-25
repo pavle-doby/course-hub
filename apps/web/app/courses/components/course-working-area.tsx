@@ -1,7 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronLeft, ChevronRight, Copy, Info, Plus, Trash2 } from "lucide-react";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  CopyIcon,
+  InfoIcon,
+  PlusIcon,
+  Trash2Icon,
+} from "lucide-react";
 import { CoursePutQuerySchema, LessonPutQuerySchema, TopicPutQuerySchema } from "@repo/contract";
 import type { CourseStatus, CourseVisibility, Lesson } from "@repo/api-client";
 import { Alert, AlertTitle } from "@repo/ui-web/components/alert";
@@ -149,7 +156,7 @@ export function CourseWorkingArea({
               disabled={!previousItem}
               onClick={() => previousItem && onNavigate(previousItem)}
             >
-              <ChevronLeft className="size-4" />
+              <ChevronLeftIcon className="size-4" />
               {t("courses.editor.previous")}
             </Button>
             <Button
@@ -160,7 +167,7 @@ export function CourseWorkingArea({
               onClick={() => nextItem && onNavigate(nextItem)}
             >
               {t("courses.editor.next")}
-              <ChevronRight className="size-4" />
+              <ChevronRightIcon className="size-4" />
             </Button>
           </div>
         )}
@@ -183,7 +190,7 @@ export function CourseWorkingArea({
                     className="gap-1.5"
                     onClick={onDuplicateSelected}
                   >
-                    <Copy />
+                    <CopyIcon />
                     {t("courses.editor.duplicate")}
                   </Button>
                 )}
@@ -194,7 +201,7 @@ export function CourseWorkingArea({
                     className="gap-1.5"
                     onClick={() => setDeleteDialogOpen(true)}
                   >
-                    <Trash2 />
+                    <Trash2Icon />
                     {t("courses.editor.delete")}
                   </Button>
                 )}
@@ -208,7 +215,7 @@ export function CourseWorkingArea({
               <>
                 {isCourseSelected && course.status === "published" && (
                   <Alert className="mx-4 mb-4 w-auto" variant="destructive">
-                    <Info />
+                    <InfoIcon />
                     <AlertTitle>{t("courses.editor.publishedVisibilityAlert")}</AlertTitle>
                   </Alert>
                 )}
@@ -284,12 +291,12 @@ export function CourseWorkingArea({
                   onAddLesson(selection.type === "topic" ? selection.id : selectedLesson?.topicId)
                 }
               >
-                <Plus className="size-4" />
+                <PlusIcon className="size-4" />
                 {t("courses.editor.addNewLesson")}
               </Button>
             )}
             <Button className="gap-2 sm:min-w-40" variant="outline" onClick={onAddTopic}>
-              <Plus className="size-4" />
+              <PlusIcon className="size-4" />
               {t("courses.editor.addNewTopic")}
             </Button>
           </div>
