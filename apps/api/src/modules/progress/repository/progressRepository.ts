@@ -52,6 +52,32 @@ export const progressRepository = {
     return row?.courseId;
   },
 
+  // Whether the lesson has a playable video and whether the user watched it to the end.
+  getLessonVideoState: async (
+    userId: string,
+    lessonId: string
+  ): Promise<{ hasVideo: boolean; isVideoWatched: boolean }> => {
+    const [row] = await db
+      .select({
+        videoId: schema.videos.id,
+        videoWatchedAt: schema.lessonProgress.videoWatchedAt,
+      })
+      .from(schema.lessons)
+      .leftJoin(
+        schema.videos,
+        and(eq(schema.videos.lessonId, schema.lessons.id), eq(schema.videos.status, "ready"))
+      )
+      .leftJoin(
+        schema.lessonProgress,
+        and(
+          eq(schema.lessonProgress.lessonId, schema.lessons.id),
+          eq(schema.lessonProgress.userId, userId)
+        )
+      )
+      .where(eq(schema.lessons.id, lessonId));
+    return { hasVideo: Boolean(row?.videoId), isVideoWatched: Boolean(row?.videoWatchedAt) };
+  },
+
   // Upserts the lesson row; on a status change also syncs course_enrollments.completedAt.
   // `isCourseCompleted` is true only when this save newly completed the course.
   saveLessonProgress: async (
@@ -70,13 +96,14 @@ export const progressRepository = {
         progressSeconds: data.progressSeconds,
         lastWatchedAt: now,
       };
+      const videoFields = data.videoWatched && { videoWatchedAt: now };
 
       const [progress] = await tx
         .insert(schema.lessonProgress)
-        .values({ userId, lessonId, ...statusFields, ...positionFields })
+        .values({ userId, lessonId, ...statusFields, ...positionFields, ...videoFields })
         .onConflictDoUpdate({
           target: [schema.lessonProgress.userId, schema.lessonProgress.lessonId],
-          set: { ...statusFields, ...positionFields, updatedAt: now },
+          set: { ...statusFields, ...positionFields, ...videoFields, updatedAt: now },
         })
         .returning(lessonProgressColumns);
 

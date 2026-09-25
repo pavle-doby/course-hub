@@ -1,0 +1,1 @@
+ALTER TABLE "lesson_progress" ADD COLUMN "video_watched_at" timestamp with time zone;

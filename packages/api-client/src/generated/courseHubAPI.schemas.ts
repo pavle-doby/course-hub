@@ -3475,6 +3475,7 @@ export type UpdateLessonProgressBody = {
   status?: UpdateLessonProgressBodyStatus;
   /** @minimum 0 */
   progressSeconds?: number;
+  videoWatched?: true;
 };
 
 export type UpdateLessonProgressDefaultCode =

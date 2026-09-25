@@ -22,7 +22,8 @@ export type SaveLessonProgress = (
 
 /**
  * Saves a lesson's status and/or video position. The saved lesson row is written into the
- * course progress cache; status changes also refetch it so derived topic/course status updates.
+ * course progress cache; status changes (and a watched video, which derives the status on the
+ * server) also refetch it so derived topic/course status updates.
  */
 export function useSaveLessonProgress(publicId: string): SaveLessonProgress {
   const { t } = useT();
@@ -54,7 +55,7 @@ export function useSaveLessonProgress(publicId: string): SaveLessonProgress {
       {
         onSuccess: (saved) => {
           updateCachedLesson(saved);
-          if (data.status) {
+          if (data.status || data.videoWatched) {
             void queryClient.invalidateQueries({ queryKey });
           }
         },
@@ -73,8 +74,9 @@ type LessonVideoProgressOptions = {
 
 /**
  * `<video>` handlers that track a lesson video: resume from the saved position, mark the lesson
- * in progress on play and done on end, and save the position at most every 10 s, on pause, and
- * when the lesson is left. Without a `lessonId` (course/topic videos) every handler is a no-op.
+ * in progress on play, report the video as watched on end (the server then marks the lesson done
+ * unless its quiz still needs all right answers), and save the position at most every 10 s, on
+ * pause, and when the lesson is left. Without a `lessonId` (course/topic videos) every handler is a no-op.
  */
 export function useLessonVideoProgress({ lessonId, progress, onSave }: LessonVideoProgressOptions) {
   const pendingRef = useRef<{ lessonId: string; seconds: number } | null>(null);
@@ -136,7 +138,7 @@ export function useLessonVideoProgress({ lessonId, progress, onSave }: LessonVid
       return;
     }
     pendingRef.current = null;
-    onSave(lessonId, { status: "done", progressSeconds: 0 });
+    onSave(lessonId, { videoWatched: true, progressSeconds: 0 });
   }
 
   return {

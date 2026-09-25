@@ -11,9 +11,12 @@ import {
 } from "lucide-react";
 import type { CourseProgress, Lesson, LessonProgressStatus } from "@repo/api-client";
 import {
+  getGetCourseProgressQueryKey,
   useGetPublicDocumentsByParent,
+  useGetPublicQuiz,
   useGetPublicVideoByParent,
   useGetVideoByParent,
+  useQueryClient,
 } from "@repo/api-client";
 import { Alert, AlertTitle } from "@repo/ui-web/components/alert";
 import { Badge } from "@repo/ui-web/components/badge";
@@ -72,6 +75,7 @@ export function LearnWorkingArea({
   onNext,
 }: LearnWorkingAreaProps) {
   const { t } = useT();
+  const queryClient = useQueryClient();
   const saveLessonProgress = useSaveLessonProgress(course.publicId);
   const [isSavingStatus, setIsSavingStatus] = useState(false);
 
@@ -121,6 +125,8 @@ export function LearnWorkingArea({
   const isVideoError = activeVideo?.status === "error";
   const isVideoProcessing = hasVideo && !isVideoReady && !isVideoError;
   const { data: documents = [] } = useGetPublicDocumentsByParent(parent);
+  const { data: quizData } = useGetPublicQuiz(parent);
+  const hasQuiz = Boolean(quizData?.quiz);
 
   const lessonProgress = selectedLesson
     ? (progress?.lessons.find((lesson) => lesson.lessonId === selectedLesson.id) ?? {
@@ -139,8 +145,12 @@ export function LearnWorkingArea({
     onSave: saveLessonProgress,
   });
 
-  const nextStatus =
+  const lessonNextStatus =
     isEnrolled && lessonProgress ? NEXT_LESSON_STATUS[lessonProgress.status] : undefined;
+  // A lesson with a video or quiz completes itself (video watched + all answers right), so it gets
+  // no "Mark as done" button; the status dropdown can still change it.
+  const nextStatus =
+    lessonNextStatus?.status === "done" && (isVideoReady || hasQuiz) ? undefined : lessonNextStatus;
 
   const isCompleteStep = nextStatus?.status === "done";
 
@@ -149,6 +159,19 @@ export function LearnWorkingArea({
       setIsSavingStatus(true);
       saveLessonProgress(lessonProgress.lessonId, { status }, () => setIsSavingStatus(false));
     }
+  }
+
+  function handleQuizStart() {
+    if (isEnrolled && lessonProgress?.status === "todo") {
+      saveLessonProgress(lessonProgress.lessonId, { status: "in_progress" });
+    }
+  }
+
+  // A lesson quiz result can change the lesson status on the server.
+  function handleQuizResponseChange() {
+    void queryClient.invalidateQueries({
+      queryKey: getGetCourseProgressQueryKey({ publicId: course.publicId }),
+    });
   }
 
   function handleAdvanceStatus() {
@@ -289,7 +312,13 @@ export function LearnWorkingArea({
           {description || t("learn.detail.noDescription")}
         </p>
 
-        <LearnQuiz key={parent.parentId} parent={parent} isEnrolled={isEnrolled} />
+        <LearnQuiz
+          key={parent.parentId}
+          parent={parent}
+          isEnrolled={isEnrolled}
+          onStart={handleQuizStart}
+          onResponseChange={handleQuizResponseChange}
+        />
 
         {nextStatus && (
           <>

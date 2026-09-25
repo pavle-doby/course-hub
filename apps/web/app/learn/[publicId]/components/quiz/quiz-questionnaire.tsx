@@ -24,11 +24,12 @@ import type { PublicQuiz, PublicQuizQuestion } from "./public-quiz";
 type QuizQuestionnaireProps = {
   quiz: PublicQuiz;
   isSaving: boolean;
+  onStart?: () => void;
   onSubmit: (answers: QuizAnswers) => void;
 };
 
 /** Step-by-step form for taking the quiz; collects the answers and hands them to `onSubmit`. */
-export function QuizQuestionnaire({ quiz, isSaving, onSubmit }: QuizQuestionnaireProps) {
+export function QuizQuestionnaire({ quiz, isSaving, onStart, onSubmit }: QuizQuestionnaireProps) {
   const { t } = useT();
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -48,7 +49,7 @@ export function QuizQuestionnaire({ quiz, isSaving, onSubmit }: QuizQuestionnair
   }
 
   return (
-    <Questionnaire items={quiz.questions.map(toItem)} onSubmit={handleSubmit}>
+    <Questionnaire items={quiz.questions.map(toItem)} onChange={onStart} onSubmit={handleSubmit}>
       <QuestionnaireProgress />
       {quiz.questions.map((question) => (
         <QuestionnaireItem

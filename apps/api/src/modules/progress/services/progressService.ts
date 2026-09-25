@@ -11,6 +11,8 @@ import { usersRepository } from "api/modules/users/repository/usersRepository";
 import { coursesRepository } from "api/modules/courses/repository/coursesRepository";
 import { enrollmentsRepository } from "api/modules/enrollments/repository/enrollmentsRepository";
 import { notificationsService } from "api/modules/notifications/services/notificationsService";
+import { quizzesRepository } from "api/modules/quizzes/repository/quizzesRepository";
+import { scoreQuiz } from "api/modules/quizzes/services/scoreQuiz";
 import { progressRepository } from "../repository/progressRepository";
 
 // Topic and course status are derived from lesson statuses, never stored.
@@ -41,6 +43,51 @@ async function notifyCourseCompleted(courseId: string, email: string): Promise<v
   if (course) {
     await notificationsService.notifyCourseCompleted(course, email);
   }
+}
+
+// Status a lesson's content earns: done once its video (if any) is watched to the end and its quiz
+// (if any) has every graded answer right; otherwise in progress.
+async function getEarnedLessonStatus(
+  userId: string,
+  lessonId: string,
+  isVideoJustWatched = false
+): Promise<LessonProgressStatus> {
+  const [video, quiz] = await Promise.all([
+    progressRepository.getLessonVideoState(userId, lessonId),
+    quizzesRepository.getByParent({ parentType: "lesson", parentId: lessonId }),
+  ]);
+  const response = quiz && (await quizzesRepository.getResponse(userId, quiz.id));
+  const result = quiz && response && scoreQuiz(quiz.questions, response.answers);
+
+  const isVideoDone = !video.hasVideo || video.isVideoWatched || isVideoJustWatched;
+  const isQuizDone = !quiz || (!!result && result.score === result.total);
+  return isVideoDone && isQuizDone ? "done" : "in_progress";
+}
+
+async function saveLessonProgress(
+  user: { id: string; email: string },
+  lessonId: string,
+  courseId: string,
+  dto: UpdateLessonProgressReq
+): Promise<UpdateLessonProgressRes> {
+  const { progress, isCourseCompleted } = await progressRepository.saveLessonProgress(
+    user.id,
+    lessonId,
+    courseId,
+    dto
+  );
+  if (isCourseCompleted) {
+    void notifyCourseCompleted(courseId, user.email).catch(() => undefined);
+  }
+  return progress;
+}
+
+async function getLessonCourseIdOrThrow(lessonId: string): Promise<string> {
+  const courseId = await progressRepository.getLessonCourseId(lessonId);
+  if (!courseId) {
+    throw new NotFoundError({ code: ErrorCodeProgress.LESSON_NOT_FOUND });
+  }
+  return courseId;
 }
 
 export const progressService = {
@@ -82,26 +129,25 @@ export const progressService = {
     };
   },
 
+  // A manual status is saved as is; a watched video derives the status from the lesson's content.
   updateLessonProgress: async (
     authUserId: string,
     lessonId: string,
     dto: UpdateLessonProgressReq
   ): Promise<UpdateLessonProgressRes> => {
-    const courseId = await progressRepository.getLessonCourseId(lessonId);
-    if (!courseId) {
-      throw new NotFoundError({ code: ErrorCodeProgress.LESSON_NOT_FOUND });
-    }
+    const courseId = await getLessonCourseIdOrThrow(lessonId);
     const user = await getEnrolledUserOrThrow(authUserId, courseId);
+    const status = dto.videoWatched
+      ? await getEarnedLessonStatus(user.id, lessonId, true)
+      : dto.status;
+    return await saveLessonProgress(user, lessonId, courseId, { ...dto, status });
+  },
 
-    const { progress, isCourseCompleted } = await progressRepository.saveLessonProgress(
-      user.id,
-      lessonId,
-      courseId,
-      dto
-    );
-    if (isCourseCompleted) {
-      void notifyCourseCompleted(courseId, user.email).catch(() => undefined);
-    }
-    return progress;
+  // Re-derives a lesson's status after its quiz answers were saved or cleared.
+  syncLessonStatus: async (authUserId: string, lessonId: string): Promise<void> => {
+    const courseId = await getLessonCourseIdOrThrow(lessonId);
+    const user = await getEnrolledUserOrThrow(authUserId, courseId);
+    const status = await getEarnedLessonStatus(user.id, lessonId);
+    await saveLessonProgress(user, lessonId, courseId, { status });
   },
 };

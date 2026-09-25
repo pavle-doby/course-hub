@@ -17,6 +17,8 @@ export const lessonProgress = pgTable(
     progressSeconds: integer("progress_seconds").notNull().default(0),
     startedAt: timestamp("started_at", { withTimezone: true }).defaultNow().notNull(),
     lastWatchedAt: timestamp("last_watched_at", { withTimezone: true }).defaultNow().notNull(),
+    /** Set once the learner reaches the end of the lesson video. */
+    videoWatchedAt: timestamp("video_watched_at", { withTimezone: true }),
     completedAt: timestamp("completed_at", { withTimezone: true }),
     updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
   },

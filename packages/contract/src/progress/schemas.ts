@@ -31,7 +31,13 @@ export const UpdateLessonProgressBodySchema = z
   .object({
     status: LessonProgressStatusSchema.optional(),
     progressSeconds: z.number().int().min(0).optional(),
+    /** The learner reached the end of the video; the server then derives the lesson status. */
+    videoWatched: z.literal(true).optional(),
   })
-  .refine((body) => body.status !== undefined || body.progressSeconds !== undefined, {
-    message: "status or progressSeconds is required",
-  });
+  .refine(
+    (body) =>
+      body.status !== undefined ||
+      body.progressSeconds !== undefined ||
+      body.videoWatched !== undefined,
+    { message: "status, progressSeconds or videoWatched is required" }
+  );

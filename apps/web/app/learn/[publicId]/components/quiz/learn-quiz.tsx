@@ -28,10 +28,14 @@ import { QuizResult } from "./quiz-result";
 type LearnQuizProps = {
   parent: QuizParentParams;
   isEnrolled: boolean;
+  /** Called when the learner answers a question. */
+  onStart?: () => void;
+  /** Called after answers are saved or cleared (a lesson quiz can change the lesson status). */
+  onResponseChange?: () => void;
 };
 
 /** Quiz at the end of a course, topic or lesson: take it, see the saved result, or clear answers. */
-export function LearnQuiz({ parent, isEnrolled }: LearnQuizProps) {
+export function LearnQuiz({ parent, isEnrolled, onStart, onResponseChange }: LearnQuizProps) {
   const { t } = useT();
   const isMobile = useIsMobile();
   const queryClient = useQueryClient();
@@ -59,6 +63,7 @@ export function LearnQuiz({ parent, isEnrolled }: LearnQuizProps) {
       {
         onSuccess: (saved) => {
           queryClient.setQueryData(responseQueryKey, saved);
+          onResponseChange?.();
           const result = saved.response?.result;
           // all graded answers right: celebrate (same burst as finishing a course)
           if (result && result.total > 0 && result.score === result.total) {
@@ -74,7 +79,10 @@ export function LearnQuiz({ parent, isEnrolled }: LearnQuizProps) {
     clearResponse(
       { pathParams: parent },
       {
-        onSuccess: () => queryClient.setQueryData(responseQueryKey, { response: null }),
+        onSuccess: () => {
+          queryClient.setQueryData(responseQueryKey, { response: null });
+          onResponseChange?.();
+        },
         onError: (error: unknown) => handleErrorAction(error as Error),
       }
     );
@@ -100,7 +108,12 @@ export function LearnQuiz({ parent, isEnrolled }: LearnQuizProps) {
           {myResponse.response ? (
             <QuizResult quiz={quiz} response={myResponse.response} onClear={handleClear} />
           ) : (
-            <QuizQuestionnaire quiz={quiz} isSaving={isSaving} onSubmit={handleSubmit} />
+            <QuizQuestionnaire
+              quiz={quiz}
+              isSaving={isSaving}
+              onStart={onStart}
+              onSubmit={handleSubmit}
+            />
           )}
         </CardContent>
       )}

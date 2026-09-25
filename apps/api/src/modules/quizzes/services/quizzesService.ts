@@ -14,18 +14,17 @@ import {
   type SaveQuizReq,
   type SaveQuizResponseReq,
   type SaveQuizRes,
-  QuizQuestion,
-  QuizAnswers,
-  QuizResult,
 } from "@repo/contract";
 import type { QuizEntity, QuizResponseEntity } from "@repo/db-schema";
 import { usersRepository } from "api/modules/users/repository/usersRepository";
 import { documentsRepository } from "api/modules/documents/repository/documentsRepository";
 import { coursesRepository } from "api/modules/courses/repository/coursesRepository";
 import { enrollmentsRepository } from "api/modules/enrollments/repository/enrollmentsRepository";
+import { progressService } from "api/modules/progress/services/progressService";
 import { consumeAiUsage } from "api/modules/ai/usage";
 import { quizzesRepository } from "../repository/quizzesRepository";
 import { quizGenerator } from "./quizGenerator";
+import { scoreQuiz } from "./scoreQuiz";
 
 const DAILY_GENERATION_LIMIT = 20;
 
@@ -62,34 +61,6 @@ async function assertCreator(
     throw new ForbiddenError({ code: ErrorCode.FORBIDDEN });
   }
   return { userId, courseId };
-}
-
-/**
- * Scores answers against the current questions. Text questions aren't scored; a multiple-choice
- * answer counts only if it matches the correct set exactly. Answers to removed questions are ignored.
- */
-export function scoreQuiz(questions: QuizQuestion[], answers: QuizAnswers): QuizResult {
-  const results = questions.map((question) => {
-    if (question.type === "text") {
-      return { id: question.id, isCorrect: null, correctValues: [] };
-    }
-
-    const correctValues = question.choices
-      .filter((choice) => choice.correct)
-      .map((choice) => choice.value);
-    const answer = answers[question.id];
-    const selected = new Set(Array.isArray(answer) ? answer : answer ? [answer] : []);
-    const isCorrect =
-      selected.size === correctValues.length && correctValues.every((value) => selected.has(value));
-    return { id: question.id, isCorrect, correctValues };
-  });
-
-  const scored = results.filter((result) => result.isCorrect !== null);
-  return {
-    score: scored.filter((result) => result.isCorrect).length,
-    total: scored.length,
-    questions: results,
-  };
 }
 
 async function getQuizOrThrow(parent: QuizParentParams): Promise<QuizEntity> {
@@ -214,6 +185,9 @@ export const quizzesService = {
     }
     const quiz = await getQuizOrThrow(parent);
     const response = await quizzesRepository.saveResponse(userId, quiz.id, dto.answers);
+    if (parent.parentType === "lesson") {
+      await progressService.syncLessonStatus(authUserId, parent.parentId);
+    }
     return toMyResponse(quiz, response);
   },
 
@@ -221,5 +195,8 @@ export const quizzesService = {
     const userId = await getUserId(authUserId);
     const quiz = await getQuizOrThrow(parent);
     await quizzesRepository.deleteResponse(userId, quiz.id);
+    if (parent.parentType === "lesson") {
+      await progressService.syncLessonStatus(authUserId, parent.parentId);
+    }
   },
 };
