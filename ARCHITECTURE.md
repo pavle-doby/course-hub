@@ -18,6 +18,9 @@ course-hub/                       # pnpm + Turborepo monorepo
 │   ├── web/                      # Next.js 16 web app (React 19, App Router)
 │   │   └── app/                  #   Pages and layouts
 │   │
+│   ├── native/                   # Expo SDK 57 iOS/Android app (in progress, Expo Router)
+│   │   └── src/app/              #   Screens and layouts
+│   │
 │
 ├── packages/                     # Shared libraries (workspace:*)
 │   │
@@ -38,8 +41,9 @@ course-hub/                       # pnpm + Turborepo monorepo
 │   ├── ui-web/                   # Web component library (shadcn/Radix, Tailwind)
 │   │   └── src/components/       #   Shared React components for Next.js apps
 │   │
-│   ├── ui-theme/                 # Design tokens: Tailwind config, colors, animations
-│   │   └── index.css             #   Web CSS entry
+│   ├── ui-theme/                 # Design tokens (colors, radius) shared by web and native
+│   │   ├── src/web/index.css     #   Web CSS entry (Tailwind 4 variables)
+│   │   └── src/native/           #   THEME tokens, NAV_THEME, NativeWind Tailwind preset
 │   │
 │   ├── i18n/                     # i18next setup for web and SSR
 │   │   ├── src/locales/sr/       #   Serbian translations (default locale)
@@ -51,7 +55,7 @@ course-hub/                       # pnpm + Turborepo monorepo
 │   ├── eslint-config/            # Shared ESLint rules (base, next, react-internal)
 │   ├── typescript-config/        # Shared tsconfig presets (base, nextjs, react-library)
 │   ├── scripts/                  # DB seed/clean scripts (run via pnpm db:*)
-│   └── ui-native/                # Retained React Native primitives (no native app)
+│   └── ui-native/                # React Native components for apps/native (NativeWind v4)
 ```
 
 ### API module organization
@@ -88,15 +92,15 @@ Each feature in `apps/api/src/modules/` follows the same layout:
 
 ## Key Decisions
 
-| Decision         | Choice                                | Why                                                               |
-| ---------------- | ------------------------------------- | ----------------------------------------------------------------- |
-| API style        | REST + OpenAPI                        | Enables Orval code-gen; type-safe across all clients              |
-| Auth             | Supabase Auth (JWT)                   | API client supplies and refreshes bearer tokens                   |
-| DB               | Drizzle ORM + PostgreSQL via Supabase | Type-safe SQL-first; schema-to-Zod via drizzle-zod                |
-| Schema ownership | `db-schema` → `contract`              | Single source of truth; prevents drift between DB and validation  |
-| API client       | Orval (code-gen)                      | `src/generated/` is always in sync with `openapi.json`            |
-| Media            | Cloudflare Stream + R2                | Video processing and object storage for course media              |
-| Styling          | Tailwind 4                            | Shared web tokens and components via `ui-theme` and `ui-web`      |
-| i18n             | i18next                               | Serbian default and English secondary                             |
-| Build            | Turborepo                             | Remote caching, task graph, watch mode across all packages        |
-| AI tools         | Typed tools per feature module + MCP  | One tool layer shared by MCP (`/apix/v1/mcp`) and the course chat |
+| Decision         | Choice                                                | Why                                                                |
+| ---------------- | ----------------------------------------------------- | ------------------------------------------------------------------ |
+| API style        | REST + OpenAPI                                        | Enables Orval code-gen; type-safe across all clients               |
+| Auth             | Supabase Auth (JWT)                                   | API client supplies and refreshes bearer tokens                    |
+| DB               | Drizzle ORM + PostgreSQL via Supabase                 | Type-safe SQL-first; schema-to-Zod via drizzle-zod                 |
+| Schema ownership | `db-schema` → `contract`                              | Single source of truth; prevents drift between DB and validation   |
+| API client       | Orval (code-gen)                                      | `src/generated/` is always in sync with `openapi.json`             |
+| Media            | Cloudflare Stream + R2                                | Video processing and object storage for course media               |
+| Styling          | Tailwind 4 (web), NativeWind v4 / Tailwind 3 (native) | Tokens shared via `ui-theme`; components in `ui-web` / `ui-native` |
+| i18n             | i18next                                               | Serbian default and English secondary                              |
+| Build            | Turborepo                                             | Remote caching, task graph, watch mode across all packages         |
+| AI tools         | Typed tools per feature module + MCP                  | One tool layer shared by MCP (`/apix/v1/mcp`) and the course chat  |

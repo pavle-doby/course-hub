@@ -5,6 +5,7 @@
 ## Stack at a Glance
 
 - **Web**: Next.js 16 (App Router), React 19, Tailwind 4, shadcn/Radix — `apps/web/`
+- **Native** (in progress): Expo SDK 57, Expo Router, NativeWind v4, react-native-reusables (`@repo/ui-native`) — `apps/native/`
 - **API**: Express 5, Node >=22, OpenAPI 3.1 — `apps/api/`
 - **DB**: PostgreSQL (Supabase), Drizzle ORM 0.44 — `packages/db-schema/` → `packages/db/`
 - **Shared types**: `@repo/contract` (Zod + drizzle-zod) — `packages/contract/`
@@ -38,8 +39,8 @@ pnpm build && pnpm lint && pnpm typecheck
 
 ## Non-Obvious Conventions
 
-**The web PWA is the only client.**
-Use the standard `/v1/auth/*` token endpoints for every supported platform.
+**Clients are the web PWA and the Expo app (`apps/native`, in progress).**
+Both use the standard `/v1/auth/*` bearer-token endpoints; don't add platform-specific auth routes.
 
 **OpenAPI is registered in code, not YAML.**  
 Add `registry.registerPath()` calls in `apps/api/src/modules/<feature>/openapi/<feature>Openapi.ts`, then import it side-effect style in `apps/api/src/openapi/spec.ts`.

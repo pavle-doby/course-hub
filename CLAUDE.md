@@ -11,6 +11,7 @@ AGENTS.md (imported above) and the scoped `AGENTS.md` files in `apps/` and `pack
 | Package map, data flow, key decisions | [ARCHITECTURE.md](ARCHITECTURE.md)                                                                |
 | What's done vs. stubbed/in progress   | [FEATURES.md](FEATURES.md) (keep it updated when a feature changes)                               |
 | Specs for planned/ongoing work        | [spec/task-init.md](spec/task-init.md) indexes `spec/[{done,in-progress,todo}]-task-*` by feature |
+| Native app plan and phases            | [apps/native/spec/n-task-0.md](apps/native/spec/n-task-0.md)                                      |
 | Deployment (Railway, two services)    | [README.deploy.md](README.deploy.md)                                                              |
 | Intentional shortcuts                 | `// ponytail:` comments mark deliberate simplifications; read before "fixing"                     |
 
@@ -59,5 +60,5 @@ Client-side helpers used by the web app:
 ## Gotchas
 
 - `drizzle-zod@0.8.3` is patched (`patches/`, declared in `pnpm-workspace.yaml`). Account for the patch if you bump drizzle-zod.
-- `@repo/ui-native` and the root `expo`/`react-native` deps are retained but unused; there is no native app. Don't build new features on them.
+- `apps/native` (Expo SDK 57, NativeWind v4 / Tailwind 3) is in progress on the way to web parity; the plan is `apps/native/spec/n-task-0.md`. It uses `@repo/ui-native` for components and `@repo/ui-theme/tailwind` for tokens. Web stays on Tailwind 4, so the two apps never share a Tailwind config. Install Expo/React Native packages with `npx expo install` from `apps/native/`, not `pnpm add`.
 - `pnpm` 11 and Node >=22 are required (`packageManager` / `engines`).

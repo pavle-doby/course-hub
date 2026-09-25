@@ -8,9 +8,11 @@
     "scheme": "native",
     "userInterfaceStyle": "automatic",
     "ios": {
+      "bundleIdentifier": "com.coursehub.app",
       "icon": "./assets/expo.icon"
     },
     "android": {
+      "package": "com.coursehub.app",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -32,7 +34,10 @@
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 76
         }
-      ]
+      ],
+      "expo-secure-store",
+      "expo-localization",
+      "expo-video"
     ],
     "experiments": {
       "typedRoutes": true,

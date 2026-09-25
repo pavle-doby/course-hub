@@ -1,56 +1,38 @@
-# Welcome to your Expo app 👋
+# Course Hub — Native app
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+iOS and Android client for Course Hub (Expo SDK 57, Expo Router, React Native 0.86). **In progress**: the goal is feature parity with `apps/web` over the same API. The plan and phases are in [spec/n-task-0.md](spec/n-task-0.md), and the install checklist is in [spec/n-task-0.1.md](spec/n-task-0.1.md).
 
-## Get started
+The stock Expo template README is kept in [README.expo.md](README.expo.md).
 
-1. Install dependencies
-
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Run
 
 ```bash
-npm run reset-project
+pnpm install              # from the repo root
+cd apps/native
+npx expo start            # dev server; open in a development build (not Expo Go)
+npx expo run:ios          # or run:android — build the dev client after native deps change
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Structure
 
-### Other setup steps
+- `src/app/`: Expo Router screens and layouts (routes only)
+- `src/components`, `src/hooks`, `src/constants`: app code outside routes
+- `src/global.css`: Tailwind directives and font variables
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+## Styling
 
-## Learn more
+NativeWind v4 on Tailwind 3 (web uses Tailwind 4, so the configs are separate).
 
-To learn more about developing your project with Expo, look at the following resources:
+- Components come from `@repo/ui-native` (react-native-reusables).
+- Theme tokens come from `@repo/ui-theme/tailwind` (`nativeTailwindPreset` in `tailwind.config.js`). Change token values in `@repo/ui-theme`, not here.
+- `metro.config.js` makes every workspace package share this app's single copy of `react`, `react-native` and `nativewind`.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Shared packages
 
-## Join the community
+`@repo/api-client` (generated React Query hooks), `@repo/contract`, `@repo/shared`, and `@repo/i18n` are the same packages the web app uses. Don't write native-only API calls.
 
-Join our community of developers creating universal apps.
+## Conventions
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- Install Expo / React Native packages with `npx expo install <pkg>`, not `pnpm add`.
+- Check with `npx tsc --noEmit` and `npx expo lint`.
+- Agent rules: [AGENTS.md](AGENTS.md).

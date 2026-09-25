@@ -17,6 +17,11 @@
       "import": "./src/native/index.ts",
       "default": "./src/native/index.ts"
     },
+    "./tailwind": {
+      "import": "./src/native/tailwindPreset.ts",
+      "require": "./src/native/tailwindPreset.ts",
+      "default": "./src/native/tailwindPreset.ts"
+    },
     "./web": "./src/web/index.css"
   },
   "peerDependencies": {

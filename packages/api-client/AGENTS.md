@@ -1,6 +1,6 @@
 # API Client Package Conventions
 
-`@repo/api-client` exposes the auto-generated React Query hooks (from Orval) plus a hand-written Axios instance that handles token authentication for the web PWA.
+`@repo/api-client` exposes the auto-generated React Query hooks (from Orval) plus a hand-written Axios instance that handles token authentication. The web PWA and the native app both use it; each supplies its own token storage via `configureTokenProviders()`.
 
 ## Generated vs hand-written — never touch generated files
 
