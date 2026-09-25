@@ -1,8 +1,8 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { z } from "zod";
 import { ApiError, ErrorCode, ErrorCodeEnrollment } from "@repo/contract";
 import { logger } from "api/logger";
 import { courseTools, type CourseToolContext } from "../tools";
+import { registerCoursePrompts } from "./mcpPrompts";
 
 /**
  * Maps a tool error to a plain English message for the agent (agents read English, so it's
@@ -32,36 +32,7 @@ function toErrorMessage(error: unknown): string {
 }
 
 /**
- * Builds the `ch_generate_course` prompt: the expected course tree shape and tone, ending
- * with an instruction to call `ch_create_course_draft`.
- *
- * @param args - Prompt arguments: course `topic`, optional `audience` and `lessonsPerTopic`
- * @returns Prompt text sent to the agent as a user message
- */
-function generateCoursePrompt({
-  topic,
-  audience,
-  lessonsPerTopic,
-}: {
-  topic: string;
-  audience?: string;
-  lessonsPerTopic?: string;
-}): string {
-  return [
-    `Design a course about: ${topic}.`,
-    `Audience: ${audience || "motivated beginners"}.`,
-    "Structure it as a course → topics → lessons tree:",
-    "- Course: a clear name (max 255 characters) and a 2-4 sentence description of what learners will be able to do.",
-    `- 4-8 topics that build on each other, each with a short description and ${lessonsPerTopic || "3-5"} lessons.`,
-    "- Each lesson: a concrete name and a description of 2-5 sentences covering what it teaches.",
-    "Tone: clear, practical and encouraging. Avoid filler and marketing language.",
-    "Before creating it, you may call ch_list_my_courses to avoid duplicating an existing course.",
-    "When the outline is ready, call ch_create_course_draft with the whole tree in one call.",
-  ].join("\n");
-}
-
-/**
- * Creates an MCP server with every course tool and the `ch_generate_course` prompt.
+ * Creates an MCP server with every course tool and the course prompts (`mcpPrompts.ts`).
  * Stateless: one server per request, with the tools bound to the token owner.
  *
  * @param ctx - Token owner the tools act as
@@ -85,20 +56,7 @@ export function createMcpServer(ctx: CourseToolContext): McpServer {
     );
   }
 
-  server.registerPrompt(
-    "ch_generate_course",
-    {
-      description: "Generate a complete draft course and save it with ch_create_course_draft.",
-      argsSchema: {
-        topic: z.string().describe("What the course teaches"),
-        audience: z.string().optional().describe("Who the course is for"),
-        lessonsPerTopic: z.string().optional().describe("Lessons per topic, e.g. 4"),
-      },
-    },
-    (args) => ({
-      messages: [{ role: "user", content: { type: "text", text: generateCoursePrompt(args) } }],
-    })
-  );
+  registerCoursePrompts(server);
 
   return server;
 }
