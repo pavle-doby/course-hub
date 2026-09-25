@@ -20,6 +20,7 @@ import { usePathname, useRouter } from "next/navigation";
 import type { LucideIcon } from "lucide-react";
 import {
   AppleIcon,
+  BellIcon,
   ChevronRightIcon,
   CirclePlusIcon,
   CompassIcon,
@@ -36,6 +37,7 @@ import {
 import { useAuthSignOut } from "@repo/api-client";
 import { useT } from "@repo/i18n/client";
 import { clearAuthTokens } from "@/utils/token-storage";
+import { useUnreadNotificationsCount } from "@/hooks/use-unread-notifications";
 
 type NavKey =
   | "nav.create"
@@ -45,6 +47,7 @@ type NavKey =
   | "nav.learnExplore"
   | "nav.learnEnrolled"
   | "nav.students"
+  | "nav.notifications"
   | "nav.profile"
   | "nav.aiConnect"
   | "nav.settings"
@@ -76,6 +79,7 @@ const NAV_ITEMS: NavItem[] = [
     ],
   },
   { label: "nav.students", icon: UsersIcon, href: "/students" },
+  { label: "nav.notifications", icon: BellIcon, href: "/notifications" },
   { label: "nav.profile", icon: UserIcon, href: "/profile" },
 ];
 
@@ -90,6 +94,7 @@ export function SideNavMenu() {
   const pathname = usePathname();
   const router = useRouter();
   const { mutate: signOut } = useAuthSignOut();
+  const unreadCount = useUnreadNotificationsCount();
 
   function handleSignOut() {
     signOut(undefined, {
@@ -153,6 +158,9 @@ export function SideNavMenu() {
                       <span>{t(item.label)}</span>
                     </Link>
                   </SidebarMenuButton>
+                  {item.href === "/notifications" && unreadCount > 0 && (
+                    <span className="pointer-events-none absolute top-3 left-5 size-2 rounded-full bg-destructive ring-2 ring-sidebar" />
+                  )}
                 </SidebarMenuItem>
               )
             )}

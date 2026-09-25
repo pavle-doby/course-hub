@@ -258,14 +258,32 @@ export const common = {
     osReminderDescription:
       "Make sure notifications are enabled on {{currentOS}} for {{currentBrowserName}}, so they show up, when you get them.",
     osReminderConfirm: "Got it",
+    status: {
+      disabled: "Turn on notifications to get updates about your courses on this device.",
+      enabledHistory: "Your notifications are enabled and will be visible here.",
+      blocked:
+        "Push notifications are blocked in this browser. You'll still see your notifications in the app.",
+      unsupported:
+        "This browser doesn't support push notifications. You'll still see your notifications in the app.",
+    },
+    history: {
+      title: "Notifications",
+      empty: "No notifications yet",
+      new: "New",
+      unreadCount: "{{count}} unread",
+      pagination: {
+        previous: "Previous",
+        next: "Next",
+      },
+    },
     push: {
       courseEnrolled: {
-        title: "New course enrollment",
+        title: "New course enrollment 🎉",
         body: "{{email}} enrolled in {{courseName}}.",
       },
       courseCompleted: {
-        title: "Course completed! 🎉",
-        body: "{{email}} completed {{courseName}} ✅",
+        title: "Course completed ✅",
+        body: "{{email}} completed {{courseName}}.",
       },
       privateCourseAttempt: {
         title: "Private course enrollment attempt",

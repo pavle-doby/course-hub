@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { notificationCategoryEnum } from "@repo/db-schema";
+import { createSelectSchema } from "drizzle-zod";
+import { notificationCategoryEnum, notifications } from "@repo/db-schema";
 
 const PushSubscriptionSchema = z.object({
   endpoint: z.url(),
@@ -9,14 +10,26 @@ const PushSubscriptionSchema = z.object({
   }),
 });
 
+const NotificationCategorySchema = z.enum(notificationCategoryEnum.enumValues);
+
+// Omitting `courseId` targets all courses (Settings). `subscription` is omitted when this device
+// can't receive push; the opt-in still records in-app notification history.
 export const SubscribeNotificationsBodySchema = z.object({
-  courseId: z.uuid(),
-  category: z.enum(notificationCategoryEnum.enumValues),
-  subscription: PushSubscriptionSchema,
+  courseId: z.uuid().optional(),
+  category: NotificationCategorySchema,
+  subscription: PushSubscriptionSchema.optional(),
 });
 
+// Omitting `courseId` turns the category off everywhere, including per-course opt-ins.
 export const UnsubscribeNotificationsBodySchema = z.object({
-  courseId: z.uuid(),
-  category: z.enum(notificationCategoryEnum.enumValues),
-  subscription: PushSubscriptionSchema.pick({ endpoint: true }),
+  courseId: z.uuid().optional(),
+  category: NotificationCategorySchema,
+  subscription: PushSubscriptionSchema.pick({ endpoint: true }).optional(),
 });
+
+// Categories the user enabled for all courses.
+export const NotificationPreferencesSchema = z.object({
+  categories: z.array(NotificationCategorySchema),
+});
+
+export const NotificationItemSchema = createSelectSchema(notifications).omit({ userId: true });

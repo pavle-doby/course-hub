@@ -10,7 +10,7 @@ Every spec in `spec/`, grouped by feature. The file name prefix is the task's st
 | Documents (Cloudflare R2)              | [`[done]-task-4/plan.md`]([done]-task-4/plan.md)                          | done  |                                                                  |
 | Course thumbnails                      | [`[done]-task-5.md`]([done]-task-5.md)                                    | done  |                                                                  |
 | Push notifications                     | [`[done]-task-6.1.md`]([done]-task-6.1.md)                                | done  |                                                                  |
-| Notification history                   | [`[todo]-task-6.2.md`]([todo]-task-6.2.md)                                | todo  | `/notifications` still "Coming soon..."                          |
+| Notification history                   | [`[done]-task-6.2.md`]([done]-task-6.2.md)                                | done  |                                                                  |
 | Learner progress tracking              | [`[done]-task-7.md`]([done]-task-7.md)                                    | done  |                                                                  |
 | AI foundation (shared course tools)    | [`[done]-task-8.0.md`]([done]-task-8.0.md)                                | done  | Manual 403 check pending                                         |
 | MCP server for coding agents           | [`[done]-task-8.1.md`]([done]-task-8.1.md)                                | done  | Most manual checks pending                                       |

@@ -257,14 +257,33 @@ export const common = {
     osReminderDescription:
       "Proverite da su obaveštenja omogućena na {{currentOS}} za {{currentBrowserName}}, kako bi se prikazivala kada ih dobijete.",
     osReminderConfirm: "Razumem",
+    status: {
+      disabled:
+        "Uključite obaveštenja da biste na ovom uređaju dobijali novosti o svojim kursevima.",
+      enabledHistory: "Vaša obaveštenja su uključena i biće prikazana ovde.",
+      blocked:
+        "Push obaveštenja su blokirana u ovom pregledaču. Obaveštenja ćete i dalje videti u aplikaciji.",
+      unsupported:
+        "Ovaj pregledač ne podržava push obaveštenja. Obaveštenja ćete i dalje videti u aplikaciji.",
+    },
+    history: {
+      title: "Obaveštenja",
+      empty: "Još nema obaveštenja",
+      new: "Novo",
+      unreadCount: "Nepročitano: {{count}}",
+      pagination: {
+        previous: "Prethodna",
+        next: "Sledeća",
+      },
+    },
     push: {
       courseEnrolled: {
-        title: "Novi upis na kurs",
+        title: "Novi upis na kurs 🎉",
         body: "{{email}} se upisao/la na kurs {{courseName}}.",
       },
       courseCompleted: {
-        title: "Kurs je završen! 🎉",
-        body: "{{email}} je završio/la kurs {{courseName}} ✅",
+        title: "Kurs je završen ✅",
+        body: "{{email}} je završio/la kurs {{courseName}}.",
       },
       privateCourseAttempt: {
         title: "Pokusaj upisa na privatni kurs",

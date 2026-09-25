@@ -15,6 +15,29 @@ export const settings = {
   cancel: "Cancel",
   save: "Save",
   updated: "Settings updated",
+  notifications: {
+    title: "Notifications",
+    allowAll: "Allow all",
+    description: "Choose which notifications you get for all of your courses.",
+    categories: {
+      course_enrolled: {
+        title: "Learner activity",
+        description: "When learners enroll in or complete your courses.",
+      },
+      private_course_attempt: {
+        title: "Private course requests",
+        description: "When someone tries to enroll in one of your private courses.",
+      },
+      course_updated: {
+        title: "Course updates",
+        description: "When a course you're enrolled in is updated.",
+      },
+      creator_new_course: {
+        title: "New courses",
+        description: "When a creator you learn from publishes a new course.",
+      },
+    },
+  },
   aiAccess: {
     oauth: {
       title: "Claude connector",

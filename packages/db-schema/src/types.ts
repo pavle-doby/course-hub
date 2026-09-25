@@ -13,6 +13,7 @@ import type {
   documents,
   pushSubscriptions,
   notificationPreferences,
+  notifications,
   apiTokens,
   courseReviews,
   quizzes,
@@ -32,6 +33,7 @@ export type LessonProgressEntity = InferSelectModel<typeof lessonProgress>;
 export type DocumentEntity = InferSelectModel<typeof documents>;
 export type PushSubscriptionEntity = InferSelectModel<typeof pushSubscriptions>;
 export type NotificationPreferenceEntity = InferSelectModel<typeof notificationPreferences>;
+export type NotificationEntity = InferSelectModel<typeof notifications>;
 export type ApiTokenEntity = InferSelectModel<typeof apiTokens>;
 export type CourseReviewEntity = InferSelectModel<typeof courseReviews>;
 export type QuizEntity = InferSelectModel<typeof quizzes>;

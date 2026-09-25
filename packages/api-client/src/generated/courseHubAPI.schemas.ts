@@ -1218,6 +1218,54 @@ export interface MyQuizResponse {
   response: MyQuizResponseResponse;
 }
 
+export type NotificationItemCategory =
+  (typeof NotificationItemCategory)[keyof typeof NotificationItemCategory];
+
+export const NotificationItemCategory = {
+  course_enrolled: "course_enrolled",
+  private_course_attempt: "private_course_attempt",
+  course_updated: "course_updated",
+  creator_new_course: "creator_new_course",
+} as const;
+
+export interface NotificationItem {
+  id: string;
+  category: NotificationItemCategory;
+  courseId: string;
+  title: string;
+  body: string;
+  url: string;
+  /** @nullable */
+  readAt: string | null;
+  createdAt: string;
+}
+
+export type NotificationsPagination = {
+  total: number;
+  page: number;
+  limit: number;
+};
+
+export interface Notifications {
+  data: NotificationItem[];
+  pagination: NotificationsPagination;
+  unreadCount: number;
+}
+
+export type NotificationPreferencesCategoriesItem =
+  (typeof NotificationPreferencesCategoriesItem)[keyof typeof NotificationPreferencesCategoriesItem];
+
+export const NotificationPreferencesCategoriesItem = {
+  course_enrolled: "course_enrolled",
+  private_course_attempt: "private_course_attempt",
+  course_updated: "course_updated",
+  creator_new_course: "creator_new_course",
+} as const;
+
+export interface NotificationPreferences {
+  categories: NotificationPreferencesCategoriesItem[];
+}
+
 export type AuthSignUpBodyLanguage =
   (typeof AuthSignUpBodyLanguage)[keyof typeof AuthSignUpBodyLanguage];
 
@@ -3356,9 +3404,9 @@ export type SubscribeNotificationsBodySubscription = {
 };
 
 export type SubscribeNotificationsBody = {
-  courseId: string;
+  courseId?: string;
   category: SubscribeNotificationsBodyCategory;
-  subscription: SubscribeNotificationsBodySubscription;
+  subscription?: SubscribeNotificationsBodySubscription;
 };
 
 export type SubscribeNotificationsDefaultCode =
@@ -3401,9 +3449,9 @@ export type UnsubscribeNotificationsBodySubscription = {
 };
 
 export type UnsubscribeNotificationsBody = {
-  courseId: string;
+  courseId?: string;
   category: UnsubscribeNotificationsBodyCategory;
-  subscription: UnsubscribeNotificationsBodySubscription;
+  subscription?: UnsubscribeNotificationsBodySubscription;
 };
 
 export type UnsubscribeNotificationsDefaultCode =
@@ -3429,6 +3477,94 @@ export type UnsubscribeNotificationsDefault = {
   code: UnsubscribeNotificationsDefaultCode;
   error?: unknown;
   details?: UnsubscribeNotificationsDefaultDetails;
+};
+
+export type GetNotificationsParams = {
+  /**
+   * @minimum 0
+   * @nullable
+   */
+  page?: number | null;
+  /**
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
+};
+
+export type GetNotificationsDefaultCode =
+  (typeof GetNotificationsDefaultCode)[keyof typeof GetNotificationsDefaultCode];
+
+export const GetNotificationsDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type GetNotificationsDefaultDetails = { [key: string]: unknown };
+
+export type GetNotificationsDefault = {
+  status: number;
+  code: GetNotificationsDefaultCode;
+  error?: unknown;
+  details?: GetNotificationsDefaultDetails;
+};
+
+export type MarkNotificationsReadDefaultCode =
+  (typeof MarkNotificationsReadDefaultCode)[keyof typeof MarkNotificationsReadDefaultCode];
+
+export const MarkNotificationsReadDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type MarkNotificationsReadDefaultDetails = { [key: string]: unknown };
+
+export type MarkNotificationsReadDefault = {
+  status: number;
+  code: MarkNotificationsReadDefaultCode;
+  error?: unknown;
+  details?: MarkNotificationsReadDefaultDetails;
+};
+
+export type GetNotificationPreferencesDefaultCode =
+  (typeof GetNotificationPreferencesDefaultCode)[keyof typeof GetNotificationPreferencesDefaultCode];
+
+export const GetNotificationPreferencesDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type GetNotificationPreferencesDefaultDetails = { [key: string]: unknown };
+
+export type GetNotificationPreferencesDefault = {
+  status: number;
+  code: GetNotificationPreferencesDefaultCode;
+  error?: unknown;
+  details?: GetNotificationPreferencesDefaultDetails;
 };
 
 export type GetCourseProgressPathParameters = {

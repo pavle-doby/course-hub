@@ -92,6 +92,20 @@
       "when": 1790334092729,
       "tag": "0012_lesson_video_watched",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1790343957644,
+      "tag": "0013_notifications",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1790345648993,
+      "tag": "0014_notification_preferences_all_courses",
+      "breakpoints": true
     }
   ]
 }

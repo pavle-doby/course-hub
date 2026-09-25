@@ -12,6 +12,7 @@ import { lessonProgress } from "./lesson-progress";
 import { documents } from "./documents";
 import { pushSubscriptions } from "./push-subscriptions";
 import { notificationPreferences } from "./notification-preferences";
+import { notifications } from "./notifications";
 import { apiTokens } from "./api-tokens";
 import { courseReviews } from "./course-reviews";
 import { quizzes } from "./quizzes";
@@ -26,6 +27,7 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   documents: many(documents),
   pushSubscriptions: many(pushSubscriptions),
   notificationPreferences: many(notificationPreferences),
+  notifications: many(notifications),
   apiTokens: many(apiTokens),
   reviews: many(courseReviews),
   quizResponses: many(quizResponses),
@@ -44,6 +46,7 @@ export const coursesRelations = relations(courses, ({ one, many }) => ({
   progress: many(courseProgress),
   documents: many(documents),
   notificationPreferences: many(notificationPreferences),
+  notifications: many(notifications),
   reviews: many(courseReviews),
   quiz: one(quizzes),
 }));
@@ -59,6 +62,11 @@ export const apiTokensRelations = relations(apiTokens, ({ one }) => ({
 export const notificationPreferencesRelations = relations(notificationPreferences, ({ one }) => ({
   user: one(users, { fields: [notificationPreferences.userId], references: [users.id] }),
   course: one(courses, { fields: [notificationPreferences.courseId], references: [courses.id] }),
+}));
+
+export const notificationsRelations = relations(notifications, ({ one }) => ({
+  user: one(users, { fields: [notifications.userId], references: [users.id] }),
+  course: one(courses, { fields: [notifications.courseId], references: [courses.id] }),
 }));
 
 export const courseEnrollmentsRelations = relations(courseEnrollments, ({ one }) => ({

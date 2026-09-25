@@ -1,0 +1,3 @@
+ALTER TABLE "notification_preferences" DROP CONSTRAINT "notification_preferences_user_id_course_id_category_unique";--> statement-breakpoint
+ALTER TABLE "notification_preferences" ALTER COLUMN "course_id" DROP NOT NULL;--> statement-breakpoint
+ALTER TABLE "notification_preferences" ADD CONSTRAINT "notification_preferences_user_id_course_id_category_unique" UNIQUE NULLS NOT DISTINCT("user_id","course_id","category");

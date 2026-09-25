@@ -10,11 +10,10 @@ export const notificationPreferences = pgTable(
     userId: uuid("user_id")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
-    courseId: uuid("course_id")
-      .notNull()
-      .references(() => courses.id, { onDelete: "cascade" }),
+    // null = all courses the user has the matching relationship with (set from Settings)
+    courseId: uuid("course_id").references(() => courses.id, { onDelete: "cascade" }),
     category: notificationCategoryEnum("category").notNull(),
     createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   },
-  (table) => [unique().on(table.userId, table.courseId, table.category)]
+  (table) => [unique().on(table.userId, table.courseId, table.category).nullsNotDistinct()]
 );

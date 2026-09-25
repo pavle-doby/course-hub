@@ -1,16 +1,27 @@
 import webpush from "web-push";
 import type { CourseEntity } from "@repo/db-schema";
-import type { SubscribeNotificationsReq, UnsubscribeNotificationsReq } from "@repo/contract";
+import type {
+  GetNotificationPreferencesRes,
+  GetNotificationsReq,
+  GetNotificationsRes,
+  SubscribeNotificationsReq,
+  UnsubscribeNotificationsReq,
+} from "@repo/contract";
 import { resources } from "@repo/i18n/resources";
 import { env } from "api/env";
 import { usersRepository } from "api/modules/users/repository/usersRepository";
-import { notificationsRepository } from "../repository/notificationsRepository";
+import type { PaginationReqExtended } from "api/middleware/pagination";
+import {
+  notificationsRepository,
+  type NotificationRecipient,
+} from "../repository/notificationsRepository";
 
 webpush.setVapidDetails(env.VAPID_SUBJECT, env.VAPID_PUBLIC_KEY, env.VAPID_PRIVATE_KEY);
 
 type PushPayload = { title: string; body: string; url: string };
 type NotificationCourse = Pick<CourseEntity, "id" | "creatorId" | "name" | "publicId">;
-type PushRecipient = { endpoint: string; p256dh: string; auth: string; language: string };
+type NotificationCategory = SubscribeNotificationsReq["category"];
+type PushRecipient = NotificationRecipient & { endpoint: string; p256dh: string; auth: string };
 type PushNotification = keyof (typeof resources)["sr"]["common"]["notifications"]["push"];
 
 function getPayload(
@@ -28,12 +39,34 @@ function getPayload(
   };
 }
 
-async function send(
-  recipients: PushRecipient[],
-  payload: (language: string) => PushPayload
-): Promise<void> {
+// Persists one history row per recipient user, then pushes to each of their live subscriptions.
+async function send({
+  recipients,
+  category,
+  course,
+  payload,
+}: {
+  recipients: NotificationRecipient[];
+  category: NotificationCategory;
+  course: NotificationCourse;
+  payload: (language: string) => PushPayload;
+}): Promise<void> {
+  const users = new Map(recipients.map((recipient) => [recipient.userId, recipient.language]));
+  await notificationsRepository.insertNotifications(
+    [...users].map(([userId, language]) => ({
+      userId,
+      category,
+      courseId: course.id,
+      ...payload(language),
+    }))
+  );
+
+  const subscriptions = recipients.filter(
+    (recipient): recipient is PushRecipient =>
+      !!recipient.endpoint && !!recipient.p256dh && !!recipient.auth
+  );
   const results = await Promise.allSettled(
-    recipients.map((subscription) =>
+    subscriptions.map((subscription) =>
       webpush.sendNotification(
         {
           endpoint: subscription.endpoint,
@@ -49,7 +82,7 @@ async function send(
         result.status === "rejected" &&
         (result.reason.statusCode === 404 || result.reason.statusCode === 410)
       ) {
-        await notificationsRepository.deleteSubscriptionByEndpoint(recipients[index]!.endpoint);
+        await notificationsRepository.deleteSubscriptionByEndpoint(subscriptions[index]!.endpoint);
       }
     })
   );
@@ -61,7 +94,9 @@ export const notificationsService = {
     if (!user) {
       return;
     }
-    await notificationsRepository.upsertSubscription(user.id, dto.subscription);
+    if (dto.subscription) {
+      await notificationsRepository.upsertSubscription(user.id, dto.subscription);
+    }
     await notificationsRepository.createPreference(user.id, dto);
   },
 
@@ -71,44 +106,73 @@ export const notificationsService = {
       return;
     }
     await notificationsRepository.deletePreference(user.id, dto);
-    if (!(await notificationsRepository.hasPreferences(user.id))) {
+    if (dto.subscription && !(await notificationsRepository.hasPreferences(user.id))) {
       await notificationsRepository.deleteSubscription(user.id, dto.subscription.endpoint);
     }
   },
 
+  getPreferences: async (authUserId: string): Promise<GetNotificationPreferencesRes> => {
+    const user = await usersRepository.getUserByAuthUserId(authUserId);
+    if (!user) {
+      return { categories: [] };
+    }
+    return await notificationsRepository.getAllCoursesCategories(user.id);
+  },
+
+  getNotifications: async (
+    authUserId: string,
+    dto: GetNotificationsReq<PaginationReqExtended>
+  ): Promise<GetNotificationsRes> => {
+    const user = await usersRepository.getUserByAuthUserId(authUserId);
+    if (!user) {
+      return { data: [], pagination: { total: 0, page: dto.page, limit: 0 }, unreadCount: 0 };
+    }
+    return await notificationsRepository.getNotifications(user.id, dto);
+  },
+
+  markAllRead: async (authUserId: string): Promise<void> => {
+    const user = await usersRepository.getUserByAuthUserId(authUserId);
+    if (!user) {
+      return;
+    }
+    await notificationsRepository.markAllRead(user.id);
+  },
+
   notifyCourseEnrolled: async (course: NotificationCourse, email: string): Promise<void> => {
-    await send(
-      await notificationsRepository.getCourseRecipients(course.id, "course_enrolled"),
-      (language) => getPayload(language, "courseEnrolled", course, email)
-    );
+    const category = "course_enrolled";
+    const recipients = await notificationsRepository.getCourseRecipients(course, category);
+    const payload = (language: string) => getPayload(language, "courseEnrolled", course, email);
+    await send({ recipients, category, course, payload });
   },
 
   // ponytail: completions reuse the creator's `course_enrolled` opt-in (learner activity on the
   // course) instead of a new category, which would need a DB enum migration.
   notifyCourseCompleted: async (course: NotificationCourse, email: string): Promise<void> => {
-    await send(
-      await notificationsRepository.getCourseRecipients(course.id, "course_enrolled"),
-      (language) => getPayload(language, "courseCompleted", course, email)
-    );
+    const category = "course_enrolled";
+    const recipients = await notificationsRepository.getCourseRecipients(course, category);
+    const payload = (language: string) => getPayload(language, "courseCompleted", course, email);
+    await send({ recipients, category, course, payload });
   },
 
   notifyPrivateCourseAttempt: async (course: NotificationCourse, email: string): Promise<void> => {
-    await send(
-      await notificationsRepository.getCourseRecipients(course.id, "private_course_attempt"),
-      (language) => getPayload(language, "privateCourseAttempt", course, email)
-    );
+    const category = "private_course_attempt";
+    const recipients = await notificationsRepository.getCourseRecipients(course, category);
+    const payload = (language: string) =>
+      getPayload(language, "privateCourseAttempt", course, email);
+    await send({ recipients, category, course, payload });
   },
 
   notifyCourseUpdated: async (course: NotificationCourse): Promise<void> => {
-    await send(
-      await notificationsRepository.getCourseRecipients(course.id, "course_updated"),
-      (language) => getPayload(language, "courseUpdated", course)
-    );
+    const category = "course_updated";
+    const recipients = await notificationsRepository.getCourseRecipients(course, category);
+    const payload = (language: string) => getPayload(language, "courseUpdated", course);
+    await send({ recipients, category, course, payload });
   },
 
   notifyCreatorNewCourse: async (course: NotificationCourse): Promise<void> => {
-    await send(await notificationsRepository.getCreatorRecipients(course.creatorId), (language) =>
-      getPayload(language, "creatorNewCourse", course)
-    );
+    const category = "creator_new_course";
+    const recipients = await notificationsRepository.getCreatorRecipients(course.creatorId);
+    const payload = (language: string) => getPayload(language, "creatorNewCourse", course);
+    await send({ recipients, category, course, payload });
   },
 };

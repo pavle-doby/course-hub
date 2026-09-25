@@ -15,6 +15,29 @@ export const settings = {
   cancel: "Otkaži",
   save: "Sačuvaj",
   updated: "Podešavanja su sačuvana",
+  notifications: {
+    title: "Obaveštenja",
+    allowAll: "Dozvoli sve",
+    description: "Izaberite koja obaveštenja dobijate za sve svoje kurseve.",
+    categories: {
+      course_enrolled: {
+        title: "Aktivnost polaznika",
+        description: "Kada se polaznici upišu na vaše kurseve ili ih završe.",
+      },
+      private_course_attempt: {
+        title: "Zahtevi za privatne kurseve",
+        description: "Kada neko pokuša da se upiše na neki od vaših privatnih kurseva.",
+      },
+      course_updated: {
+        title: "Izmene kurseva",
+        description: "Kada se izmeni kurs na koji ste upisani.",
+      },
+      creator_new_course: {
+        title: "Novi kursevi",
+        description: "Kada autor od kog učite objavi nov kurs.",
+      },
+    },
+  },
   aiAccess: {
     oauth: {
       title: "Claude konektor",

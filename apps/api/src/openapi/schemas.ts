@@ -30,6 +30,8 @@ import {
   PublicQuizOrNullSchema as PublicQuizOrNullSchemaBase,
   GeneratedQuizSchema as GeneratedQuizSchemaBase,
   MyQuizResponseSchema as MyQuizResponseSchemaBase,
+  NotificationItemSchema as NotificationItemSchemaBase,
+  NotificationPreferencesSchema as NotificationPreferencesSchemaBase,
 } from "@repo/contract";
 
 export const UserSchema = registry.register("User", UserSchemaBase);
@@ -179,3 +181,22 @@ export const PublicQuizOrNullSchema = registry.register(
 );
 export const GeneratedQuizSchema = registry.register("GeneratedQuiz", GeneratedQuizSchemaBase);
 export const MyQuizResponseSchema = registry.register("MyQuizResponse", MyQuizResponseSchemaBase);
+
+export const NotificationItemSchema = registry.register(
+  "NotificationItem",
+  NotificationItemSchemaBase
+);
+
+export const GetNotificationsResSchema = registry.register(
+  "Notifications",
+  z.object({
+    data: z.array(NotificationItemSchema),
+    pagination: PaginationSchema,
+    unreadCount: z.number().int(),
+  })
+);
+
+export const NotificationPreferencesSchema = registry.register(
+  "NotificationPreferences",
+  NotificationPreferencesSchemaBase
+);
