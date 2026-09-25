@@ -53,7 +53,7 @@ Both steps remain fire-and-forget after the triggering database write, failures 
 ## Web Application
 
 - Replace the stub `apps/web/app/notifications/page.tsx` with a real list (shadcn `card`/`separator`/`button`, page pagination) using the generated hooks; mark-all-read on open.
-- Add a bell with an unread badge (count query) to `SideNavMenu` (desktop) and `MobileHeader` (mobile). `MobileBottomNav` is skipped because a second bell on the same mobile screen is redundant. `nav.notifications` and the `/notifications` header title already exist.
+- Add a bell with an unread badge (count query) to `SideNavMenu` (desktop) and `MobileBottomNav` (mobile). The mobile header has no bell, to avoid a second bell on the same screen. `nav.notifications` and the `/notifications` header title already exist.
 - Unread rows stay highlighted for the current visit: mark-all-read refreshes only the bell count, not the open list.
 - `notificationclick` in `sw.js` already opens the payload URL; that URL now resolves to the real history/deep-link target.
 - Add i18n keys for the history list UI to `packages/i18n/src/locales/{en,sr}`.
