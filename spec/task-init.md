@@ -17,6 +17,7 @@ Every spec in `spec/`, grouped by feature. The file name prefix is the task's st
 | AI chat in the course editor           | [`[todo]-task-8.2.md`]([todo]-task-8.2.md)                                | todo  |                                                                  |
 | Course reviews                         | [`[done]-task-9.md`]([done]-task-9.md)                                    | done  | User still runs the `course_reviews` migration                   |
 | Quizzes (AI and manual)                | [`[done]-task-10.md`]([done]-task-10.md)                                  | done  | User still runs the `rename_questionnaires_to_quizzes` migration |
-| AI usage tracking + bring-your-own key | [`[todo]-task-10.1.md`]([todo]-task-10.1.md)                              | todo  | Spec written                                                     |
+| Quiz tools for MCP                     | [`[done]-task-10.1.md`]([done]-task-10.1.md)                              | done  | Manual MCP checks pending                                        |
+| AI usage tracking + bring-your-own key | [`[todo]-task-10.2.md`]([todo]-task-10.2.md)                              | todo  | Spec written                                                     |
 
 Not a task: [web-audit/findings.md](web-audit/findings.md) is a research-only audit of `apps/web`.

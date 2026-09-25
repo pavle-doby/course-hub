@@ -21,6 +21,7 @@ import { EntityForm, type EntityFormHandle, type EntityFormValues } from "./enti
 import { CourseThumbnailInput } from "./course-thumbnail-input";
 import { InviteForm } from "./invite-form";
 import { QuizSection } from "./quiz/quiz-section";
+import { CourseWorkingAreaSkeleton } from "./course-working-area-skeleton";
 import {
   useAdjacentSelection,
   type Selection,
@@ -58,6 +59,7 @@ type CourseWorkingAreaProps = {
   activeTab?: "edit" | "invite";
   tree: TopicWithLessons[];
   flatLessons: Lesson[];
+  isLoadingTree?: boolean;
   onSaveCourse: (data: EntityFormValues) => void | Promise<void>;
   onSaveTopic: (id: string, data: EntityFormValues) => void | Promise<void>;
   onSaveLesson: (id: string, data: EntityFormValues) => void | Promise<void>;
@@ -85,6 +87,7 @@ export function CourseWorkingArea({
   activeTab = "edit",
   tree,
   flatLessons,
+  isLoadingTree,
   onSaveCourse,
   onSaveTopic,
   onSaveLesson,
@@ -140,6 +143,11 @@ export function CourseWorkingArea({
     (selection.type === "topic" && !!selectedTopic) ||
     (selection.type === "lesson" && !!selectedLesson);
   const showHeader = isCourseSelected || hasSelectedTopicOrLesson;
+
+  // topic/lesson data comes from the tree queries, which resolve after the course itself
+  if (!isCourseSelected && !hasSelectedTopicOrLesson && isLoadingTree) {
+    return <CourseWorkingAreaSkeleton type={selection.type} />;
+  }
   const isInviteActive = isCourseSelected && showInviteTab && activeTab === "invite";
   // needs a saved id, so the course-level quiz appears once the new course is first saved
   const quizParentId = isCourseSelected ? courseId : (selectedTopic?.id ?? selectedLesson?.id);

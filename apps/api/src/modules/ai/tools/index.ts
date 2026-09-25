@@ -12,6 +12,11 @@ import {
   getEnrolledCourseTool,
   listEnrolledCoursesTool,
 } from "api/modules/enrollments/ai/tools/enrollmentsTools";
+import {
+  deleteQuizTool,
+  getQuizTool,
+  saveQuizTool,
+} from "api/modules/quizzes/ai/tools/quizzesTools";
 
 export type { CourseTool, CourseToolContext } from "./courseTool";
 
@@ -28,4 +33,7 @@ export const courseTools: CourseTool[] = [
   updateCourseTool,
   updateTopicTool,
   updateLessonTool,
+  getQuizTool,
+  saveQuizTool,
+  deleteQuizTool,
 ];

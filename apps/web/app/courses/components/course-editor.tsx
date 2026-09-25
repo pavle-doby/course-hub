@@ -234,7 +234,7 @@ export function CourseEditor({ mode, publicId }: CourseEditorProps) {
     return <CourseEditError onRetry={refetchCourse} onBack={handleBackOrCancel} />;
   }
   if (mode === "edit" && isCourseLoading) {
-    return <CourseEditSkeleton />;
+    return <CourseEditSkeleton selectionType={selection.type} />;
   }
 
   async function invalidateTopicsAndLessons() {
@@ -599,6 +599,7 @@ export function CourseEditor({ mode, publicId }: CourseEditorProps) {
             activeTab={activeTab}
             tree={tree}
             flatLessons={flatLessons}
+            isLoadingTree={isLoadingTree}
             onSaveCourse={handleSaveCourse}
             onSaveTopic={handleSaveTopic}
             onSaveLesson={handleSaveLesson}

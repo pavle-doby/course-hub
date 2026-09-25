@@ -3,6 +3,7 @@ import { courseStatusEnum } from "@repo/db-schema";
 import { CoursePostQuerySchema, CoursePutQuerySchema, CourseSchema } from "../courses/schemas";
 import { TopicPostQuerySchema, TopicPutQuerySchema, TopicSchema } from "../topics/schemas";
 import { LessonPostQuerySchema, LessonPutQuerySchema, LessonSchema } from "../lessons/schemas";
+import { QuizParentParamsSchema, SaveQuizBodySchema } from "../quizzes/schemas";
 
 // ponytail: caps keep one tool call from inserting thousands of rows
 const MAX_TOPICS = 30;
@@ -110,3 +111,6 @@ export const UpdateLessonInputSchema = LessonPutQuerySchema.pick({
   description: true,
   position: true,
 }).extend({ lessonId: z.uuid() });
+
+// Replaces the whole quiz on a course, topic or lesson
+export const SaveQuizInputSchema = QuizParentParamsSchema.extend(SaveQuizBodySchema.shape);

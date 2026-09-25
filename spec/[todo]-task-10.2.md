@@ -1,4 +1,4 @@
-# Task 10.1: AI Usage Tracking And Bring-Your-Own Anthropic Key
+# Task 10.2: AI Usage Tracking And Bring-Your-Own Anthropic Key
 
 Depends on `spec/[done]-task-10.md`. Scope: (1) every AI call is saved to the database, so we can track usage per user and see statistics; (2) a user can add their own Anthropic API key, and quiz generation then runs on their account instead of ours.
 

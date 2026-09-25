@@ -8,6 +8,7 @@ import {
   GetEnrolledCourseInputSchema,
   ListEnrolledCoursesInputSchema,
   ListMyCoursesInputSchema,
+  SaveQuizInputSchema,
   SearchPublicCoursesInputSchema,
   UpdateCourseInputSchema,
   UpdateLessonInputSchema,
@@ -27,3 +28,4 @@ export type AddLessonInput = z.infer<typeof AddLessonInputSchema>;
 export type UpdateCourseInput = z.infer<typeof UpdateCourseInputSchema>;
 export type UpdateTopicInput = z.infer<typeof UpdateTopicInputSchema>;
 export type UpdateLessonInput = z.infer<typeof UpdateLessonInputSchema>;
+export type SaveQuizInput = z.infer<typeof SaveQuizInputSchema>;
