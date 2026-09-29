@@ -1,4 +1,5 @@
 export const nav = {
+  home: "Home",
   create: "Create",
   courses: "Courses",
   lessons: "Lessons",

@@ -1,4 +1,4 @@
-import { randomBytes } from "node:crypto";
+import { randomHex } from "../utils";
 import { pgTable, uuid, varchar, timestamp } from "drizzle-orm/pg-core";
 import { courseInvitationTypeEnum, courseInvitationStatusEnum } from "./enums";
 import { users } from "./users";
@@ -15,7 +15,7 @@ export const courseInvitations = pgTable("course_invitations", {
   token: varchar("token", { length: 64 })
     .notNull()
     .unique()
-    .$defaultFn(() => randomBytes(24).toString("hex")),
+    .$defaultFn(() => randomHex(24)),
   type: courseInvitationTypeEnum("type").notNull(),
   email: varchar("email", { length: 255 }),
   status: courseInvitationStatusEnum("status").notNull().default("pending"),

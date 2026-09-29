@@ -22,6 +22,7 @@ import {
 import { Skeleton } from "@repo/ui-web/components/skeleton";
 import { toast } from "@repo/ui-web/components/sonner";
 import { useIsMobile } from "@repo/ui-web/hooks/use-mobile";
+import { vibrate } from "@/utils/vibrate";
 import { celebrate } from "./celebrate";
 import { QuizQuestionnaire } from "./quiz-questionnaire";
 import { QuizQuestionnaireSkeleton } from "./quiz-questionnaire-skeleton";
@@ -83,6 +84,9 @@ export function LearnQuiz({ parent, isEnrolled, onStart, onResponseChange }: Lea
           // all graded answers right: celebrate (same burst as finishing a course)
           if (result && result.total > 0 && result.score === result.total) {
             celebrate(isMobile);
+            vibrate([80, 60, 80, 60, 160]);
+          } else {
+            vibrate(40);
           }
         },
         onError: (error: unknown) => handleErrorAction(error as Error),

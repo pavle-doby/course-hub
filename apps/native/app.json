@@ -1,16 +1,18 @@
 {
   "expo": {
-    "name": "native",
-    "slug": "native",
+    "name": "Course Hub",
+    "slug": "course-hub",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "native",
+    "scheme": "coursehub",
     "userInterfaceStyle": "automatic",
     "ios": {
+      "bundleIdentifier": "com.coursehub.app",
       "icon": "./assets/expo.icon"
     },
     "android": {
+      "package": "com.coursehub.app",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -32,7 +34,9 @@
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 76
         }
-      ]
+      ],
+      "expo-secure-store",
+      "expo-localization"
     ],
     "experiments": {
       "typedRoutes": true,

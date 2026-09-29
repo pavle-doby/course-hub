@@ -1,4 +1,4 @@
-import { randomBytes } from "node:crypto";
+import { randomHex } from "../utils";
 import {
   pgTable,
   uuid,
@@ -21,7 +21,7 @@ export const courses = pgTable("courses", {
   publicId: varchar("public_id", { length: 12 })
     .notNull()
     .unique()
-    .$defaultFn(() => randomBytes(6).toString("hex")),
+    .$defaultFn(() => randomHex(6)),
   description: text("description"),
   thumbnailObjectKey: text("thumbnail_object_key"),
   status: courseStatusEnum("status").notNull().default("draft"),

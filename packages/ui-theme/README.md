@@ -1,45 +1,33 @@
 # @repo/ui-theme
 
-Shared design-token and theme package for the monorepo. It is the **single source of truth** for all colour values, radii, and spacing tokens across every platform.
+Shared design tokens (colors, radius) for the web and native apps.
 
 ## Structure
 
 ```
 packages/ui-theme/
 ├── src/
-│   ├── native/         # React Native / Expo theme
-│   │   └── index.ts    # Exports: THEME, NAV_THEME, THEME_NATIVE, ThemeColors, ColorScheme
-│   ├── web/            # Web (Next.js / Tailwind CSS) theme
-│   │   ├── index.ts    # Exports: THEME_WEB, applyThemeVars, ThemeWeb
-│   │   └── index.css   # CSS custom properties for :root and .dark (Tailwind v4)
-│   ├── theme.ts        # Source of truth — all token values live here
-│   └── index.ts        # Barrel re-export (re-exports everything from native + web)
+│   ├── native/
+│   │   ├── tokens.ts          # THEME (light/dark) — plain data, no imports
+│   │   ├── theme.ts           # NAV_THEME for React Navigation / Expo Router
+│   │   ├── tailwindPreset.ts  # Tailwind 3 preset for NativeWind (CSS variables from THEME)
+│   │   └── index.ts           # Barrel: THEME, NAV_THEME, ThemeColors, ColorScheme
+│   ├── web/
+│   │   └── index.css          # Tailwind 4 CSS variables (:root, .dark, @theme inline)
+│   └── index.ts               # Re-exports ./native
 └── package.json
 ```
 
-## Entry Points
+## Entry points
 
-| Import path                | Contents                                                      |
-| -------------------------- | ------------------------------------------------------------- |
-| `@repo/ui-theme`           | Everything — native + web TypeScript exports                  |
-| `@repo/ui-theme/native`    | Native-only: `THEME`, `NAV_THEME`, `THEME_NATIVE`             |
-| `@repo/ui-theme/web`       | Web-only: `THEME_WEB`, `applyThemeVars`                       |
-| `@repo/ui-theme/index.css` | Tailwind v4 CSS variables (`@theme inline`, `:root`, `.dark`) |
+| Import path                | Contents                                                           |
+| -------------------------- | ------------------------------------------------------------------ |
+| `@repo/ui-theme/native`    | `THEME`, `NAV_THEME`, `ThemeColors`, `ColorScheme`                 |
+| `@repo/ui-theme/tailwind`  | `nativeTailwindPreset` for `apps/native/tailwind.config.js` (Node) |
+| `@repo/ui-theme/index.css` | Web Tailwind 4 CSS variables (same as `@repo/ui-theme/web`)        |
 
-## How tokens are derived
+`tailwindPreset.ts` is not in the `native` barrel: Tailwind loads it in Node, where `theme.ts`'s `@react-navigation/native` import can't be required. It turns `THEME` into `--background`, `--card-foreground`, … variables on `:root` / `.dark:root` and maps the color names to `hsl(var(--x) / <alpha-value>)`, so native uses the same class names as web (`bg-primary/90`, `text-muted-foreground`).
 
-`src/theme.ts` defines three objects:
+## Keep web and native in sync
 
-- **`THEME`** — camelCase color tokens consumed directly by React Native style props.
-- **`THEME_WEB`** — CSS custom properties grouped by scope (`inline`, `root`, `dark`), mirroring `src/web/index.css`.
-- **`THEME_NATIVE`** — `THEME_WEB` converted to camelCase keys for NativeWind / programmatic use.
-
-## ⚠️ Important — keep both themes in sync
-
-`THEME` (native) and `THEME_WEB` (web) must always reflect the same design tokens. Whenever you update a colour value you **must** update it in **both** places and in `src/web/index.css`:
-
-1. `THEME.light.*` / `THEME.dark.*` in `src/theme.ts`
-2. `THEME_WEB.root.*` / `THEME_WEB.dark.*` in `src/theme.ts`
-3. The corresponding CSS variable in `src/web/index.css`
-
-A mismatch between native and web tokens will cause visual inconsistencies across platforms.
+A token change goes in **both** `src/native/tokens.ts` (`THEME.light` / `THEME.dark`) and `src/web/index.css` (`:root` / `.dark`).

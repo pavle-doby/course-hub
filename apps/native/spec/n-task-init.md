@@ -34,11 +34,13 @@ Order is by dependency. Each task ends with `npx tsc --noEmit` and `npx expo lin
 
 ### Phase 0 — Foundation
 
+Detailed plan and progress log: [n-task-0](<[done]-n-task-0.md>).
+
 | #   | Task                  | Summary                                                                                                                                                                                                                                                                         | State |
 | --- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| 0   | Workspace wiring      | Clean out the Expo template screens. Metro config for the pnpm monorepo, NativeWind + `@repo/ui-theme/native`, workspace deps (`@repo/*`), `tsconfig` paths, `EXPO_PUBLIC_API_URL` in `.env.example`, turbo tasks. Update CLAUDE.md/ARCHITECTURE.md (they say "no native app"). | todo  |
-| 1   | App shell & providers | Root `_layout.tsx`: `ApiClientProvider`, i18n, theme, safe area, gesture handler, toast host. Navigation skeleton mirroring web: tabs (Home, Learn, Courses, Notifications, Profile/More) + stacks for detail screens.                                                          | todo  |
-| 2   | Auth                  | Login / signup screens (language + theme pickers defaulted from device), SecureStore token storage, `configureTokenProviders` refresh + logout, auth-gated route groups (`(auth)` / `(app)`), `next`-style redirect back.                                                       | todo  |
+| 0   | Workspace wiring      | Clean out the Expo template screens. Metro config for the pnpm monorepo, NativeWind + `@repo/ui-theme/native`, workspace deps (`@repo/*`), `tsconfig` paths, `EXPO_PUBLIC_API_URL` in `.env.example`, turbo tasks. Update CLAUDE.md/ARCHITECTURE.md (they say "no native app"). | done  |
+| 1   | App shell & providers | Root `_layout.tsx`: `ApiClientProvider`, i18n, theme, safe area, gesture handler, toast host. Navigation skeleton mirroring web: tabs (Home, Learn, Courses, Notifications, Profile/More) + stacks for detail screens.                                                          | done  |
+| 2   | Auth                  | Login / signup screens (language + theme pickers defaulted from device), SecureStore token storage, `configureTokenProviders` refresh + logout, auth-gated route groups (`(auth)` / `(app)`), `next`-style redirect back.                                                       | done  |
 
 ### Phase 1 — Learner experience
 

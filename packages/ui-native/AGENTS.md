@@ -1,6 +1,6 @@
 # UI Native Package Conventions (`@repo/ui-native`)
 
-`@repo/ui-native` is a retained React Native component library built on NativeWind, `class-variance-authority`, and `@rn-primitives/slot`. There is currently no native app; keep reusable native components here if a native consumer is restored.
+`@repo/ui-native` is a retained React Native component library built on NativeWind, `class-variance-authority`, and `@rn-primitives/slot`. It is consumed by `apps/native`; keep reusable native components here, not in the app.
 
 ## Folder structure
 
@@ -95,7 +95,7 @@ Default icon size is `14`. Pass `className="size-4"` (NativeWind resolves to px)
 
 ## Design tokens — CSS variables via NativeWind
 
-NativeWind resolves Tailwind utility classes to React Native styles using the theme defined in `@repo/ui-theme/native`. Use the same token class names as the web package (`bg-primary`, `text-foreground`, etc.) — never hardcode colours.
+NativeWind resolves Tailwind utility classes to React Native styles using the tokens from `@repo/ui-theme` (the app's `tailwind.config.js` uses the `@repo/ui-theme/tailwind` preset, which also emits the `:root` / `.dark:root` CSS variables). Use the same token class names as the web package (`bg-primary`, `text-foreground`, etc.) — never hardcode colours.
 
 ## Exports
 
