@@ -1,4 +1,4 @@
-import { Text, TextClassContext } from "./text";
+import { Text, TextClassContext } from "@repo/ui-native/components/text";
 import { cn } from "@repo/ui-native/lib/utils";
 import { View } from "react-native";
 

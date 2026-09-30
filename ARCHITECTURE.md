@@ -18,6 +18,11 @@ course-hub/                       # pnpm + Turborepo monorepo
 │   ├── web/                      # Next.js 16 web app (React 19, App Router)
 │   │   └── app/                  #   Pages and layouts
 │   │
+│   ├── native/                   # Expo SDK 57 app (iOS/Android), second client of the same API
+│   │   ├── src/app/              #   Expo Router: (auth) login/signup, (app)/(tabs) screens
+│   │   ├── metro.config.js       #   NativeWind + resolves @react-navigation/native from expo-router
+│   │   └── spec/                 #   Native task specs (n-task-*)
+│   │
 │
 ├── packages/                     # Shared libraries (workspace:*)
 │   │
@@ -39,9 +44,10 @@ course-hub/                       # pnpm + Turborepo monorepo
 │   │   └── src/components/       #   Shared React components for Next.js apps
 │   │
 │   ├── ui-theme/                 # Design tokens: Tailwind config, colors, animations
-│   │   └── index.css             #   Web CSS entry
+│   │   ├── index.css             #   Web CSS entry
+│   │   └── src/native/           #   Native tokens, NAV_THEME, Tailwind 3 preset for NativeWind
 │   │
-│   ├── i18n/                     # i18next setup for web and SSR
+│   ├── i18n/                     # i18next setup for web, SSR and native (`react-native` export)
 │   │   ├── src/locales/sr/       #   Serbian translations (default locale)
 │   │   ├── src/locales/en/       #   English translations
 │   │   └── src/config.web.ts     #   Next.js config
@@ -51,7 +57,7 @@ course-hub/                       # pnpm + Turborepo monorepo
 │   ├── eslint-config/            # Shared ESLint rules (base, next, react-internal)
 │   ├── typescript-config/        # Shared tsconfig presets (base, nextjs, react-library)
 │   ├── scripts/                  # DB seed/clean scripts (run via pnpm db:*)
-│   └── ui-native/                # Retained React Native primitives (no native app)
+│   └── ui-native/                # React Native components (NativeWind v4, rn-primitives) for apps/native
 ```
 
 ### API module organization

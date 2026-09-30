@@ -11,6 +11,7 @@ export const learn = {
     previous: "Prethodna",
     next: "Sledeća",
     contents: "Sadržaj",
+    closeContents: "Zatvori sadržaj",
     resizeContents: "Promeni širinu sadržaja",
     noDescription: "Opis nije naveden.",
     videoProcessing: "Video se obrađuje. Pokušajte ponovo za nekoliko trenutaka.",

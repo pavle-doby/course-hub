@@ -59,5 +59,6 @@ Client-side helpers used by the web app:
 ## Gotchas
 
 - `drizzle-zod@0.8.3` is patched (`patches/`, declared in `pnpm-workspace.yaml`). Account for the patch if you bump drizzle-zod.
-- `@repo/ui-native` and the root `expo`/`react-native` deps are retained but unused; there is no native app. Don't build new features on them.
+- `apps/native` (Expo SDK 57) is being built out; its plan and progress live in `apps/native/spec/` (`n-task-init.md` is the index). It uses NativeWind v4 + Tailwind 3 through `@repo/ui-native`, while web uses Tailwind 4; the only shared piece is the token values in `@repo/ui-theme`.
+- Installs are hoisted (`nodeLinker: hoisted` in `pnpm-workspace.yaml`; pnpm 11 ignores `.npmrc` for this). Native singletons (React, safe-area-context, svg) are pinned in its `overrides` so unpinned peers don't pull a second version; bump them there with the Expo SDK. `npx expo-doctor` in `apps/native` catches new duplicates.
 - `pnpm` 11 and Node >=22 are required (`packageManager` / `engines`).

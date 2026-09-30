@@ -1,3 +1,4 @@
+nodeLinker: hoisted
 packages:
   - "apps/*"
   - "packages/*"
@@ -5,5 +6,12 @@ allowBuilds:
   esbuild: true
   msw: true
   sharp: true
+# One copy per singleton: unpinned peers otherwise resolve to the newest version.
+# Keep in sync with apps/native (Expo SDK) and apps/web versions.
+overrides:
+  react: 19.2.3
+  react-dom: 19.2.3
+  react-native-safe-area-context: ~5.7.0
+  react-native-svg: 15.15.4
 patchedDependencies:
   drizzle-zod@0.8.3: patches/drizzle-zod@0.8.3.patch

@@ -1,4 +1,4 @@
-import { allErrorMessages } from "@repo/shared/consts/allErrorMessages";
+import { allErrorMessages } from "../../consts/allErrorMessages";
 import axios from "axios";
 import { useCallback } from "react";
 

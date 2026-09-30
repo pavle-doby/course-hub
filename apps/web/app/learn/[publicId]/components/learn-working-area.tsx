@@ -100,7 +100,7 @@ export function LearnWorkingArea({
   };
   const parent = parentByType[selection.type] ?? parentByType.course;
 
-  const { data: video } = useGetVideoByParent(parent, {
+  const { data: video, isLoading: isVideoLoading } = useGetVideoByParent(parent, {
     query: {
       enabled: isEnrolled,
       refetchInterval: (query) => {
@@ -108,7 +108,7 @@ export function LearnWorkingArea({
       },
     },
   });
-  const { data: publicVideo } = useGetPublicVideoByParent(
+  const { data: publicVideo, isLoading: isPublicVideoLoading } = useGetPublicVideoByParent(
     { parentType: "course", parentId: course.id },
     {
       query: {
@@ -124,7 +124,9 @@ export function LearnWorkingArea({
   const isVideoReady = activeVideo?.status === "ready";
   const isVideoError = activeVideo?.status === "error";
   const isVideoProcessing = hasVideo && !isVideoReady && !isVideoError;
-  const { data: documents = [] } = useGetPublicDocumentsByParent(parent);
+  const isActiveVideoLoading = isEnrolled ? isVideoLoading : isPublicVideoLoading;
+  const { data: documents = [], isLoading: isDocumentsLoading } =
+    useGetPublicDocumentsByParent(parent);
   const { data: quizData } = useGetPublicQuiz(parent);
   const hasQuiz = Boolean(quizData?.quiz);
 
@@ -216,37 +218,40 @@ export function LearnWorkingArea({
             className="mb-4 aspect-video w-full rounded-lg object-cover"
           />
         )}
-        <div className="flex items-center justify-between gap-2">
-          <h2 className="text-2xl font-semibold">{name}</h2>
-          {nextStatus && !isCompleteStep && (
-            <Button
-              className="ml-auto hidden shrink-0 md:flex"
-              size="sm"
-              disabled={isSavingStatus}
-              onClick={handleAdvanceStatus}
-            >
-              {t(nextStatus.labelKey)}
-            </Button>
-          )}
-          {isEnrolled && lessonProgress && isSavingStatus && (
-            <Skeleton className="h-8 w-32 shrink-0" />
-          )}
+        {/* Status first, full width; the title (and the desktop next-step button) below it */}
+        <div className="flex flex-col gap-3">
+          {isEnrolled && lessonProgress && isSavingStatus && <Skeleton className="h-8 w-full" />}
           {isEnrolled && lessonProgress && !isSavingStatus && (
             <LessonStatusSelect
+              className="w-full"
               status={lessonProgress.status}
               onStatusChange={handleLessonStatusChange}
             />
           )}
           {isEnrolled && readOnlyStatus && (
-            <Badge variant="outline" className="h-8 shrink-0 gap-2 px-3 text-sm">
+            <Badge variant="outline" className="h-8 w-full justify-start gap-2 px-3 text-sm">
               <ProgressStatusIcon status={readOnlyStatus} className="size-4!" />
               {t(PROGRESS_STATUS_LABEL_KEYS[readOnlyStatus])}
             </Badge>
           )}
+          <div className="flex items-center justify-between gap-2">
+            <h2 className="text-2xl font-semibold">{name}</h2>
+            {nextStatus && !isCompleteStep && (
+              <Button
+                className="ml-auto hidden shrink-0 md:flex"
+                size="sm"
+                disabled={isSavingStatus}
+                onClick={handleAdvanceStatus}
+              >
+                {t(nextStatus.labelKey)}
+              </Button>
+            )}
+          </div>
         </div>
         {selection.type === "course" && (
           <StarRating className="mt-2" average={course.ratingAverage} count={course.ratingCount} />
         )}
+        {isActiveVideoLoading && <Skeleton className="mt-4 aspect-video w-full rounded-lg" />}
         {hasVideo && (
           <>
             {isVideoReady && (
@@ -273,6 +278,7 @@ export function LearnWorkingArea({
           </>
         )}
 
+        {isDocumentsLoading && <Skeleton className="mt-4 h-20 w-full rounded-lg" />}
         {documents.length > 0 && (
           <section className="mt-4">
             <h3 className="mb-2 font-medium">{t("learn.detail.documents")}</h3>

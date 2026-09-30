@@ -1,4 +1,5 @@
 export const nav = {
+  home: "Početna",
   create: "Kreiranje",
   courses: "Kursevi",
   lessons: "Lekcije",

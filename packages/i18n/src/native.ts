@@ -1,16 +1,13 @@
 import i18n, { nativeConfig } from "./config.native";
 import { initReactI18next } from "react-i18next";
-import LanguageDetector from "i18next-react-native-language-detector";
 
 export * from "react-i18next";
+export type { TFunction } from "i18next";
 export { LOCALES as locales, DEFAULT_LOCALE as defaultLocale } from "./constants";
+export type { Locale } from "./types";
 
-i18n
-  .use(initReactI18next)
-  .use(LanguageDetector)
-  .init({
-    ...nativeConfig,
-    compatibilityJSON: "v4",
-  });
+// The app detects the device language (expo-localization) and calls i18n.changeLanguage,
+// which keeps Expo out of this package's dependencies.
+void i18n.use(initReactI18next).init(nativeConfig);
 
 export default i18n;

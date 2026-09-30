@@ -11,6 +11,7 @@ export const learn = {
     previous: "Previous",
     next: "Next",
     contents: "Contents",
+    closeContents: "Close contents",
     resizeContents: "Resize contents",
     noDescription: "No description provided.",
     videoProcessing: "Video is processing. Please check back shortly.",

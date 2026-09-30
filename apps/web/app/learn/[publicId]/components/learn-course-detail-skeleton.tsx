@@ -1,7 +1,7 @@
 import { Skeleton } from "@repo/ui-web/components/skeleton";
+import { LearnWorkingAreaSkeleton } from "./learn-working-area-skeleton";
 
 const TREE_ITEMS = Array.from({ length: 6 }, (_, index) => index);
-const DOCUMENTS = Array.from({ length: 3 }, (_, index) => index);
 
 export function LearnCourseDetailSkeleton() {
   return (
@@ -23,27 +23,7 @@ export function LearnCourseDetailSkeleton() {
           <Skeleton className="h-9 w-24" />
         </header>
 
-        <main className="flex flex-1 flex-col p-4 md:p-6">
-          <div className="mx-auto w-full max-w-2xl">
-            <Skeleton className="h-8 w-3/4" />
-            <Skeleton className="mt-4 aspect-video w-full rounded-lg" />
-
-            <section className="mt-4">
-              <Skeleton className="mb-2 h-5 w-24" />
-              <div className="space-y-2">
-                {DOCUMENTS.map((document) => (
-                  <Skeleton key={document} className="h-20 w-full rounded-lg" />
-                ))}
-              </div>
-            </section>
-
-            <div className="mt-4 space-y-3">
-              <Skeleton className="h-5 w-full" />
-              <Skeleton className="h-5 w-5/6" />
-              <Skeleton className="h-5 w-2/3" />
-            </div>
-          </div>
-        </main>
+        <LearnWorkingAreaSkeleton />
 
         <footer className="sticky bottom-0 z-40 flex items-center justify-between border-t bg-background px-4 pt-1 pb-4 md:hidden">
           <Skeleton className="h-7 w-30" />
