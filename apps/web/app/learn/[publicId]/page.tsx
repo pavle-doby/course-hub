@@ -34,6 +34,7 @@ import { LearnCourseDetailSkeleton } from "./components/learn-course-detail-skel
 import { LearnHeader } from "./components/learn-header";
 import { LearnTreeNav } from "./components/learn-tree-nav";
 import { LearnWorkingArea } from "./components/learn-working-area";
+import { LearnWorkingAreaSkeleton } from "./components/learn-working-area-skeleton";
 import { ReviewDialog } from "./components/review-dialog";
 
 const COURSE_SELECTION: Selection = { type: "course" };
@@ -43,7 +44,7 @@ export default function LearnCourseDetailPage() {
   const router = useRouter();
   const { t } = useT();
   const [urlSelection, setUrlSelection] = useSelectionSearchParam();
-  const hasRestoredLessonRef = useRef(false);
+  const [hasNavigated, setHasNavigated] = useState(false);
   const [notificationCourseId, setNotificationCourseId] = useState<string>();
   const [isCompletedDialogOpen, setIsCompletedDialogOpen] = useState(false);
   const [isReviewDialogOpen, setIsReviewDialogOpen] = useState(false);
@@ -127,7 +128,10 @@ export default function LearnCourseDetailPage() {
 
   const { data: myReview } = useGetMyCourseReview({ publicId }, { query: { enabled: isEnrolled } });
 
-  const { data: progress } = useGetCourseProgress({ publicId }, { query: { enabled: isEnrolled } });
+  const { data: progress, isLoading: isProgressLoading } = useGetCourseProgress(
+    { publicId },
+    { query: { enabled: isEnrolled } }
+  );
   const statusById = new Map([
     ...(progress?.topics ?? []).map((topic) => [topic.topicId, topic.status] as const),
     ...(progress?.lessons ?? []).map((lesson) => [lesson.lessonId, lesson.status] as const),
@@ -151,21 +155,27 @@ export default function LearnCourseDetailPage() {
       ? Math.round((doneLessonCount / flatLessons.length) * 100)
       : undefined;
 
-  // Opening the course without a topic/lesson in the URL resumes the last active lesson, once.
-  // A finished course has nothing to resume, so it stays on the course overview.
-  const restoreLastLesson = useEffectEvent(() => {
-    if (hasRestoredLessonRef.current || !progress) {
-      return;
-    }
-    hasRestoredLessonRef.current = true;
-    if (urlSelection.type === "course" && progress.status !== "done" && progress.lastLessonId) {
-      setUrlSelection({ type: "lesson", id: progress.lastLessonId });
-    }
+  // Opening the course without a topic/lesson in the URL resumes the last active lesson, until the
+  // learner picks something themselves. A finished course has nothing to resume, so it stays on
+  // the course overview.
+  const resumeLessonId =
+    isEnrolled && !hasNavigated && urlSelection.type === "course" && progress?.status !== "done"
+      ? progress?.lastLessonId
+      : undefined;
+  const resumeLesson = useEffectEvent((lessonId: string) => {
+    setUrlSelection({ type: "lesson", id: lessonId });
   });
 
   useEffect(() => {
-    restoreLastLesson();
-  }, [progress]);
+    if (resumeLessonId) {
+      resumeLesson(resumeLessonId);
+    }
+  }, [resumeLessonId]);
+
+  // Until the current lesson is known (enrollment, tree, progress, or the resume jump landing in
+  // the URL), the working area shows a skeleton instead of flashing the course overview.
+  const isLoadingLesson =
+    isLoadingEnrollment || isLoadingTree || (isEnrolled && isProgressLoading) || !!resumeLessonId;
 
   // Celebrate only when the course turns done during this visit, not when opening a finished one.
   // On mobile the completion burst shoots up from the bottom center.
@@ -241,7 +251,7 @@ export default function LearnCourseDetailPage() {
   }
 
   function setSelection(next: Selection) {
-    hasRestoredLessonRef.current = true;
+    setHasNavigated(true);
     setUrlSelection(next);
   }
 
@@ -366,18 +376,22 @@ export default function LearnCourseDetailPage() {
             progressPercent={progressPercent}
           />
 
-          <LearnWorkingArea
-            selection={selection}
-            course={course}
-            tree={tree}
-            flatLessons={flatLessons}
-            isEnrolled={isEnrolled}
-            progress={isEnrolled ? progress : undefined}
-            hasPrevious={isEnrolled && !!previousItem}
-            hasNext={isEnrolled && !!nextItem}
-            onPrevious={handlePrevious}
-            onNext={handleNext}
-          />
+          {isLoadingLesson ? (
+            <LearnWorkingAreaSkeleton />
+          ) : (
+            <LearnWorkingArea
+              selection={selection}
+              course={course}
+              tree={tree}
+              flatLessons={flatLessons}
+              isEnrolled={isEnrolled}
+              progress={isEnrolled ? progress : undefined}
+              hasPrevious={isEnrolled && !!previousItem}
+              hasNext={isEnrolled && !!nextItem}
+              onPrevious={handlePrevious}
+              onNext={handleNext}
+            />
+          )}
 
           <LearnBottomNav
             hasPrevious={isEnrolled && !!previousItem}

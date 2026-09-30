@@ -29,6 +29,20 @@ Run lint and typecheck before declaring any task done.
 - Import `Link`, `router`, and `useLocalSearchParams` from `expo-router`.
 - Docs: https://docs.expo.dev/router/introduction.md
 
+## Code placement (mirrors `apps/web`)
+
+Expo Router has no private-folder convention, so the web app's `app/<route>/components/` lives in `src/modules/<feature>/` instead. Route files in `src/app/` stay thin and import from modules.
+
+| Type                           | Location                                          |
+| ------------------------------ | ------------------------------------------------- |
+| Used by one feature only       | `src/modules/<feature>/{components,hooks,utils}/` |
+| Shared by two or more features | `src/components/`, `src/hooks/`, `src/utils/`     |
+| App-wide providers             | `src/providers/`                                  |
+
+- A module never imports from another module. When a second feature needs something, move it to the shared `src/` folder.
+- Shared code (`src/components`, `src/hooks`, `src/utils`, `src/providers`) never imports from `src/modules/`.
+- Current modules: `auth`, `learn` (Learn tab lists), `learn-course` (`/learn/[publicId]` reader, quiz), `reviews`.
+
 ## Building with EAS
 
 Use EAS to build, sign, and submit the app in the cloud (`eas build`, `eas submit`) and to ship over-the-air updates (`eas update`) — no local Xcode or Android Studio required. Run EAS CLI as `bunx eas-cli <command>` in Bun projects, or `npx eas-cli@latest <command>` otherwise; substitute that for bare `eas` in docs examples.

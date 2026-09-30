@@ -14,6 +14,7 @@ export * from "./components/input";
 export * from "./components/label";
 export * from "./components/native-only-animated-view";
 export * from "./components/progress";
+export * from "./components/questionnaire";
 export * from "./components/select";
 export * from "./components/separator";
 export * from "./components/skeleton";

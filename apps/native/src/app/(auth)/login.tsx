@@ -1,5 +1,5 @@
-import { AuthScreen } from "@/components/auth/auth-screen";
-import { LoginForm } from "@/components/auth/login-form";
+import { AuthScreen } from "@/modules/auth/components/auth-screen";
+import { LoginForm } from "@/modules/auth/components/login-form";
 
 export default function LoginScreen() {
   return (

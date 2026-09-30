@@ -34,7 +34,7 @@ Order is by dependency. Each task ends with `npx tsc --noEmit` and `npx expo lin
 
 ### Phase 0 — Foundation
 
-Detailed plan and progress log: [n-task-0](<[done]-n-task-0.md>).
+Detailed plan and progress log: [n-task-0]([done]-n-task-0.md).
 
 | #   | Task                  | Summary                                                                                                                                                                                                                                                                         | State |
 | --- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
@@ -44,13 +44,15 @@ Detailed plan and progress log: [n-task-0](<[done]-n-task-0.md>).
 
 ### Phase 1 — Learner experience
 
+Detailed plan and progress log: [n-task-1]([in-progress]-n-task-1.md).
+
 | #   | Task                      | Summary                                                                                                                                                                                                                                  | State |
 | --- | ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| 3   | Catalog & course cards    | Home (public catalog + search), Learn → Explore (other-creators / exclude-enrolled filters) and Enrolled (progress bar). Shared `CourseCard` + `CourseStats` in `@repo/ui-native` or app `components/`. Infinite scroll over pagination. | todo  |
-| 4   | Course reader             | `/learn/[publicId]`: overview, topic/lesson tree (drawer or sheet on phone), lesson content, documents (open signed URL), enroll / withdraw, non-enrolled view, jump to last active lesson, `?topic=`/`?lesson=` params.                 | todo  |
-| 5   | Video playback & progress | `expo-video` for Stream HLS, resume from last position, send `videoWatched` on end. Lesson status dropdown + "next step" button, derived topic/course status icons, completion dialog + confetti.                                        | todo  |
-| 6   | Learner quizzes           | Take quiz at the end of content (single / multiple / text), result card with score and correct answers, clear answers, enroll hint for visitors.                                                                                         | todo  |
-| 7   | Reviews                   | Review dialog (1–5 stars + comment), Review button next to Withdraw and in the completion dialog, public reviews list (paginated), creator reply inline.                                                                                 | todo  |
+| 3   | Catalog & course cards    | Home (public catalog + search), Learn → Explore (other-creators / exclude-enrolled filters) and Enrolled (progress bar). Shared `CourseCard` + `CourseStats` in `@repo/ui-native` or app `components/`. Infinite scroll over pagination. | done  |
+| 4   | Course reader             | `/learn/[publicId]`: overview, topic/lesson tree (drawer or sheet on phone), lesson content, documents (open signed URL), enroll / withdraw, non-enrolled view, jump to last active lesson, `?topic=`/`?lesson=` params.                 | done  |
+| 5   | Video playback & progress | `expo-video` for Stream HLS, resume from last position, send `videoWatched` on end. Lesson status dropdown + "next step" button, derived topic/course status icons, completion dialog + confetti.                                        | done  |
+| 6   | Learner quizzes           | Take quiz at the end of content (single / multiple / text), result card with score and correct answers, clear answers, enroll hint for visitors.                                                                                         | done  |
+| 7   | Reviews                   | Review dialog (1–5 stars + comment), Review button next to Withdraw and in the completion dialog, public reviews list (paginated), creator reply inline.                                                                                 | done  |
 | 8   | Invitations (accept side) | Open invite link → public token lookup → invite-aware login/signup → accept. Needs deep link handling for `/invite/[token]`.                                                                                                             | todo  |
 
 ### Phase 2 — Notifications

@@ -6,6 +6,7 @@ import { useColorScheme } from "nativewind";
 import { PortalHost } from "@rn-primitives/portal";
 import { Toaster } from "@repo/ui-native/components/sonner";
 import { NAV_THEME } from "@repo/ui-theme/native";
+import { ConfettiProvider } from "@/components/confetti/confetti-provider";
 import { useAuth } from "@/providers/auth-provider";
 
 export function RootNavigator() {
@@ -22,17 +23,19 @@ export function RootNavigator() {
 
   return (
     <ThemeProvider value={NAV_THEME[colorScheme]}>
-      <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Protected guard={isSignedIn}>
-          <Stack.Screen name="(app)" />
-        </Stack.Protected>
-        <Stack.Protected guard={!isSignedIn}>
-          <Stack.Screen name="(auth)" />
-        </Stack.Protected>
-      </Stack>
-      <PortalHost />
-      <Toaster />
+      <ConfettiProvider>
+        <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Protected guard={isSignedIn}>
+            <Stack.Screen name="(app)" />
+          </Stack.Protected>
+          <Stack.Protected guard={!isSignedIn}>
+            <Stack.Screen name="(auth)" />
+          </Stack.Protected>
+        </Stack>
+        <PortalHost />
+        <Toaster />
+      </ConfettiProvider>
     </ThemeProvider>
   );
 }

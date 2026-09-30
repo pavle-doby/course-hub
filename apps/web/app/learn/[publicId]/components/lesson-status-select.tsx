@@ -12,6 +12,7 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@repo/ui-web/components/dropdown-menu";
+import { cn } from "@repo/ui-web/lib/utils";
 import { PROGRESS_STATUS_LABEL_KEYS } from "@/utils/consts";
 import { ProgressStatusIcon } from "./progress-status-icon";
 
@@ -20,9 +21,10 @@ const STATUSES = Object.values(LessonProgressStatus);
 type LessonStatusSelectProps = {
   status: LessonProgressStatus;
   onStatusChange: (status: LessonProgressStatus) => void;
+  className?: string;
 };
 
-export function LessonStatusSelect({ status, onStatusChange }: LessonStatusSelectProps) {
+export function LessonStatusSelect({ status, onStatusChange, className }: LessonStatusSelectProps) {
   const { t } = useT();
 
   function handleValueChange(value: string) {
@@ -32,13 +34,16 @@ export function LessonStatusSelect({ status, onStatusChange }: LessonStatusSelec
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm" className="shrink-0 gap-2">
+        <Button variant="outline" size="sm" className={cn("shrink-0 gap-2", className)}>
           <ProgressStatusIcon status={status} />
           {t(PROGRESS_STATUS_LABEL_KEYS[status])}
-          <ChevronDownIcon className="size-4" />
+          <ChevronDownIcon className="ml-auto size-4" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="min-w-44">
+      <DropdownMenuContent
+        align="start"
+        className="w-(--radix-dropdown-menu-trigger-width) min-w-44"
+      >
         <DropdownMenuLabel>{t("learn.progress.status")}</DropdownMenuLabel>
         <DropdownMenuRadioGroup value={status} onValueChange={handleValueChange}>
           {STATUSES.map((option) => (
