@@ -11,12 +11,14 @@ course-hub/                       # pnpm + Turborepo monorepo
 │   │   │                         #   invitations, videos, documents, notifications, progress,
 │   │   │                         #   api-tokens, ai, health
 │   │   ├── src/middleware/       #   Auth (JWT + personal access tokens), error handling
+│   │   ├── src/logger/           #   Pino logger + pino-http request logging (X-Request-Id)
 │   │   ├── src/routes/           #   /api (private + public /v1) and /apix (external systems)
 │   │   ├── src/openapi/          #   Auto-generates openapi.json from code
 │   │   └── openapi.json          #   OpenAPI 3.1 spec (committed, consumed by Orval)
 │   │
-│   ├── web/                      # Next.js 16 web app (React 19, App Router)
-│   │   └── app/                  #   Pages and layouts
+│   ├── web/                      # Next.js 16 web app (React 19, App Router), installable PWA
+│   │   ├── app/                  #   Pages and layouts (app/manifest.ts = web app manifest)
+│   │   └── public/sw.js          #   Service worker: offline page, Web Push
 │   │
 │   ├── native/                   # Expo SDK 57 app (iOS/Android), second client of the same API
 │   │   ├── src/app/              #   Expo Router: (auth) login/signup, (app)/(tabs) screens
@@ -88,21 +90,24 @@ Each feature in `apps/api/src/modules/` follows the same layout:
 │                                            │                     │
 │                                    ┌───────┴───────┐             │
 │                                    ▼               ▼             │
-│                                   web         other apps         │
+│                                web (PWA)     native (Expo)       │
 └──────────────────────────────────────────────────────────────────┘
 ```
 
 ## Key Decisions
 
-| Decision         | Choice                                | Why                                                               |
-| ---------------- | ------------------------------------- | ----------------------------------------------------------------- |
-| API style        | REST + OpenAPI                        | Enables Orval code-gen; type-safe across all clients              |
-| Auth             | Supabase Auth (JWT)                   | API client supplies and refreshes bearer tokens                   |
-| DB               | Drizzle ORM + PostgreSQL via Supabase | Type-safe SQL-first; schema-to-Zod via drizzle-zod                |
-| Schema ownership | `db-schema` → `contract`              | Single source of truth; prevents drift between DB and validation  |
-| API client       | Orval (code-gen)                      | `src/generated/` is always in sync with `openapi.json`            |
-| Media            | Cloudflare Stream + R2                | Video processing and object storage for course media              |
-| Styling          | Tailwind 4                            | Shared web tokens and components via `ui-theme` and `ui-web`      |
-| i18n             | i18next                               | Serbian default and English secondary                             |
-| Build            | Turborepo                             | Remote caching, task graph, watch mode across all packages        |
-| AI tools         | Typed tools per feature module + MCP  | One tool layer shared by MCP (`/apix/v1/mcp`) and the course chat |
+| Decision         | Choice                                  | Why                                                                |
+| ---------------- | --------------------------------------- | ------------------------------------------------------------------ |
+| API style        | REST + OpenAPI                          | Enables Orval code-gen; type-safe across all clients               |
+| Auth             | Supabase Auth (JWT)                     | API client supplies and refreshes bearer tokens                    |
+| DB               | Drizzle ORM + PostgreSQL via Supabase   | Type-safe SQL-first; schema-to-Zod via drizzle-zod                 |
+| Schema ownership | `db-schema` → `contract`                | Single source of truth; prevents drift between DB and validation   |
+| API client       | Orval (code-gen)                        | `src/generated/` is always in sync with `openapi.json`             |
+| Media            | Cloudflare Stream + R2                  | Video processing and object storage for course media               |
+| Styling          | Tailwind 4 (web), NativeWind 4 (native) | Shared design tokens via `ui-theme`; NativeWind 4 needs Tailwind 3 |
+| Clients          | Next.js PWA + Expo app                  | One API and shared packages; PWA covers web, Expo covers stores    |
+| Logging          | Pino + pino-http                        | Structured JSON logs; pretty-printed only in development           |
+| i18n             | i18next                                 | Serbian default and English secondary                              |
+| Build            | Turborepo                               | Remote caching, task graph, watch mode across all packages         |
+| Package manager  | pnpm workspaces (`nodeLinker: hoisted`) | Metro (native bundler) needs a flat `node_modules`                 |
+| AI tools         | Typed tools per feature module + MCP    | One tool layer shared by MCP (`/apix/v1/mcp`) and the course chat  |
