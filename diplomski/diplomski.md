@@ -230,64 +230,52 @@ Turborepo je sistem za izgradnju projekata u JavaScript-u i TypeScript-u, napisa
 
 # 4. Analiza zahteva
 
-Zahtevi su podeljeni na funkcionalne, koji opisuju šta sistem radi, i nefunkcionalne, koji opisuju svojstva kvaliteta, prema standardu ISO/IEC/IEEE 29148 [108]. Opisuju sistem onakav kakav je implementiran, a razlike po platformama date su u odeljku 4.4.
+Zahtevi su podeljeni na funkcionalne, koji opisuju šta sistem radi, i nefunkcionalne, koji opisuju svojstva kvaliteta, prema standardu ISO/IEC/IEEE 29148 [108]. Opisuju sistem onakav kakav je implementiran.
 
 ## 4.1 Akteri
 
-Prema specifikaciji jezika UML (eng. _Unified Modeling Language_), akter je uloga koju u interakciji sa sistemom ima korisnik ili drugi sistem, a ne konkretna osoba [109]. Course Hub ne razlikuje vrste naloga: svaki korisnik može da pravi kurseve i da se upisuje na tuđe, pa je kreator kursa koji je napravio, a polaznik kursa na koji je upisan. Akteri su prikazani u tabeli 4.1.
+Prema specifikaciji jezika UML (eng. _Unified Modeling Language_), akter je uloga koju u interakciji sa sistemom ima korisnik ili drugi sistem, a ne konkretna osoba [109]. Course Hub ne razlikuje vrste naloga, pa je uloga korisnika vezana za kurs. Akteri su:
 
-_Tabela 4.1: Akteri sistema Course Hub_
+- **Posetilac:** neprijavljeni korisnik koji pregleda katalog javnih kurseva.
+- **Polaznik:** korisnik upisan na kurs.
+- **Kreator:** korisnik koji je napravio kurs.
+- **Asistent zasnovan na VI:** spoljni sistem koji preko MCP-a radi u ime polaznika ili kreatora (poglavlje 9).
+- **Jezički model Claude:** spoljni sistem koji predlaže pitanja za kviz.
+- **Cloudflare Stream:** spoljni sistem koji javlja da je obrada video snimka završena.
+- **Servisi za push:** servisi pretraživača koji isporučuju push poruke do uređaja.
 
-| Akter                   | Vrsta          | Opis                                                                                                                                                                                                               |
-| ----------------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Posetilac               | Čovek          | Neprijavljeni korisnik. Pregleda i pretražuje katalog javnih kurseva, vidi opis kursa, recenzije i broj pitanja u kvizu, ali ne i sadržaj lekcija. Može da se registruje ili da otvori pozivnicu za privatni kurs. |
-| Polaznik                | Čovek          | Prijavljeni korisnik upisan na kurs. Prati lekcije i video snimke, rešava kvizove, prati napredak, ocenjuje kurs i prima obaveštenja.                                                                              |
-| Kreator                 | Čovek          | Prijavljeni korisnik koji je napravio kurs. Uređuje sadržaj, dodaje multimediju i kvizove, objavljuje kurs, poziva polaznike na privatne kurseve, odgovara na recenzije i prati svoje polaznike.                   |
-| Asistent zasnovan na VI | Spoljni sistem | MCP klijent (npr. Claude ili Claude Code) koji, uz dozvolu korisnika, poziva alate sistema u njegovo ime: pravi nacrte kurseva za kreatora ili čita sadržaj kurseva na koje je polaznik upisan.                    |
-| Jezički model Claude    | Spoljni sistem | Na zahtev kreatora predlaže pitanja za kviz.                                                                                                                                                                       |
-| Cloudflare Stream       | Spoljni sistem | Obaveštava server da je obrada otpremljenog video snimka završena.                                                                                                                                                 |
-| Servisi za push         | Spoljni sistem | Servisi pretraživača za isporuku Web Push poruka do uređaja korisnika.                                                                                                                                             |
+Šema baze predviđa i ulogu administratora, ali nijedan klijent još ne koristi njene rute (odeljak 5.1), pa administrator nije akter.
 
-Šema baze predviđa i ulogu administratora, a server ima rute za upravljanje korisnicima zaštićene međuslojem `validateAdminRole`. Nijedan klijent ih još ne koristi, pa administrator ovde nije akter (odeljak 5.1).
+## 4.2 Funkcionalni zahtevi po platformama
 
-## 4.2 Funkcionalni zahtevi
+Funkcionalni zahtevi i njihova podrška po klijentu dati su u tabeli 4.1. Web klijent ispunjava sve zahteve, a nativni pokriva deo za polaznika. To je projektna odluka: polazniku je mobilna aplikacija najpotrebnija, a kreator radi pretežno na računaru, kao i kod platformi iz odeljka 2.1.
 
-Funkcionalni zahtevi (tabela 4.2) grupisani su po oblastima i označeni sa FZ; kolona „Akter“ navodi ko zahtev inicira.
+_Tabela 4.1: Funkcionalni zahtevi po platformama (✓ ostvareno, ✗ planirano)_
 
-_Tabela 4.2: Funkcionalni zahtevi_
+| Oznaka | Zahtev                                                                                                                                                                                                                 | Web                           | Nativna                            |
+| ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- | ---------------------------------- |
+| FZ-1   | **Nalog.** Registracija, prijava, odjava i automatsko osvežavanje sesije.                                                                                                                                              | ✓                             | ✓                                  |
+| FZ-2   | **Profil i podešavanja.** Izmena profila i brisanje naloga; jezik (srpski ili engleski) i tema čuvaju se na serveru i primenjuju na svakom uređaju posle prijave.                                                      | ✓                             | Samo primena podešavanja           |
+| FZ-3   | **Katalog.** Pretraga i filtriranje objavljenih javnih kurseva, sa brojem polaznika i prosečnom ocenom; posetilac vidi opšte podatke o kursu, ali ne i sadržaj lekcija.                                                | ✓                             | ✓, samo uz prijavu                 |
+| FZ-4   | **Upis.** Samostalan upis na javni kurs i odjava; na privatni kurs samo preko pozivnice, a pokušaj upisa bez nje dojavljuje se kreatoru.                                                                               | ✓                             | ✓                                  |
+| FZ-5   | **Učenje.** Stablo tema i lekcija sa video snimkom, dokumentima i opisom; link do teme ili lekcije (`?topic=`, `?lesson=`) i nastavak od poslednje aktivne lekcije.                                                    | ✓                             | ✓                                  |
+| FZ-6   | **Napredak.** Status lekcije, postavljen ručno ili automatski (video odgledan do kraja i svi ocenjivi odgovori u kvizu tačni), izveden status teme i kursa, nastavak videa od mesta prekida i čestitka na kraju kursa. | ✓                             | ✓                                  |
+| FZ-7   | **Rešavanje kviza** na kraju kursa, teme ili lekcije: pitanja sa jednim ili više tačnih odgovora i slobodnim tekstom (koji se ne ocenjuje), prikaz rezultata i ponovno rešavanje.                                      | ✓                             | ✓                                  |
+| FZ-8   | **Recenzije.** Ocena od jedne do pet zvezdica uz komentar, jedna po polazniku, i jedan odgovor kreatora na svaku recenziju.                                                                                            | ✓                             | ✓                                  |
+| FZ-9   | **Kreiranje kursa.** Pravljenje, izmena, dupliranje i brisanje kursa, tema i lekcija uz automatsko čuvanje; status (nacrt, objavljen, arhiviran) i vidljivost (javni ili privatni); naslovna slika, video i dokumenti. | ✓                             | ✗                                  |
+| FZ-10  | **Pravljenje kviza**, ručno ili iz predloga jezičkog modela, koji kreator proverava pre čuvanja.                                                                                                                       | ✓                             | ✗                                  |
+| FZ-11  | **Pozivnice i polaznici.** Pozivnica za privatni kurs, vezana za adresu e-pošte ili jednokratni link, njen opoziv i prihvatanje; pregled polaznika svih kurseva kreatora.                                              | ✓                             | ✗                                  |
+| FZ-12  | **Obaveštenja.** Push obaveštenja o upisu, završetku kursa, pokušaju upisa na privatni kurs, izmeni kursa i novom kursu kreatora; istorija i uključivanje kategorija po kursu.                                         | ✓, na iOS-u posle instalacije | ✗, zahteva izmenu API-ja           |
+| FZ-13  | **Asistent zasnovan na VI** preko MCP-a: kreator pravi nacrte kurseva, tema, lekcija i kvizova, ali ih ne može objaviti ni obrisati; polaznik čita upisane kurseve ako je kreator to dozvolio.                         | — (MCP klijent)               | — (MCP klijent)                    |
+| FZ-14  | **Pristup za VI.** Lični pristupni tokeni za MCP i stranica za saglasnost MCP klijenta (OAuth).                                                                                                                        | ✓                             | ✗; saglasnost namerno samo na webu |
 
-| Oznaka | Oblast      | Zahtev                                                                                                                                                                                                                                                | Akter               |
-| ------ | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
-| FZ-1   | Nalog       | Registracija e-poštom i lozinkom, uz izbor jezika i teme (podrazumevano prema podešavanjima uređaja), prijava, odjava i automatsko osvežavanje sesije.                                                                                                | Posetilac, korisnik |
-| FZ-2   | Nalog       | Pregled i izmena profila (ime, prezime, korisničko ime, biografija) i brisanje sopstvenog naloga.                                                                                                                                                     | Korisnik            |
-| FZ-3   | Nalog       | Podešavanja jezika (srpski ili engleski), teme (svetla, tamna ili sistemska) i namene korišćenja, sačuvana na serveru i primenjena na svakom uređaju posle prijave.                                                                                   | Korisnik            |
-| FZ-4   | Katalog     | Pregled i pretraga objavljenih javnih kurseva sa paginacijom; na kartici kursa prikazuju se broj polaznika, prosečna ocena i broj recenzija.                                                                                                          | Posetilac, polaznik |
-| FZ-5   | Katalog     | Filtriranje kataloga tako da se prikažu samo kursevi drugih kreatora, odnosno samo kursevi na koje korisnik još nije upisan.                                                                                                                          | Polaznik            |
-| FZ-6   | Upis        | Samostalan upis na javni kurs i odjava sa kursa. Na privatni kurs moguće je upisati se samo preko pozivnice; pokušaj upisa bez nje dojavljuje se kreatoru.                                                                                            | Polaznik            |
-| FZ-7   | Učenje      | Čitanje kursa kroz stablo tema i lekcija, sa video snimkom, dokumentima i opisom svakog dela. Sadržaj lekcija dobija samo upisani polaznik; posetilac vidi samo opšte podatke o kursu.                                                                | Polaznik            |
-| FZ-8   | Učenje      | Link do konkretne teme ili lekcije (parametri `?topic=` i `?lesson=`), a pri otvaranju kursa bez linka nastavak od poslednje aktivne lekcije.                                                                                                         | Polaznik            |
-| FZ-9   | Napredak    | Status svake lekcije (nije započeta, u toku, završena), postavljen ručno ili izveden automatski: lekcija je završena kada je video odgledan do kraja i kada su svi ocenjivi odgovori u kvizu tačni. Status teme i kursa izvodi se iz statusa lekcija. | Polaznik            |
-| FZ-10  | Napredak    | Nastavak video snimka od mesta gde je polaznik stao i čestitka pri završetku kursa.                                                                                                                                                                   | Polaznik            |
-| FZ-11  | Kvizovi     | Rešavanje kviza na kraju kursa, teme ili lekcije, sa pitanjima sa jednim tačnim odgovorom, više tačnih odgovora i slobodnim tekstom (koji se ne ocenjuje); prikaz rezultata i tačnih odgovora; brisanje odgovora i ponovno rešavanje.                 | Polaznik            |
-| FZ-12  | Recenzije   | Ocena kursa od jedne do pet zvezdica uz opcioni komentar (jedna recenzija po polazniku, koja se može menjati) i javni pregled recenzija.                                                                                                              | Polaznik, posetilac |
-| FZ-13  | Recenzije   | Jedan odgovor kreatora na svaku recenziju, koji se može izmeniti ili obrisati.                                                                                                                                                                        | Kreator             |
-| FZ-14  | Kreiranje   | Pravljenje, izmena, dupliranje i brisanje kursa, tema i lekcija, uz promenu redosleda i automatsko čuvanje izmena u editoru.                                                                                                                          | Kreator             |
-| FZ-15  | Kreiranje   | Životni ciklus kursa (nacrt, objavljen, arhiviran) i vidljivost (javni ili privatni).                                                                                                                                                                 | Kreator             |
-| FZ-16  | Multimedija | Otpremanje naslovne slike kursa, jednog video snimka i više dokumenata po kursu, temi i lekciji, uz praćenje obrade video snimka.                                                                                                                     | Kreator             |
-| FZ-17  | Kvizovi     | Ručno pravljenje kviza ili predlog pitanja od strane jezičkog modela na osnovu naziva i opisa sadržaja, uz obaveznu proveru i čuvanje od strane kreatora; izmena i brisanje kviza.                                                                    | Kreator             |
-| FZ-18  | Pozivnice   | Pozivanje na privatni kurs pozivnicom vezanom za adresu e-pošte ili jednokratnim linkom, opoziv pozivnice i prihvatanje pozivnice uz prijavu ili registraciju.                                                                                        | Kreator, posetilac  |
-| FZ-19  | Polaznici   | Pregled polaznika svih svojih kurseva, sa datumom upisa i završetka, i ukupan broj upisa i polaznika.                                                                                                                                                 | Kreator             |
-| FZ-20  | Obaveštenja | Push obaveštenja po kategorijama: novi upis i završen kurs (kreatoru), pokušaj upisa na privatni kurs (kreatoru), izmena objavljenog kursa (polaznicima) i novi kurs kreatora (njegovim polaznicima).                                                 | Kreator, polaznik   |
-| FZ-21  | Obaveštenja | Istorija obaveštenja sa oznakom nepročitanih i uključivanje ili isključivanje kategorija za pojedinačan kurs ili za sve kurseve.                                                                                                                      | Korisnik            |
-| FZ-22  | VI          | Pristup asistenata zasnovanih na VI preko MCP servera: pregled i pravljenje nacrta kurseva, dodavanje i izmena tema i lekcija, rad sa kvizovima. Asistent ne može da objavi ni da obriše kurs.                                                        | Kreator, asistent   |
-| FZ-23  | VI          | Čitanje sadržaja kurseva na koje je polaznik upisan preko asistenta, samo ako je kreator za taj kurs uključio pristup za VI.                                                                                                                          | Polaznik, asistent  |
-| FZ-24  | VI          | Izdavanje i opoziv ličnih pristupnih tokena za MCP i odobravanje pristupa MCP klijentima preko stranice za saglasnost (OAuth).                                                                                                                        | Korisnik            |
+Osnovni tok učenja, od kataloga do kviza i recenzije (FZ-3 do FZ-8), dostupan je na obe platforme. Najveći nedostatak nativnog klijenta su push obaveštenja, koja bi na iOS-u radila bez instalacije PWA, a zahtevaju podršku za Expo push tokene na serveru. Web klijent se instalira kao PWA, a nativni će se distribuirati preko prodavnica posle izgradnje pomoću EAS-a. Zahtevi označeni sa ✓ na nativnom klijentu prolaze proveru tipova, a ručna provera na uređajima je u toku.
 
 ## 4.3 Nefunkcionalni zahtevi
 
-Nefunkcionalni zahtevi (tabela 4.3) grupisani su po karakteristikama kvaliteta iz standarda ISO/IEC 25010:2023 [110, 111], i to samo po onima koje su za ovaj sistem bitne.
+Nefunkcionalni zahtevi (tabela 4.2) grupisani su po karakteristikama kvaliteta iz standarda ISO/IEC 25010:2023 [110, 111], i to samo po onima koje su za ovaj sistem bitne.
 
-_Tabela 4.3: Nefunkcionalni zahtevi po karakteristikama kvaliteta ISO/IEC 25010_
+_Tabela 4.2: Nefunkcionalni zahtevi po karakteristikama kvaliteta ISO/IEC 25010_
 
 | Oznaka | Karakteristika         | Zahtev                                                                                                                                                                                                                                 |
 | ------ | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -303,37 +291,6 @@ _Tabela 4.3: Nefunkcionalni zahtevi po karakteristikama kvaliteta ISO/IEC 25010_
 | NFZ-10 | Održivost              | Model podataka definiše se na jednom mestu, a tipovi, šeme za validaciju, opis API-ja i klijent za API izvode se iz njega. Promena modela ili rute koja nije usklađena sa klijentima otkriva se kao greška u tipovima pre izvršavanja. |
 
 Sistem namerno ne podržava učenje bez internet konekcije, za razliku od platformi iz odeljka 2.1: servisni radnik kešira samo statičke resurse i stranicu za rad bez konekcije, a ne sadržaj lekcija. Automatskih testova nema, pa se NFZ-10 proverava proverom tipova, lint alatom i izgradnjom (poglavlje 12).
-
-## 4.4 Funkcionalnosti po platformama
-
-Web klijent ispunjava sve funkcionalne zahteve, a nativni pokriva deo za polaznika (tabela 4.4). To je i projektna odluka: polazniku je mobilna aplikacija najpotrebnija, a kreator radi pretežno na računaru, kao i kod platformi iz odeljka 2.1.
-
-_Tabela 4.4: Matrica funkcionalnost × platforma_
-
-| Funkcionalnost (zahtev)                             | Web (računar i telefon)                       | Nativna (iOS i Android)                                 |
-| --------------------------------------------------- | --------------------------------------------- | ------------------------------------------------------- |
-| Registracija i prijava (FZ-1)                       | ✓                                             | ✓                                                       |
-| Pregled kataloga bez prijave (FZ-4)                 | ✓                                             | ✗ (sve funkcionalnosti zahtevaju prijavu)               |
-| Katalog, pretraga i filteri (FZ-4, FZ-5)            | ✓                                             | ✓                                                       |
-| Upis i odjava (FZ-6)                                | ✓                                             | ✓                                                       |
-| Čitanje kursa, video i dokumenti (FZ-7, FZ-8)       | ✓                                             | ✓                                                       |
-| Napredak i nastavak videa (FZ-9, FZ-10)             | ✓                                             | ✓                                                       |
-| Rešavanje kvizova (FZ-11)                           | ✓                                             | ✓                                                       |
-| Haptička povratna informacija pri predaji kviza     | Android; iOS 18+ zaobilaznim putem            | ✓ (`expo-haptics`)                                      |
-| Recenzije i odgovor kreatora (FZ-12, FZ-13)         | ✓                                             | ✓                                                       |
-| Primena sačuvanog jezika i teme (FZ-3)              | ✓                                             | ✓                                                       |
-| Izmena profila i podešavanja (FZ-2, FZ-3)           | ✓                                             | ✗ (planirano)                                           |
-| Prihvatanje pozivnice (FZ-18)                       | ✓                                             | ✗ (planirano)                                           |
-| Push obaveštenja (FZ-20)                            | ✓ (Web Push; na iOS-u samo posle instalacije) | ✗ (planirano, zahteva izmenu API-ja)                    |
-| Istorija obaveštenja (FZ-21)                        | ✓                                             | ✗ (planirano)                                           |
-| Kreiranje kursa i multimedija (FZ-14 do FZ-16)      | ✓                                             | ✗ (planirano)                                           |
-| Pravljenje kviza, ručno i uz VI (FZ-17)             | ✓                                             | ✗ (planirano)                                           |
-| Slanje pozivnica i pregled polaznika (FZ-18, FZ-19) | ✓                                             | ✗ (planirano)                                           |
-| Lični pristupni tokeni za MCP (FZ-24)               | ✓                                             | ✗ (planirano)                                           |
-| Stranica za saglasnost MCP klijenta (FZ-24)         | ✓                                             | — (namerno samo na webu)                                |
-| Instalacija na uređaj                               | Kao PWA                                       | Iz prodavnice, posle izgradnje pomoću EAS-a (planirano) |
-
-Osnovni tok učenja, od kataloga do kviza i recenzije, dostupan je na obe platforme. Najvažniji nedostatak nativnog klijenta su push obaveštenja, koja bi na iOS-u radila bez instalacije PWA, a zahtevaju podršku za Expo push tokene na serveru. Funkcionalnosti nativnog klijenta označene kao ostvarene prolaze proveru tipova, a ručna provera na uređajima je u toku.
 
 # 5. Projektovanje sistema
 
@@ -440,7 +397,7 @@ _Tabela 5.1: Tabele baze podataka po grupama_
 | Grupa                | Tabele                                                                                         | Ključna pravila                                                                                                                                                                             |
 | -------------------- | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Korisnici            | `users`, `user_preferences`, `api_tokens`                                                      | Veza sa Supabase Auth-om preko `auth_user_id`; lozinke i sesije čuva Supabase. Podešavanja 1:1, upisuju se u istoj transakciji kao korisnik. Od tokena za MCP čuvaju se samo heš i prefiks. |
-| Sadržaj              | `courses`, `topics`, `lessons`                                                                 | Hijerarhija 1:N sa kaskadnim brisanjem; redosled u polju `position`. Kurs ima javni identifikator `public_id` za adrese, status, vidljivost i `ai_access_enabled` (FZ-23).                  |
+| Sadržaj              | `courses`, `topics`, `lessons`                                                                 | Hijerarhija 1:N sa kaskadnim brisanjem; redosled u polju `position`. Kurs ima javni identifikator `public_id` za adrese, status, vidljivost i `ai_access_enabled` (FZ-13).                  |
 | Materijali i kvizovi | `videos`, `documents`, `quizzes`                                                               | Pripadaju tačno jednom roditelju: kursu, temi ili lekciji. Najviše jedan video i jedan kviz po roditelju; dokumenata više.                                                                  |
 | Učenje               | `course_enrollments`, `course_progress`, `lesson_progress`, `quiz_responses`, `course_reviews` | Jedinstven par (korisnik, kurs) ili (korisnik, lekcija). Odjava popunjava `withdrawn_at` umesto brisanja. Status teme i kursa izvodi se iz statusa lekcija. Ocena recenzije 1–5.            |
 | Pozivnice            | `course_invitations`                                                                           | Tip (e-pošta, link), nasumični token, status i rok važenja.                                                                                                                                 |
@@ -550,7 +507,7 @@ Navigacija je namerno projektovana posebno za svaku platformu, ali obe prate ist
 
 **Web.** Na ekranima širim od 768 px (granica `md` u Tailwind CSS-u [120]) prikazuje se bočni meni iz shadcn/ui [94], a na užim zaglavlje i donja traka, čije grupe „Učenje“ i „Kreiranje“ otvaraju fioku (eng. _drawer_) sa dna ekrana. Tailwind polazi od mobilnog prikaza: klase bez prefiksa važe za sve širine, a klase sa `md:` od granice naviše [120], pa jedan kod opslužuje računar i telefon (NFZ-4).
 
-**Nativni klijent.** Korenski stek Expo Router-a [88] ima grupe ekrana `(auth)` i `(app)`, koje `Stack.Protected` prikazuje prema tome da li je korisnik prijavljen; posle odjave zaštićeni ekrani se uklanjaju iz istorije navigacije [121]. Grupa `(app)` ima pet tabova (početna, učenje, kursevi, obaveštenja, profil), od kojih su poslednja tri za sada placeholderi (odeljak 4.4). Stablo lekcija prikazuje se kao `Modal` sa stilom `pageSheet`: na iOS-u kao kartica koja se zatvara prevlačenjem nadole, a na Androidu preko celog ekrana [122].
+**Nativni klijent.** Korenski stek Expo Router-a [88] ima grupe ekrana `(auth)` i `(app)`, koje `Stack.Protected` prikazuje prema tome da li je korisnik prijavljen; posle odjave zaštićeni ekrani se uklanjaju iz istorije navigacije [121]. Grupa `(app)` ima pet tabova (početna, učenje, kursevi, obaveštenja, profil), od kojih su poslednja tri za sada placeholderi (odeljak 4.2). Stablo lekcija prikazuje se kao `Modal` sa stilom `pageSheet`: na iOS-u kao kartica koja se zatvara prevlačenjem nadole, a na Androidu preko celog ekrana [122].
 
 > **[Slika 5.5: Snimci ekrana istog kursa — web na računaru (bočni meni), web na telefonu (donja traka, fioka „Učenje“) i nativni klijent (tabovi, stablo lekcija kao kartica).]**
 
@@ -565,7 +522,7 @@ _Tabela 5.3: Navigacija po platformama_
 | Adresa lekcije        | `/learn/<publicId>?lesson=<id>` | `/learn/<publicId>?lesson=<id>` | `learn/<publicId>?lesson=<id>`         |
 | Komponente            | `@repo/ui-web`                  | `@repo/ui-web`                  | `@repo/ui-native`                      |
 
-Zajednički su struktura sadržaja, oblik adrese (isti link iz obaveštenja otvara istu lekciju na obe platforme, FZ-8) i ključevi prevoda iz `@repo/i18n`; razlikuju se komponente i obrasci navigacije.
+Zajednički su struktura sadržaja, oblik adrese (isti link iz obaveštenja otvara istu lekciju na obe platforme, FZ-5) i ključevi prevoda iz `@repo/i18n`; razlikuju se komponente i obrasci navigacije.
 
 # 6. Ponovna upotreba koda između platformi
 
@@ -666,7 +623,7 @@ Uvrštavanjem vrednosti iz tabele 6.2 u formulu iz koraka 4 dobija se:
 
 Brojke treba tumačiti uz tri ograde:
 
-1. **Klijenti nemaju isti obim.** Web klijent sadrži i deo za kreatora, a nativni samo deo za polaznika (odeljak 4.4). Udeo kod nativnog klijenta zato bolje opisuje deo aplikacije koji postoji na obe platforme.
+1. **Klijenti nemaju isti obim.** Web klijent sadrži i deo za kreatora, a nativni samo deo za polaznika (odeljak 4.2). Udeo kod nativnog klijenta zato bolje opisuje deo aplikacije koji postoji na obe platforme.
 2. **Nativni klijent ne koristi sav zajednički kod.** Generisani hook-ovi pokrivaju svih 82 operacije API-ja, a prevodi i ekrane koji postoje samo na webu, pa je 70,4% gornja granica udela koji nativni klijent zaista koristi.
 3. **Većina zajedničkog koda je generisana.** Od 14 807 zajedničkih linija 10 610 generiše Orval, a ručno je pisano 4 197. Ušteda u pisanju koda je zato manja od udela, ali ni generisani kod ne mora da se piše ni održava posebno za svaku platformu.
 
@@ -678,7 +635,7 @@ Ovo poglavlje opisuje kako su funkcionalni zahtevi ostvareni na serveru i u web 
 
 ## 7.1 Kursevi, teme i lekcije
 
-Kurs, tema i lekcija imaju iste operacije (`POST`, `GET`, `PUT`, `DELETE` na `/v1/courses`, `/v1/topics` i `/v1/lessons`), a izmene dozvoljava samo kreator kursa (FZ-14). Web editor (`/courses/add` i `/courses/<publicId>/edit`) ima dva dela: levo je stablo kursa, u kome se redosled tema i lekcija menja prevlačenjem (biblioteka `@dnd-kit`), a desno forma za izabrani element.
+Kurs, tema i lekcija imaju iste operacije (`POST`, `GET`, `PUT`, `DELETE` na `/v1/courses`, `/v1/topics` i `/v1/lessons`), a izmene dozvoljava samo kreator kursa (FZ-9). Web editor (`/courses/add` i `/courses/<publicId>/edit`) ima dva dela: levo je stablo kursa, u kome se redosled tema i lekcija menja prevlačenjem (biblioteka `@dnd-kit`), a desno forma za izabrani element.
 
 Ponašanje editora određuju četiri pravila:
 
@@ -716,9 +673,9 @@ Za reprodukciju server vraća adresu HLS manifesta (`.../manifest/video.m3u8`). 
 
 ## 7.3 Upis, pozivnice i privatni kursevi
 
-Na javni objavljen kurs polaznik se upisuje jednim zahtevom, a kreator dobija obaveštenje (FZ-6). Ponovni upis posle odjave ponovo aktivira postojeći red u `course_enrollments`. Pokušaj upisa na privatni kurs odbija se statusom 409 (`COURSE_PRIVATE`), a kreator dobija obaveštenje o pokušaju.
+Na javni objavljen kurs polaznik se upisuje jednim zahtevom, a kreator dobija obaveštenje (FZ-4). Ponovni upis posle odjave ponovo aktivira postojeći red u `course_enrollments`. Pokušaj upisa na privatni kurs odbija se statusom 409 (`COURSE_PRIVATE`), a kreator dobija obaveštenje o pokušaju.
 
-Na privatni kurs upisuje se samo preko pozivnice (FZ-18). Pozivnicu pravi kreator, samo za privatni kurs, u jednom od dva oblika:
+Na privatni kurs upisuje se samo preko pozivnice (FZ-11). Pozivnicu pravi kreator, samo za privatni kurs, u jednom od dva oblika:
 
 - **vezana za e-poštu:** prihvatiti je može samo nalog sa tom adresom (u suprotnom 403, `EMAIL_MISMATCH`);
 - **link:** prihvatiti je može bilo koji prijavljen korisnik.
@@ -727,7 +684,7 @@ Obe vrste nose nasumični token od 48 heksadecimalnih znakova, važe 7 dana i mo
 
 ## 7.4 Praćenje napretka
 
-Napredak se čuva po lekciji, a status teme i kursa izvodi se pri čitanju (FZ-9):
+Napredak se čuva po lekciji, a status teme i kursa izvodi se pri čitanju (FZ-6):
 
 - tema ili kurs je **završen** ako su sve njegove lekcije završene;
 - **nije započet** ako nijedna lekcija nije započeta;
@@ -735,11 +692,11 @@ Napredak se čuva po lekciji, a status teme i kursa izvodi se pri čitanju (FZ-9
 
 Lekcija postaje završena automatski kada je ispunjen uslov za oba dela sadržaja: video (ako postoji) je odgledan do kraja, a u kvizu (ako postoji) su svi ocenjivi odgovori tačni. Status se ponovo izračunava pri svakom čuvanju ili brisanju odgovora na kviz, pa brisanje odgovora vraća lekciju u status „u toku“. Polaznik status lekcije može postaviti i ručno.
 
-Web klijent poziciju u snimku čuva najviše jednom u 10 sekundi, kao i pri pauzi i napuštanju lekcije, a pri sledećem otvaranju nastavlja od nje (FZ-10). Kada se završi poslednja lekcija, kreator dobija obaveštenje, a polaznik vidi čestitku sa konfetama i ponudu da oceni kurs.
+Web klijent poziciju u snimku čuva najviše jednom u 10 sekundi, kao i pri pauzi i napuštanju lekcije, a pri sledećem otvaranju nastavlja od nje (FZ-6). Kada se završi poslednja lekcija, kreator dobija obaveštenje, a polaznik vidi čestitku sa konfetama i ponudu da oceni kurs.
 
 ## 7.5 Kvizovi i recenzije
 
-Kviz može pripadati kursu, temi ili lekciji i ima pitanja tri vrste: jedan tačan odgovor, više tačnih odgovora i slobodan tekst (FZ-11, FZ-17). Kreator kviz pravi u formi sa pitanjima koja se mogu prevlačiti, ručno ili iz predloga jezičkog modela. Polaznik dobija kviz preko javne putanje iz koje su uklonjene oznake tačnih odgovora, pa tačni odgovori ne stižu do klijenta pre predaje (NFZ-5). Posle predaje server čuva odgovore, ocenjuje ih funkcijom `scoreQuiz` prema trenutnim pitanjima i vraća rezultat; odgovori na pitanja sa slobodnim tekstom se čuvaju, ali se ne ocenjuju.
+Kviz može pripadati kursu, temi ili lekciji i ima pitanja tri vrste: jedan tačan odgovor, više tačnih odgovora i slobodan tekst (FZ-7, FZ-10). Kreator kviz pravi u formi sa pitanjima koja se mogu prevlačiti, ručno ili iz predloga jezičkog modela. Polaznik dobija kviz preko javne putanje iz koje su uklonjene oznake tačnih odgovora, pa tačni odgovori ne stižu do klijenta pre predaje (NFZ-5). Posle predaje server čuva odgovore, ocenjuje ih funkcijom `scoreQuiz` prema trenutnim pitanjima i vraća rezultat; odgovori na pitanja sa slobodnim tekstom se čuvaju, ali se ne ocenjuju.
 
 Recenzije su opisane u odeljcima 5.2 i 5.3: polaznik ima jednu recenziju po kursu (ocena 1–5 i komentar), kreator jedan odgovor na nju, a prosečna ocena kursa ponovo se računa u istoj transakciji.
 
@@ -762,11 +719,11 @@ Slanje se odvija u tri koraka:
 2. Tekst se prevodi na jezik primaoca iz njegovih podešavanja, a ne na jezik korisnika koji je izazvao događaj.
 3. Poruka se šalje na sve pretplate primaoca bibliotekom `web-push`. Pretplata za koju servis za isporuku vrati status 404, kojim RFC 8030 označava isteklu pretplatu [48], ili 410, briše se.
 
-Slanje se ne čeka (eng. _fire-and-forget_): greška pri slanju ne prekida upis, objavu ili drugu radnju koja ga je pokrenula (NFZ-9). Servisni radnik prikazuje poruku, a klik na nju otvara adresu iz poruke u postojećem ili novom prozoru aplikacije. Istorija obaveštenja je stranica `/notifications`, sa brojem nepročitanih u navigaciji (FZ-21).
+Slanje se ne čeka (eng. _fire-and-forget_): greška pri slanju ne prekida upis, objavu ili drugu radnju koja ga je pokrenula (NFZ-9). Servisni radnik prikazuje poruku, a klik na nju otvara adresu iz poruke u postojećem ili novom prozoru aplikacije. Istorija obaveštenja je stranica `/notifications`, sa brojem nepročitanih u navigaciji (FZ-12).
 
 ## 7.7 Lokalizacija i teme
 
-Jezik nije deo adrese (`localeInPath: false`): proxy iz fajla `proxy.ts` (odeljak 3.4.2) određuje jezik iz kolačića, pa ista adresa radi na oba jezika. Prevodi su u `@repo/i18n`, a podrazumevani jezik je srpski. Tema (svetla, tamna ili sistemska) primenjuje se bibliotekom `next-themes`. Jezik i tema čuvaju se i na serveru (`user_preferences`) i primenjuju se posle prijave, pa korisnik ima ista podešavanja na svakom uređaju (FZ-3).
+Jezik nije deo adrese (`localeInPath: false`): proxy iz fajla `proxy.ts` (odeljak 3.4.2) određuje jezik iz kolačića, pa ista adresa radi na oba jezika. Prevodi su u `@repo/i18n`, a podrazumevani jezik je srpski. Tema (svetla, tamna ili sistemska) primenjuje se bibliotekom `next-themes`. Jezik i tema čuvaju se i na serveru (`user_preferences`) i primenjuju se posle prijave, pa korisnik ima ista podešavanja na svakom uređaju (FZ-2).
 
 ## 7.8 PWA
 
@@ -782,7 +739,7 @@ U samoj aplikaciji komponenta `NetworkProvider` prati događaje `offline` i `onl
 
 # 8. Implementacija nativne aplikacije
 
-Ovo poglavlje opisuje kako nativni klijent (`apps/native`) ostvaruje deo za polaznika iz tabele 4.4. Zamene web API-ja opisane su u odeljku 6.2, a navigacija u odeljku 5.6.
+Ovo poglavlje opisuje kako nativni klijent (`apps/native`) ostvaruje deo za polaznika iz tabele 4.1. Zamene web API-ja opisane su u odeljku 6.2, a navigacija u odeljku 5.6.
 
 ## 8.1 Integracija u monorepo
 
@@ -967,7 +924,7 @@ Kviz koristi javnu putanju bez tačnih odgovora (odeljak 7.5) i komponentu `ques
 
 ## 8.6 Sinhronizacija podešavanja
 
-Jezik i tema prate korisnika sa servera, pa nativni klijent posle prijave izgleda isto kao web (FZ-3). Pri pokretanju jezik se postavlja prema uređaju: `expo-localization` vraća jezike redom iz podešavanja uređaja [133], a uzima se prvi koji aplikacija podržava, inače srpski. Posle prijave komponenta `PreferencesSync` dohvata sačuvana podešavanja (`GET /v1/users/preferences`) i primenjuje ih (listing 8.5).
+Jezik i tema prate korisnika sa servera, pa nativni klijent posle prijave izgleda isto kao web (FZ-2). Pri pokretanju jezik se postavlja prema uređaju: `expo-localization` vraća jezike redom iz podešavanja uređaja [133], a uzima se prvi koji aplikacija podržava, inače srpski. Posle prijave komponenta `PreferencesSync` dohvata sačuvana podešavanja (`GET /v1/users/preferences`) i primenjuje ih (listing 8.5).
 
 _Listing 8.5: Primena jezika i teme (`src/hooks/use-apply-preferences.ts`)_
 
@@ -988,7 +945,7 @@ export function useApplyPreferences() {
 }
 ```
 
-Isti hook se poziva pri prijavi, sa podešavanjima iz odgovora na `POST /v1/auth/login`, i pri odjavi, sa jezikom uređaja i sistemskom temom (listing 8.1). Prevodi i hook `useGetUserPreferences` dolaze iz zajedničkih paketa, a `expo-localization` i `setColorScheme` iz NativeWind-a su specifični za nativni klijent. Podešavanja se na nativnoj strani za sada samo čitaju, jer je ekran profila placeholder (tabela 4.4).
+Isti hook se poziva pri prijavi, sa podešavanjima iz odgovora na `POST /v1/auth/login`, i pri odjavi, sa jezikom uređaja i sistemskom temom (listing 8.1). Prevodi i hook `useGetUserPreferences` dolaze iz zajedničkih paketa, a `expo-localization` i `setColorScheme` iz NativeWind-a su specifični za nativni klijent. Podešavanja se na nativnoj strani za sada samo čitaju, jer je ekran profila placeholder (tabela 4.1).
 
 > **[Slika 8.3: Snimci ekrana nativnog klijenta na iOS-u i Androidu — katalog sa pretragom, detalji kursa sa stablom lekcija u kartici, video lekcija i kviz posle predaje.]**
 
@@ -1036,7 +993,7 @@ _Slika 9.1: Dva puta integracije VI_
 2. Server proverava da je korisnik kreator i da nije potrošio dnevni limit od 20 predloga (NFZ-8).
 3. Server modelu šalje nazive i opise kursa, teme ili lekcije i jezik korisnika, sa zahtevom za 3–5 pitanja.
 4. Odgovor se traži kao strukturisan izlaz (eng. _structured output_) prema Zod šemi iz `@repo/contract`, što garantuje JSON saglasan šemi [135]. Server ga ponovo proverava i vraća, a u bazu ne upisuje ništa.
-5. Predlog se otvara u istoj formi kao ručno pravljen kviz, gde ga kreator menja, dopunjuje i čuva (FZ-17).
+5. Predlog se otvara u istoj formi kao ručno pravljen kviz, gde ga kreator menja, dopunjuje i čuva (FZ-10).
 
 Ovakav predlog je realan oslonac: u poređenju 651 pitanja koja je napisao GPT-4 i 449 pitanja koja su napisali ljudi, generisana pitanja imala su jasan jezik, jedan tačan odgovor i kvalitetne netačne ponude [136]. Ipak, model zna samo nazive i opise lekcija, pa je pregled kreatora obavezan korak, a ne formalnost.
 
@@ -1047,13 +1004,64 @@ MCP je otvoreni standard kompanije Anthropic iz novembra 2024. godine za poveziv
 1. **Povezivanje.** Korisnik na stranici `/ai-connect` pravi lični pristupni token, ili se asistent sam prijavljuje preko OAuth-a: korisnik se preusmerava na web klijent, gde odobrava pristup, po postupku koji propisuje specifikacija MCP-a [141–145]. Pristup se u svakom trenutku može opozvati.
 2. **Otkrivanje.** Asistent od servera dobija listu od 14 alata (pregled, pravljenje i izmena kurseva, tema, lekcija i kvizova, i čitanje upisanih kurseva) i tri šablona: `ch_generate_course` (pisanje), `ch_review_course` i `ch_research_course` (istraživanje i učenje).
 3. **Rad.** Model na osnovu zahteva korisnika bira alate i poziva ih; server ih izvršava u ime korisnika, preko istih servisa i provera kao REST API.
-4. **Granice.** Asistent ne može da objavi ni da obriše kurs, već pravi nacrt koji kreator pregleda i objavljuje. Polaznik upisani kurs čita preko asistenta samo ako je kreator to dozvolio (FZ-23), jer sadržaj tada odlazi spoljnom modelu.
+4. **Granice.** Asistent ne može da objavi ni da obriše kurs, već pravi nacrt koji kreator pregleda i objavljuje. Polaznik upisani kurs čita preko asistenta samo ako je kreator to dozvolio (FZ-13), jer sadržaj tada odlazi spoljnom modelu.
 
 ## 9.5 Ograničenja
 
 - Kvalitet predloga nije sistematski meren; oslanja se na pregled kreatora i proveru korisnika.
 - Dnevni limit se broji u memoriji servera, pa se briše pri postavljanju nove verzije.
 - Pristupni tokeni nemaju rok važenja ni ovlašćenja po alatu, iako specifikacija preporučuje kratkotrajne tokene [141], a verzija specifikacije 2026-07-28 zastarelom proglašava dinamičku registraciju klijenata koju sistem koristi [146].
+
+# 10. Prikaz rada aplikacije
+
+Rad aplikacije prikazan je na jednom toku, rešavanju kviza na kraju lekcije, na računaru, mobilnom webu, iOS-u i Androidu. Ovaj tok je izabran jer postoji na svim klijentima (FZ-7). Na sva četiri snimka su isti korisnik i ista lekcija, pa se vidi i da se odgovori i napredak dele između uređaja (NFZ-2).
+
+## 10.1 Tok rešavanja kviza
+
+1. Polaznik otvara lekciju preko stabla kursa ili linka `?lesson=` (FZ-5). Kviz je kartica ispod sadržaja lekcije.
+2. Prvi odgovor menja status lekcije iz „nije započeta“ u „u toku“.
+3. Posle predaje server ocenjuje odgovore (odeljak 7.5), a klijent prikazuje rezultat i tačne odgovore.
+4. Ako su svi ocenjivi odgovori tačni, prikazuju se konfete i uređaj vibrira. Lekcija je završena ako je i video odgledan do kraja (FZ-6).
+5. Polaznik može da obriše odgovore i reši kviz ponovo.
+
+> **[Slika 10.1: Kviz pre predaje — web na računaru, web na telefonu, iOS i Android, jedan pored drugog.]**
+
+> **[Slika 10.2: Rezultat kviza sa tačnim odgovorima i konfetama posle predaje sa svim tačnim odgovorima — iste četiri platforme.]**
+
+## 10.2 Razlike po platformama
+
+Tok i izgled su isti na sve četiri platforme, a razlikuju se samo delovi iz tabele 10.1.
+
+_Tabela 10.1: Razlike u toku kviza po platformama_
+
+| Deo            | Web, računar                         | Web, telefon                                                  | iOS i Android                                     |
+| -------------- | ------------------------------------ | ------------------------------------------------------------- | ------------------------------------------------- |
+| Stablo lekcija | bočni meni                           | fioka sa dna ekrana                                           | `Modal` (kartica na iOS-u, ceo ekran na Androidu) |
+| Komponente     | `@repo/ui-web`                       | `@repo/ui-web`                                                | `@repo/ui-native`                                 |
+| Konfete        | `canvas-confetti`, iz sredine ekrana | `canvas-confetti`, sa dna ekrana                              | Reanimated                                        |
+| Vibracija      | nema                                 | `navigator.vibrate` na Androidu; na iOS 18+ zaobilaznim putem | `expo-haptics`                                    |
+
+Komponenta `LearnQuiz` ima na webu 146, a na nativnom klijentu 145 linija. Razlikuje se 19 linija nativne verzije, uglavnom uvozi i povratna informacija posle predaje (listing 10.1).
+
+_Listing 10.1: Reakcija na rezultat kviza na webu i nativnom klijentu (`apps/web/app/learn/[publicId]/components/quiz/learn-quiz.tsx`, `apps/native/src/modules/learn-course/components/quiz/learn-quiz.tsx`)_
+
+```tsx
+const { mutate: saveResponse } = useSaveQuizResponse(); // isto: @repo/api-client
+// …
+onSuccess: (saved) => {
+  queryClient.setQueryData(responseQueryKey, saved); // isto
+  const result = saved.response?.result;
+  if (result && result.total > 0 && result.score === result.total) {
+    // web:     celebrate(isMobile); vibrate([80, 60, 80, 60, 160]);
+    // nativno: celebrate(); Haptics.notificationAsync(NotificationFeedbackType.Success);
+  } else {
+    // web:     vibrate(40);
+    // nativno: Haptics.impactAsync(ImpactFeedbackStyle.Light);
+  }
+},
+```
+
+Iz zajedničkih paketa dolaze hook-ovi za kviz i ključ keša (`@repo/api-client`), tipovi odgovora (`@repo/contract`), obrada grešaka (`@repo/shared`) i prevodi (`@repo/i18n`), a ocenjivanje je na serveru. Specifični za platformu su samo komponente, konfete i vibracija. Za ceo kviz (`learn-quiz`, `quiz-questionnaire`, `quiz-result`, `public-quiz`) nativna verzija ima 312 linija, od kojih se 62 razlikuju od web verzije.
 
 # 11. Postavljanje u produkciju i cena održavanja
 

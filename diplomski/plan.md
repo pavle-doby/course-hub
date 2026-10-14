@@ -3,12 +3,12 @@
 ## Napredak
 
 ```
-Rad        ██████████████████░░  ~90 %
-Strane     ~51 od ~55
-Poglavlja  10 od 12  (1–9, 11. Postavljanje u produkciju i cena održavanja)
+Rad        ███████████████████░  ~93 %
+Strane     ~50 od ~55
+Poglavlja  11 od 12  (1–11)
 ```
 
-Procena od 14.10.2026: `diplomski.md` ima oko 15 200 reči posle skraćivanja celog rada (računajući tabele i dijagrame), uz oko 300 reči po strani (A4, 12 pt, prored 1,5), bez slika. Poglavlje 11 ima oko 1 150 reči, većinom u tabelama. Nisu napisani poglavlja 10 i 12, sažetak i abstract; rad je već na gornjoj granici, pa ih treba pisati minimalno.
+Procena od 14.10.2026: `diplomski.md` ima oko 15 000 reči posle skraćivanja celog rada i poglavlja 4 (računajući tabele i dijagrame), uz oko 300 reči po strani (A4, 12 pt, prored 1,5), bez slika. Poglavlje 10 ima oko 450 reči i čeka slike 10.1 i 10.2. Nisu napisani poglavlje 12, sažetak i abstract; rad je već na gornjoj granici, pa ih treba pisati minimalno.
 
 **Naslov:** Razvoj višeplatformske aplikacije za kurseve korišćenjem web tehnologija
 
@@ -70,10 +70,10 @@ Težište rada: **jedan backend i zajednički TypeScript/React kod za web (PWA),
 
 ### 4. ★ Analiza zahteva
 
-- Akteri: polaznik, kreator, posetilac
-- Funkcionalni i nefunkcionalni zahtevi
+- 4.1 Akteri: jedan pasus (posetilac, polaznik, kreator, spoljni sistemi)
+- 4.2 Funkcionalni zahtevi po platformama: jedna tabela FZ-1 do FZ-14 sa kolonama web/nativna (matrica i lista zahteva spojene 14.10.2026.)
+- 4.3 Nefunkcionalni zahtevi
 - ~~Slučajevi korišćenja~~ (izbačeno 13.10.2026.)
-- ◆ Matrica „funkcionalnost × platforma“ (šta radi na webu, a šta nativno)
 
 ### 5. ★ Projektovanje sistema
 
