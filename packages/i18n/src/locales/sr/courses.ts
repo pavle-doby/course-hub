@@ -16,7 +16,7 @@ export const courses = {
     preview: "Pregled",
     delete: "Obriši",
     publish: "Objavi",
-    unpublish: "Poništi objavljivanje",
+    unpublish: "Povuci",
     archive: "Arhiviraj",
     invite: "Pozovi",
     deleteDialog: {
@@ -43,7 +43,7 @@ export const courses = {
     save: "Sačuvaj",
     saving: "Čuvanje…",
     publish: "Objavi",
-    unpublish: "Poništi objavljivanje",
+    unpublish: "Povuci",
     visibility: "Vidljivost",
     state: "Stanje",
     status: "Status",
@@ -126,7 +126,7 @@ export const courses = {
     autoSaveOnToast: "Automatsko čuvanje - Uključeno",
     autoSaveOffToast: "Automatsko čuvanje - Isključeno",
     publishedToast: "Kurs je objavljen",
-    unpublishedToast: "Objavljivanje kursa je poništeno",
+    unpublishedToast: "Kurs je povučen",
     archive: "Arhiviraj",
     archivedToast: "Kurs je arhiviran",
     publishDialog: {
@@ -135,9 +135,9 @@ export const courses = {
       confirm: "Objavi",
     },
     unpublishDialog: {
-      title: "Poništiti objavljivanje kursa?",
+      title: "Povući kurs?",
       description: "Polaznici više neće moći da se upišu na ovaj kurs.",
-      confirm: "Poništi objavljivanje",
+      confirm: "Povuci",
     },
     archiveDialog: {
       title: "Arhivirati kurs?",
