@@ -29,6 +29,7 @@ export default function LearnEnrolledPage() {
     page,
     limit: PAGE_LIMIT,
   });
+
   useErrorHandlingQuery({
     t: t as (key: string) => string,
     error,

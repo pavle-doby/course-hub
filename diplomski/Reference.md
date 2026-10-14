@@ -10,35 +10,35 @@ Numeracija prati redosled prvog citiranja u radu.
 
 [4] Expo, „Expo Documentation“. Dostupno na: https://docs.expo.dev/ (pristupljeno 30.09.2026.)
 
-[5] H. L. Roediger III, J. D. Karpicke, „Test-Enhanced Learning: Taking Memory Tests Improves Long-Term Retention“, *Psychological Science*, vol. 17, no. 3, str. 249–255, 2006. DOI: 10.1111/j.1467-9280.2006.01693.x
+[5] H. L. Roediger III, J. D. Karpicke, „Test-Enhanced Learning: Taking Memory Tests Improves Long-Term Retention“, _Psychological Science_, vol. 17, no. 3, str. 249–255, 2006. DOI: 10.1111/j.1467-9280.2006.01693.x
 
-[6] R. Potvin, J. Levenberg, „Why Google Stores Billions of Lines of Code in a Single Repository“, *Communications of the ACM*, vol. 59, no. 7, str. 78–87, 2016. DOI: 10.1145/2854146
+[6] R. Potvin, J. Levenberg, „Why Google Stores Billions of Lines of Code in a Single Repository“, _Communications of the ACM_, vol. 59, no. 7, str. 78–87, 2016. DOI: 10.1145/2854146
 
 [7] Moodle HQ, „Moodle App Overview“, Moodle Developer Resources. Dostupno na: https://moodledev.io/general/app/overview (pristupljeno 30.09.2026.)
 
-[8] Coursera, Inc., *Form 10-K: Annual Report for the fiscal year ended December 31, 2025*, U.S. Securities and Exchange Commission, 2026. Dostupno na: https://www.sec.gov/Archives/edgar/data/1651562/000165156226000015/cour-20251231.htm (pristupljeno 30.09.2026.)
+[8] Coursera, Inc., _Form 10-K: Annual Report for the fiscal year ended December 31, 2025_, U.S. Securities and Exchange Commission, 2026. Dostupno na: https://www.sec.gov/Archives/edgar/data/1651562/000165156226000015/cour-20251231.htm (pristupljeno 30.09.2026.)
 
-[9] Coursera, Inc., *Form 8-K/A* (završeno spajanje sa kompanijom Udemy, 11.05.2026.), U.S. Securities and Exchange Commission, 2026. Dostupno na: https://www.sec.gov/Archives/edgar/data/0001651562/000165156226000050/cour-20260511.htm (pristupljeno 30.09.2026.)
+[9] Coursera, Inc., _Form 8-K/A_ (završeno spajanje sa kompanijom Udemy, 11.05.2026.), U.S. Securities and Exchange Commission, 2026. Dostupno na: https://www.sec.gov/Archives/edgar/data/0001651562/000165156226000050/cour-20260511.htm (pristupljeno 30.09.2026.)
 
 [10] Teachable, „Use the iOS App as a Student“, Teachable Help Center. Dostupno na: https://support.teachable.com/en/articles/11682426-use-the-ios-app-as-a-student (pristupljeno 30.09.2026.)
 
-[11] edX, „If You Use the edX Mobile App“, *Open edX Learner's Guide*. Dostupno na: https://edx.readthedocs.io/projects/open-edx-learner-guide/en/latest/SFD_mobile.html (pristupljeno 30.09.2026.)
+[11] edX, „If You Use the edX Mobile App“, _Open edX Learner's Guide_. Dostupno na: https://edx.readthedocs.io/projects/open-edx-learner-guide/en/latest/SFD_mobile.html (pristupljeno 30.09.2026.)
 
-[12] Moodle HQ, *moodlehq/moodleapp* (izvorni kod i `package.json`, grana main), GitHub, 2026. Dostupno na: https://github.com/moodlehq/moodleapp (pristupljeno 30.09.2026.)
+[12] Moodle HQ, _moodlehq/moodleapp_ (izvorni kod i `package.json`, grana main), GitHub, 2026. Dostupno na: https://github.com/moodlehq/moodleapp (pristupljeno 30.09.2026.)
 
-[13] Instructure, *instructure/canvas-android*, GitHub. Dostupno na: https://github.com/instructure/canvas-android (pristupljeno 30.09.2026.)
+[13] Instructure, _instructure/canvas-android_, GitHub. Dostupno na: https://github.com/instructure/canvas-android (pristupljeno 30.09.2026.)
 
-[14] Instructure, *instructure/canvas-ios*, GitHub. Dostupno na: https://github.com/instructure/canvas-ios (pristupljeno 30.09.2026.)
+[14] Instructure, _instructure/canvas-ios_, GitHub. Dostupno na: https://github.com/instructure/canvas-ios (pristupljeno 30.09.2026.)
 
 [15] Moodle, „AI subsystem“, MoodleDocs. Dostupno na: https://docs.moodle.org/en/AI_subsystem (pristupljeno 30.09.2026.)
 
-[16] H. Heitkötter, S. Hanschke, T. A. Majchrzak, „Comparing Cross-platform Development Approaches for Mobile Applications“, *Proceedings of the 8th International Conference on Web Information Systems and Technologies (WEBIST 2012)*, SciTePress, str. 299–311, 2012. DOI: 10.5220/0003904502990311
+[16] H. Heitkötter, S. Hanschke, T. A. Majchrzak, „Comparing Cross-platform Development Approaches for Mobile Applications“, _Proceedings of the 8th International Conference on Web Information Systems and Technologies (WEBIST 2012)_, SciTePress, str. 299–311, 2012. DOI: 10.5220/0003904502990311
 
-[17] W. S. El-Kassas, B. A. Abdullah, A. H. Yousef, A. M. Wahba, „Taxonomy of Cross-Platform Mobile Applications Development Approaches“, *Ain Shams Engineering Journal*, vol. 8, no. 2, str. 163–190, 2017. DOI: 10.1016/j.asej.2015.08.004
+[17] W. S. El-Kassas, B. A. Abdullah, A. H. Yousef, A. M. Wahba, „Taxonomy of Cross-Platform Mobile Applications Development Approaches“, _Ain Shams Engineering Journal_, vol. 8, no. 2, str. 163–190, 2017. DOI: 10.1016/j.asej.2015.08.004
 
-[18] A. Biørn-Hansen, T.-M. Grønli, G. Ghinea, „A Survey and Taxonomy of Core Concepts and Research Challenges in Cross-Platform Mobile Development“, *ACM Computing Surveys*, vol. 51, no. 5, čl. 108, str. 1–34, 2018. DOI: 10.1145/3241739
+[18] A. Biørn-Hansen, T.-M. Grønli, G. Ghinea, „A Survey and Taxonomy of Core Concepts and Research Challenges in Cross-Platform Mobile Development“, _ACM Computing Surveys_, vol. 51, no. 5, čl. 108, str. 1–34, 2018. DOI: 10.1145/3241739
 
-[19] T. A. Majchrzak, A. Biørn-Hansen, T.-M. Grønli, „Progressive Web Apps: the Definite Approach to Cross-Platform Development?“, *Proceedings of the 51st Hawaii International Conference on System Sciences (HICSS-51)*, str. 5735–5744, 2018. DOI: 10.24251/HICSS.2018.718
+[19] T. A. Majchrzak, A. Biørn-Hansen, T.-M. Grønli, „Progressive Web Apps: the Definite Approach to Cross-Platform Development?“, _Proceedings of the 51st Hawaii International Conference on System Sciences (HICSS-51)_, str. 5735–5744, 2018. DOI: 10.24251/HICSS.2018.718
 
 [20] Ionic, „Capacitor Documentation“. Dostupno na: https://capacitorjs.com/docs (pristupljeno 30.09.2026.)
 
@@ -48,15 +48,15 @@ Numeracija prati redosled prvog citiranja u radu.
 
 [23] Flutter, „Flutter architectural overview“. Dostupno na: https://docs.flutter.dev/resources/architectural-overview (pristupljeno 30.09.2026.)
 
-[24] A. Biørn-Hansen, C. Rieger, T.-M. Grønli, T. A. Majchrzak, G. Ghinea, „An empirical investigation of performance overhead in cross-platform mobile development frameworks“, *Empirical Software Engineering*, vol. 25, no. 4, str. 2997–3040, 2020. DOI: 10.1007/s10664-020-09827-6
+[24] A. Biørn-Hansen, C. Rieger, T.-M. Grønli, T. A. Majchrzak, G. Ghinea, „An empirical investigation of performance overhead in cross-platform mobile development frameworks“, _Empirical Software Engineering_, vol. 25, no. 4, str. 2997–3040, 2020. DOI: 10.1007/s10664-020-09827-6
 
-[25] W. Oliveira, B. Moraes, F. Castor, J. P. Fernandes, „Analyzing the Resource Usage Overhead of Mobile App Development Frameworks“, *Proceedings of the 27th International Conference on Evaluation and Assessment in Software Engineering (EASE 2023)*, ACM, str. 152–161, 2023. DOI: 10.1145/3593434.3593487
+[25] W. Oliveira, B. Moraes, F. Castor, J. P. Fernandes, „Analyzing the Resource Usage Overhead of Mobile App Development Frameworks“, _Proceedings of the 27th International Conference on Evaluation and Assessment in Software Engineering (EASE 2023)_, ACM, str. 152–161, 2023. DOI: 10.1145/3593434.3593487
 
-[26] R. Horn, A. Lahnaoui, E. Reinoso, S. Peng, V. Isakov, T. Islam, I. Malavolta, „Native vs Web Apps: Comparing the Energy Consumption and Performance of Android Apps and their Web Counterparts“, *2023 IEEE/ACM 10th International Conference on Mobile Software Engineering and Systems (MOBILESoft)*, str. 44–54, 2023. DOI: 10.1109/MOBILSoft59058.2023.00013
+[26] R. Horn, A. Lahnaoui, E. Reinoso, S. Peng, V. Isakov, T. Islam, I. Malavolta, „Native vs Web Apps: Comparing the Energy Consumption and Performance of Android Apps and their Web Counterparts“, _2023 IEEE/ACM 10th International Conference on Mobile Software Engineering and Systems (MOBILESoft)_, str. 44–54, 2023. DOI: 10.1109/MOBILSoft59058.2023.00013
 
-[27] I. Malavolta, G. Procaccianti, P. Noorland, P. Vukmirović, „Assessing the Impact of Service Workers on the Energy Efficiency of Progressive Web Apps“, *2017 IEEE/ACM 4th International Conference on Mobile Software Engineering and Systems (MOBILESoft)*, str. 35–45, 2017. DOI: 10.1109/MOBILESoft.2017.7
+[27] I. Malavolta, G. Procaccianti, P. Noorland, P. Vukmirović, „Assessing the Impact of Service Workers on the Energy Efficiency of Progressive Web Apps“, _2017 IEEE/ACM 4th International Conference on Mobile Software Engineering and Systems (MOBILESoft)_, str. 35–45, 2017. DOI: 10.1109/MOBILESoft.2017.7
 
-[28] C. Rieger, T. A. Majchrzak, „Towards the definitive evaluation framework for cross-platform app development approaches“, *Journal of Systems and Software*, vol. 153, str. 175–199, 2019. DOI: 10.1016/j.jss.2019.04.001
+[28] C. Rieger, T. A. Majchrzak, „Towards the definitive evaluation framework for cross-platform app development approaches“, _Journal of Systems and Software_, vol. 153, str. 175–199, 2019. DOI: 10.1016/j.jss.2019.04.001
 
 [29] Google, „Learn PWA: Installation“, web.dev. Dostupno na: https://web.dev/learn/pwa/installation (pristupljeno 30.09.2026.)
 
@@ -84,7 +84,7 @@ Numeracija prati redosled prvog citiranja u radu.
 
 [41] MDN Web Docs, „Navigator: vibrate() method“, Mozilla. Dostupno na: https://developer.mozilla.org/docs/Web/API/Navigator/vibrate (pristupljeno 30.09.2026.)
 
-[42] Evropski parlament i Savet Evropske unije, „Regulation (EU) 2022/1925 of the European Parliament and of the Council of 14 September 2022 on contestable and fair markets in the digital sector and amending Directives (EU) 2019/1937 and (EU) 2020/1828 (Digital Markets Act)“, *Official Journal of the European Union*, L 265, str. 1–66, 12.10.2022. Dostupno na: https://eur-lex.europa.eu/eli/reg/2022/1925/oj (pristupljeno 07.10.2026.)
+[42] Evropski parlament i Savet Evropske unije, „Regulation (EU) 2022/1925 of the European Parliament and of the Council of 14 September 2022 on contestable and fair markets in the digital sector and amending Directives (EU) 2019/1937 and (EU) 2020/1828 (Digital Markets Act)“, _Official Journal of the European Union_, L 265, str. 1–66, 12.10.2022. Dostupno na: https://eur-lex.europa.eu/eli/reg/2022/1925/oj (pristupljeno 07.10.2026.)
 
 [43] C. Miller, „Apple says iOS 17.4 won't remove Home Screen web apps in the EU after all“, 9to5Mac, 01.03.2024. Dostupno na: https://9to5mac.com/2024/03/01/apple-home-screen-web-apps-ios-17-eu/ (pristupljeno 30.09.2026.)
 
@@ -108,9 +108,9 @@ Numeracija prati redosled prvog citiranja u radu.
 
 [53] C. McDonnell, „Release notes – Zod 4“, zod.dev, 2025. Dostupno na: https://zod.dev/v4 (pristupljeno 30.09.2026.)
 
-[54] R. T. Fielding, *Architectural Styles and the Design of Network-based Software Architectures*, doktorska disertacija, University of California, Irvine, 2000. Dostupno na: https://ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm (pristupljeno 30.09.2026.)
+[54] R. T. Fielding, _Architectural Styles and the Design of Network-based Software Architectures_, doktorska disertacija, University of California, Irvine, 2000. Dostupno na: https://ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm (pristupljeno 30.09.2026.)
 
-[55] OpenAPI Initiative, *OpenAPI Specification v3.1.0*, The Linux Foundation, 15.02.2021. Dostupno na: https://spec.openapis.org/oas/v3.1.0.html (pristupljeno 30.09.2026.)
+[55] OpenAPI Initiative, _OpenAPI Specification v3.1.0_, The Linux Foundation, 15.02.2021. Dostupno na: https://spec.openapis.org/oas/v3.1.0.html (pristupljeno 30.09.2026.)
 
 [56] Astea Solutions, „zod-to-openapi“ (README), GitHub. Dostupno na: https://github.com/asteasolutions/zod-to-openapi (pristupljeno 30.09.2026.)
 
@@ -198,11 +198,11 @@ Numeracija prati redosled prvog citiranja u radu.
 
 [98] Nx, „Monorepo Explained“, monorepo.tools. Dostupno na: https://monorepo.tools/ (pristupljeno 30.09.2026.)
 
-[99] C. Jaspan, M. Jorde, A. Knight, C. Sadowski, E. K. Smith, C. Winter, E. Murphy-Hill, „Advantages and Disadvantages of a Monolithic Repository: A Case Study at Google“, *Proceedings of the 40th International Conference on Software Engineering: Software Engineering in Practice (ICSE-SEIP '18)*, ACM, 2018. DOI: 10.1145/3183519.3183550
+[99] C. Jaspan, M. Jorde, A. Knight, C. Sadowski, E. K. Smith, C. Winter, E. Murphy-Hill, „Advantages and Disadvantages of a Monolithic Repository: A Case Study at Google“, _Proceedings of the 40th International Conference on Software Engineering: Software Engineering in Practice (ICSE-SEIP '18)_, ACM, 2018. DOI: 10.1145/3183519.3183550
 
 [100] G. Brito, R. Terra, M. T. Valente, „Monorepos: A Multivocal Literature Review“, arXiv:1810.09477, 2018. DOI: 10.48550/arXiv.1810.09477
 
-[101] N. Brousse, „The issue of monorepo and polyrepo in large enterprises“, *Companion Proceedings of the 3rd International Conference on the Art, Science, and Engineering of Programming (Programming '19)*, ACM, str. 1–4, 2019. DOI: 10.1145/3328433.3328435
+[101] N. Brousse, „The issue of monorepo and polyrepo in large enterprises“, _Companion Proceedings of the 3rd International Conference on the Art, Science, and Engineering of Programming (Programming '19)_, ACM, str. 1–4, 2019. DOI: 10.1145/3328433.3328435
 
 [102] pnpm, „Motivation“, pnpm.io. Dostupno na: https://pnpm.io/motivation (pristupljeno 30.09.2026.)
 
@@ -215,3 +215,101 @@ Numeracija prati redosled prvog citiranja u radu.
 [106] Vercel, „Caching“, Turborepo Docs. Dostupno na: https://turborepo.dev/docs/crafting-your-repository/caching (pristupljeno 30.09.2026.)
 
 [107] Nx, „Intro to Nx“, nx.dev. Dostupno na: https://nx.dev/docs/getting-started/intro (pristupljeno 30.09.2026.)
+
+[108] ISO/IEC/IEEE, „ISO/IEC/IEEE 29148:2018 – Systems and software engineering – Life cycle processes – Requirements engineering“, ISO/IEC/IEEE, 2018. Dostupno na: https://webstore.iec.ch/publication/64315 (pristupljeno 07.10.2026.)
+
+[109] Object Management Group, „OMG Unified Modeling Language (OMG UML), Version 2.5.1“, OMG, decembar 2017. Dostupno na: https://www.omg.org/spec/UML/2.5.1/ (pristupljeno 07.10.2026.)
+
+[110] ISO/IEC, „ISO/IEC 25010:2023 – Systems and software engineering – Systems and software Quality Requirements and Evaluation (SQuaRE) – Product quality model“, ISO, 2023. Dostupno na: https://www.iso.org/standard/78176.html (pristupljeno 07.10.2026.)
+
+[111] Sonar, „ISO/IEC 25010 explained: Definition and guide“, sonarsource.com. Dostupno na: https://www.sonarsource.com/resources/library/iso-iec-25010-explained/ (pristupljeno 07.10.2026.)
+
+[112] M. Fowler, „Presentation Domain Data Layering“, martinfowler.com, 26.08.2015. Dostupno na: https://martinfowler.com/bliki/PresentationDomainDataLayering.html (pristupljeno 07.10.2026.)
+
+[113] P. P. Chen, „The Entity-Relationship Model—Toward a Unified View of Data“, _ACM Transactions on Database Systems_, vol. 1, no. 1, str. 9–36, 1976. DOI: 10.1145/320434.320440
+
+[114] The PostgreSQL Global Development Group, „PostgreSQL Documentation: 9.2. Comparison Functions and Operators“, postgresql.org. Dostupno na: https://www.postgresql.org/docs/current/functions-comparison.html (pristupljeno 07.10.2026.)
+
+[115] E. W. Dijkstra, „On the role of scientific thought“ EWD447, rukopis, 30.08.1974. Dostupno na: https://www.cs.utexas.edu/~EWD/transcriptions/EWD04xx/EWD447.html (pristupljeno 08.10.2026.)
+
+[116] E. Hieatt, R. Mee, „Repository“, u: M. Fowler, _Patterns of Enterprise Application Architecture_, Addison-Wesley, 2002. Dostupno na: https://martinfowler.com/eaaCatalog/repository.html (pristupljeno 07.10.2026.)
+
+[117] Supabase, „JavaScript: Retrieve a user (auth.getUser)“, Supabase Docs. Dostupno na: https://supabase.com/docs/reference/javascript/auth-getuser (pristupljeno 07.10.2026.)
+
+[118] OWASP Foundation, „HTML5 Security Cheat Sheet“, OWASP Cheat Sheet Series. Dostupno na: https://cheatsheetseries.owasp.org/cheatsheets/HTML5_Security_Cheat_Sheet.html (pristupljeno 07.10.2026.)
+
+[119] React Hook Form, „resolvers“ (README), GitHub. Dostupno na: https://github.com/react-hook-form/resolvers (pristupljeno 08.10.2026.)
+
+[120] Tailwind Labs, „Responsive design“, Tailwind CSS Docs. Dostupno na: https://tailwindcss.com/docs/responsive-design (pristupljeno 07.10.2026.)
+
+[121] Expo, „Protected routes“, Expo Documentation. Dostupno na: https://docs.expo.dev/router/advanced/protected/ (pristupljeno 07.10.2026.)
+
+[122] Meta Platforms, „Modal“, React Native Docs. Dostupno na: https://reactnative.dev/docs/modal (pristupljeno 07.10.2026.)
+
+[123] Expo, „Haptics (expo-haptics)“, Expo Documentation. Dostupno na: https://docs.expo.dev/versions/latest/sdk/haptics/ (pristupljeno 08.10.2026.)
+
+[124] Software Mansion, „React Native Reanimated“, docs.swmansion.com. Dostupno na: https://docs.swmansion.com/react-native-reanimated/ (pristupljeno 08.10.2026.)
+
+[125] Expo, „WebBrowser (expo-web-browser)“, Expo Documentation. Dostupno na: https://docs.expo.dev/versions/latest/sdk/webbrowser/ (pristupljeno 08.10.2026.)
+
+[126] Vercel, „How to use environment variables in Next.js“, Next.js Docs. Dostupno na: https://nextjs.org/docs/app/guides/environment-variables (pristupljeno 08.10.2026.)
+
+[127] Expo, „Environment variables in Expo“, Expo Documentation. Dostupno na: https://docs.expo.dev/guides/environment-variables/ (pristupljeno 08.10.2026.)
+
+[128] Expo, „Work with monorepos“, Expo Documentation. Dostupno na: https://docs.expo.dev/guides/monorepos/ (pristupljeno 08.10.2026.)
+
+[129] Expo, „SplashScreen (expo-splash-screen)“, Expo Documentation. Dostupno na: https://docs.expo.dev/versions/latest/sdk/splash-screen/ (pristupljeno 14.10.2026.)
+
+[130] TanStack, „Infinite Queries“, TanStack Query Docs (React). Dostupno na: https://tanstack.com/query/latest/docs/framework/react/guides/infinite-queries (pristupljeno 14.10.2026.)
+
+[131] Meta Platforms, „VirtualizedList“, React Native Docs. Dostupno na: https://reactnative.dev/docs/virtualizedlist (pristupljeno 14.10.2026.)
+
+[132] Expo, „Linking into your app“, Expo Documentation. Dostupno na: https://docs.expo.dev/linking/into-your-app/ (pristupljeno 14.10.2026.)
+
+[133] Expo, „Localization (expo-localization)“, Expo Documentation. Dostupno na: https://docs.expo.dev/versions/latest/sdk/localization/ (pristupljeno 14.10.2026.)
+
+[134] E. Kasneci, K. Sessler, S. Küchemann, M. Bannert i dr., „ChatGPT for good? On opportunities and challenges of large language models for education“, _Learning and Individual Differences_, vol. 103, čl. 102274, 2023. DOI: 10.1016/j.lindif.2023.102274
+
+[135] Anthropic, „Structured outputs“, Claude Platform Docs. Dostupno na: https://platform.claude.com/docs/en/build-with-claude/structured-outputs (pristupljeno 14.10.2026.)
+
+[136] J. Doughty, Z. Wan, A. Bompelli, J. Qayum, T. Wang, J. Zhang, Y. Zheng, A. Doyle, P. Sridhar, A. Agarwal, C. Bogart, E. Keylor, C. Kultur, J. Savelka, M. Sakr, „A Comparative Study of AI-Generated (GPT-4) and Human-crafted MCQs in Programming Education“, _Proceedings of the 26th Australasian Computing Education Conference (ACE 2024)_, str. 114–123, 2024. DOI: 10.1145/3636243.3636256
+
+[137] Anthropic, „Introducing the Model Context Protocol“, anthropic.com, 25.11.2024. Dostupno na: https://www.anthropic.com/news/model-context-protocol (pristupljeno 14.10.2026.)
+
+[138] Anthropic, „Donating the Model Context Protocol and establishing the Agentic AI Foundation“, anthropic.com, 09.12.2025. Dostupno na: https://www.anthropic.com/news/donating-the-model-context-protocol-and-establishing-of-the-agentic-ai-foundation (pristupljeno 14.10.2026.)
+
+[139] Model Context Protocol, „Specification (2025-11-25)“, modelcontextprotocol.io. Dostupno na: https://modelcontextprotocol.io/specification/2025-11-25 (pristupljeno 14.10.2026.)
+
+[140] Model Context Protocol, „Transports (2025-11-25)“, modelcontextprotocol.io. Dostupno na: https://modelcontextprotocol.io/specification/2025-11-25/basic/transports (pristupljeno 14.10.2026.)
+
+[141] Model Context Protocol, „Authorization (2025-11-25)“, modelcontextprotocol.io. Dostupno na: https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization (pristupljeno 14.10.2026.)
+
+[142] M. B. Jones, P. Hunt, A. Parecki, „OAuth 2.0 Protected Resource Metadata“, RFC 9728, IETF, 2025. Dostupno na: https://www.rfc-editor.org/rfc/rfc9728 (pristupljeno 14.10.2026.)
+
+[143] M. Jones, N. Sakimura, J. Bradley, „OAuth 2.0 Authorization Server Metadata“, RFC 8414, IETF, jun 2018. Dostupno na: https://www.rfc-editor.org/rfc/rfc8414 (pristupljeno 14.10.2026.)
+
+[144] N. Sakimura (ur.), J. Bradley, N. Agarwal, „Proof Key for Code Exchange by OAuth Public Clients“, RFC 7636, IETF, septembar 2015. Dostupno na: https://www.rfc-editor.org/rfc/rfc7636 (pristupljeno 14.10.2026.)
+
+[145] J. Richer (ur.), M. Jones, J. Bradley, M. Machulak, P. Hunt, „OAuth 2.0 Dynamic Client Registration Protocol“, RFC 7591, IETF, jul 2015. Dostupno na: https://www.rfc-editor.org/rfc/rfc7591 (pristupljeno 14.10.2026.)
+
+[146] Model Context Protocol, „The 2026-07-28 Specification“, MCP Blog, 28.07.2026. Dostupno na: https://blog.modelcontextprotocol.io/posts/2026-07-28/ (pristupljeno 14.10.2026.)
+
+[147] Railway, „Pricing“, railway.com. Dostupno na: https://railway.com/pricing (pristupljeno 14.10.2026.)
+
+[148] Railway, „Build Configuration“, Railway Docs. Dostupno na: https://docs.railway.com/guides/build-configuration (pristupljeno 14.10.2026.)
+
+[149] Supabase, „Pricing & Fees“, supabase.com. Dostupno na: https://supabase.com/pricing (pristupljeno 14.10.2026.)
+
+[150] Cloudflare, „Stream: Pricing“, Cloudflare Docs. Dostupno na: https://developers.cloudflare.com/stream/pricing/ (pristupljeno 14.10.2026.)
+
+[151] Cloudflare, „R2: Pricing“, Cloudflare Docs. Dostupno na: https://developers.cloudflare.com/r2/pricing/ (pristupljeno 14.10.2026.)
+
+[152] Anthropic, „Pricing“, Claude Platform Docs. Dostupno na: https://platform.claude.com/docs/en/about-claude/pricing (pristupljeno 14.10.2026.)
+
+[153] Expo, „Pricing“, expo.dev. Dostupno na: https://expo.dev/pricing (pristupljeno 14.10.2026.)
+
+[154] Expo, „Push notifications: FAQ“, Expo Documentation. Dostupno na: https://docs.expo.dev/push-notifications/faq/ (pristupljeno 14.10.2026.)
+
+[155] Apple, „Enrollment – Apple Developer Program“, developer.apple.com. Dostupno na: https://developer.apple.com/programs/enroll/ (pristupljeno 14.10.2026.)
+
+[156] Google, „Get started with Play Console“, Play Console Help. Dostupno na: https://support.google.com/googleplay/android-developer/answer/6112435 (pristupljeno 14.10.2026.)

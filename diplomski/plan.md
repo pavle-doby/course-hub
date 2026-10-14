@@ -3,12 +3,12 @@
 ## Napredak
 
 ```
-Rad        █████████░░░░░░░░░░░  ~44 %
-Strane     ~22 od ~50
-Poglavlja  3 od 14   (1. Uvod, 2. Problem i srodna rešenja, 3. Korišćene tehnologije)
+Rad        ██████████████████░░  ~90 %
+Strane     ~51 od ~55
+Poglavlja  10 od 12  (1–9, 11. Postavljanje u produkciju i cena održavanja)
 ```
 
-Procena od 7.10.2026: `diplomski.md` ima oko 6 700 reči, uz oko 300 reči po strani (A4, 12 pt, prored 1,5), bez slika. Cilj je sredina opsega od 45–55 strana. Nisu napisani sažetak i abstract ni poglavlja 4–14.
+Procena od 14.10.2026: `diplomski.md` ima oko 15 200 reči posle skraćivanja celog rada (računajući tabele i dijagrame), uz oko 300 reči po strani (A4, 12 pt, prored 1,5), bez slika. Poglavlje 11 ima oko 1 150 reči, većinom u tabelama. Nisu napisani poglavlja 10 i 12, sažetak i abstract; rad je već na gornjoj granici, pa ih treba pisati minimalno.
 
 **Naslov:** Razvoj višeplatformske aplikacije za kurseve korišćenjem web tehnologija
 
@@ -21,7 +21,7 @@ Težište rada: **jedan backend i zajednički TypeScript/React kod za web (PWA),
 | Klijent                              | Tehnologija                                                                                             | Stanje                                                                                                                                                                                                               |
 | ------------------------------------ | ------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Web (PWA)**                        | Next.js 16, React 19, Tailwind 4, service worker, Web Push                                              | Kompletan: polaznik, kreator, AI/MCP, obaveštenja                                                                                                                                                                    |
-| **Nativna aplikacija (iOS/Android)** | Expo 57, React Native 0.86, Expo Router, NativeWind                                                     | Završeno: prijava/registracija, katalog, čitač kursa, video i napredak, kvizovi, recenzije. Još nije urađeno: pozivnice, nativni push, obaveštenja, profil, deo za kreatora (za sada ekrani-placeholderi), EAS build |
+| **Nativna aplikacija (iOS/Android)** | Expo 57, React Native 0.86, Expo Router, NativeWind                                                     | Završeno: prijava/registracija, katalog, detalji kursa, video i napredak, kvizovi, recenzije. Još nije urađeno: pozivnice, nativni push, obaveštenja, profil, deo za kreatora (za sada ekrani-placeholderi), EAS build |
 | **Zajednički paketi**                | `contract`, `api-client` (Orval), `shared`, `i18n` (web + native), `ui-theme` (tokeni za obe platforme) | Već se koriste na obe platforme                                                                                                                                                                                      |
 
 ## Oznake
@@ -72,7 +72,7 @@ Težište rada: **jedan backend i zajednički TypeScript/React kod za web (PWA),
 
 - Akteri: polaznik, kreator, posetilac
 - Funkcionalni i nefunkcionalni zahtevi
-- Slučajevi korišćenja
+- ~~Slučajevi korišćenja~~ (izbačeno 13.10.2026.)
 - ◆ Matrica „funkcionalnost × platforma“ (šta radi na webu, a šta nativno)
 
 ### 5. ★ Projektovanje sistema
@@ -114,7 +114,7 @@ Novo poglavlje i najjači argument za naslov.
 - 8.1 Integracija Expo aplikacije u monorepo (Metro, NativeWind, workspace zavisnosti)
 - 8.2 Prijava i bezbedno čuvanje tokena
 - 8.3 Katalog i beskonačna lista (`useInfiniteQuery` nad Orval fetcherima)
-- 8.4 Čitač kursa: stablo lekcija u sheet-u, deep linkovi `?lesson=`
+- 8.4 Detalji kursa: stablo lekcija u sheet-u, deep linkovi `?lesson=`
 - 8.5 Video, napredak, kvizovi i recenzije
 - 8.6 Sinhronizacija korisničkih podešavanja (jezik, tema)
 
@@ -126,14 +126,10 @@ AI generisanje kvizova (Claude), MCP server, OAuth za MCP klijente. Savremeno i 
 
 Snimci ekrana istog toka (npr. polaganje kviza) na desktopu, mobilnom webu, iOS-u i Android-u, jedni pored drugih.
 
-### 11. ◆ Testiranje i verifikacija
+### 11. ◆ Postavljanje u produkciju i cena održavanja
 
-Typecheck, lint, CI build, `expo-doctor`, ručni scenariji na simulatorima i uređajima.
-
-### 12. ◆ Postavljanje u produkciju i cena održavanja
-
-- 12.1 Postavljanje: Railway za API i web; EAS build za prodavnice aplikacija (za sada samo plan)
-- 12.2 Cena održavanja sistema za 100, 1 000, 10 000, 100 000 i 1 000 000 korisnika
+- 11.1 Postavljanje: Railway za API i web; EAS build za prodavnice aplikacija (za sada samo plan)
+- 11.2 Cena održavanja sistema za 100, 1 000, 10 000, 100 000 i 1 000 000 korisnika
   - Stavke troška, za svaku servis koji sistem zaista koristi:
     - Railway: dva servisa (API i web), naplata po CPU-u, RAM-u i odlaznom saobraćaju
     - Supabase: PostgreSQL baza i autentifikacija (plan, veličina baze, broj aktivnih korisnika mesečno)
@@ -147,14 +143,9 @@ Typecheck, lint, CI build, `expo-doctor`, ručni scenariji na simulatorima i ure
   - Analiza: fiksni i promenljivi troškovi; prelomne tačke (prelazak sa besplatnog na plaćeni plan, više instanci API-ja, connection pooling i replike baze na 100 000+); šta najviše utiče na cenu
   - Izvori: zvanični cenovnici servisa, sa datumom pristupa. Za 1 000 000 korisnika cene su često stvar ugovora, pa jasno reći da je procena gruba
 
-### 13. ◆ Diskusija, ograničenja i dalji razvoj
+### 12. ★ Zaključak
 
-- Nativna aplikacija još nije u potpunosti izjednačena sa webom
-- Nativni push traži izmenu API-ja (Expo push tokeni pored Web Push-a)
-- Otvoreno pitanje da li je `react-native-web` cilj
-- Nedovršene web funkcionalnosti: reset lozinke, Google prijava, avatar, admin panel
-
-### 14. ★ Zaključak
+- Jedan pasus o ograničenjima i daljem razvoju (poglavlje „Diskusija, ograničenja i dalji razvoj“ izbačeno 14.10.2026, a od njegovog sadržaja ostaje samo ovo): nativni klijent nije izjednačen sa webom, nativni push traži Expo push tokene na serveru, nema automatskih testova (provera: typecheck, lint, CI build, `expo-doctor`, ručni scenariji), nedovršene web funkcionalnosti (reset lozinke, Google prijava, avatar, admin panel)
 
 ### ★ Literatura
 
@@ -167,7 +158,7 @@ Delovi koda, OpenAPI specifikacija, uputstvo za pokretanje.
 - **Naslov i React Native.** Naslov kaže „korišćenjem web tehnologija“, a React Native nije web u užem smislu. Opravdanje u radu: ceo sistem koristi web tehnologije (TypeScript, React, HTTP/REST, CSS-slično stilizovanje preko NativeWind-a). Ovo obavezno objasniti u uvodu ili poglavlju 3, jer je lako pitanje za komisiju.
 - **Obim nativnog dela.** Kreator, obaveštenja i profil na nativnoj strani su trenutno placeholderi. Dve opcije:
   - dovršiti bar faze 2–3 (push i profil) pre predaje;
-  - predstaviti podelu kao projektnu odluku: web je puna aplikacija, nativna je aplikacija za polaznike. Tada jasno navesti šta je urađeno u poglavljima 4 i 13, bez preuveličavanja.
-- **Testovi.** Automatskih testova nema. U poglavlju 11 opisati tačno šta se proverava i na koji način.
+  - predstaviti podelu kao projektnu odluku: web je puna aplikacija, nativna je aplikacija za polaznike. Tada jasno navesti šta je urađeno u poglavljima 4 i 12, bez preuveličavanja.
+- **Testovi.** Automatskih testova nema. U zaključku (poglavlje 12) kratko navesti šta se i kako proverava.
 - **Obim rada:** oko 45–55 strana. Teorija (poglavlja 2–3) oko 30%, projektovanje i implementacija (poglavlja 4–10) oko 55%.
 - **Obaveznost sekcija** je izvedena iz dva uzorka radova. Proveriti sa mentorom ili u pravilniku ETF-a za završne radove. Sažetak/Abstract ima samo noviji rad, pa je verovatno obavezan u sadašnjem formatu.
