@@ -4,8 +4,8 @@
   "version": "1.0.0",
   "scripts": {
     "start": "expo start",
-    "android": "expo run:android",
-    "android:rebuild": "npx expo run:android",
+    "android": "adb reverse tcp:7007 tcp:7007 || true; expo run:android",
+    "android:rebuild": "adb reverse tcp:7007 tcp:7007 || true; npx expo run:android",
     "ios": "expo run:ios",
     "ios:rebuild": "npx expo run:ios",
     "ios:new-dep": "npx expo prebuild --clean --platform ios",
