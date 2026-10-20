@@ -5,10 +5,10 @@
 ```
 Rad        ███████████████████░  ~93 %
 Strane     ~50 od ~55
-Poglavlja  11 od 12  (1–11)
+Poglavlja  12 od 12  (1–12)
 ```
 
-Procena od 14.10.2026: `diplomski.md` ima oko 15 000 reči posle skraćivanja celog rada i poglavlja 4 (računajući tabele i dijagrame), uz oko 300 reči po strani (A4, 12 pt, prored 1,5), bez slika. Poglavlje 10 ima oko 450 reči i čeka slike 10.1 i 10.2. Nisu napisani poglavlje 12, sažetak i abstract; rad je već na gornjoj granici, pa ih treba pisati minimalno.
+Procena od 14.10.2026: `diplomski.md` ima oko 15 000 reči posle skraćivanja celog rada i poglavlja 4 (računajući tabele i dijagrame), uz oko 300 reči po strani (A4, 12 pt, prored 1,5), bez slika. Poglavlje 10 ima oko 450 reči i čeka slike 10.1 i 10.2. Poglavlje 12 napisano 17.10.2026. (oko 330 reči). Nisu napisani sažetak i abstract; rad je već na gornjoj granici, pa ih treba pisati minimalno.
 
 **Naslov:** Razvoj višeplatformske aplikacije za kurseve korišćenjem web tehnologija
 
@@ -145,7 +145,9 @@ Snimci ekrana istog toka (npr. polaganje kviza) na desktopu, mobilnom webu, iOS-
 
 ### 12. ★ Zaključak
 
-- Jedan pasus o ograničenjima i daljem razvoju (poglavlje „Diskusija, ograničenja i dalji razvoj“ izbačeno 14.10.2026, a od njegovog sadržaja ostaje samo ovo): nativni klijent nije izjednačen sa webom, nativni push traži Expo push tokene na serveru, nema automatskih testova (provera: typecheck, lint, CI build, `expo-doctor`, ručni scenariji), nedovršene web funkcionalnosti (reset lozinke, Google prijava, avatar, admin panel)
+- 12.1 Rezultati rada (jedan pasus)
+- 12.2 Ograničenja PWA i React Native platforme, kao lista (autorova odluka 19.10.2026: bez nabrajanja neimplementiranih funkcionalnosti)
+- 12.3 Dalji razvoj, kao lista: naplata kursa, rang-lista, ćaskanje
 
 ### ★ Literatura
 
@@ -159,6 +161,6 @@ Delovi koda, OpenAPI specifikacija, uputstvo za pokretanje.
 - **Obim nativnog dela.** Kreator, obaveštenja i profil na nativnoj strani su trenutno placeholderi. Dve opcije:
   - dovršiti bar faze 2–3 (push i profil) pre predaje;
   - predstaviti podelu kao projektnu odluku: web je puna aplikacija, nativna je aplikacija za polaznike. Tada jasno navesti šta je urađeno u poglavljima 4 i 12, bez preuveličavanja.
-- **Testovi.** Automatskih testova nema. U zaključku (poglavlje 12) kratko navesti šta se i kako proverava.
+- **Testovi.** Automatskih testova nema; navedeno u odeljcima 4.3 i 6.3, ne u zaključku.
 - **Obim rada:** oko 45–55 strana. Teorija (poglavlja 2–3) oko 30%, projektovanje i implementacija (poglavlja 4–10) oko 55%.
 - **Obaveznost sekcija** je izvedena iz dva uzorka radova. Proveriti sa mentorom ili u pravilniku ETF-a za završne radove. Sažetak/Abstract ima samo noviji rad, pa je verovatno obavezan u sadašnjem formatu.

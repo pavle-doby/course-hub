@@ -15,3 +15,4 @@ overrides:
   react-native-svg: 15.15.4
 patchedDependencies:
   drizzle-zod@0.8.3: patches/drizzle-zod@0.8.3.patch
+  expo-modules-jsi@57.1.1: patches/expo-modules-jsi@57.1.1.patch

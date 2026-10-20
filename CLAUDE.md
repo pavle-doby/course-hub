@@ -59,6 +59,7 @@ Client-side helpers used by the web app:
 ## Gotchas
 
 - `drizzle-zod@0.8.3` is patched (`patches/`, declared in `pnpm-workspace.yaml`). Account for the patch if you bump drizzle-zod.
+- iOS builds with Xcode 27 / Swift 6.4 depend on two workarounds: `expo-modules-jsi@57.1.1` is patched (its `.swiftinterface` strip didn't match Swift 6.4's `__ObjC::` syntax), and `apps/native/app.json` sets `expo-build-properties` → `ios.usePrecompiledModules: false` (Expo's prebuilt XCFrameworks were built with Swift 6.3.1) plus `enableSceneSupport: true`. Re-check all three when you bump the Expo SDK; SDK 58 should make them unnecessary.
 - `apps/native` (Expo SDK 57) is being built out; its plan and progress live in `apps/native/spec/` (`n-task-init.md` is the index). It uses NativeWind v4 + Tailwind 3 through `@repo/ui-native`, while web uses Tailwind 4; the only shared piece is the token values in `@repo/ui-theme`.
 - Installs are hoisted (`nodeLinker: hoisted` in `pnpm-workspace.yaml`; pnpm 11 ignores `.npmrc` for this). Native singletons (React, safe-area-context, svg) are pinned in its `overrides` so unpinned peers don't pull a second version; bump them there with the Expo SDK. `npx expo-doctor` in `apps/native` catches new duplicates.
 - `pnpm` 11 and Node >=22 are required (`packageManager` / `engines`).
