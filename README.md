@@ -1,12 +1,14 @@
 # Course Hub
 
-A course authoring and learning platform. Creators can build public or private courses, organize topics and lessons, attach videos and documents, invite learners, and manage enrollments. Learners can explore public courses and use an enrolled course reader.
+A course authoring and learning platform. Creators can build public or private courses, organize topics and lessons, attach videos and documents, invite learners, and manage enrollments. Learners can explore public courses and use an enrolled course reader on the web (installable PWA) or in the native iOS/Android app.
 
 ## Tech stack
 
 | Layer        | Tech                                                        |
 | ------------ | ----------------------------------------------------------- |
 | Web          | Next.js 16 (App Router), React 19, Tailwind 4, shadcn/Radix |
+| PWA          | Web app manifest, service worker, Web Push (VAPID)          |
+| Native       | Expo SDK 57, React Native 0.86, Expo Router, NativeWind 4   |
 | API          | Express 5, Node >=22, Pino, OpenAPI 3.1                     |
 | DB           | PostgreSQL (Supabase), Drizzle ORM, drizzle-kit             |
 | Auth         | Supabase Auth with access and refresh tokens                |
@@ -27,6 +29,7 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for the full directory tree, data-flow 
 - Course enrollment, learner lists, and email or share-link invitations
 - Cloudflare Stream videos and Cloudflare R2 documents at course, topic, or lesson level
 - Profile, settings, and localized web UI
+- Native iOS/Android app (Expo) for learners: catalog, course reader, video, progress, quizzes, and reviews (creator screens are still placeholders)
 - AI access: an MCP server for AI agents, usable as a claude.ai connector (OAuth) or from Claude Code / Cursor with a personal access token
 
 ## How to run
@@ -51,6 +54,8 @@ pnpm dev          # All apps in watch mode
 pnpm web          # Web only (port 3000)
 pnpm api          # API only
 ```
+
+Native app (from `apps/native`): `pnpm start` for the Expo dev server, `pnpm ios` / `pnpm android` to build and run on a simulator or device. See [apps/native/spec/](./apps/native/spec/) for the plan and progress.
 
 ## Tunnels
 

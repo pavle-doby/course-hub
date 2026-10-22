@@ -37,7 +37,16 @@
       ],
       "expo-secure-store",
       "expo-localization",
-      "expo-video"
+      "expo-video",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "usePrecompiledModules": false,
+            "enableSceneSupport": true
+          }
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,
