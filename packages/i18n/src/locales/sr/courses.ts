@@ -11,6 +11,7 @@ export const courses = {
   card: {
     enrolledLabel: "Upisanih studenata: {{count}}",
     ratingLabel: "Ocena {{average}} od 5, na osnovu {{count}} recenzija",
+    free: "Besplatno",
     actions: "Akcije kursa",
     edit: "Izmeni",
     preview: "Pregled",
@@ -55,6 +56,10 @@ export const courses = {
     aiAccessDescription:
       "Upisani polaznici mogu da preuzmu ovaj kurs u svog AI agenta (npr. Claude) radi učenja.",
     aiAccessChangedToast: "AI pristup je ažuriran",
+    price: "Cena",
+    priceLabel: "Cena ({{currency}})",
+    priceHint: "0 znači da je kurs besplatan.",
+    priceChangedToast: "Cena je ažurirana",
     visibilityPublicDialog: {
       title: "Učiniti kurs javnim?",
       description: "Svako ko ima vezu do kursa moći će da ga vidi.",

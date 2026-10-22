@@ -5,8 +5,10 @@ Fully implemented features and what is still in progress.
 ## Fully implemented (all layers: DB → repo → API → contract → OpenAPI → generated hooks → web UI)
 
 - **Auth** — email/password signup, login, signout, refresh. Supabase JWT verified per-request by `handleAuth` on every private route. Signup picks language + theme (defaulted from browser); login/signup responses return saved preferences and apply them. Web: `apps/web/app/auth/[mode]/`.
+- **Password reset** — `/auth/forgot` → `POST /v1/auth/forgot-password` (Supabase `resetPasswordForEmail`, always 200 so emails can't be enumerated) → email link to `/auth/reset?token_hash=…` → `POST /v1/auth/reset-password` (`verifyOtp` + `updateUser` on a per-request Supabase client, other sessions signed out). Needs the Supabase "Reset Password" email template and redirect URL set up. Native not wired yet. Spec: `spec/[done]-task-11.md`.
 - **User profile & account** — view/edit profile (firstName, lastName, username, bio), delete own account. `apps/api/src/modules/users/`, `apps/web/app/profile/`.
 - **Course authoring** — CRUD, draft→published→archived, public/private visibility, auto-save editor, duplicate. Course cards (creator and learn/explore/home) share `CourseStats`: enrolled students (active enrollments, `enrolledCount` on `GET /v1/courses`, `GET /v1/public/courses`, `GET /v1/enrollments/courses`), rating average + count, and visibility. `apps/api/src/modules/courses/`, `apps/web/app/courses/`.
+- **Course price (display only)** — `courses.price` in cents (`0` = free), one app-wide currency (`COURSE_CURRENCY = "EUR"` in `apps/web/utils/consts.ts`). Creator sets it in the editor's actions panel (`course-price-input.tsx`, saved via `PUT /v1/courses/:id`); shown on course cards (`CourseStats`) and the learn overview, formatted with `Intl.NumberFormat`. No payments: enrollment stays free. Spec: `spec/[done]-task-12.md`.
 - **Course thumbnail (Cloudflare R2)** — initialize → direct upload → verify → save/delete. `apps/api/src/modules/courses/`.
 - **Topics management** — CRUD, `position` reorder, duplicate. `apps/api/src/modules/topics/`.
 - **Lessons management** — CRUD, reorder, duplicate, standalone searchable list with pagination. `apps/api/src/modules/lessons/`, `apps/web/app/lessons/`.
@@ -34,7 +36,6 @@ Fully implemented features and what is still in progress.
 - **Feedback** — `apps/web/app/feedback/` is a stub, no API.
 - **Per-course opt-in management**: Settings only toggles categories for all courses. There's no list of individual per-course opt-ins.
 - **Invitation-accept notifications** — accepting an invite enrolls without notifying the creator (intentional for now; `ponytail:` marker in `invitationsService`).
-- **Password reset** — forgot-password form only; no submit handler / API endpoint (Supabase `resetPassword` never called).
 - **Google OAuth login** — button rendered in login form; no backend wiring.
 - **Avatar photo upload** — "Change photo" is an `alert()` placeholder; `users.avatarUrl` exists but no upload flow.
 - **Admin user management** — `/api/v1/users*` admin endpoints + hooks exist; no web pages call them.

@@ -1,5 +1,8 @@
 import type { LessonProgressStatus } from "@repo/api-client";
 
+/** Currency for every course price (prices are stored in its minor units). */
+export const COURSE_CURRENCY = "EUR";
+
 /** `3 seconds` - Refetch interval for video status while it's uploading. */
 export const VIDEO_REFETCH_INTERVAL = 3000;
 

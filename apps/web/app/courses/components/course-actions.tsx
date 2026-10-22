@@ -32,6 +32,7 @@ import {
 import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui-web/components/tooltip";
 import { useT } from "@repo/i18n/client";
 import { ChAlertDialog } from "@/components/ch-alert-dialog";
+import { CoursePriceInput } from "./course-price-input";
 
 type CourseActionsProps = {
   status: CourseStatus;
@@ -40,6 +41,8 @@ type CourseActionsProps = {
   onInviteClick?: () => void;
   aiAccessEnabled?: boolean;
   onAiAccessChange?: (value: boolean) => void;
+  price?: number;
+  onPriceChange?: (value: number) => void;
   isPublished?: boolean;
   onPublishCourse?: () => void;
   onArchiveCourse?: () => void;
@@ -83,6 +86,8 @@ export function CourseActions({
   onInviteClick,
   aiAccessEnabled = false,
   onAiAccessChange,
+  price = 0,
+  onPriceChange,
   isPublished = false,
   onPublishCourse,
   onArchiveCourse,
@@ -227,6 +232,10 @@ export function CourseActions({
     </label>
   );
 
+  const priceAction = onPriceChange && (
+    <CoursePriceInput price={price} onPriceChange={onPriceChange} />
+  );
+
   const deleteAction = onDeleteCourse && (
     <Button
       variant="destructive"
@@ -361,6 +370,15 @@ export function CourseActions({
                   </section>
                 </>
               )}
+              {onPriceChange && (
+                <>
+                  <Separator className="-mx-4 !w-auto" />
+                  <section className="flex flex-col gap-3">
+                    <h2 className="text-sm font-medium">{t("courses.editor.price")}</h2>
+                    {priceAction}
+                  </section>
+                </>
+              )}
               {onVisibilityChange && hasStateActions && <Separator className="-mx-4 !w-auto" />}
               {hasStateActions && (
                 <section className="flex flex-col gap-3">
@@ -425,6 +443,16 @@ export function CourseActions({
               {t("courses.editor.aiAccess")}
             </h2>
             {aiAccessAction}
+            <Separator className="-mx-4 !w-auto" />
+          </SidebarGroup>
+        )}
+
+        {onPriceChange && (
+          <SidebarGroup className="gap-3">
+            <h2 className="text-sm font-medium text-sidebar-foreground/70">
+              {t("courses.editor.price")}
+            </h2>
+            {priceAction}
             <Separator className="-mx-4 !w-auto" />
           </SidebarGroup>
         )}

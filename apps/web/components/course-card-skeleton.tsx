@@ -16,6 +16,7 @@ export function CourseCardSkeleton() {
           <Skeleton className="h-4 w-10" />
           <Skeleton className="h-4 w-14" />
           <Skeleton className="h-4 w-16" />
+          <Skeleton className="ml-auto h-4 w-14" />
         </div>
       </CardContent>
     </Card>

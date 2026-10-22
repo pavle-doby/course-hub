@@ -79,6 +79,14 @@ export const common = {
         title: "Too Many Attempts",
         message: "You have made too many attempts. Please try again later.",
       },
+      RESET_LINK_INVALID: {
+        title: "Invalid Reset Link",
+        message: "This reset link is invalid or has expired. Please request a new one.",
+      },
+      SAME_PASSWORD: {
+        title: "Same Password",
+        message: "Your new password must be different from your current password.",
+      },
     },
     user: {
       NOT_FOUND: { title: "User Not Found", message: "The requested user could not be found." },

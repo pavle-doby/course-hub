@@ -2,8 +2,10 @@ import { registry } from "api/openapi/registry";
 import { AuthTokensSchema, AuthWithTokensSchema } from "api/openapi/schemas";
 import {
   ApiErrorSchema,
+  AuthForgotPasswordQuerySchema,
   AuthLoginQuerySchema,
   AuthRefreshQuerySchema,
+  AuthResetPasswordQuerySchema,
   AuthSignUpQuerySchema,
 } from "@repo/contract";
 
@@ -79,6 +81,46 @@ registry.registerPath({
       description: "Tokens refreshed successfully",
       content: { "application/json": { schema: AuthTokensSchema } },
     },
+    default: {
+      description: "Error",
+      content: { "application/json": { schema: ApiErrorSchema } },
+    },
+  },
+});
+
+registry.registerPath({
+  method: "post",
+  path: "/v1/auth/forgot-password",
+  operationId: "authForgotPassword",
+  tags: ["Auth"],
+  request: {
+    body: {
+      content: { "application/json": { schema: AuthForgotPasswordQuerySchema } },
+      required: true,
+    },
+  },
+  responses: {
+    200: { description: "Reset email sent if the account exists" },
+    default: {
+      description: "Error",
+      content: { "application/json": { schema: ApiErrorSchema } },
+    },
+  },
+});
+
+registry.registerPath({
+  method: "post",
+  path: "/v1/auth/reset-password",
+  operationId: "authResetPassword",
+  tags: ["Auth"],
+  request: {
+    body: {
+      content: { "application/json": { schema: AuthResetPasswordQuerySchema } },
+      required: true,
+    },
+  },
+  responses: {
+    200: { description: "Password reset successfully" },
     default: {
       description: "Error",
       content: { "application/json": { schema: ApiErrorSchema } },

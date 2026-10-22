@@ -13,10 +13,14 @@ import type {
 } from "@tanstack/react-query";
 
 import type {
+  AuthForgotPasswordBody,
+  AuthForgotPasswordDefault,
   AuthLoginBody,
   AuthLoginDefault,
   AuthRefreshTokenBody,
   AuthRefreshTokenDefault,
+  AuthResetPasswordBody,
+  AuthResetPasswordDefault,
   AuthSignUpBody,
   AuthSignUpDefault,
   AuthTokens,
@@ -301,4 +305,162 @@ export const useAuthRefreshToken = <TError = AuthRefreshTokenDefault, TContext =
   TContext
 > => {
   return useMutation(getAuthRefreshTokenMutationOptions(options), queryClient);
+};
+export const authForgotPassword = (
+  authForgotPasswordBody: AuthForgotPasswordBody,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<void>(
+    {
+      url: `/v1/auth/forgot-password`,
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      data: authForgotPasswordBody,
+      signal,
+    },
+    options
+  );
+};
+
+export const getAuthForgotPasswordMutationOptions = <
+  TError = AuthForgotPasswordDefault,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof authForgotPassword>>,
+    TError,
+    AuthForgotPasswordMutationVariables,
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof authForgotPassword>>,
+  TError,
+  AuthForgotPasswordMutationVariables,
+  TContext
+> => {
+  const mutationKey = ["authForgotPassword"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof authForgotPassword>>,
+    AuthForgotPasswordMutationVariables
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return authForgotPassword(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AuthForgotPasswordMutationResult = NonNullable<
+  Awaited<ReturnType<typeof authForgotPassword>>
+>;
+export type AuthForgotPasswordMutationBody = AuthForgotPasswordBody;
+export type AuthForgotPasswordMutationError = AuthForgotPasswordDefault;
+export type AuthForgotPasswordMutationVariables = { data: AuthForgotPasswordBody };
+
+export const useAuthForgotPassword = <TError = AuthForgotPasswordDefault, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof authForgotPassword>>,
+      TError,
+      AuthForgotPasswordMutationVariables,
+      TContext
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof authForgotPassword>>,
+  TError,
+  AuthForgotPasswordMutationVariables,
+  TContext
+> => {
+  return useMutation(getAuthForgotPasswordMutationOptions(options), queryClient);
+};
+export const authResetPassword = (
+  authResetPasswordBody: AuthResetPasswordBody,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<void>(
+    {
+      url: `/v1/auth/reset-password`,
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      data: authResetPasswordBody,
+      signal,
+    },
+    options
+  );
+};
+
+export const getAuthResetPasswordMutationOptions = <
+  TError = AuthResetPasswordDefault,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof authResetPassword>>,
+    TError,
+    AuthResetPasswordMutationVariables,
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof authResetPassword>>,
+  TError,
+  AuthResetPasswordMutationVariables,
+  TContext
+> => {
+  const mutationKey = ["authResetPassword"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof authResetPassword>>,
+    AuthResetPasswordMutationVariables
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return authResetPassword(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AuthResetPasswordMutationResult = NonNullable<
+  Awaited<ReturnType<typeof authResetPassword>>
+>;
+export type AuthResetPasswordMutationBody = AuthResetPasswordBody;
+export type AuthResetPasswordMutationError = AuthResetPasswordDefault;
+export type AuthResetPasswordMutationVariables = { data: AuthResetPasswordBody };
+
+export const useAuthResetPassword = <TError = AuthResetPasswordDefault, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof authResetPassword>>,
+      TError,
+      AuthResetPasswordMutationVariables,
+      TContext
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof authResetPassword>>,
+  TError,
+  AuthResetPasswordMutationVariables,
+  TContext
+> => {
+  return useMutation(getAuthResetPasswordMutationOptions(options), queryClient);
 };

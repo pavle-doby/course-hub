@@ -1,9 +1,11 @@
 import { z } from "zod";
 import { User } from "../users";
 import {
+  AuthForgotPasswordQuerySchema,
   AuthLoginQuerySchema,
   AuthPreferencesSchema,
   AuthRefreshQuerySchema,
+  AuthResetPasswordQuerySchema,
   AuthSignUpQuerySchema,
 } from "./schemas";
 
@@ -22,3 +24,7 @@ export type AuthTokens = {
 
 export type AuthRefreshTokenReq = z.infer<typeof AuthRefreshQuerySchema>;
 export type AuthRefreshTokenRes = AuthTokens;
+
+export type AuthForgotPasswordReq = z.infer<typeof AuthForgotPasswordQuerySchema>;
+
+export type AuthResetPasswordReq = z.infer<typeof AuthResetPasswordQuerySchema>;

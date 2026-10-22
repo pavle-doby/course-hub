@@ -97,13 +97,13 @@ export function CourseCard({
         {course.description && (
           <p className="line-clamp-3 text-sm text-muted-foreground">{course.description}</p>
         )}
-        <div className="mt-auto flex items-center justify-between gap-2 pt-2">
-          <CourseStats course={course} />
+        <div className="mt-auto flex flex-col gap-2 pt-2">
           {showStatus && (
-            <Badge variant={statusVariant[course.status]}>
+            <Badge className="self-start" variant={statusVariant[course.status]}>
               {t(`courses.status.${course.status}`)}
             </Badge>
           )}
+          <CourseStats course={course} />
         </div>
       </CardContent>
     </Card>

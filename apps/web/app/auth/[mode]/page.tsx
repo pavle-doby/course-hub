@@ -7,8 +7,9 @@ import { Skeleton } from "@repo/ui-web/components/skeleton";
 import { LoginForm } from "./components/login-form";
 import { SignupForm } from "./components/signup-form";
 import { ForgotForm } from "./components/forgot-form";
+import { ResetForm } from "./components/reset-form";
 
-const MODES = ["login", "signup", "forgot"] as const;
+const MODES = ["login", "signup", "forgot", "reset"] as const;
 
 type Mode = (typeof MODES)[number];
 
@@ -41,6 +42,7 @@ export default async function AuthPage({ params }: { params: Promise<{ mode: str
           {mode === "login" && <LoginForm />}
           {mode === "signup" && <SignupForm />}
           {mode === "forgot" && <ForgotForm />}
+          {mode === "reset" && <ResetForm />}
         </Suspense>
       </div>
     </div>

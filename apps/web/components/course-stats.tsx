@@ -3,14 +3,18 @@
 import { type CourseWithStats } from "@repo/api-client";
 import { useT } from "@repo/i18n/client";
 import { cn } from "@repo/ui-web/lib/utils";
-import { GlobeIcon, LockIcon, StarIcon, UserIcon } from "lucide-react";
+import { GlobeIcon, LockIcon, StarIcon, TagIcon, UserIcon } from "lucide-react";
+import { formatPrice } from "@/utils/format-price";
 
 type CourseStatsProps = {
-  course: Pick<CourseWithStats, "enrolledCount" | "ratingAverage" | "ratingCount" | "visibility">;
+  course: Pick<
+    CourseWithStats,
+    "enrolledCount" | "ratingAverage" | "ratingCount" | "visibility" | "price"
+  >;
   className?: string;
 };
 
-/** Course card stats row: enrolled students, rating average + count, and visibility. */
+/** Course card stats row: enrolled students, rating average + count, visibility, and price. */
 export function CourseStats({ course, className }: CourseStatsProps) {
   const { t, i18n } = useT();
 
@@ -54,6 +58,13 @@ export function CourseStats({ course, className }: CourseStatsProps) {
       <span className="flex items-center gap-1">
         {isPublic ? <GlobeIcon className="size-4" /> : <LockIcon className="size-4" />}
         {isPublic ? t("courses.editor.visibilityPublic") : t("courses.editor.visibilityPrivate")}
+      </span>
+      {/* pushed right while the row has room; wraps onto its own line (still right-aligned) when it doesn't */}
+      <span className="ml-auto flex shrink-0 items-center gap-1 whitespace-nowrap">
+        <TagIcon className="size-4" />
+        <span className="font-semibold text-foreground tabular-nums">
+          {course.price > 0 ? formatPrice(course.price, i18n.language) : t("courses.card.free")}
+        </span>
       </span>
     </div>
   );

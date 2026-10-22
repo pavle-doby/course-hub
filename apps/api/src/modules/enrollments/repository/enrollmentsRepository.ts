@@ -45,6 +45,7 @@ const courseColumns = {
   status: schema.courses.status,
   visibility: schema.courses.visibility,
   aiAccessEnabled: schema.courses.aiAccessEnabled,
+  price: schema.courses.price,
   publishedAt: schema.courses.publishedAt,
   ratingAverage: schema.courses.ratingAverage,
   ratingCount: schema.courses.ratingCount,

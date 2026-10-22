@@ -33,4 +33,12 @@ export const authErrorMessages = {
     title: "errors.auth.RATE_LIMIT_EXCEEDED.title",
     message: "errors.auth.RATE_LIMIT_EXCEEDED.message",
   },
+  [ErrorCodeAuth.RESET_LINK_INVALID]: {
+    title: "errors.auth.RESET_LINK_INVALID.title",
+    message: "errors.auth.RESET_LINK_INVALID.message",
+  },
+  [ErrorCodeAuth.SAME_PASSWORD]: {
+    title: "errors.auth.SAME_PASSWORD.title",
+    message: "errors.auth.SAME_PASSWORD.message",
+  },
 } as const satisfies Record<ErrorCodeAuth, { title: string; message: string }>;

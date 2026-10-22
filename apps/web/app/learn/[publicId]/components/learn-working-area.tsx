@@ -36,6 +36,7 @@ import type { Selection, TopicWithLessons } from "@/hooks/use-course-tree";
 import { useLessonVideoProgress, useSaveLessonProgress } from "@/hooks/use-lesson-progress";
 import { NEXT_LESSON_STATUS, PROGRESS_STATUS_LABEL_KEYS } from "@/utils/consts";
 import { getVideoRefetchInterval } from "@/utils/get-video-refetch-interval";
+import { formatPrice } from "@/utils/format-price";
 import { StarRating } from "@/components/star-rating";
 import { LessonStatusSelect } from "./lesson-status-select";
 import { LearnQuiz } from "./quiz/learn-quiz";
@@ -51,6 +52,7 @@ type LearnWorkingAreaProps = {
     thumbnailUrl?: string | null;
     ratingAverage: number;
     ratingCount: number;
+    price: number;
   };
   tree: TopicWithLessons[];
   flatLessons: Lesson[];
@@ -74,7 +76,7 @@ export function LearnWorkingArea({
   onPrevious,
   onNext,
 }: LearnWorkingAreaProps) {
-  const { t } = useT();
+  const { t, i18n } = useT();
   const queryClient = useQueryClient();
   const saveLessonProgress = useSaveLessonProgress(course.publicId);
   const [isSavingStatus, setIsSavingStatus] = useState(false);
@@ -218,22 +220,8 @@ export function LearnWorkingArea({
             className="mb-4 aspect-video w-full rounded-lg object-cover"
           />
         )}
-        {/* Status first, full width; the title (and the desktop next-step button) below it */}
+        {/* Title (and the desktop next-step button) first; status below it, full width on mobile and fitting its text from md up */}
         <div className="flex flex-col gap-3">
-          {isEnrolled && lessonProgress && isSavingStatus && <Skeleton className="h-8 w-full" />}
-          {isEnrolled && lessonProgress && !isSavingStatus && (
-            <LessonStatusSelect
-              className="w-full"
-              status={lessonProgress.status}
-              onStatusChange={handleLessonStatusChange}
-            />
-          )}
-          {isEnrolled && readOnlyStatus && (
-            <Badge variant="outline" className="h-8 w-full justify-start gap-2 px-3 text-sm">
-              <ProgressStatusIcon status={readOnlyStatus} className="size-4!" />
-              {t(PROGRESS_STATUS_LABEL_KEYS[readOnlyStatus])}
-            </Badge>
-          )}
           <div className="flex items-center justify-between gap-2">
             <h2 className="text-2xl font-semibold">{name}</h2>
             {nextStatus && !isCompleteStep && (
@@ -247,9 +235,33 @@ export function LearnWorkingArea({
               </Button>
             )}
           </div>
+          {isEnrolled && lessonProgress && isSavingStatus && (
+            <Skeleton className="h-8 w-full md:w-36" />
+          )}
+          {isEnrolled && lessonProgress && !isSavingStatus && (
+            <LessonStatusSelect
+              className="w-full md:w-fit"
+              status={lessonProgress.status}
+              onStatusChange={handleLessonStatusChange}
+            />
+          )}
+          {isEnrolled && readOnlyStatus && (
+            <Badge
+              variant="outline"
+              className="h-8 w-full justify-start gap-2 px-3 text-sm md:w-fit"
+            >
+              <ProgressStatusIcon status={readOnlyStatus} className="size-4!" />
+              {t(PROGRESS_STATUS_LABEL_KEYS[readOnlyStatus])}
+            </Badge>
+          )}
         </div>
         {selection.type === "course" && (
-          <StarRating className="mt-2" average={course.ratingAverage} count={course.ratingCount} />
+          <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2">
+            <StarRating average={course.ratingAverage} count={course.ratingCount} />
+            <Badge variant="secondary">
+              {course.price > 0 ? formatPrice(course.price, i18n.language) : t("courses.card.free")}
+            </Badge>
+          </div>
         )}
         {isActiveVideoLoading && <Skeleton className="mt-4 aspect-video w-full rounded-lg" />}
         {hasVideo && (

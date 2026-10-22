@@ -11,6 +11,7 @@ export const courses = {
   card: {
     enrolledLabel: "{{count}} enrolled students",
     ratingLabel: "Rated {{average}} out of 5 from {{count}} reviews",
+    free: "Free",
     actions: "Course actions",
     edit: "Edit",
     preview: "Preview",
@@ -55,6 +56,10 @@ export const courses = {
     aiAccessDescription:
       "Enrolled students can pull this course into their AI agent (e.g. Claude) to study it.",
     aiAccessChangedToast: "AI access updated",
+    price: "Price",
+    priceLabel: "Price ({{currency}})",
+    priceHint: "0 means the course is free.",
+    priceChangedToast: "Price updated",
     visibilityPublicDialog: {
       title: "Make course public?",
       description: "Anyone with the course link will be able to view it.",

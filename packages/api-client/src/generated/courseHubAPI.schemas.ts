@@ -172,6 +172,11 @@ export interface Course {
   status: CourseStatus;
   visibility: CourseVisibility;
   aiAccessEnabled: boolean;
+  /**
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  price: number;
   /** @nullable */
   publishedAt: string | null;
   /**
@@ -236,6 +241,11 @@ export interface CourseWithStats {
   status: CourseWithStatsStatus;
   visibility: CourseWithStatsVisibility;
   aiAccessEnabled: boolean;
+  /**
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  price: number;
   /** @nullable */
   publishedAt: string | null;
   /**
@@ -312,6 +322,11 @@ export interface EnrolledCourse {
   status: EnrolledCourseStatus;
   visibility: EnrolledCourseVisibility;
   aiAccessEnabled: boolean;
+  /**
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  price: number;
   /** @nullable */
   publishedAt: string | null;
   /**
@@ -1384,6 +1399,67 @@ export type AuthRefreshTokenDefault = {
   details?: AuthRefreshTokenDefaultDetails;
 };
 
+export type AuthForgotPasswordBody = {
+  email: string;
+};
+
+export type AuthForgotPasswordDefaultCode =
+  (typeof AuthForgotPasswordDefaultCode)[keyof typeof AuthForgotPasswordDefaultCode];
+
+export const AuthForgotPasswordDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type AuthForgotPasswordDefaultDetails = { [key: string]: unknown };
+
+export type AuthForgotPasswordDefault = {
+  status: number;
+  code: AuthForgotPasswordDefaultCode;
+  error?: unknown;
+  details?: AuthForgotPasswordDefaultDetails;
+};
+
+export type AuthResetPasswordBody = {
+  /** @minLength 1 */
+  tokenHash: string;
+  /** @minLength 6 */
+  password: string;
+};
+
+export type AuthResetPasswordDefaultCode =
+  (typeof AuthResetPasswordDefaultCode)[keyof typeof AuthResetPasswordDefaultCode];
+
+export const AuthResetPasswordDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type AuthResetPasswordDefaultDetails = { [key: string]: unknown };
+
+export type AuthResetPasswordDefault = {
+  status: number;
+  code: AuthResetPasswordDefaultCode;
+  error?: unknown;
+  details?: AuthResetPasswordDefaultDetails;
+};
+
 export type GetUserSelfDefaultCode =
   (typeof GetUserSelfDefaultCode)[keyof typeof GetUserSelfDefaultCode];
 
@@ -1770,6 +1846,11 @@ export type CreateCourseBody = {
   status?: CreateCourseBodyStatus;
   visibility?: CreateCourseBodyVisibility;
   aiAccessEnabled?: boolean;
+  /**
+   * @minimum 0
+   * @maximum 100000000
+   */
+  price?: number;
   publishedAt?: string;
 };
 
@@ -1967,6 +2048,11 @@ export type UpdateCourseBody = {
   status?: UpdateCourseBodyStatus;
   visibility?: UpdateCourseBodyVisibility;
   aiAccessEnabled?: boolean;
+  /**
+   * @minimum 0
+   * @maximum 100000000
+   */
+  price?: number;
   publishedAt?: string;
 };
 

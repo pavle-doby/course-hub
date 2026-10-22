@@ -76,6 +76,14 @@ export const common = {
         title: "Previše pokušaja",
         message: "Napravili ste previše pokušaja. Pokušajte ponovo kasnije.",
       },
+      RESET_LINK_INVALID: {
+        title: "Neispravan link za resetovanje",
+        message: "Ovaj link za resetovanje je neispravan ili je istekao. Zatražite novi.",
+      },
+      SAME_PASSWORD: {
+        title: "Ista lozinka",
+        message: "Nova lozinka mora biti drugačija od trenutne.",
+      },
     },
     user: {
       NOT_FOUND: { title: "Korisnik nije pronađen", message: "Traženi korisnik nije pronađen." },

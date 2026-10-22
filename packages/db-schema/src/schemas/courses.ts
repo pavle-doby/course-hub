@@ -28,6 +28,8 @@ export const courses = pgTable("courses", {
   visibility: courseVisibilityEnum("visibility").notNull().default("private"),
   // Creator opt-in: enrolled students may pull this course into their AI agent (MCP).
   aiAccessEnabled: boolean("ai_access_enabled").notNull().default(false),
+  // Display only (no payments yet): minor units (cents) in COURSE_CURRENCY; 0 = free.
+  price: integer("price").notNull().default(0),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
   publishedAt: timestamp("published_at", { withTimezone: true }),

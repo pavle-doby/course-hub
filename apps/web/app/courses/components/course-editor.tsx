@@ -47,6 +47,7 @@ type CourseDraft = {
   status?: CourseStatus;
   visibility?: CourseVisibility;
   aiAccessEnabled?: boolean;
+  price?: number;
 };
 
 function toCourseDraft(course: Course): CourseDraft {
@@ -56,6 +57,7 @@ function toCourseDraft(course: Course): CourseDraft {
     status: course.status,
     visibility: course.visibility,
     aiAccessEnabled: course.aiAccessEnabled,
+    price: course.price,
   };
 }
 
@@ -279,6 +281,19 @@ export function CourseEditor({ mode, publicId }: CourseEditorProps) {
       if (updated) {
         setCourse(toCourseDraft(updated));
         toast.success(t("courses.editor.aiAccessChangedToast"));
+      }
+    } catch (error) {
+      handleErrorAction(error as Error);
+    }
+  }
+
+  async function handlePriceChange(price: number) {
+    try {
+      const id = await ensureCourseId();
+      const updated = await updateCourse({ pathParams: { id }, data: { price } });
+      if (updated) {
+        setCourse(toCourseDraft(updated));
+        toast.success(t("courses.editor.priceChangedToast"));
       }
     } catch (error) {
       handleErrorAction(error as Error);
@@ -641,6 +656,8 @@ export function CourseEditor({ mode, publicId }: CourseEditorProps) {
             onInviteClick={courseId ? handleInviteClick : undefined}
             aiAccessEnabled={displayedCourse.aiAccessEnabled}
             onAiAccessChange={courseId ? handleAiAccessChange : undefined}
+            price={displayedCourse.price}
+            onPriceChange={courseId ? handlePriceChange : undefined}
             isPublished={displayedCourse.status === "published"}
             onPublishCourse={courseId ? handlePublish : undefined}
             onArchiveCourse={courseId ? handleArchiveCourse : undefined}

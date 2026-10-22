@@ -7,4 +7,6 @@ export enum ErrorCodeAuth {
   USER_NOT_FOUND = "auth_user_not_found",
   BAD_REQUEST = "auth_bad_request",
   RATE_LIMIT_EXCEEDED = "auth_rate_limit_exceeded",
+  RESET_LINK_INVALID = "auth_reset_link_invalid",
+  SAME_PASSWORD = "auth_same_password",
 }

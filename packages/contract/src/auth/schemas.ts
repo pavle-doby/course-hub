@@ -24,3 +24,12 @@ export const AuthLoginQuerySchema = z.object({
 export const AuthRefreshQuerySchema = z.object({
   refreshToken: z.string().min(1),
 });
+
+export const AuthForgotPasswordQuerySchema = z.object({
+  email: z.email(),
+});
+
+export const AuthResetPasswordQuerySchema = z.object({
+  tokenHash: z.string().min(1),
+  password: z.string().min(6),
+});

@@ -8,6 +8,8 @@ import {
   AuthSignUpUserRes,
   AuthRefreshTokenReq,
   AuthRefreshTokenRes,
+  AuthForgotPasswordReq,
+  AuthResetPasswordReq,
   User,
 } from "@repo/contract";
 import {
@@ -18,6 +20,8 @@ import {
   InternalServerError,
   TooManyRequestsError,
 } from "@repo/contract";
+import { createClient } from "@supabase/supabase-js";
+import { env } from "api/env";
 import { supabase } from "api/utils/supabase";
 import { authRepository } from "../repository/authRepository";
 import { CreateUser } from "../repository/types";
@@ -164,5 +168,64 @@ export const authService = {
       accessToken: data.session?.access_token ?? "",
       refreshToken: data.session?.refresh_token ?? "",
     };
+  },
+
+  forgotPassword: async ({ dto }: { dto: AuthForgotPasswordReq }): Promise<void> => {
+    const { error } = await supabase.auth.resetPasswordForEmail(dto.email, {
+      redirectTo: `${env.WEB_APP_URL}/auth/reset`,
+    });
+
+    // Other errors are swallowed so the response never reveals whether the email exists
+    if (error?.status === 429) {
+      throw new TooManyRequestsError({
+        code: ErrorCodeAuth.RATE_LIMIT_EXCEEDED,
+        error,
+      });
+    }
+  },
+
+  resetPassword: async ({ dto }: { dto: AuthResetPasswordReq }): Promise<void> => {
+    // verifyOtp stores a session on the client, so never use the shared singleton here
+    const client = createClient(env.SUPABASE_URL, env.SUPABASE_API_KEY, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
+
+    const { error: verifyError } = await client.auth.verifyOtp({
+      type: "recovery",
+      token_hash: dto.tokenHash,
+    });
+
+    if (verifyError) {
+      if (verifyError.status === 429) {
+        throw new TooManyRequestsError({
+          code: ErrorCodeAuth.RATE_LIMIT_EXCEEDED,
+          error: verifyError,
+        });
+      }
+
+      throw new BadRequestError({
+        code: ErrorCodeAuth.RESET_LINK_INVALID,
+        error: verifyError,
+      });
+    }
+
+    const { error: updateError } = await client.auth.updateUser({ password: dto.password });
+
+    if (updateError) {
+      if (updateError.code === "same_password") {
+        throw new BadRequestError({
+          code: ErrorCodeAuth.SAME_PASSWORD,
+          error: updateError,
+        });
+      }
+
+      throw new BadRequestError({
+        code: updateError.code || ErrorCodeAuth.BAD_REQUEST,
+        error: updateError,
+      });
+    }
+
+    // Best effort: log out every other device that still holds the old session
+    await client.auth.signOut({ scope: "others" });
   },
 };

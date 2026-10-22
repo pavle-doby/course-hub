@@ -5,6 +5,9 @@ import { courseStatusEnum, courseVisibilityEnum } from "@repo/db-schema";
 import { isoDatetime, paramBoolean } from "../shared";
 import { UserSchema } from "../users/schemas";
 
+// In cents: 1,000,000.00
+const MAX_COURSE_PRICE = 1_000_000_00;
+
 export const CourseCreatorSchema = UserSchema.pick({
   id: true,
   firstName: true,
@@ -26,6 +29,7 @@ export const CourseSchema = createSelectSchema(courses, {
     status: true,
     visibility: true,
     aiAccessEnabled: true,
+    price: true,
     publishedAt: true,
     ratingAverage: true,
     ratingCount: true,
@@ -55,12 +59,14 @@ export const CoursePostQuerySchema = createInsertSchema(courses, {
   status: z.enum(courseStatusEnum.enumValues).optional(),
   visibility: z.enum(courseVisibilityEnum.enumValues).optional(),
   publishedAt: isoDatetime().optional(),
+  price: (s) => s.int().nonnegative().max(MAX_COURSE_PRICE).optional(),
 }).pick({
   name: true,
   description: true,
   status: true,
   visibility: true,
   aiAccessEnabled: true,
+  price: true,
   publishedAt: true,
 });
 
@@ -68,6 +74,7 @@ export const CoursePutQuerySchema = createUpdateSchema(courses, {
   status: z.enum(courseStatusEnum.enumValues).optional(),
   visibility: z.enum(courseVisibilityEnum.enumValues).optional(),
   publishedAt: isoDatetime(),
+  price: (s) => s.int().nonnegative().max(MAX_COURSE_PRICE),
 })
   .pick({
     name: true,
@@ -75,6 +82,7 @@ export const CoursePutQuerySchema = createUpdateSchema(courses, {
     status: true,
     visibility: true,
     aiAccessEnabled: true,
+    price: true,
     publishedAt: true,
   })
   .partial();
