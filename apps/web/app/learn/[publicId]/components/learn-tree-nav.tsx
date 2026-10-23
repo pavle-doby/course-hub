@@ -44,6 +44,8 @@ type LearnTreeNavProps = {
   selection: Selection;
   contentLocked: boolean;
   isLoadingTree?: boolean;
+  /** Enrollment is still loading, so it's not yet known whether the leaderboard link shows. */
+  isLoadingLinks?: boolean;
   courseStatus?: LessonProgressStatus;
   /** Topic and lesson status by id; empty when not enrolled. */
   statusById: Map<string, LessonProgressStatus>;
@@ -70,6 +72,7 @@ export function LearnTreeNav({
   selection,
   contentLocked,
   isLoadingTree = false,
+  isLoadingLinks = false,
   courseStatus,
   statusById,
   onSelectCourse,
@@ -91,24 +94,37 @@ export function LearnTreeNav({
     <Sidebar collapsible="offcanvas" className="border-r">
       <SidebarHeader className="min-h-14 justify-center border-b">
         <SidebarMenu>
-          {leaderboardHref && (
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild>
-                <Link href={leaderboardHref}>
-                  <TrophyIcon />
-                  <span>{t("learn.leaderboard.title")}</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
+          {isLoadingLinks ? (
+            <>
+              <SidebarMenuItem>
+                <SidebarMenuSkeleton showIcon />
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuSkeleton showIcon />
+              </SidebarMenuItem>
+            </>
+          ) : (
+            <>
+              {leaderboardHref && (
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <Link href={leaderboardHref}>
+                      <TrophyIcon />
+                      <span>{t("learn.leaderboard.title")}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              )}
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link href={reviewsHref}>
+                    <MessageSquareTextIcon />
+                    <span>{t("learn.reviews.title")}</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </>
           )}
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <Link href={reviewsHref}>
-                <MessageSquareTextIcon />
-                <span>{t("learn.reviews.title")}</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>

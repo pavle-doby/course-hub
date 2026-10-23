@@ -373,6 +373,7 @@ export default function LearnCourseDetailPage() {
           selection={selection}
           contentLocked={!isEnrolled}
           isLoadingTree={isLoadingTree}
+          isLoadingLinks={isLoadingEnrollment}
           courseStatus={isEnrolled ? progress?.status : undefined}
           statusById={isEnrolled ? statusById : new Map()}
           onSelectCourse={handleSelectCourse}
