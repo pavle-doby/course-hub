@@ -3,7 +3,9 @@ import { validate } from "api/middleware/validate";
 import {
   LessonProgressParamsSchema,
   ParamsPublicIdSchema,
+  TopicProgressParamsSchema,
   UpdateLessonProgressBodySchema,
+  UpdateTopicProgressBodySchema,
 } from "@repo/contract";
 import { progressController } from "../controllers/progressController";
 
@@ -27,6 +29,17 @@ router.put(
   validate(UpdateLessonProgressBodySchema),
   async (req: Request, res: Response) => {
     await progressController.updateLessonProgress(req, res);
+  }
+);
+
+// PUT /progress/topics/:topicId → mark the topic video as watched by the current user
+router.put(
+  //
+  "/topics/:topicId",
+  validate(TopicProgressParamsSchema, "params"),
+  validate(UpdateTopicProgressBodySchema),
+  async (req: Request, res: Response) => {
+    await progressController.updateTopicProgress(req, res);
   }
 );
 

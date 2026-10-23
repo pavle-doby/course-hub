@@ -4,8 +4,10 @@ import {
   LessonProgressParamsSchema,
   LessonProgressSchema,
   LessonProgressStatusSchema,
+  TopicProgressParamsSchema,
   TopicProgressSchema,
   UpdateLessonProgressBodySchema,
+  UpdateTopicProgressBodySchema,
 } from "./schemas";
 
 export type LessonProgressStatus = z.infer<typeof LessonProgressStatusSchema>;
@@ -20,3 +22,7 @@ export type GetCourseProgressRes = CourseProgress;
 export type UpdateLessonProgressParams = z.infer<typeof LessonProgressParamsSchema>;
 export type UpdateLessonProgressReq = z.infer<typeof UpdateLessonProgressBodySchema>;
 export type UpdateLessonProgressRes = LessonProgress;
+
+// PUT /progress/topics/:topicId → mark the topic video as watched
+export type UpdateTopicProgressParams = z.infer<typeof TopicProgressParamsSchema>;
+export type UpdateTopicProgressReq = z.infer<typeof UpdateTopicProgressBodySchema>;

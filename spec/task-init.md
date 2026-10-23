@@ -21,5 +21,6 @@ Every spec in `spec/`, grouped by feature. The file name prefix is the task's st
 | AI usage tracking + bring-your-own key | [`[todo]-task-10.2.md`]([todo]-task-10.2.md)                              | todo  | Spec written                                                     |
 | Forgot / reset password (web)          | [`[done]-task-11.md`]([done]-task-11.md)                                  | done  |                                                                  |
 | Course price (display only)            | [`[done]-task-12.md`]([done]-task-12.md)                                  | done  | User still runs the `course_price` migration                     |
+| Course leaderboard (web)               | [`[done]-task-13.md`]([done]-task-13.md)                                  | done  |                                                                  |
 
 Not a task: [web-audit/findings.md](web-audit/findings.md) is a research-only audit of `apps/web`.

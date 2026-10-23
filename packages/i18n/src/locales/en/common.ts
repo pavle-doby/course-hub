@@ -254,6 +254,15 @@ export const common = {
         title: "Lesson Not Found",
         message: "The lesson you are tracking progress for could not be found.",
       },
+      TOPIC_NOT_FOUND: {
+        title: "Topic Not Found",
+        message: "The topic you are tracking progress for could not be found.",
+      },
+      LESSON_NOT_EARNED: {
+        title: "Lesson Not Finished Yet",
+        message:
+          "Watch the lesson video to the end and answer every quiz question correctly to finish this lesson.",
+      },
     },
   },
   notifications: {

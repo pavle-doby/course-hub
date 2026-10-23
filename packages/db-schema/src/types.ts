@@ -18,6 +18,8 @@ import type {
   courseReviews,
   quizzes,
   quizResponses,
+  topicProgress,
+  learnerActivityDays,
 } from "./schemas";
 
 export type UserEntity = InferSelectModel<typeof users>;
@@ -38,3 +40,5 @@ export type ApiTokenEntity = InferSelectModel<typeof apiTokens>;
 export type CourseReviewEntity = InferSelectModel<typeof courseReviews>;
 export type QuizEntity = InferSelectModel<typeof quizzes>;
 export type QuizResponseEntity = InferSelectModel<typeof quizResponses>;
+export type TopicProgressEntity = InferSelectModel<typeof topicProgress>;
+export type LearnerActivityDayEntity = InferSelectModel<typeof learnerActivityDays>;

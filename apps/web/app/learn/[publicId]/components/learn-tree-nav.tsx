@@ -7,6 +7,7 @@ import {
   FilesIcon,
   FolderIcon,
   MessageSquareTextIcon,
+  TrophyIcon,
 } from "lucide-react";
 import {
   Collapsible,
@@ -36,6 +37,8 @@ import { ProgressStatusIcon } from "./progress-status-icon";
 
 type LearnTreeNavProps = {
   courseName: string;
+  /** Only for the course creator and enrolled learners. */
+  leaderboardHref?: string;
   reviewsHref: string;
   tree: TopicWithLessons[];
   selection: Selection;
@@ -61,6 +64,7 @@ const PLACEHOLDER_TOPICS: SkeletonTopic[] = Array.from({ length: 3 }, (_, topicI
 
 export function LearnTreeNav({
   courseName,
+  leaderboardHref,
   reviewsHref,
   tree,
   selection,
@@ -85,8 +89,18 @@ export function LearnTreeNav({
 
   return (
     <Sidebar collapsible="offcanvas" className="border-r">
-      <SidebarHeader className="h-14 justify-center border-b">
+      <SidebarHeader className="min-h-14 justify-center border-b">
         <SidebarMenu>
+          {leaderboardHref && (
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                <Link href={leaderboardHref}>
+                  <TrophyIcon />
+                  <span>{t("learn.leaderboard.title")}</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          )}
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
               <Link href={reviewsHref}>

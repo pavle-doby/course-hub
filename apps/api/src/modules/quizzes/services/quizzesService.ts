@@ -50,6 +50,19 @@ async function getParentCourse(
   return course;
 }
 
+// Saved or cleared answers can finish or reopen the lesson, topic or course they belong to.
+async function syncProgress(
+  parent: QuizParentParams,
+  courseId: string,
+  authUserId: string
+): Promise<void> {
+  if (parent.parentType === "lesson") {
+    await progressService.syncLessonStatus(authUserId, parent.parentId);
+  } else {
+    await progressService.syncCourseQuiz(authUserId, courseId);
+  }
+}
+
 // Resolves parent → course and checks the caller created it
 async function assertCreator(
   parent: QuizParentParams,
@@ -185,18 +198,15 @@ export const quizzesService = {
     }
     const quiz = await getQuizOrThrow(parent);
     const response = await quizzesRepository.saveResponse(userId, quiz.id, dto.answers);
-    if (parent.parentType === "lesson") {
-      await progressService.syncLessonStatus(authUserId, parent.parentId);
-    }
+    await syncProgress(parent, courseId, authUserId);
     return toMyResponse(quiz, response);
   },
 
   clearMyResponse: async (parent: QuizParentParams, authUserId: string): Promise<void> => {
     const userId = await getUserId(authUserId);
+    const { courseId } = await getParentCourse(parent);
     const quiz = await getQuizOrThrow(parent);
     await quizzesRepository.deleteResponse(userId, quiz.id);
-    if (parent.parentType === "lesson") {
-      await progressService.syncLessonStatus(authUserId, parent.parentId);
-    }
+    await syncProgress(parent, courseId, authUserId);
   },
 };

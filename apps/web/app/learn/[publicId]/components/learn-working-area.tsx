@@ -34,6 +34,7 @@ import { cn } from "@repo/ui-web/lib/utils";
 import { useT } from "@repo/i18n/client";
 import type { Selection, TopicWithLessons } from "@/hooks/use-course-tree";
 import { useLessonVideoProgress, useSaveLessonProgress } from "@/hooks/use-lesson-progress";
+import { useSaveTopicProgress } from "@/hooks/use-save-topic-progress";
 import { NEXT_LESSON_STATUS, PROGRESS_STATUS_LABEL_KEYS } from "@/utils/consts";
 import { getVideoRefetchInterval } from "@/utils/get-video-refetch-interval";
 import { formatPrice } from "@/utils/format-price";
@@ -41,6 +42,7 @@ import { StarRating } from "@/components/star-rating";
 import { LessonStatusSelect } from "./lesson-status-select";
 import { LearnQuiz } from "./quiz/learn-quiz";
 import { ProgressStatusIcon } from "./progress-status-icon";
+import { StatusInfoDialog } from "./status-info-dialog";
 
 type LearnWorkingAreaProps = {
   selection: Selection;
@@ -79,6 +81,7 @@ export function LearnWorkingArea({
   const { t, i18n } = useT();
   const queryClient = useQueryClient();
   const saveLessonProgress = useSaveLessonProgress(course.publicId);
+  const saveTopicVideoWatched = useSaveTopicProgress(course.publicId);
   const [isSavingStatus, setIsSavingStatus] = useState(false);
 
   const selectedTopic =
@@ -147,12 +150,19 @@ export function LearnWorkingArea({
     lessonId: isEnrolled ? lessonProgress?.lessonId : undefined,
     progress: lessonProgress,
     onSave: saveLessonProgress,
+    topicId: isEnrolled ? selectedTopic?.id : undefined,
+    onTopicVideoWatched: saveTopicVideoWatched,
   });
+  // Done on a lesson with a video or quiz has to be earned by finishing them.
+  const isDoneLocked =
+    !!lessonProgress &&
+    lessonProgress.status !== "done" &&
+    !!progress?.gatedLessonIds.includes(lessonProgress.lessonId);
 
   const lessonNextStatus =
     isEnrolled && lessonProgress ? NEXT_LESSON_STATUS[lessonProgress.status] : undefined;
   // A lesson with a video or quiz completes itself (video watched + all answers right), so it gets
-  // no "Mark as done" button; the status dropdown can still change it.
+  // no "Mark as done" button, and Done is locked in the status dropdown.
   const nextStatus =
     lessonNextStatus?.status === "done" && (isVideoReady || hasQuiz) ? undefined : lessonNextStatus;
 
@@ -171,7 +181,7 @@ export function LearnWorkingArea({
     }
   }
 
-  // A lesson quiz result can change the lesson status on the server.
+  // A quiz result can change the lesson, topic or course status on the server.
   function handleQuizResponseChange() {
     void queryClient.invalidateQueries({
       queryKey: getGetCourseProgressQueryKey({ publicId: course.publicId }),
@@ -242,17 +252,21 @@ export function LearnWorkingArea({
             <LessonStatusSelect
               className="w-full md:w-fit"
               status={lessonProgress.status}
+              isDoneLocked={isDoneLocked}
               onStatusChange={handleLessonStatusChange}
             />
           )}
           {isEnrolled && readOnlyStatus && (
-            <Badge
-              variant="outline"
-              className="h-8 w-full justify-start gap-2 px-3 text-sm md:w-fit"
-            >
-              <ProgressStatusIcon status={readOnlyStatus} className="size-4!" />
-              {t(PROGRESS_STATUS_LABEL_KEYS[readOnlyStatus])}
-            </Badge>
+            <div className="flex items-center gap-1">
+              <Badge
+                variant="outline"
+                className="h-8 flex-1 justify-start gap-2 px-3 text-sm md:flex-none"
+              >
+                <ProgressStatusIcon status={readOnlyStatus} className="size-4!" />
+                {t(PROGRESS_STATUS_LABEL_KEYS[readOnlyStatus])}
+              </Badge>
+              <StatusInfoDialog type={selection.type === "course" ? "course" : "topic"} />
+            </div>
           )}
         </div>
         {selection.type === "course" && (

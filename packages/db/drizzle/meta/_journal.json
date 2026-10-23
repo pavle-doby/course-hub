@@ -113,6 +113,13 @@
       "when": 1792621266193,
       "tag": "0015_course_price",
       "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1792692738878,
+      "tag": "0016_leaderboard",
+      "breakpoints": true
     }
   ]
 }

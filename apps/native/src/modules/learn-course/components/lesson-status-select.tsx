@@ -19,11 +19,17 @@ const STATUSES = Object.values(LessonProgressStatus);
 
 type LessonStatusSelectProps = {
   status: LessonProgressStatus;
+  /** Done can't be picked by hand: the lesson's video and quiz have to be finished first. */
+  isDoneLocked?: boolean;
   onStatusChange: (status: LessonProgressStatus) => void;
 };
 
 /** Lesson status dropdown: To do / In progress / Done. */
-export function LessonStatusSelect({ status, onStatusChange }: LessonStatusSelectProps) {
+export function LessonStatusSelect({
+  status,
+  isDoneLocked = false,
+  onStatusChange,
+}: LessonStatusSelectProps) {
   const { t } = useTranslation();
 
   function handleValueChange(value: string) {
@@ -50,12 +56,21 @@ export function LessonStatusSelect({ status, onStatusChange }: LessonStatusSelec
         <DropdownMenuLabel>{t("learn.progress.status")}</DropdownMenuLabel>
         <DropdownMenuRadioGroup value={status} onValueChange={handleValueChange}>
           {STATUSES.map((option) => (
-            <DropdownMenuRadioItem key={option} value={option}>
+            <DropdownMenuRadioItem
+              key={option}
+              value={option}
+              disabled={isDoneLocked && option === "done"}
+            >
               <ProgressStatusIcon status={option} />
               <Text>{t(PROGRESS_STATUS_LABEL_KEYS[option])}</Text>
             </DropdownMenuRadioItem>
           ))}
         </DropdownMenuRadioGroup>
+        {isDoneLocked && (
+          <Text className="max-w-56 px-2 py-1.5 text-xs text-muted-foreground">
+            {t("learn.progress.doneLocked")}
+          </Text>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );

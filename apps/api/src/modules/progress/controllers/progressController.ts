@@ -3,6 +3,8 @@ import {
   UpdateLessonProgressParams,
   UpdateLessonProgressReq,
   UpdateLessonProgressRes,
+  UpdateTopicProgressParams,
+  UpdateTopicProgressReq,
 } from "@repo/contract";
 import { Request, Response } from "express";
 import { progressService } from "../services/progressService";
@@ -28,5 +30,13 @@ export const progressController = {
       reqDto
     );
     res.status(200).json(resDto);
+  },
+
+  updateTopicProgress: async (_req: Request, res: Response): Promise<void> => {
+    const authUserId: string = res.locals.user.id;
+    const { topicId } = res.locals.params as UpdateTopicProgressParams;
+    const reqDto = res.locals.body as UpdateTopicProgressReq;
+    await progressService.updateTopicProgress(authUserId, topicId, reqDto);
+    res.status(204).send();
   },
 };

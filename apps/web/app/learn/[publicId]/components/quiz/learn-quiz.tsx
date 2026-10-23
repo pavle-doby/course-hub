@@ -20,6 +20,7 @@ import {
   CardTitle,
 } from "@repo/ui-web/components/card";
 import { Skeleton } from "@repo/ui-web/components/skeleton";
+import { cn } from "@repo/ui-web/lib/utils";
 import { toast } from "@repo/ui-web/components/sonner";
 import { useIsMobile } from "@repo/ui-web/hooks/use-mobile";
 import { vibrate } from "@/utils/vibrate";
@@ -122,13 +123,14 @@ export function LearnQuiz({ parent, isEnrolled, onStart, onResponseChange }: Lea
           </CardDescription>
         )}
       </CardHeader>
-      {isResponseLoading && (
+      {(isResponseLoading || isSaving) && (
         <CardContent>
           <QuizQuestionnaireSkeleton />
         </CardContent>
       )}
+      {/* Hidden, not unmounted, while saving so the answers survive a failed submit. */}
       {isEnrolled && myResponse && (
-        <CardContent>
+        <CardContent className={cn(isSaving && "hidden")}>
           {myResponse.response ? (
             <QuizResult quiz={quiz} response={myResponse.response} onClear={handleClear} />
           ) : (

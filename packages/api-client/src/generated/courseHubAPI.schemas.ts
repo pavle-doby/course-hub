@@ -732,6 +732,7 @@ export interface CourseProgress {
   lastLessonId: string | null;
   topics: CourseProgressTopicsItem[];
   lessons: CourseProgressLessonsItem[];
+  gatedLessonIds: string[];
 }
 
 export type ApiTokenSource = (typeof ApiTokenSource)[keyof typeof ApiTokenSource];
@@ -867,6 +868,151 @@ export type CourseReviewsPagination = {
 export interface CourseReviews {
   data: CourseReview[];
   pagination: CourseReviewsPagination;
+}
+
+export type CourseLeaderboardDataItemUser = {
+  id: string;
+  /**
+   * @maxLength 255
+   * @nullable
+   */
+  firstName: string | null;
+  /**
+   * @maxLength 255
+   * @nullable
+   */
+  lastName: string | null;
+  /** @maxLength 255 */
+  username: string;
+  /** @nullable */
+  avatarUrl: string | null;
+  /**
+   * @maxLength 255
+   * @nullable
+   */
+  email: string | null;
+};
+
+export type CourseLeaderboardDataItem = {
+  place: number;
+  points: number;
+  isWithdrawn: boolean;
+  user: CourseLeaderboardDataItemUser;
+};
+
+export type CourseLeaderboardPagination = {
+  total: number;
+  page: number;
+  limit: number;
+};
+
+export type CourseLeaderboardMeUser = {
+  id: string;
+  /**
+   * @maxLength 255
+   * @nullable
+   */
+  firstName: string | null;
+  /**
+   * @maxLength 255
+   * @nullable
+   */
+  lastName: string | null;
+  /** @maxLength 255 */
+  username: string;
+  /** @nullable */
+  avatarUrl: string | null;
+  /**
+   * @maxLength 255
+   * @nullable
+   */
+  email: string | null;
+};
+
+/**
+ * @nullable
+ */
+export type CourseLeaderboardMe = {
+  place: number;
+  points: number;
+  isWithdrawn: boolean;
+  user: CourseLeaderboardMeUser;
+} | null;
+
+export interface CourseLeaderboard {
+  data: CourseLeaderboardDataItem[];
+  pagination: CourseLeaderboardPagination;
+  /** @nullable */
+  me: CourseLeaderboardMe;
+}
+
+export type MyLeaderboardNearbyMeUser = {
+  id: string;
+  /**
+   * @maxLength 255
+   * @nullable
+   */
+  firstName: string | null;
+  /**
+   * @maxLength 255
+   * @nullable
+   */
+  lastName: string | null;
+  /** @maxLength 255 */
+  username: string;
+  /** @nullable */
+  avatarUrl: string | null;
+  /**
+   * @maxLength 255
+   * @nullable
+   */
+  email: string | null;
+};
+
+/**
+ * @nullable
+ */
+export type MyLeaderboardNearbyMe = {
+  place: number;
+  points: number;
+  isWithdrawn: boolean;
+  user: MyLeaderboardNearbyMeUser;
+} | null;
+
+export type MyLeaderboardNearbyEntriesItemUser = {
+  id: string;
+  /**
+   * @maxLength 255
+   * @nullable
+   */
+  firstName: string | null;
+  /**
+   * @maxLength 255
+   * @nullable
+   */
+  lastName: string | null;
+  /** @maxLength 255 */
+  username: string;
+  /** @nullable */
+  avatarUrl: string | null;
+  /**
+   * @maxLength 255
+   * @nullable
+   */
+  email: string | null;
+};
+
+export type MyLeaderboardNearbyEntriesItem = {
+  place: number;
+  points: number;
+  isWithdrawn: boolean;
+  user: MyLeaderboardNearbyEntriesItemUser;
+};
+
+export interface MyLeaderboardNearby {
+  /** @nullable */
+  me: MyLeaderboardNearbyMe;
+  entries: MyLeaderboardNearbyEntriesItem[];
 }
 
 export type QuizQuestionsItem =
@@ -3725,6 +3871,38 @@ export type UpdateLessonProgressDefault = {
   details?: UpdateLessonProgressDefaultDetails;
 };
 
+export type UpdateTopicProgressPathParameters = {
+  topicId: string;
+};
+export type UpdateTopicProgressBody = {
+  videoWatched: true;
+};
+
+export type UpdateTopicProgressDefaultCode =
+  (typeof UpdateTopicProgressDefaultCode)[keyof typeof UpdateTopicProgressDefaultCode];
+
+export const UpdateTopicProgressDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type UpdateTopicProgressDefaultDetails = { [key: string]: unknown };
+
+export type UpdateTopicProgressDefault = {
+  status: number;
+  code: UpdateTopicProgressDefaultCode;
+  error?: unknown;
+  details?: UpdateTopicProgressDefaultDetails;
+};
+
 export type GetMyCourseReviewPathParameters = {
   publicId: string;
 };
@@ -3869,6 +4047,75 @@ export type GetCourseReviewsDefault = {
   code: GetCourseReviewsDefaultCode;
   error?: unknown;
   details?: GetCourseReviewsDefaultDetails;
+};
+
+export type GetCourseLeaderboardPathParameters = {
+  publicId: string;
+};
+export type GetCourseLeaderboardParams = {
+  /**
+   * @minimum 0
+   * @nullable
+   */
+  page?: number | null;
+  /**
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
+};
+
+export type GetCourseLeaderboardDefaultCode =
+  (typeof GetCourseLeaderboardDefaultCode)[keyof typeof GetCourseLeaderboardDefaultCode];
+
+export const GetCourseLeaderboardDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type GetCourseLeaderboardDefaultDetails = { [key: string]: unknown };
+
+export type GetCourseLeaderboardDefault = {
+  status: number;
+  code: GetCourseLeaderboardDefaultCode;
+  error?: unknown;
+  details?: GetCourseLeaderboardDefaultDetails;
+};
+
+export type GetMyLeaderboardNearbyPathParameters = {
+  publicId: string;
+};
+export type GetMyLeaderboardNearbyDefaultCode =
+  (typeof GetMyLeaderboardNearbyDefaultCode)[keyof typeof GetMyLeaderboardNearbyDefaultCode];
+
+export const GetMyLeaderboardNearbyDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type GetMyLeaderboardNearbyDefaultDetails = { [key: string]: unknown };
+
+export type GetMyLeaderboardNearbyDefault = {
+  status: number;
+  code: GetMyLeaderboardNearbyDefaultCode;
+  error?: unknown;
+  details?: GetMyLeaderboardNearbyDefaultDetails;
 };
 
 export type GetQuizPathParameters = {

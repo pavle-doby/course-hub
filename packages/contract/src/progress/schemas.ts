@@ -21,6 +21,8 @@ export const CourseProgressSchema = z.object({
   lastLessonId: z.uuid().nullable(),
   topics: z.array(TopicProgressSchema),
   lessons: z.array(LessonProgressSchema),
+  /** Lessons with a ready video or a quiz: they can only be marked done by finishing those. */
+  gatedLessonIds: z.array(z.uuid()),
 });
 
 export const LessonProgressParamsSchema = z.object({
@@ -41,3 +43,12 @@ export const UpdateLessonProgressBodySchema = z
       body.videoWatched !== undefined,
     { message: "status, progressSeconds or videoWatched is required" }
   );
+
+export const TopicProgressParamsSchema = z.object({
+  topicId: z.uuid(),
+});
+
+export const UpdateTopicProgressBodySchema = z.object({
+  /** The learner reached the end of the topic video. */
+  videoWatched: z.literal(true),
+});

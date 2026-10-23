@@ -30,7 +30,7 @@ export function LearnNextStep({ publicId, courseId, lessonId, progress }: LearnN
   const status = progress.lessons.find((lesson) => lesson.lessonId === lessonId)?.status ?? "todo";
   const lessonNextStatus = NEXT_LESSON_STATUS[status];
   // A lesson with a video or quiz completes itself (video watched + all answers right), so it gets
-  // no "Mark as done" button; the status dropdown can still change it.
+  // no "Mark as done" button, and Done is locked in the status dropdown.
   const nextStatus =
     lessonNextStatus?.status === "done" && (isVideoReady || quizData?.quiz)
       ? undefined

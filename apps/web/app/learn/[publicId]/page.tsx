@@ -23,6 +23,7 @@ import { toast } from "@repo/ui-web/components/sonner";
 import { useIsMobile } from "@repo/ui-web/hooks/use-mobile";
 import { useErrorHandlingQuery } from "@repo/shared";
 import { useAdjacentSelection, useCourseTree, type Selection } from "@/hooks/use-course-tree";
+import { useLeaderboardPlaceChange } from "@/hooks/use-leaderboard-place-change";
 import { useSelectionSearchParam } from "@/hooks/use-selection-search-param";
 import { INTERACTIVE_SELECTOR } from "@/utils/consts";
 import { getAccessToken } from "@/utils/token-storage";
@@ -36,6 +37,7 @@ import { LearnTreeNav } from "./components/learn-tree-nav";
 import { LearnWorkingArea } from "./components/learn-working-area";
 import { LearnWorkingAreaSkeleton } from "./components/learn-working-area-skeleton";
 import { ReviewDialog } from "./components/review-dialog";
+import { LeaderboardChangeDialog } from "./components/leaderboard-change-dialog";
 
 const COURSE_SELECTION: Selection = { type: "course" };
 
@@ -131,6 +133,10 @@ export default function LearnCourseDetailPage() {
   const { data: progress, isLoading: isProgressLoading } = useGetCourseProgress(
     { publicId },
     { query: { enabled: isEnrolled } }
+  );
+  const { placeChange, clearPlaceChange } = useLeaderboardPlaceChange(
+    publicId,
+    isEnrolled ? progress : undefined
   );
   const statusById = new Map([
     ...(progress?.topics ?? []).map((topic) => [topic.topicId, topic.status] as const),
@@ -347,9 +353,21 @@ export default function LearnCourseDetailPage() {
           onOpenChange={setIsReviewDialogOpen}
         />
       )}
+      {/* Waits for the congratulations / review dialogs when the course itself was completed. */}
+      <LeaderboardChangeDialog
+        publicId={publicId}
+        change={placeChange}
+        open={!!placeChange && !isCompletedDialogOpen && !isReviewDialogOpen}
+        onClose={clearPlaceChange}
+      />
       <div className="flex min-h-svh flex-1 flex-row">
         <LearnTreeNav
           courseName={course.name}
+          leaderboardHref={
+            isEnrolled || course.creatorId === currentUser?.id
+              ? `/learn/${publicId}/leaderboard`
+              : undefined
+          }
           reviewsHref={`/learn/${publicId}/reviews`}
           tree={tree}
           selection={selection}

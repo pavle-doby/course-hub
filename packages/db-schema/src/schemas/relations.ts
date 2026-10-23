@@ -17,6 +17,8 @@ import { apiTokens } from "./api-tokens";
 import { courseReviews } from "./course-reviews";
 import { quizzes } from "./quizzes";
 import { quizResponses } from "./quiz-responses";
+import { topicProgress } from "./topic-progress";
+import { learnerActivityDays } from "./learner-activity-days";
 
 export const usersRelations = relations(users, ({ one, many }) => ({
   preferences: one(userPreferences, { fields: [users.id], references: [userPreferences.userId] }),
@@ -31,6 +33,8 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   apiTokens: many(apiTokens),
   reviews: many(courseReviews),
   quizResponses: many(quizResponses),
+  topicProgress: many(topicProgress),
+  activityDays: many(learnerActivityDays),
 }));
 
 export const userPreferencesRelations = relations(userPreferences, ({ one }) => ({
@@ -49,6 +53,7 @@ export const coursesRelations = relations(courses, ({ one, many }) => ({
   notifications: many(notifications),
   reviews: many(courseReviews),
   quiz: one(quizzes),
+  activityDays: many(learnerActivityDays),
 }));
 
 export const pushSubscriptionsRelations = relations(pushSubscriptions, ({ one }) => ({
@@ -92,6 +97,7 @@ export const topicsRelations = relations(topics, ({ one, many }) => ({
   lessons: many(lessons),
   documents: many(documents),
   quiz: one(quizzes),
+  progress: many(topicProgress),
 }));
 
 export const lessonsRelations = relations(lessons, ({ one, many }) => ({
@@ -148,4 +154,14 @@ export const quizResponsesRelations = relations(quizResponses, ({ one }) => ({
     fields: [quizResponses.quizId],
     references: [quizzes.id],
   }),
+}));
+
+export const topicProgressRelations = relations(topicProgress, ({ one }) => ({
+  user: one(users, { fields: [topicProgress.userId], references: [users.id] }),
+  topic: one(topics, { fields: [topicProgress.topicId], references: [topics.id] }),
+}));
+
+export const learnerActivityDaysRelations = relations(learnerActivityDays, ({ one }) => ({
+  user: one(users, { fields: [learnerActivityDays.userId], references: [users.id] }),
+  course: one(courses, { fields: [learnerActivityDays.courseId], references: [courses.id] }),
 }));

@@ -253,6 +253,15 @@ export const common = {
         title: "Lekcija nije pronađena",
         message: "Lekcija za koju pratite napredak nije pronađena.",
       },
+      TOPIC_NOT_FOUND: {
+        title: "Tema nije pronađena",
+        message: "Tema za koju pratite napredak nije pronađena.",
+      },
+      LESSON_NOT_EARNED: {
+        title: "Lekcija još nije završena",
+        message:
+          "Pogledajte video lekcije do kraja i tačno odgovorite na sva pitanja u kvizu da biste završili lekciju.",
+      },
     },
   },
   notifications: {

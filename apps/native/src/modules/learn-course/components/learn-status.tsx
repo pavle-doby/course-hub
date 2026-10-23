@@ -44,6 +44,7 @@ export function LearnStatus({ publicId, selection, progress }: LearnStatusProps)
     ) : (
       <LessonStatusSelect
         status={status}
+        isDoneLocked={status !== "done" && progress.gatedLessonIds.includes(selection.id)}
         onStatusChange={(next) => handleLessonStatusChange(selection.id, next)}
       />
     );

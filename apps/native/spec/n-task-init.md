@@ -92,6 +92,7 @@ Detailed plan and progress log: [n-task-1]([in-progress]-n-task-1.md).
 - **OAuth consent page** (`/oauth/authorize`) — used by MCP clients in a browser; stays web-only.
 - **Keyboard shortcuts, resize handles, drag-to-reorder by mouse** — replaced by touch equivalents (long-press reorder or up/down actions) within the tasks above.
 - **PWA service worker** (`sw.js`) — replaced by native push (n-task-9).
+- **Course leaderboard page** — web-only for now. Native only sends the progress its gates need (topic video watched, locked **Done** on lessons with a video or quiz); see [`spec/[done]-task-13.md`](../../../spec/[done]-task-13.md), Native section.
 
 ## Open questions
 
