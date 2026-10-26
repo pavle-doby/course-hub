@@ -30,6 +30,8 @@ import {
   useSidebar,
 } from "@repo/ui-web/components/sidebar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui-web/components/tooltip";
+import { ProBadge } from "@/components/pro-badge";
+import { usePlan } from "@/hooks/use-plan";
 import { useT } from "@repo/i18n/client";
 import { ChAlertDialog } from "@/components/ch-alert-dialog";
 import { CoursePriceInput } from "./course-price-input";
@@ -97,6 +99,11 @@ export function CourseActions({
   const { isMobile, openMobile, setOpenMobile, state, toggleSidebar } = useSidebar();
   const [activeDialog, setActiveDialog] = useState<CourseDialogKey | null>(null);
   const isPrivate = visibility === "private";
+  const { entitlements } = usePlan();
+  // Turning a feature off, or keeping what a downgraded creator already has, is always allowed;
+  // while the plan loads nothing is locked (the API enforces the plan anyway)
+  const canMakePrivate = isPrivate || entitlements?.privateCourses !== false;
+  const canEnableAiAccess = aiAccessEnabled || entitlements?.studentAiAccess !== false;
   const statusVariant =
     status === "published" ? "default" : status === "archived" ? "destructive" : "secondary";
   const hasStateActions = !!onPublishCourse || !!onArchiveCourse || !!onDeleteCourse;
@@ -205,10 +212,12 @@ export function CourseActions({
           type="button"
           variant={isPrivate ? "default" : "outline"}
           className="w-1/2 gap-1.5"
+          disabled={!canMakePrivate}
           onClick={() => openDialog("visibilityPrivate")}
         >
           <LockIcon className="size-4" />
           {t("courses.editor.visibilityPrivate")}
+          {!canMakePrivate && <ProBadge />}
         </Button>
       </ButtonGroup>
       {isPrivate && onInviteClick && (
@@ -223,12 +232,20 @@ export function CourseActions({
   const aiAccessAction = onAiAccessChange && (
     <label className="flex items-start justify-between gap-3">
       <span className="flex flex-col gap-1">
-        <span className="text-sm">{t("courses.editor.aiAccessLabel")}</span>
+        <span className="flex items-center gap-2 text-sm">
+          {t("courses.editor.aiAccessLabel")}
+          {!canEnableAiAccess && <ProBadge />}
+        </span>
         <span className="text-xs text-muted-foreground">
           {t("courses.editor.aiAccessDescription")}
         </span>
       </span>
-      <Switch className="mt-0.5" checked={aiAccessEnabled} onCheckedChange={onAiAccessChange} />
+      <Switch
+        className="mt-0.5"
+        checked={aiAccessEnabled}
+        disabled={!canEnableAiAccess}
+        onCheckedChange={onAiAccessChange}
+      />
     </label>
   );
 
@@ -292,6 +309,7 @@ export function CourseActions({
           <CollapsedAction
             label={t("courses.editor.visibilityPrivate")}
             variant={isPrivate ? "secondary" : "ghost"}
+            disabled={!canMakePrivate}
             onClick={() => openDialog("visibilityPrivate")}
           >
             <LockIcon className="size-4" />

@@ -11,6 +11,14 @@ export const UserRole = {
   admin: "admin",
 } as const;
 
+export type UserPlan = (typeof UserPlan)[keyof typeof UserPlan];
+
+export const UserPlan = {
+  free: "free",
+  pro: "pro",
+  enterprise: "enterprise",
+} as const;
+
 export interface User {
   id: string;
   /** @maxLength 255 */
@@ -32,6 +40,12 @@ export interface User {
   /** @nullable */
   bio: string | null;
   role: UserRole;
+  plan: UserPlan;
+  /**
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  planVersion: number;
 }
 
 export type UserPreferencesContentBehavior =
@@ -66,6 +80,15 @@ export const AuthWithTokensUserRole = {
   admin: "admin",
 } as const;
 
+export type AuthWithTokensUserPlan =
+  (typeof AuthWithTokensUserPlan)[keyof typeof AuthWithTokensUserPlan];
+
+export const AuthWithTokensUserPlan = {
+  free: "free",
+  pro: "pro",
+  enterprise: "enterprise",
+} as const;
+
 export type AuthWithTokensUser = {
   id: string;
   /** @maxLength 255 */
@@ -87,6 +110,12 @@ export type AuthWithTokensUser = {
   /** @nullable */
   bio: string | null;
   role: AuthWithTokensUserRole;
+  plan: AuthWithTokensUserPlan;
+  /**
+   * @minimum -2147483648
+   * @maximum 2147483647
+   */
+  planVersion: number;
 };
 
 export type AuthWithTokensPreferencesTheme =
@@ -1915,6 +1944,49 @@ export type DeleteUserDefault = {
   code: DeleteUserDefaultCode;
   error?: unknown;
   details?: DeleteUserDefaultDetails;
+};
+
+export type UpdateUserPlanPathParameters = {
+  id: string;
+};
+export type UpdateUserPlanBodyPlan =
+  (typeof UpdateUserPlanBodyPlan)[keyof typeof UpdateUserPlanBodyPlan];
+
+export const UpdateUserPlanBodyPlan = {
+  free: "free",
+  pro: "pro",
+  enterprise: "enterprise",
+} as const;
+
+export type UpdateUserPlanBody = {
+  plan: UpdateUserPlanBodyPlan;
+  /** @exclusiveMinimum 0 */
+  planVersion?: number;
+};
+
+export type UpdateUserPlanDefaultCode =
+  (typeof UpdateUserPlanDefaultCode)[keyof typeof UpdateUserPlanDefaultCode];
+
+export const UpdateUserPlanDefaultCode = {
+  forbidden: "forbidden",
+  unauthorized: "unauthorized",
+  not_found: "not_found",
+  server_error: "server_error",
+  not_found_endpoint: "not_found_endpoint",
+  no_token: "no_token",
+  invalid_token: "invalid_token",
+  auth_check_failed: "auth_check_failed",
+  validation_error: "validation_error",
+  invalid_pagination_params: "invalid_pagination_params",
+} as const;
+
+export type UpdateUserPlanDefaultDetails = { [key: string]: unknown };
+
+export type UpdateUserPlanDefault = {
+  status: number;
+  code: UpdateUserPlanDefaultCode;
+  error?: unknown;
+  details?: UpdateUserPlanDefaultDetails;
 };
 
 export type GetCoursesParams = {

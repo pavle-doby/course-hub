@@ -1,5 +1,6 @@
 export const students = {
   title: "Students",
+  proOnly: "See who completed what, and when, with the Pro plan.",
   searchPlaceholder: "Search by email or a course name",
   empty: "No students found",
   table: {

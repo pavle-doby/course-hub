@@ -8,6 +8,7 @@ import { learn } from "./learn";
 import { lessons } from "./lessons";
 import { metadata } from "./metadata";
 import { nav } from "./nav";
+import { pricing } from "./pricing";
 import { profile } from "./profile";
 import { settings } from "./settings";
 import { students } from "./students";
@@ -23,6 +24,7 @@ const sr: TranslationResources = {
   learn,
   lessons,
   nav,
+  pricing,
   profile,
   settings,
   students,

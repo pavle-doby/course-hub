@@ -24,7 +24,7 @@ import { cn } from "@repo/ui-web/lib/utils";
 import { toast } from "@repo/ui-web/components/sonner";
 import { useIsMobile } from "@repo/ui-web/hooks/use-mobile";
 import { vibrate } from "@/utils/vibrate";
-import { celebrate } from "./celebrate";
+import { celebrate } from "@/utils/celebrate";
 import { QuizQuestionnaire } from "./quiz-questionnaire";
 import { QuizQuestionnaireSkeleton } from "./quiz-questionnaire-skeleton";
 import { QuizResult } from "./quiz-result";

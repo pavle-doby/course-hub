@@ -18,19 +18,22 @@ export const videosController = {
 
   initializeUpload: async (_req: Request, res: Response): Promise<void> => {
     const dto = res.locals.body as InitializeVideoUploadReq;
-    const video: InitializeVideoUploadRes = await videosService.initializeUpload(dto);
+    const video: InitializeVideoUploadRes = await videosService.initializeUpload(
+      dto,
+      res.locals.user.id
+    );
     res.status(201).json(video);
   },
 
   completeUpload: async (_req: Request, res: Response): Promise<void> => {
     const dto = res.locals.params as CompleteVideoUploadReq;
-    await videosService.completeUpload(dto);
+    await videosService.completeUpload(dto, res.locals.user.id);
     res.status(204).send();
   },
 
   deleteVideo: async (_req: Request, res: Response): Promise<void> => {
     const { id } = res.locals.params as { id: string };
-    await videosService.deleteVideo(id);
+    await videosService.deleteVideo(id, res.locals.user.id);
     res.status(204).send();
   },
 

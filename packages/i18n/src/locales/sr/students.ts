@@ -1,5 +1,6 @@
 export const students = {
   title: "Studenti",
+  proOnly: "Pogledajte ko je šta završio i kada uz Pro plan.",
   searchPlaceholder: "Pretraži po email-u ili kursu",
   empty: "Nema pronađenih studenata",
   table: {

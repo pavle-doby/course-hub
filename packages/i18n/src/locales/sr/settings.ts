@@ -39,6 +39,7 @@ export const settings = {
     },
   },
   aiAccess: {
+    proOnly: "Povežite Claude i druge AI agente sa svojim kursevima uz Pro plan.",
     oauth: {
       title: "Claude konektor",
       description:

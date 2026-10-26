@@ -22,5 +22,7 @@ Every spec in `spec/`, grouped by feature. The file name prefix is the task's st
 | Forgot / reset password (web)          | [`[done]-task-11.md`]([done]-task-11.md)                                  | done  |                                                                  |
 | Course price (display only)            | [`[done]-task-12.md`]([done]-task-12.md)                                  | done  | User still runs the `course_price` migration                     |
 | Course leaderboard (web)               | [`[done]-task-13.md`]([done]-task-13.md)                                  | done  |                                                                  |
+| Pricing page + plan entitlements (web) | [`[done]-task-14.md`]([done]-task-14.md)                                  | done  | Phase 1 only; enforcement and payments are later tasks           |
+| Plan enforcement (backend)             | [`[done]-task-15.md`]([done]-task-15.md)                                  | done  | User still runs the `plans` migration                            |
 
 Not a task: [web-audit/findings.md](web-audit/findings.md) is a research-only audit of `apps/web`.

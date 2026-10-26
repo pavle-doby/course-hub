@@ -233,6 +233,20 @@ export const common = {
         message: "The review could not be found.",
       },
     },
+    plans: {
+      FEATURE_NOT_IN_PLAN: {
+        title: "Upgrade to Pro",
+        message: "This is part of the Pro plan.",
+      },
+      LIMIT_REACHED: {
+        title: "Plan Limit Reached",
+        message: "You've used everything your plan includes. Upgrade to Pro for more.",
+      },
+      INVALID_PLAN_VERSION: {
+        title: "Invalid Plan Version",
+        message: "This plan has no such version.",
+      },
+    },
     quiz: {
       NOT_FOUND: {
         title: "Quiz Not Found",

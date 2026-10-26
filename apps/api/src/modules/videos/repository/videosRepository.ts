@@ -62,10 +62,21 @@ export const videosRepository = {
     return video;
   },
 
-  getById: async (id: string): Promise<{ id: string; streamUid: string } | undefined> => {
+  getById: async (
+    id: string
+  ): Promise<
+    | {
+        id: string;
+        streamUid: string;
+        courseId: string | null;
+        topicId: string | null;
+        lessonId: string | null;
+      }
+    | undefined
+  > => {
     return await db.query.videos.findFirst({
       where: eq(schema.videos.id, id),
-      columns: { id: true, streamUid: true },
+      columns: { id: true, streamUid: true, courseId: true, topicId: true, lessonId: true },
     });
   },
 

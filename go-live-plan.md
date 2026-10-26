@@ -65,7 +65,7 @@ Enough to build and publish a real course.
 | Pro          | €19 / month or €190 / year (2 months free) |
 | Video add-on | €10 / month per extra 20 hours stored      |
 
-Later, when there's demand: **Team / School** at about €49 / month (several creators, more video, branding).
+**Enterprise**: everything in Pro with no default caps, live support and feature requests; priced per deal (**Contact us** on the pricing page). It replaces the earlier "Team / School" idea. Plan limits live in `PLAN_ENTITLEMENTS` (`@repo/contract`), see `spec/[done]-task-14.md`.
 
 Reasoning: Teachable, Thinkific and Podia start at about $39–49 / month and Kajabi at $149, so €19 is clearly cheaper while Course Hub has no payments yet. 20 hours of video costs about $6 / month in Cloudflare Stream storage (plus about $1 per 1,000 minutes watched), and AI quiz drafts cost cents, so Pro keeps a healthy margin.
 

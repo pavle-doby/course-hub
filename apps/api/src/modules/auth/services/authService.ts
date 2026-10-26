@@ -84,6 +84,8 @@ export const authService = {
       avatarUrl: userDb.avatarUrl,
       bio: userDb.bio,
       role: userDb.role,
+      plan: userDb.plan,
+      planVersion: userDb.planVersion,
     };
 
     return {
@@ -131,6 +133,8 @@ export const authService = {
       avatarUrl: user.avatarUrl,
       bio: user.bio,
       role: user.role,
+      plan: user.plan,
+      planVersion: user.planVersion,
     };
 
     return {

@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import confetti from "canvas-confetti";
 import { StarIcon } from "lucide-react";
 import { useT } from "@repo/i18n/client";
 import {
@@ -15,7 +14,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@repo/ui-web/components/alert-dialog";
-import { FIREWORK_INTERVAL, FIREWORK_SIDES } from "@/utils/consts";
+import { fireworkBurst } from "@/utils/celebrate";
+import { FIREWORK_INTERVAL } from "@/utils/consts";
 
 type CourseCompletedDialogProps = {
   open: boolean;
@@ -37,23 +37,9 @@ export function CourseCompletedDialog({
     if (!open) {
       return;
     }
-    // One soft burst per tick, alternating sides: low velocity and gravity with a slow decay
-    // let the sparks float down gently instead of popping.
+    // One soft burst per tick, alternating sides
     let tick = 0;
-    const interval = setInterval(() => {
-      const [min, max] = FIREWORK_SIDES[tick++ % FIREWORK_SIDES.length] ?? FIREWORK_SIDES[0];
-      void confetti({
-        particleCount: 40,
-        startVelocity: 18,
-        spread: 360,
-        gravity: 0.35,
-        decay: 0.95,
-        ticks: 260,
-        scalar: 0.8,
-        shapes: ["circle"],
-        origin: { x: min + Math.random() * (max - min), y: 0.15 + Math.random() * 0.3 },
-      });
-    }, FIREWORK_INTERVAL);
+    const interval = setInterval(() => fireworkBurst(tick++), FIREWORK_INTERVAL);
     return () => clearInterval(interval);
   }, [open]);
 

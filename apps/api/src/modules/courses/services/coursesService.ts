@@ -31,6 +31,9 @@ import { r2Service } from "api/modules/documents/services/r2Service";
 import { coursesRepository } from "../repository/coursesRepository";
 import { PaginationReqExtended } from "api/middleware/pagination";
 import { GetAllCoursesReq } from "@repo/contract";
+import type { CourseEntity, UserEntity } from "@repo/db-schema";
+import { entitlementsService } from "api/modules/plans/services/entitlementsService";
+import { plansRepository } from "api/modules/plans/repository/plansRepository";
 
 function withThumbnailUrl<T extends { thumbnailObjectKey: string | null }>(course: T) {
   const { thumbnailObjectKey, ...rest } = course;
@@ -40,7 +43,7 @@ function withThumbnailUrl<T extends { thumbnailObjectKey: string | null }>(cours
   };
 }
 
-async function getOwnedCourse(courseId: string, authUserId: string) {
+async function getOwnedCourseAndUser(courseId: string, authUserId: string) {
   const user = await usersRepository.getUserByAuthUserId(authUserId);
   const course = await coursesRepository.getCourseById(courseId);
   if (!course) {
@@ -49,7 +52,32 @@ async function getOwnedCourse(courseId: string, authUserId: string) {
   if (!user || course.creatorId !== user.id) {
     throw new ForbiddenError({ code: ErrorCode.FORBIDDEN });
   }
-  return course;
+  return { course, user };
+}
+
+async function getOwnedCourse(courseId: string, authUserId: string) {
+  return (await getOwnedCourseAndUser(courseId, authUserId)).course;
+}
+
+/**
+ * Plan checks for a course create or update. Each runs only when the value changes, so a
+ * downgraded creator can still edit the published / private courses they already have.
+ */
+async function assertCoursePlan(
+  user: UserEntity,
+  data: Pick<CreateCourseReq, "status" | "visibility" | "aiAccessEnabled">,
+  existing?: Pick<CourseEntity, "status" | "visibility" | "aiAccessEnabled">
+): Promise<void> {
+  if (data.visibility === "private" && existing?.visibility !== "private") {
+    entitlementsService.assertFeature(user, "privateCourses");
+  }
+  if (data.aiAccessEnabled && !existing?.aiAccessEnabled) {
+    entitlementsService.assertFeature(user, "studentAiAccess");
+  }
+  if (data.status === "published" && existing?.status !== "published") {
+    const published = await plansRepository.countPublishedCourses(user.id);
+    entitlementsService.assertWithinLimit(user, "publishedCourses", published, 1);
+  }
 }
 
 export const coursesService = {
@@ -104,6 +132,7 @@ export const coursesService = {
   createCourse: async (authUserId: string, data: CreateCourseReq): Promise<CreateCourseRes> => {
     const user = await usersRepository.getUserByAuthUserId(authUserId);
     if (!user) throw new NotFoundError({ code: ErrorCodeCourse.NOT_FOUND });
+    await assertCoursePlan(user, data);
 
     return withThumbnailUrl(await coursesRepository.createCourse({ ...data, creatorId: user.id }));
   },
@@ -113,7 +142,8 @@ export const coursesService = {
     data: UpdateCourseReq,
     authUserId: string
   ): Promise<UpdateCourseRes> => {
-    const existing = await getOwnedCourse(id, authUserId);
+    const { course: existing, user } = await getOwnedCourseAndUser(id, authUserId);
+    await assertCoursePlan(user, data, existing);
 
     const course = await coursesRepository.updateCourse(id, data);
     if (course && existing.status !== "published" && course.status === "published") {

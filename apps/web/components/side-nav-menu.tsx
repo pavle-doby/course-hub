@@ -30,6 +30,7 @@ import {
   LogOutIcon,
   SettingsIcon,
   SparklesIcon,
+  TagIcon,
   UserIcon,
   UsersIcon,
 } from "lucide-react";
@@ -50,6 +51,7 @@ type NavKey =
   | "nav.notifications"
   | "nav.profile"
   | "nav.aiConnect"
+  | "nav.pricing"
   | "nav.settings"
   | "nav.logOut";
 
@@ -85,6 +87,7 @@ const NAV_ITEMS: NavItem[] = [
 
 const FOOTER_ITEMS = (onSignOut: () => void): FooterItem[] => [
   { label: "nav.aiConnect", icon: SparklesIcon, href: "/ai-connect" },
+  { label: "nav.pricing", icon: TagIcon, href: "/pricing" },
   { label: "nav.settings", icon: SettingsIcon, href: "/settings" },
   { label: "nav.logOut", icon: LogOutIcon, action: onSignOut },
 ];

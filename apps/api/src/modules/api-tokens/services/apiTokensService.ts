@@ -8,7 +8,9 @@ import {
   type CreateApiTokenRes,
   type GetApiTokensRes,
 } from "@repo/contract";
+import type { UserEntity } from "@repo/db-schema";
 import { usersRepository } from "api/modules/users/repository/usersRepository";
+import { entitlementsService } from "api/modules/plans/services/entitlementsService";
 import { apiTokensRepository } from "../repository/apiTokensRepository";
 
 const TOKEN_PREFIX = "ch_pat_";
@@ -20,12 +22,16 @@ function hashToken(token: string): string {
   return createHash("sha256").update(token).digest("hex");
 }
 
-async function getUserId(authUserId: string): Promise<string> {
+async function getUser(authUserId: string): Promise<UserEntity> {
   const user = await usersRepository.getUserByAuthUserId(authUserId);
   if (!user) {
     throw new NotFoundError({ code: ErrorCodeUser.NOT_FOUND });
   }
-  return user.id;
+  return user;
+}
+
+async function getUserId(authUserId: string): Promise<string> {
+  return (await getUser(authUserId)).id;
 }
 
 export const apiTokensService = {
@@ -38,9 +44,13 @@ export const apiTokensService = {
     dto: CreateApiTokenReq,
     source: ApiToken["source"] = "manual"
   ): Promise<CreateApiTokenRes> => {
+    // Covers OAuth too: connector tokens are issued through here
+    const user = await getUser(authUserId);
+    entitlementsService.assertFeature(user, "mcpAccess");
+
     const token = `${TOKEN_PREFIX}${randomBytes(32).toString("base64url")}`;
     const created = await apiTokensRepository.createToken({
-      userId: await getUserId(authUserId),
+      userId: user.id,
       name: dto.name,
       tokenHash: hashToken(token),
       tokenPrefix: token.slice(0, PREFIX_DISPLAY_LENGTH),
@@ -56,7 +66,9 @@ export const apiTokensService = {
     }
   },
 
-  // Returns the owner of an active token, or undefined
+  // Returns the owner of an active token, or undefined. When the owner's plan no longer includes
+  // MCP (e.g. after a downgrade) it throws 403 instead of 401, so OAuth clients don't loop back
+  // into a login that can't issue a token; the token works again after an upgrade.
   authenticate: async (
     token: string
   ): Promise<{ userId: string; authUserId: string } | undefined> => {
@@ -67,6 +79,7 @@ export const apiTokensService = {
     if (!row) {
       return undefined;
     }
+    entitlementsService.assertFeature(row, "mcpAccess");
     // ponytail: fire-and-forget, throttled to once per minute per token
     if (!row.lastUsedAt || Date.now() - row.lastUsedAt.getTime() > LAST_USED_THROTTLE_MS) {
       void apiTokensRepository.setLastUsedAt(row.id).catch(() => undefined);

@@ -28,6 +28,8 @@ import { StarRating } from "@/components/star-rating";
 import { getAccessToken } from "@/utils/token-storage";
 import { ReviewDialog } from "../components/review-dialog";
 import { ReviewStars } from "../components/review-stars";
+import { ProBadge } from "@/components/pro-badge";
+import { usePlan } from "@/hooks/use-plan";
 import { ReviewReplyForm } from "./components/review-reply-form";
 
 const PAGE_LIMIT = 10;
@@ -46,6 +48,8 @@ export default function LearnCourseReviewsPage() {
     query: { enabled: Boolean(getAccessToken()), retry: false },
   });
   const isCreator = !!course && course.creatorId === currentUser?.id;
+  const { entitlements } = usePlan();
+  const canReply = entitlements?.reviewReplies !== false;
   const { data: enrollmentStatus } = useGetEnrollmentStatus(
     { publicId },
     { query: { enabled: !!currentUser, retry: false } }
@@ -147,10 +151,12 @@ export default function LearnCourseReviewsPage() {
                         variant="ghost"
                         size="sm"
                         className="self-start"
+                        disabled={!canReply}
                         onClick={() => setReplyingToId(review.id)}
                       >
                         <MessageSquareReplyIcon className="size-4" />
                         {review.reply ? t("learn.reviews.editReply") : t("learn.reviews.reply")}
+                        {!canReply && <ProBadge />}
                       </Button>
                     )}
                   </div>

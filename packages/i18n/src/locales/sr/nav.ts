@@ -10,6 +10,7 @@ export const nav = {
   notifications: "Obaveštenja",
   profile: "Profil",
   aiConnect: "AI povezivanje",
+  pricing: "Cenovnik",
   settings: "Podešavanja",
   feedback: "Utisci",
   logOut: "Odjava",

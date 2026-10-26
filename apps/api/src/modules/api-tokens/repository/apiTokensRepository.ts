@@ -1,5 +1,6 @@
 import { and, desc, eq, isNull } from "drizzle-orm";
 import { db, schema } from "@repo/db";
+import type { UserEntity } from "@repo/db-schema";
 import type { ApiToken } from "@repo/contract";
 
 const apiTokenColumns = {
@@ -16,6 +17,9 @@ type ActiveApiToken = {
   userId: string;
   authUserId: string;
   lastUsedAt: Date | null;
+  /** The owner's plan, so `authenticate` can check MCP access without another query. */
+  plan: UserEntity["plan"];
+  planVersion: number;
 };
 
 export const apiTokensRepository = {
@@ -34,6 +38,8 @@ export const apiTokensRepository = {
         userId: schema.apiTokens.userId,
         authUserId: schema.users.authUserId,
         lastUsedAt: schema.apiTokens.lastUsedAt,
+        plan: schema.users.plan,
+        planVersion: schema.users.planVersion,
       })
       .from(schema.apiTokens)
       .innerJoin(schema.users, eq(schema.apiTokens.userId, schema.users.id))

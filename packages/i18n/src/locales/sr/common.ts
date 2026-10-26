@@ -231,6 +231,20 @@ export const common = {
         message: "Recenzija nije pronađena.",
       },
     },
+    plans: {
+      FEATURE_NOT_IN_PLAN: {
+        title: "Pređite na Pro",
+        message: "Ovo je deo Pro plana.",
+      },
+      LIMIT_REACHED: {
+        title: "Dostignuto ograničenje plana",
+        message: "Iskoristili ste sve što vaš plan uključuje. Pređite na Pro za više.",
+      },
+      INVALID_PLAN_VERSION: {
+        title: "Nepostojeća verzija plana",
+        message: "Ovaj plan nema tu verziju.",
+      },
+    },
     quiz: {
       NOT_FOUND: {
         title: "Kviz nije pronađen",

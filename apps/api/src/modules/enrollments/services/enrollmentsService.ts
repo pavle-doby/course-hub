@@ -22,6 +22,7 @@ import { lessonsRepository } from "api/modules/lessons/repository/lessonsReposit
 import { r2Service } from "api/modules/documents/services/r2Service";
 import { PaginationReqExtended } from "api/middleware/pagination";
 import { enrollmentsRepository } from "../repository/enrollmentsRepository";
+import { entitlementsService } from "api/modules/plans/services/entitlementsService";
 import { notificationsService } from "api/modules/notifications/services/notificationsService";
 
 async function getPublishedCourseOrThrow(publicId: string) {
@@ -169,6 +170,8 @@ export const enrollmentsService = {
   ): Promise<GetAllStudentsRes> => {
     const user = await usersRepository.getUserByAuthUserId(authUserId);
     if (!user) throw new NotFoundError({ code: ErrorCodeEnrollment.COURSE_NOT_FOUND });
+    // Free keeps the basic counts (`getStats`); the full list is a Pro feature
+    entitlementsService.assertFeature(user, "fullStudentsPage");
 
     return await enrollmentsRepository.getStudents({ ...dto, creatorId: user.id });
   },

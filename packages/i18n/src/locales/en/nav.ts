@@ -10,6 +10,7 @@ export const nav = {
   notifications: "Notifications",
   profile: "Profile",
   aiConnect: "AI Connect",
+  pricing: "Pricing",
   settings: "Settings",
   feedback: "Feedback",
   logOut: "Log Out",

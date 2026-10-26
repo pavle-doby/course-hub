@@ -15,6 +15,7 @@ import { PaginationReqExtended } from "api/middleware/pagination";
 import { usersRepository } from "api/modules/users/repository/usersRepository";
 import { coursesRepository } from "api/modules/courses/repository/coursesRepository";
 import { enrollmentsRepository } from "api/modules/enrollments/repository/enrollmentsRepository";
+import { entitlementsService } from "api/modules/plans/services/entitlementsService";
 import { reviewsRepository } from "../repository/reviewsRepository";
 
 async function getPublishedCourseOrThrow(publicId: string) {
@@ -63,6 +64,7 @@ export const reviewsService = {
     if (!user || user.id !== creatorId) {
       throw new ForbiddenError({ code: ErrorCode.FORBIDDEN });
     }
+    entitlementsService.assertFeature(user, "reviewReplies");
 
     await reviewsRepository.saveReply(reviewId, reply || null);
     return (await reviewsRepository.getReviewById(reviewId))!;

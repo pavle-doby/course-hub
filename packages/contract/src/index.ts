@@ -14,6 +14,7 @@ export * from "./notifications";
 export * from "./progress";
 export * from "./reviews";
 export * from "./leaderboard";
+export * from "./plans";
 export * from "./quizzes";
 export * from "./ai";
 export * from "./api-tokens";

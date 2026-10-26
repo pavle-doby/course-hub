@@ -34,6 +34,9 @@ import type {
   UpdateUserBody,
   UpdateUserDefault,
   UpdateUserPathParameters,
+  UpdateUserPlanBody,
+  UpdateUserPlanDefault,
+  UpdateUserPlanPathParameters,
   UpdateUserPreferencesBody,
   UpdateUserPreferencesDefault,
   User,
@@ -774,4 +777,85 @@ export const useDeleteUser = <TError = DeleteUserDefault, TContext = unknown>(
   TContext
 > => {
   return useMutation(getDeleteUserMutationOptions(options), queryClient);
+};
+export const updateUserPlan = (
+  { id }: UpdateUserPlanPathParameters,
+  updateUserPlanBody: UpdateUserPlanBody,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<User>(
+    {
+      url: `/v1/users/${id}/plan`,
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      data: updateUserPlanBody,
+      signal,
+    },
+    options
+  );
+};
+
+export const getUpdateUserPlanMutationOptions = <
+  TError = UpdateUserPlanDefault,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateUserPlan>>,
+    TError,
+    UpdateUserPlanMutationVariables,
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updateUserPlan>>,
+  TError,
+  UpdateUserPlanMutationVariables,
+  TContext
+> => {
+  const mutationKey = ["updateUserPlan"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updateUserPlan>>,
+    UpdateUserPlanMutationVariables
+  > = (props) => {
+    const { pathParams, data } = props ?? {};
+
+    return updateUserPlan(pathParams, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type UpdateUserPlanMutationResult = NonNullable<Awaited<ReturnType<typeof updateUserPlan>>>;
+export type UpdateUserPlanMutationBody = UpdateUserPlanBody;
+export type UpdateUserPlanMutationError = UpdateUserPlanDefault;
+export type UpdateUserPlanMutationVariables = {
+  pathParams: UpdateUserPlanPathParameters;
+  data: UpdateUserPlanBody;
+};
+
+export const useUpdateUserPlan = <TError = UpdateUserPlanDefault, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof updateUserPlan>>,
+      TError,
+      UpdateUserPlanMutationVariables,
+      TContext
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof updateUserPlan>>,
+  TError,
+  UpdateUserPlanMutationVariables,
+  TContext
+> => {
+  return useMutation(getUpdateUserPlanMutationOptions(options), queryClient);
 };

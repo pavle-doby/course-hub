@@ -6,7 +6,7 @@ import { useT } from "@repo/i18n/client";
 import { Button } from "@repo/ui-web/components/button";
 import { useIsMobile } from "@repo/ui-web/hooks/use-mobile";
 import { ChAlertDialog } from "@/components/ch-alert-dialog";
-import { celebrateFrom } from "./celebrate";
+import { celebrateFrom } from "@/utils/celebrate";
 import type { PublicQuiz } from "./public-quiz";
 import { QuizResultItem } from "./quiz-result-item";
 

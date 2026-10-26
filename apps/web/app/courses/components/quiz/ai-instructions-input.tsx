@@ -11,6 +11,8 @@ import { Button } from "@repo/ui-web/components/button";
 import { Field, FieldError, FieldLabel } from "@repo/ui-web/components/field";
 import { Spinner } from "@repo/ui-web/components/spinner";
 import { Textarea } from "@repo/ui-web/components/textarea";
+import { ProBadge } from "@/components/pro-badge";
+import { usePlan } from "@/hooks/use-plan";
 
 type AiInstructionsInputProps = {
   submitLabel: string;
@@ -29,6 +31,9 @@ export function AiInstructionsInput({
   const id = useId();
   const { t, i18n } = useT();
   useZodLocale(i18n);
+  const { entitlements } = usePlan();
+  // 0 generations a day = AI quizzes aren't in the plan (Free)
+  const isLocked = entitlements?.aiQuizGenerationsDay === 0;
 
   const {
     register,
@@ -52,7 +57,7 @@ export function AiInstructionsInput({
           id={`${id}-instructions`}
           rows={3}
           placeholder={t("courses.quiz.aiInstructionsPlaceholder")}
-          disabled={isGenerating}
+          disabled={isGenerating || isLocked}
           {...register("instructions")}
         />
         <FieldError errors={[errors.instructions]} />
@@ -67,11 +72,12 @@ export function AiInstructionsInput({
         <Button
           type="button"
           className="gap-1.5"
-          disabled={isGenerating}
+          disabled={isGenerating || isLocked}
           onClick={handleGenerateClick}
         >
           {isGenerating ? <Spinner /> : <SparklesIcon />}
           {isGenerating ? t("courses.quiz.generating") : submitLabel}
+          {isLocked && <ProBadge />}
         </Button>
       </div>
     </div>

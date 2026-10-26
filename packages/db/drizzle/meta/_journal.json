@@ -120,6 +120,13 @@
       "when": 1792692738878,
       "tag": "0016_leaderboard",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1792880432954,
+      "tag": "0017_plans",
+      "breakpoints": true
     }
   ]
 }

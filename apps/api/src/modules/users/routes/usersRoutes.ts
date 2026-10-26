@@ -7,6 +7,8 @@ import {
   UserPostQuerySchema,
   UserPreferencesPutQuerySchema,
   UserPutQuerySchema,
+  UpdateUserPlanBodySchema,
+  UpdateUserPlanParamsSchema,
 } from "@repo/contract";
 import { ParamsIdSchema, SearchSchema } from "@repo/contract";
 import { validateAdminRole } from "api/middleware/validateRole";
@@ -84,6 +86,18 @@ router.put(
   validate(UserPutQuerySchema),
   async (req: Request, res: Response) => {
     await usersController.updateUser(req, res);
+  }
+);
+
+// PUT /users/:id/plan → set a user's plan (admin; later the payment webhook)
+router.put(
+  //
+  "/:id/plan",
+  validateAdminRole(),
+  validate(UpdateUserPlanParamsSchema, "params"),
+  validate(UpdateUserPlanBodySchema),
+  async (req: Request, res: Response) => {
+    await usersController.updateUserPlan(req, res);
   }
 );
 

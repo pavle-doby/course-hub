@@ -12,11 +12,15 @@ import {
   type InitializeDocumentUploadRes,
   type ReorderDocumentsReq,
 } from "@repo/contract";
+import type { UserEntity } from "@repo/db-schema";
 import { usersRepository } from "api/modules/users/repository/usersRepository";
+import { entitlementsService } from "api/modules/plans/services/entitlementsService";
+import { plansRepository } from "api/modules/plans/repository/plansRepository";
 import { documentsRepository } from "../repository/documentsRepository";
 import { r2Service } from "./r2Service";
 
 const MAX_DOCUMENTS_PER_PARENT = 20;
+const BYTES_PER_MB = 1024 * 1024;
 
 function parentFromDocument(document: {
   courseId: string | null;
@@ -32,7 +36,10 @@ function parentFromDocument(document: {
   return { parentType: "lesson", parentId: document.lessonId! };
 }
 
-async function assertCreator(parent: GetDocumentsByParentReq, authUserId: string): Promise<string> {
+async function assertCreator(
+  parent: GetDocumentsByParentReq,
+  authUserId: string
+): Promise<UserEntity> {
   const user = await usersRepository.getUserByAuthUserId(authUserId);
   if (!user) {
     throw new ForbiddenError({ code: ErrorCode.FORBIDDEN });
@@ -46,7 +53,7 @@ async function assertCreator(parent: GetDocumentsByParentReq, authUserId: string
     throw new ForbiddenError({ code: ErrorCode.FORBIDDEN });
   }
 
-  return user.id;
+  return user;
 }
 
 export const documentsService = {
@@ -69,7 +76,15 @@ export const documentsService = {
     dto: InitializeDocumentUploadReq,
     authUserId: string
   ): Promise<InitializeDocumentUploadRes> => {
-    const userId = await assertCreator(dto, authUserId);
+    const user = await assertCreator(dto, authUserId);
+    const usedMb = (await plansRepository.sumDocumentBytes(user.id)) / BYTES_PER_MB;
+    entitlementsService.assertWithinLimit(
+      user,
+      "documentStorageMb",
+      usedMb,
+      dto.size / BYTES_PER_MB
+    );
+
     const count = await documentsRepository.countByParent(dto);
     if (count >= MAX_DOCUMENTS_PER_PARENT) {
       throw new BadRequestError({ code: ErrorCodeDocument.LIMIT_EXCEEDED });
@@ -78,7 +93,7 @@ export const documentsService = {
     const objectKey = `${authUserId}/course-content/${dto.parentType}/${dto.parentId}/${randomUUID()}`;
     const document = await documentsRepository.create({
       parent: dto,
-      uploadedByUserId: userId,
+      uploadedByUserId: user.id,
       objectKey,
       originalFileName: dto.fileName,
       contentType: dto.mimeType,

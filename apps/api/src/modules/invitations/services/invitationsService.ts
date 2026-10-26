@@ -17,6 +17,7 @@ import { usersRepository } from "api/modules/users/repository/usersRepository";
 import { coursesRepository } from "api/modules/courses/repository/coursesRepository";
 import { enrollmentsRepository } from "api/modules/enrollments/repository/enrollmentsRepository";
 import { PaginationReqExtended } from "api/middleware/pagination";
+import { entitlementsService } from "api/modules/plans/services/entitlementsService";
 import { invitationsRepository } from "../repository/invitationsRepository";
 
 async function getCourseOrThrow(publicId: string) {
@@ -58,6 +59,7 @@ export const invitationsService = {
     const course = await getCourseOrThrow(publicId);
     assertCreatorOrThrow(course, user.id);
     assertPrivateOrThrow(course);
+    entitlementsService.assertFeature(user, "privateCourses");
 
     return await invitationsRepository.createEmailInvitation(course.id, user.id, email);
   },
@@ -72,6 +74,7 @@ export const invitationsService = {
     const course = await getCourseOrThrow(publicId);
     assertCreatorOrThrow(course, user.id);
     assertPrivateOrThrow(course);
+    entitlementsService.assertFeature(user, "privateCourses");
 
     return await invitationsRepository.createLinkInvitation(course.id, user.id);
   },
