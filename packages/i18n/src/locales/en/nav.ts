@@ -13,5 +13,7 @@ export const nav = {
   pricing: "Pricing",
   settings: "Settings",
   feedback: "Feedback",
+  collapseSidebar: "Collapse sidebar",
+  expandSidebar: "Expand sidebar",
   logOut: "Log Out",
 };

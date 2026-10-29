@@ -14,7 +14,13 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
+  SidebarRail,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+  useSidebar,
 } from "@repo/ui-web";
+import { Button } from "@repo/ui-web/components/button";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import type { LucideIcon } from "lucide-react";
@@ -28,6 +34,8 @@ import {
   FolderIcon,
   GraduationCapIcon,
   LogOutIcon,
+  PanelLeftCloseIcon,
+  PanelLeftOpenIcon,
   SettingsIcon,
   SparklesIcon,
   TagIcon,
@@ -53,7 +61,9 @@ type NavKey =
   | "nav.aiConnect"
   | "nav.pricing"
   | "nav.settings"
-  | "nav.logOut";
+  | "nav.logOut"
+  | "nav.collapseSidebar"
+  | "nav.expandSidebar";
 
 type NavSubItem = { label: NavKey; href: string; icon?: LucideIcon };
 type NavItem =
@@ -98,6 +108,8 @@ export function SideNavMenu() {
   const router = useRouter();
   const { mutate: signOut } = useAuthSignOut();
   const unreadCount = useUnreadNotificationsCount();
+  const { isMobile, state, toggleSidebar } = useSidebar();
+  const isCollapsed = state === "collapsed";
 
   function handleSignOut() {
     signOut(undefined, {
@@ -109,8 +121,23 @@ export function SideNavMenu() {
   }
 
   return (
-    <Sidebar collapsible="none" className="sticky top-0 h-svh border-r">
+    <Sidebar collapsible="icon" className="border-r">
       <SidebarContent>
+        <div className="sticky top-0 z-10 flex h-14 shrink-0 items-center justify-end border-b bg-sidebar p-2 group-data-[collapsible=icon]:justify-center">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleSidebar}
+            aria-label={t(isCollapsed ? "nav.expandSidebar" : "nav.collapseSidebar")}
+          >
+            {isCollapsed ? (
+              <PanelLeftOpenIcon className="size-4" />
+            ) : (
+              <PanelLeftCloseIcon className="size-4" />
+            )}
+          </Button>
+        </div>
+
         <SidebarGroup>
           <SidebarMenu>
             {NAV_ITEMS.map((item) =>
@@ -127,26 +154,46 @@ export function SideNavMenu() {
                 >
                   <SidebarMenuItem>
                     <CollapsibleTrigger asChild>
-                      <SidebarMenuButton size="lg">
+                      <SidebarMenuButton
+                        size="lg"
+                        className="group-data-[collapsible=icon]:justify-center"
+                        tooltip={t(item.label)}
+                      >
                         <item.icon />
-                        <span>{t(item.label)}</span>
-                        <ChevronRightIcon className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                        <span className="group-data-[collapsible=icon]:hidden">
+                          {t(item.label)}
+                        </span>
+                        <ChevronRightIcon className="ml-auto transition-transform duration-200 group-data-[collapsible=icon]:hidden group-data-[state=open]/collapsible:rotate-90" />
                       </SidebarMenuButton>
                     </CollapsibleTrigger>
                     <CollapsibleContent>
-                      <SidebarMenuSub>
+                      <SidebarMenuSub className="group-data-[collapsible=icon]:mx-0! group-data-[collapsible=icon]:flex! group-data-[collapsible=icon]:border-0 group-data-[collapsible=icon]:px-0">
                         {item.items.map((sub) => (
                           <SidebarMenuSubItem key={sub.href}>
-                            <SidebarMenuSubButton
-                              size="md"
-                              asChild
-                              isActive={pathname === sub.href}
-                            >
-                              <Link href={sub.href}>
-                                {sub.icon && <sub.icon />}
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <SidebarMenuSubButton
+                                  size="md"
+                                  asChild
+                                  className="group-data-[collapsible=icon]:flex! group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
+                                  isActive={pathname === sub.href}
+                                >
+                                  <Link href={sub.href}>
+                                    {sub.icon && <sub.icon />}
+                                    <span className="group-data-[collapsible=icon]:hidden">
+                                      {t(sub.label)}
+                                    </span>
+                                  </Link>
+                                </SidebarMenuSubButton>
+                              </TooltipTrigger>
+                              <TooltipContent
+                                side="right"
+                                align="center"
+                                hidden={!isCollapsed || isMobile}
+                              >
                                 {t(sub.label)}
-                              </Link>
-                            </SidebarMenuSubButton>
+                              </TooltipContent>
+                            </Tooltip>
                           </SidebarMenuSubItem>
                         ))}
                       </SidebarMenuSub>
@@ -155,10 +202,16 @@ export function SideNavMenu() {
                 </Collapsible>
               ) : (
                 <SidebarMenuItem key={item.label}>
-                  <SidebarMenuButton size="lg" asChild isActive={pathname === item.href}>
+                  <SidebarMenuButton
+                    size="lg"
+                    asChild
+                    className="group-data-[collapsible=icon]:justify-center"
+                    isActive={pathname === item.href}
+                    tooltip={t(item.label)}
+                  >
                     <Link href={item.href}>
                       <item.icon />
-                      <span>{t(item.label)}</span>
+                      <span className="group-data-[collapsible=icon]:hidden">{t(item.label)}</span>
                     </Link>
                   </SidebarMenuButton>
                   {item.href === "/notifications" && unreadCount > 0 && (
@@ -178,6 +231,8 @@ export function SideNavMenu() {
               <SidebarMenuItem key={item.label}>
                 <SidebarMenuButton
                   size="lg"
+                  className="group-data-[collapsible=icon]:justify-center"
+                  tooltip={t(item.label)}
                   asChild={!!item.href}
                   isActive={!!item.href && pathname === item.href}
                   onClick={item.action}
@@ -185,12 +240,12 @@ export function SideNavMenu() {
                   {item.href ? (
                     <Link href={item.href}>
                       <item.icon />
-                      <span>{t(item.label)}</span>
+                      <span className="group-data-[collapsible=icon]:hidden">{t(item.label)}</span>
                     </Link>
                   ) : (
                     <>
                       <item.icon />
-                      <span>{t(item.label)}</span>
+                      <span className="group-data-[collapsible=icon]:hidden">{t(item.label)}</span>
                     </>
                   )}
                 </SidebarMenuButton>
@@ -199,6 +254,7 @@ export function SideNavMenu() {
           </SidebarMenu>
         </SidebarGroup>
       </SidebarFooter>
+      <SidebarRail />
     </Sidebar>
   );
 }

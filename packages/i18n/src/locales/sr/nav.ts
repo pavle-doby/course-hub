@@ -13,5 +13,7 @@ export const nav = {
   pricing: "Cenovnik",
   settings: "Podešavanja",
   feedback: "Utisci",
+  collapseSidebar: "Skupi meni",
+  expandSidebar: "Proširi meni",
   logOut: "Odjava",
 };
