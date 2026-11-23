@@ -25,6 +25,9 @@ import { toast } from "@repo/ui-web/components/sonner";
 import { ChAlertDialog } from "@/components/ch-alert-dialog";
 import { CLAUDE_CONNECTORS_SETTINGS_URL, MCP_URL } from "@/utils/consts";
 import { ApiTokenDetailsDialog } from "./api-token-details-dialog";
+import { ProBadge } from "@/components/pro-badge";
+import { UpgradeNotice } from "@/components/upgrade-notice";
+import { usePlan } from "@/hooks/use-plan";
 import { CreateApiTokenDialog } from "./create-api-token-dialog";
 import { Snippet } from "./mcp-config-snippets";
 
@@ -34,6 +37,8 @@ export function AiAccessCard() {
   const [createOpen, setCreateOpen] = useState(false);
   const [tokenToRevoke, setTokenToRevoke] = useState<ApiToken>();
   const [tokenDetails, setTokenDetails] = useState<ApiToken>();
+  const { entitlements } = usePlan();
+  const isLocked = entitlements?.mcpAccess === false;
 
   const { data: tokens, isPending, error } = useGetApiTokens();
   const { mutateAsync: deleteToken } = useDeleteApiToken();
@@ -83,6 +88,7 @@ export function AiAccessCard() {
 
   return (
     <>
+      {isLocked && <UpgradeNotice className="max-w-2xl" message={t("settings.aiAccess.proOnly")} />}
       <Card className="w-full max-w-2xl">
         <CardHeader className="border-b">
           <CardTitle>{t("settings.aiAccess.oauth.title")}</CardTitle>
@@ -129,8 +135,9 @@ export function AiAccessCard() {
           <CardTitle>{t("settings.aiAccess.manual.title")}</CardTitle>
           <CardDescription>{t("settings.aiAccess.manual.description")}</CardDescription>
           <CardAction>
-            <Button type="button" onClick={handleOpenCreate}>
+            <Button type="button" disabled={isLocked} onClick={handleOpenCreate}>
               <PlusIcon /> {t("settings.aiAccess.createToken")}
+              {isLocked && <ProBadge />}
             </Button>
           </CardAction>
         </CardHeader>

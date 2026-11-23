@@ -10,9 +10,20 @@ import {
   UpdateUserRes,
   UpdateUserPreferencesReq,
   UpdateUserPreferencesRes,
+  UpdateUserPlanReq,
   User,
 } from "@repo/contract";
-import { NotFoundError, ConflictError, InternalServerError } from "@repo/contract";
+import {
+  BadRequestError,
+  CURRENT_PLAN_VERSION,
+  ErrorCode,
+  ErrorCodePlans,
+  ForbiddenError,
+  NotFoundError,
+  ConflictError,
+  InternalServerError,
+  PLAN_ENTITLEMENTS,
+} from "@repo/contract";
 import { usersRepository } from "../repository/usersRepository";
 import { PaginationReqExtended } from "api/middleware/pagination";
 
@@ -33,6 +44,8 @@ export const usersService = {
       avatarUrl: userDb.avatarUrl,
       bio: userDb.bio,
       role: userDb.role,
+      plan: userDb.plan,
+      planVersion: userDb.planVersion,
     };
 
     return user;
@@ -53,6 +66,8 @@ export const usersService = {
       avatarUrl: userDb.avatarUrl,
       bio: userDb.bio,
       role: userDb.role,
+      plan: userDb.plan,
+      planVersion: userDb.planVersion,
     };
   },
   getUserPreferences: async (authUserId: string): Promise<UpdateUserPreferencesRes> => {
@@ -101,7 +116,18 @@ export const usersService = {
 
     return userRes;
   },
-  updateUser: async (id: string, user: UpdateUserReq): Promise<UpdateUserRes> => {
+  updateUser: async (
+    id: string,
+    user: UpdateUserReq,
+    authUserId: string
+  ): Promise<UpdateUserRes> => {
+    // Users edit only themselves; admins edit anyone and are the only ones who can change a role
+    const caller = await usersRepository.getUserByAuthUserId(authUserId);
+    const isAdmin = caller?.role === "admin";
+    if (!caller || (caller.id !== id && !isAdmin) || (user.role !== undefined && !isAdmin)) {
+      throw new ForbiddenError({ code: ErrorCode.FORBIDDEN });
+    }
+
     const existingUser = await usersRepository.getUserWithProfile(id);
 
     if (!existingUser) {
@@ -110,6 +136,19 @@ export const usersService = {
 
     const [userRes] = await usersRepository.updateUser(id, user);
     return userRes;
+  },
+  // Admin only until payments exist; then the payment webhook sets the plan
+  updateUserPlan: async (id: string, dto: UpdateUserPlanReq): Promise<User> => {
+    const planVersion = dto.planVersion ?? CURRENT_PLAN_VERSION;
+    if (!(planVersion in PLAN_ENTITLEMENTS[dto.plan])) {
+      throw new BadRequestError({ code: ErrorCodePlans.INVALID_PLAN_VERSION });
+    }
+
+    const user = await usersRepository.updateUserPlan(id, dto.plan, planVersion);
+    if (!user) {
+      throw new NotFoundError({ code: ErrorCodeUser.NOT_FOUND });
+    }
+    return user;
   },
   deleteUser: async (id: string): Promise<DeleteUserRes> => {
     const [user] = await usersRepository.deleteUser(id);

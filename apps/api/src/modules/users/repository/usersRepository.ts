@@ -6,6 +6,7 @@ import {
   Search,
   FilterUser,
   GetAllUsersRes,
+  Plan,
   User,
 } from "@repo/contract";
 import { db, schema } from "@repo/db";
@@ -131,6 +132,8 @@ export const usersRepository = {
       avatarUrl: schema.users.avatarUrl,
       bio: schema.users.bio,
       role: schema.users.role,
+      plan: schema.users.plan,
+      planVersion: schema.users.planVersion,
     });
   },
   updateUser: async (id: string, data: UpdateUserReq): Promise<User[]> => {
@@ -143,7 +146,32 @@ export const usersRepository = {
       avatarUrl: schema.users.avatarUrl,
       bio: schema.users.bio,
       role: schema.users.role,
+      plan: schema.users.plan,
+      planVersion: schema.users.planVersion,
     });
+  },
+  updateUserPlan: async (
+    id: string,
+    plan: Plan,
+    planVersion: number
+  ): Promise<User | undefined> => {
+    const [user] = await db
+      .update(schema.users)
+      .set({ plan, planVersion, updatedAt: new Date() })
+      .where(eq(schema.users.id, id))
+      .returning({
+        id: schema.users.id,
+        email: schema.users.email,
+        firstName: schema.users.firstName,
+        lastName: schema.users.lastName,
+        username: schema.users.username,
+        avatarUrl: schema.users.avatarUrl,
+        bio: schema.users.bio,
+        role: schema.users.role,
+        plan: schema.users.plan,
+        planVersion: schema.users.planVersion,
+      });
+    return user;
   },
   deleteUser: async (id: string): Promise<User[]> => {
     return await db.delete(schema.users).where(eq(schema.users.id, id)).returning({
@@ -155,6 +183,8 @@ export const usersRepository = {
       avatarUrl: schema.users.avatarUrl,
       bio: schema.users.bio,
       role: schema.users.role,
+      plan: schema.users.plan,
+      planVersion: schema.users.planVersion,
     });
   },
 };

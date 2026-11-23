@@ -20,6 +20,8 @@ import { usePagination } from "@/hooks/use-pagination";
 import { PageHeader } from "@/components/page-header";
 import { ChPagination, ChPaginationSkeleton } from "@/components/ch-pagination";
 import { StudentCard, StudentCardSkeleton } from "@/app/students/components/student-card";
+import { UpgradeNotice } from "@/components/upgrade-notice";
+import { usePlan } from "@/hooks/use-plan";
 
 const PAGE_LIMIT = 10;
 const SKELETON_ROWS = 5;
@@ -38,16 +40,22 @@ export default function StudentsPage() {
   const { t } = useT();
   const { query, debouncedQuery, setQuery } = useDebounce("");
   const { page, setPage, trackTotalPages } = usePagination(debouncedQuery);
+  const { entitlements } = usePlan();
+  // The full list is a Pro feature; wait for the plan so Free users never get a 403 toast
+  const isLocked = entitlements?.fullStudentsPage === false;
 
   const {
     data: students,
     isPending,
     error,
-  } = useGetStudents({
-    query: debouncedQuery || undefined,
-    page,
-    limit: PAGE_LIMIT,
-  });
+  } = useGetStudents(
+    {
+      query: debouncedQuery || undefined,
+      page,
+      limit: PAGE_LIMIT,
+    },
+    { query: { enabled: entitlements?.fullStudentsPage === true } }
+  );
   useErrorHandlingQuery({
     t: t as (key: string) => string,
     error,
@@ -70,7 +78,9 @@ export default function StudentsPage() {
       />
 
       <div className="flex flex-1 flex-col p-4 pt-0 md:px-6 md:pb-6">
-        {isPending ? (
+        {isLocked ? (
+          <UpgradeNotice message={t("students.proOnly")} />
+        ) : isPending ? (
           <div className="flex flex-1 flex-col justify-between">
             <div className="hidden rounded-md border md:block">
               <Table>

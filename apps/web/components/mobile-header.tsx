@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { MenuIcon, SettingsIcon, SparklesIcon, LogOutIcon } from "lucide-react";
+import { MenuIcon, SettingsIcon, SparklesIcon, LogOutIcon, TagIcon } from "lucide-react";
 import { useRouter, usePathname } from "next/navigation";
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@repo/ui-web/components/sheet";
 import { Button } from "@repo/ui-web/components/button";
@@ -18,6 +18,7 @@ const TITLE_BY_PATH: Record<
   | "nav.notifications"
   | "nav.profile"
   | "nav.aiConnect"
+  | "nav.pricing"
   | "nav.settings"
 > = {
   "/courses": "nav.courses",
@@ -27,6 +28,7 @@ const TITLE_BY_PATH: Record<
   "/notifications": "nav.notifications",
   "/profile": "nav.profile",
   "/ai-connect": "nav.aiConnect",
+  "/pricing": "nav.pricing",
   "/settings": "nav.settings",
 };
 
@@ -66,6 +68,15 @@ export function MobileHeader() {
               >
                 <SparklesIcon className="size-4" />
                 {t("nav.aiConnect")}
+              </Link>
+            </SheetClose>
+            <SheetClose asChild>
+              <Link
+                href="/pricing"
+                className="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm hover:bg-accent"
+              >
+                <TagIcon className="size-4" />
+                {t("nav.pricing")}
               </Link>
             </SheetClose>
             <SheetClose asChild>

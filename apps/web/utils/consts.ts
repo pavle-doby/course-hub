@@ -56,3 +56,6 @@ export const CLAUDE_CONNECTORS_URL = "https://claude.ai/customize/connectors/you
 
 /** Stands in for the token in MCP config snippets until the user pastes it (only its hash is stored). */
 export const MCP_TOKEN_PLACEHOLDER = "<YOUR_TOKEN>";
+
+/** Inbox for Enterprise enquiries; the pricing page disables **Contact us** until it is set. */
+export const CONTACT_EMAIL = process.env.NEXT_PUBLIC_CONTACT_EMAIL;

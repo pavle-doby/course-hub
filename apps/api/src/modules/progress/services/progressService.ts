@@ -1,4 +1,5 @@
 import {
+  BadRequestError,
   ErrorCodeEnrollment,
   ErrorCodeProgress,
   GetCourseProgressRes,
@@ -6,6 +7,7 @@ import {
   NotFoundError,
   UpdateLessonProgressReq,
   UpdateLessonProgressRes,
+  UpdateTopicProgressReq,
 } from "@repo/contract";
 import { usersRepository } from "api/modules/users/repository/usersRepository";
 import { coursesRepository } from "api/modules/courses/repository/coursesRepository";
@@ -13,17 +15,26 @@ import { enrollmentsRepository } from "api/modules/enrollments/repository/enroll
 import { notificationsService } from "api/modules/notifications/services/notificationsService";
 import { quizzesRepository } from "api/modules/quizzes/repository/quizzesRepository";
 import { scoreQuiz } from "api/modules/quizzes/services/scoreQuiz";
-import { progressRepository } from "../repository/progressRepository";
+import { progressRepository, type LearnerRows } from "../repository/progressRepository";
+import { deriveCourseProgress, type LearnerState } from "./deriveCourseProgress";
 
-// Topic and course status are derived from lesson statuses, never stored.
-function deriveStatus(statuses: LessonProgressStatus[]): LessonProgressStatus {
-  if (statuses.length > 0 && statuses.every((status) => status === "done")) {
-    return "done";
-  }
-  if (statuses.every((status) => status === "todo")) {
-    return "todo";
-  }
-  return "in_progress";
+/** One learner's state out of rows loaded for one or more learners. */
+export function toLearnerState(rows: LearnerRows, userId: string): LearnerState {
+  return {
+    lessonStatuses: new Map(
+      rows.lessons.filter((row) => row.userId === userId).map((row) => [row.lessonId, row.status])
+    ),
+    watchedTopicIds: new Set(
+      rows.topics
+        .filter((row) => row.userId === userId && row.videoWatchedAt)
+        .map((row) => row.topicId)
+    ),
+    answersByQuizId: new Map(
+      rows.quizResponses
+        .filter((row) => row.userId === userId)
+        .map((row) => [row.quizId, row.answers])
+    ),
+  };
 }
 
 async function getEnrolledUserOrThrow(
@@ -64,20 +75,36 @@ async function getEarnedLessonStatus(
   return isVideoDone && isQuizDone ? "done" : "in_progress";
 }
 
+// Topic/course gates (topic video, topic and course quizzes) can't be seen from a single lesson
+// save, so completion is re-derived from the whole course after every change that can affect it.
+async function syncCourseCompletion(
+  user: { id: string; email: string },
+  courseId: string
+): Promise<void> {
+  const [content, rows] = await Promise.all([
+    progressRepository.getCourseContent(courseId),
+    progressRepository.getLearnerRows(courseId, [user.id]),
+  ]);
+  const { status } = deriveCourseProgress(content, toLearnerState(rows, user.id));
+  const isNewlyCompleted = await progressRepository.setEnrollmentCompleted(
+    user.id,
+    courseId,
+    status === "done"
+  );
+  if (isNewlyCompleted) {
+    void notifyCourseCompleted(courseId, user.email).catch(() => undefined);
+  }
+}
+
 async function saveLessonProgress(
   user: { id: string; email: string },
   lessonId: string,
   courseId: string,
   dto: UpdateLessonProgressReq
 ): Promise<UpdateLessonProgressRes> {
-  const { progress, isCourseCompleted } = await progressRepository.saveLessonProgress(
-    user.id,
-    lessonId,
-    courseId,
-    dto
-  );
-  if (isCourseCompleted) {
-    void notifyCourseCompleted(courseId, user.email).catch(() => undefined);
+  const progress = await progressRepository.saveLessonProgress(user.id, lessonId, courseId, dto);
+  if (dto.status) {
+    await syncCourseCompletion(user, courseId);
   }
   return progress;
 }
@@ -101,35 +128,35 @@ export const progressService = {
     }
     const { id: userId } = await getEnrolledUserOrThrow(authUserId, course.id);
 
-    const rows = await progressRepository.getCourseLessonStatuses(userId, course.id);
-    const statusesByTopic = new Map<string, LessonProgressStatus[]>();
-    let lastRow: (typeof rows)[number] | undefined;
-    for (const row of rows) {
-      statusesByTopic.set(row.topicId, [...(statusesByTopic.get(row.topicId) ?? []), row.status]);
-      if (
-        row.lastActivityAt &&
-        (!lastRow?.lastActivityAt || row.lastActivityAt > lastRow.lastActivityAt)
-      ) {
-        lastRow = row;
-      }
-    }
+    const [content, rows] = await Promise.all([
+      progressRepository.getCourseContent(course.id),
+      progressRepository.getLearnerRows(course.id, [userId]),
+    ]);
+    const derived = deriveCourseProgress(content, toLearnerState(rows, userId));
+    const rowsByLessonId = new Map(rows.lessons.map((row) => [row.lessonId, row]));
+    const lastRow = rows.lessons.reduce<(typeof rows.lessons)[number] | undefined>(
+      (last, row) => (!last || row.updatedAt > last.updatedAt ? row : last),
+      undefined
+    );
+    const quizLessonIds = new Set(content.quizzes.map((quiz) => quiz.lessonId));
 
     return {
-      status: deriveStatus(rows.map((row) => row.status)),
+      status: derived.status,
       lastLessonId: lastRow?.lessonId ?? null,
-      topics: [...statusesByTopic].map(([topicId, statuses]) => ({
-        topicId,
-        status: deriveStatus(statuses),
+      topics: [...derived.topicStatuses].map(([topicId, status]) => ({ topicId, status })),
+      lessons: content.lessons.map(({ id }) => ({
+        lessonId: id,
+        status: rowsByLessonId.get(id)?.status ?? ("todo" satisfies LessonProgressStatus),
+        progressSeconds: rowsByLessonId.get(id)?.progressSeconds ?? 0,
       })),
-      lessons: rows.map(({ lessonId, status, progressSeconds }) => ({
-        lessonId,
-        status,
-        progressSeconds: Number(progressSeconds),
-      })),
+      gatedLessonIds: content.lessons
+        .filter((lesson) => lesson.hasVideo || quizLessonIds.has(lesson.id))
+        .map((lesson) => lesson.id),
     };
   },
 
-  // A manual status is saved as is; a watched video derives the status from the lesson's content.
+  // A watched video derives the status from the lesson's content. A manual status is saved as is,
+  // except Done on a lesson with a ready video or a quiz, which needs both finished first.
   updateLessonProgress: async (
     authUserId: string,
     lessonId: string,
@@ -137,10 +164,37 @@ export const progressService = {
   ): Promise<UpdateLessonProgressRes> => {
     const courseId = await getLessonCourseIdOrThrow(lessonId);
     const user = await getEnrolledUserOrThrow(authUserId, courseId);
-    const status = dto.videoWatched
-      ? await getEarnedLessonStatus(user.id, lessonId, true)
-      : dto.status;
-    return await saveLessonProgress(user, lessonId, courseId, { ...dto, status });
+    if (dto.videoWatched) {
+      const status = await getEarnedLessonStatus(user.id, lessonId, true);
+      return await saveLessonProgress(user, lessonId, courseId, { ...dto, status });
+    }
+    if (dto.status === "done" && (await getEarnedLessonStatus(user.id, lessonId)) !== "done") {
+      throw new BadRequestError({ code: ErrorCodeProgress.LESSON_NOT_EARNED });
+    }
+    return await saveLessonProgress(user, lessonId, courseId, dto);
+  },
+
+  // The topic video was watched to the end; it can complete the topic and the course.
+  updateTopicProgress: async (
+    authUserId: string,
+    topicId: string,
+    _dto: UpdateTopicProgressReq
+  ): Promise<void> => {
+    const courseId = await progressRepository.getTopicCourseId(topicId);
+    if (!courseId) {
+      throw new NotFoundError({ code: ErrorCodeProgress.TOPIC_NOT_FOUND });
+    }
+    const user = await getEnrolledUserOrThrow(authUserId, courseId);
+    await progressRepository.saveTopicVideoWatched(user.id, topicId);
+    await progressRepository.touchActivityDay(user.id, courseId);
+    await syncCourseCompletion(user, courseId);
+  },
+
+  // A topic or course quiz was saved or cleared: record the activity and re-check completion.
+  syncCourseQuiz: async (authUserId: string, courseId: string): Promise<void> => {
+    const user = await getEnrolledUserOrThrow(authUserId, courseId);
+    await progressRepository.touchActivityDay(user.id, courseId);
+    await syncCourseCompletion(user, courseId);
   },
 
   // Re-derives a lesson's status after its quiz answers were saved or cleared.

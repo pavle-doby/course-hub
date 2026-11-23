@@ -233,6 +233,20 @@ export const common = {
         message: "The review could not be found.",
       },
     },
+    plans: {
+      FEATURE_NOT_IN_PLAN: {
+        title: "Upgrade to Pro",
+        message: "This is part of the Pro plan.",
+      },
+      LIMIT_REACHED: {
+        title: "Plan Limit Reached",
+        message: "You've used everything your plan includes. Upgrade to Pro for more.",
+      },
+      INVALID_PLAN_VERSION: {
+        title: "Invalid Plan Version",
+        message: "This plan has no such version.",
+      },
+    },
     quiz: {
       NOT_FOUND: {
         title: "Quiz Not Found",
@@ -253,6 +267,15 @@ export const common = {
       LESSON_NOT_FOUND: {
         title: "Lesson Not Found",
         message: "The lesson you are tracking progress for could not be found.",
+      },
+      TOPIC_NOT_FOUND: {
+        title: "Topic Not Found",
+        message: "The topic you are tracking progress for could not be found.",
+      },
+      LESSON_NOT_EARNED: {
+        title: "Lesson Not Finished Yet",
+        message:
+          "Watch the lesson video to the end and answer every quiz question correctly to finish this lesson.",
       },
     },
   },

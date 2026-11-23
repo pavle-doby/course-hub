@@ -1,6 +1,8 @@
 import { pgEnum } from "drizzle-orm/pg-core";
 
 export const userRoleEnum = pgEnum("user_role", ["user", "admin"]);
+// Plan limits live in code (`PLAN_ENTITLEMENTS` in @repo/contract), keyed by plan + version
+export const planEnum = pgEnum("plan", ["free", "pro", "enterprise"]);
 export const userStatusEnum = pgEnum("user_status", ["pending", "approved", "rejected"]);
 export const contentBehaviorEnum = pgEnum("content_behavior", ["create", "consume", "both"]);
 export const themeEnum = pgEnum("theme", ["light", "dark", "system"]);

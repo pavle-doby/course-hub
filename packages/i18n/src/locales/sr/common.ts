@@ -231,6 +231,20 @@ export const common = {
         message: "Recenzija nije pronađena.",
       },
     },
+    plans: {
+      FEATURE_NOT_IN_PLAN: {
+        title: "Pređite na Pro",
+        message: "Ovo je deo Pro plana.",
+      },
+      LIMIT_REACHED: {
+        title: "Dostignuto ograničenje plana",
+        message: "Iskoristili ste sve što vaš plan uključuje. Pređite na Pro za više.",
+      },
+      INVALID_PLAN_VERSION: {
+        title: "Nepostojeća verzija plana",
+        message: "Ovaj plan nema tu verziju.",
+      },
+    },
     quiz: {
       NOT_FOUND: {
         title: "Kviz nije pronađen",
@@ -252,6 +266,15 @@ export const common = {
       LESSON_NOT_FOUND: {
         title: "Lekcija nije pronađena",
         message: "Lekcija za koju pratite napredak nije pronađena.",
+      },
+      TOPIC_NOT_FOUND: {
+        title: "Tema nije pronađena",
+        message: "Tema za koju pratite napredak nije pronađena.",
+      },
+      LESSON_NOT_EARNED: {
+        title: "Lekcija još nije završena",
+        message:
+          "Pogledajte video lekcije do kraja i tačno odgovorite na sva pitanja u kvizu da biste završili lekciju.",
       },
     },
   },

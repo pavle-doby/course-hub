@@ -13,6 +13,7 @@ import { Text } from "@repo/ui-native/components/text";
 import { StarRating } from "@/components/star-rating";
 import type { Selection, TopicWithLessons } from "@/modules/learn-course/hooks/use-course-tree";
 import { useSaveLessonProgress } from "@/modules/learn-course/hooks/use-lesson-progress";
+import { useSaveTopicProgress } from "@/modules/learn-course/hooks/use-save-topic-progress";
 import { useSelectionVideo } from "@/modules/learn-course/hooks/use-selection-video";
 import { LearnDocuments } from "./learn-documents";
 import { LearnStatus } from "./learn-status";
@@ -50,6 +51,7 @@ export function LearnContent({
   const queryClient = useQueryClient();
   const { publicId } = course;
   const saveLessonProgress = useSaveLessonProgress(publicId);
+  const saveTopicVideoWatched = useSaveTopicProgress(publicId);
 
   const selectedTopic =
     selection.type === "topic" ? tree.find((topic) => topic.id === selection.id) : undefined;
@@ -91,7 +93,7 @@ export function LearnContent({
     }
   }
 
-  // A lesson quiz result can change the lesson status on the server.
+  // A quiz result can change the lesson, topic or course status on the server.
   function handleQuizResponseChange() {
     void queryClient.invalidateQueries({ queryKey: getGetCourseProgressQueryKey({ publicId }) });
   }
@@ -119,6 +121,8 @@ export function LearnContent({
         lessonId={isEnrolled ? selectedLesson?.id : undefined}
         progress={lessonProgress}
         onSave={saveLessonProgress}
+        topicId={isEnrolled ? selectedTopic?.id : undefined}
+        onTopicVideoWatched={saveTopicVideoWatched}
       />
 
       {isDocumentsLoading && <Skeleton className="mt-4 h-16 w-full rounded-lg" />}

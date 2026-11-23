@@ -36,6 +36,7 @@ configureTokenProviders({
 function isPublicRoute(pathname: string): boolean {
   return (
     pathname === "/" ||
+    pathname === "/pricing" ||
     pathname.startsWith("/auth/") ||
     pathname.startsWith("/invite/") ||
     (/^\/learn\/[^/]+$/.test(pathname) &&

@@ -12,10 +12,19 @@ type LearnVideoProps = {
   lessonId?: string;
   progress?: LessonProgress;
   onSave: SaveLessonProgress;
+  topicId?: string;
+  onTopicVideoWatched?: (topicId: string) => void;
 };
 
 /** Video slot of the reader: skeleton, player, or a processing / unavailable alert. */
-export function LearnVideo({ video, lessonId, progress, onSave }: LearnVideoProps) {
+export function LearnVideo({
+  video,
+  lessonId,
+  progress,
+  onSave,
+  topicId,
+  onTopicVideoWatched,
+}: LearnVideoProps) {
   const { t } = useTranslation();
 
   if (video.isLoading) {
@@ -30,6 +39,8 @@ export function LearnVideo({ video, lessonId, progress, onSave }: LearnVideoProp
         lessonId={lessonId}
         progress={progress}
         onSave={onSave}
+        topicId={topicId}
+        onTopicVideoWatched={onTopicVideoWatched}
       />
     );
   }

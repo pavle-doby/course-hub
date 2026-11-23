@@ -1,6 +1,7 @@
 import {
   ErrorCode,
   ErrorCodeEnrollment,
+  ErrorCodePlans,
   ErrorCodeQuiz,
   ForbiddenError,
   NotFoundError,
@@ -15,29 +16,32 @@ import {
   type SaveQuizResponseReq,
   type SaveQuizRes,
 } from "@repo/contract";
-import type { QuizEntity, QuizResponseEntity } from "@repo/db-schema";
+import type { QuizEntity, QuizResponseEntity, UserEntity } from "@repo/db-schema";
 import { usersRepository } from "api/modules/users/repository/usersRepository";
 import { documentsRepository } from "api/modules/documents/repository/documentsRepository";
 import { coursesRepository } from "api/modules/courses/repository/coursesRepository";
 import { enrollmentsRepository } from "api/modules/enrollments/repository/enrollmentsRepository";
 import { progressService } from "api/modules/progress/services/progressService";
 import { consumeAiUsage } from "api/modules/ai/usage";
+import { entitlementsService } from "api/modules/plans/services/entitlementsService";
 import { quizzesRepository } from "../repository/quizzesRepository";
 import { quizGenerator } from "./quizGenerator";
 import { scoreQuiz } from "./scoreQuiz";
-
-const DAILY_GENERATION_LIMIT = 20;
 
 // ##################################################################################
 // #region Private Helpers
 // ##################################################################################
 
-async function getUserId(authUserId: string): Promise<string> {
+async function getUser(authUserId: string): Promise<UserEntity> {
   const user = await usersRepository.getUserByAuthUserId(authUserId);
   if (!user) {
     throw new ForbiddenError({ code: ErrorCode.FORBIDDEN });
   }
-  return user.id;
+  return user;
+}
+
+async function getUserId(authUserId: string): Promise<string> {
+  return (await getUser(authUserId)).id;
 }
 
 async function getParentCourse(
@@ -50,17 +54,30 @@ async function getParentCourse(
   return course;
 }
 
+// Saved or cleared answers can finish or reopen the lesson, topic or course they belong to.
+async function syncProgress(
+  parent: QuizParentParams,
+  courseId: string,
+  authUserId: string
+): Promise<void> {
+  if (parent.parentType === "lesson") {
+    await progressService.syncLessonStatus(authUserId, parent.parentId);
+  } else {
+    await progressService.syncCourseQuiz(authUserId, courseId);
+  }
+}
+
 // Resolves parent → course and checks the caller created it
 async function assertCreator(
   parent: QuizParentParams,
   authUserId: string
-): Promise<{ userId: string; courseId: string }> {
-  const userId = await getUserId(authUserId);
+): Promise<{ user: UserEntity; courseId: string }> {
+  const user = await getUser(authUserId);
   const { creatorId, courseId } = await getParentCourse(parent);
-  if (creatorId !== userId) {
+  if (creatorId !== user.id) {
     throw new ForbiddenError({ code: ErrorCode.FORBIDDEN });
   }
-  return { userId, courseId };
+  return { user, courseId };
 }
 
 async function getQuizOrThrow(parent: QuizParentParams): Promise<QuizEntity> {
@@ -121,8 +138,16 @@ export const quizzesService = {
     dto: GenerateQuizReq,
     authUserId: string
   ): Promise<GenerateQuizRes> => {
-    const { userId, courseId } = await assertCreator(parent, authUserId);
-    consumeAiUsage(userId, DAILY_GENERATION_LIMIT);
+    const { user, courseId } = await assertCreator(parent, authUserId);
+    const userId = user.id;
+    // 0 = not in the plan (no AI call made), null = no daily cap
+    const dailyLimit = entitlementsService.get(user).aiQuizGenerationsDay as number | null;
+    if (dailyLimit === 0) {
+      throw new ForbiddenError({ code: ErrorCodePlans.FEATURE_NOT_IN_PLAN });
+    }
+    if (dailyLimit !== null) {
+      consumeAiUsage(userId, dailyLimit);
+    }
     const [tree, preferences] = await Promise.all([
       coursesRepository.getCourseTree(courseId),
       usersRepository.getUserPreferences(userId),
@@ -185,18 +210,15 @@ export const quizzesService = {
     }
     const quiz = await getQuizOrThrow(parent);
     const response = await quizzesRepository.saveResponse(userId, quiz.id, dto.answers);
-    if (parent.parentType === "lesson") {
-      await progressService.syncLessonStatus(authUserId, parent.parentId);
-    }
+    await syncProgress(parent, courseId, authUserId);
     return toMyResponse(quiz, response);
   },
 
   clearMyResponse: async (parent: QuizParentParams, authUserId: string): Promise<void> => {
     const userId = await getUserId(authUserId);
+    const { courseId } = await getParentCourse(parent);
     const quiz = await getQuizOrThrow(parent);
     await quizzesRepository.deleteResponse(userId, quiz.id);
-    if (parent.parentType === "lesson") {
-      await progressService.syncLessonStatus(authUserId, parent.parentId);
-    }
+    await syncProgress(parent, courseId, authUserId);
   },
 };

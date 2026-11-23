@@ -71,6 +71,9 @@ type LessonVideoProgressOptions = {
   lessonId?: string;
   progress?: LessonProgress;
   onSave: SaveLessonProgress;
+  /** Set for a topic video (no `lessonId`); only its end is reported. */
+  topicId?: string;
+  onTopicVideoWatched?: (topicId: string) => void;
 };
 
 /**
@@ -78,11 +81,11 @@ type LessonVideoProgressOptions = {
  * resume from the saved position, mark the lesson in progress on play, report the video as
  * watched on end (the server then marks the lesson done unless its quiz still needs all right
  * answers), and save the position at most every 10 s, on pause, and when the lesson is left.
- * Without a `lessonId` (course/topic videos) nothing is tracked.
+ * A topic video only reports its end (it gates the topic); course videos track nothing.
  */
 export function useLessonVideoProgress(
   player: VideoPlayer,
-  { lessonId, progress, onSave }: LessonVideoProgressOptions
+  { lessonId, progress, onSave, topicId, onTopicVideoWatched }: LessonVideoProgressOptions
 ) {
   const pendingRef = useRef<{ lessonId: string; seconds: number } | null>(null);
   const lastSavedAtRef = useRef(0);
@@ -140,10 +143,13 @@ export function useLessonVideoProgress(
     }
   });
 
-  // ponytail: reaching the end counts as watched even if the learner skipped ahead; manual Done
-  // is allowed anyway, so tracking watched ranges adds nothing.
+  // ponytail: reaching the end counts as watched even if the learner skipped ahead. Points and
+  // completion depend on it, so track watched ranges if skipping becomes a problem.
   useEventListener(player, "playToEnd", () => {
     if (!lessonId) {
+      if (topicId) {
+        onTopicVideoWatched?.(topicId);
+      }
       return;
     }
     pendingRef.current = null;

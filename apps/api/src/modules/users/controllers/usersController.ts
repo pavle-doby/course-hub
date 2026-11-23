@@ -10,6 +10,7 @@ import {
   UpdateUserRes,
   UpdateUserPreferencesReq,
   UpdateUserPreferencesRes,
+  UpdateUserPlanReq,
 } from "@repo/contract";
 import { Request, Response } from "express";
 import { usersService } from "../services/usersService";
@@ -62,7 +63,15 @@ export const usersController = {
   updateUser: async (_req: Request, res: Response): Promise<void> => {
     const id = res.locals.params.id;
     const reqDto = res.locals.body as UpdateUserReq;
-    const resDto: UpdateUserRes = await usersService.updateUser(id, reqDto);
+    const authUserId: string = res.locals.user.id;
+    const resDto: UpdateUserRes = await usersService.updateUser(id, reqDto, authUserId);
+    res.status(200).json(resDto);
+  },
+
+  updateUserPlan: async (_req: Request, res: Response): Promise<void> => {
+    const id = res.locals.params.id;
+    const reqDto = res.locals.body as UpdateUserPlanReq;
+    const resDto: User = await usersService.updateUserPlan(id, reqDto);
     res.status(200).json(resDto);
   },
 

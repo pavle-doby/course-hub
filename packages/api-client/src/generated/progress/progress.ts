@@ -28,6 +28,9 @@ import type {
   UpdateLessonProgressBody,
   UpdateLessonProgressDefault,
   UpdateLessonProgressPathParameters,
+  UpdateTopicProgressBody,
+  UpdateTopicProgressDefault,
+  UpdateTopicProgressPathParameters,
 } from "../courseHubAPI.schemas";
 
 import { customInstance } from "../../lib/apiClient";
@@ -252,4 +255,87 @@ export const useUpdateLessonProgress = <TError = UpdateLessonProgressDefault, TC
   TContext
 > => {
   return useMutation(getUpdateLessonProgressMutationOptions(options), queryClient);
+};
+export const updateTopicProgress = (
+  { topicId }: UpdateTopicProgressPathParameters,
+  updateTopicProgressBody: UpdateTopicProgressBody,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<void>(
+    {
+      url: `/v1/progress/topics/${topicId}`,
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      data: updateTopicProgressBody,
+      signal,
+    },
+    options
+  );
+};
+
+export const getUpdateTopicProgressMutationOptions = <
+  TError = UpdateTopicProgressDefault,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateTopicProgress>>,
+    TError,
+    UpdateTopicProgressMutationVariables,
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updateTopicProgress>>,
+  TError,
+  UpdateTopicProgressMutationVariables,
+  TContext
+> => {
+  const mutationKey = ["updateTopicProgress"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && "mutationKey" in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updateTopicProgress>>,
+    UpdateTopicProgressMutationVariables
+  > = (props) => {
+    const { pathParams, data } = props ?? {};
+
+    return updateTopicProgress(pathParams, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type UpdateTopicProgressMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updateTopicProgress>>
+>;
+export type UpdateTopicProgressMutationBody = UpdateTopicProgressBody;
+export type UpdateTopicProgressMutationError = UpdateTopicProgressDefault;
+export type UpdateTopicProgressMutationVariables = {
+  pathParams: UpdateTopicProgressPathParameters;
+  data: UpdateTopicProgressBody;
+};
+
+export const useUpdateTopicProgress = <TError = UpdateTopicProgressDefault, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof updateTopicProgress>>,
+      TError,
+      UpdateTopicProgressMutationVariables,
+      TContext
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof updateTopicProgress>>,
+  TError,
+  UpdateTopicProgressMutationVariables,
+  TContext
+> => {
+  return useMutation(getUpdateTopicProgressMutationOptions(options), queryClient);
 };

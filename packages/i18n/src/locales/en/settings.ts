@@ -39,6 +39,7 @@ export const settings = {
     },
   },
   aiAccess: {
+    proOnly: "Connect Claude and other AI agents to your courses with the Pro plan.",
     oauth: {
       title: "Claude connector",
       description:

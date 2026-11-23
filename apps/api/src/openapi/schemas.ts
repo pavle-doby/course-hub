@@ -25,6 +25,8 @@ import {
   OauthApproveResponseSchema as OauthApproveResponseSchemaBase,
   CourseReviewSchema as CourseReviewSchemaBase,
   MyCourseReviewSchema as MyCourseReviewSchemaBase,
+  CourseLeaderboardSchema as CourseLeaderboardSchemaBase,
+  MyLeaderboardNearbySchema as MyLeaderboardNearbySchemaBase,
   QuizSchema as QuizSchemaBase,
   QuizOrNullSchema as QuizOrNullSchemaBase,
   PublicQuizOrNullSchema as PublicQuizOrNullSchemaBase,
@@ -171,6 +173,15 @@ export const PaginatedCourseReviewsSchema = registry.register(
     data: z.array(CourseReviewSchema),
     pagination: PaginationSchema,
   })
+);
+
+export const CourseLeaderboardSchema = registry.register(
+  "CourseLeaderboard",
+  CourseLeaderboardSchemaBase
+);
+export const MyLeaderboardNearbySchema = registry.register(
+  "MyLeaderboardNearby",
+  MyLeaderboardNearbySchemaBase
 );
 
 export const QuizSchema = registry.register("Quiz", QuizSchemaBase);

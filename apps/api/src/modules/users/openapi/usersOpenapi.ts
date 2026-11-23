@@ -5,6 +5,7 @@ import {
   UserPostQuerySchema,
   UserPreferencesPutQuerySchema,
   UserPutQuerySchema,
+  UpdateUserPlanBodySchema,
 } from "@repo/contract";
 import { ParamsIdSchema, SearchSchema, ApiErrorSchema } from "@repo/contract";
 import { PaginationParams } from "api/middleware/pagination";
@@ -161,6 +162,32 @@ registry.registerPath({
   responses: {
     200: {
       description: "User updated",
+      content: { "application/json": { schema: UserSchema } },
+    },
+    default: {
+      description: "Error",
+      content: { "application/json": { schema: ApiErrorSchema } },
+    },
+  },
+});
+
+// PUT /users/:id/plan
+registry.registerPath({
+  method: "put",
+  path: "/v1/users/{id}/plan",
+  operationId: "updateUserPlan",
+  tags: ["Users"],
+  security: [{ bearerAuth: [] }],
+  request: {
+    params: ParamsIdSchema,
+    body: {
+      content: { "application/json": { schema: UpdateUserPlanBodySchema } },
+      required: true,
+    },
+  },
+  responses: {
+    200: {
+      description: "User with the new plan",
       content: { "application/json": { schema: UserSchema } },
     },
     default: {
